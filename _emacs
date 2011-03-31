@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; outline-minor-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2010-10-18 15:40:49 (bm3719)>
+;;;; Time-stamp: <2011-03-24 16:15:43 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -47,7 +47,7 @@
 
 ;; Remove wasted pixels left of col1.
 (when (fboundp 'set-fringe-mode)   ; Added in >22.
-    (set-fringe-mode 1))           ; Space in pixels.
+    (set-fringe-mode 2))           ; Space in pixels.
 
 (global-font-lock-mode 1)          ; Turn on font lock mode everywhere.
 (blink-cursor-mode nil)            ; Disable cursor blinking.
@@ -284,7 +284,7 @@
 (defun bcm-date ()
   "Insert a nicely formated date string."
   (interactive)
-  (insert (format-time-string "%m/%d/%Y")))
+  (insert (format-time-string "%Y-%m-%d")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation
@@ -297,7 +297,8 @@
 (setq scroll-conservatively 4)
 ;; Don't hscroll unless needed.
 (setq hscroll-margin 1)
-;; Start scrolling when 2 lines from top/bottom.
+;; Start scrolling when 2 lines from top/bottom.  Set to 0 on systems where I
+;; use ansi-term or multi-term a lot.
 (setq scroll-margin 2)
 ;; Keeps the cursor in the same relative row during pgups and downs.
 (setq scroll-preserve-screen-position t)
@@ -511,7 +512,7 @@
             (message "Build Succeeded."))))
 ;; Use c-mode for flex files (cc-mode is probably better for this though).
 (setq auto-mode-alist
-      (append '(("\\.l$"    . c-mode))
+      (append '(("\\.l$" . c-mode))
                 auto-mode-alist))
 ;; Change default indent style from "gnu".  I actually use 1TBS, but BSD style
 ;; auto-indents properly.
@@ -540,7 +541,7 @@
 (defun sql-pool-a ()
   (interactive)
   (sql-connect-preset 'pool-a))
-;; Use sql-mode for .script files (used by jetty and tomcat).
+;; Use sql-mode for .script files (used by Jetty and Tomcat).
 (setq auto-mode-alist
       (append '(("\\.script$" . sql-mode))
                 auto-mode-alist))
@@ -1013,8 +1014,9 @@
   (add-to-list 'flymake-allowed-file-name-masks
                '("\\.py\\'" flymake-pylint-init)))
 ;; ipython: Support for a replacement to the default Python shell.  Requires an
-;; install of the iPython application.
+;; install of the iPython application.  Run with M-x py-shell.
 (require 'ipython)
+(global-set-key "\C-cL" 'py-execute-buffer)
 
 ;; ruby-mode
 ;; http://www.emacswiki.org/emacs/RubyMode
@@ -1107,7 +1109,7 @@
 (add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
 ;; NOTE: This auto-logs me into SQL*Plus, but doesn't execute commands sent
 ;;       from the current .sqp file for some reason.  A working method is to
-;;       open the .sqp file, an run commands with C-Ret.
+;;       open the .sqp file, and run commands with C-Ret.
 (defun bcm-sqlplus ()
   (interactive)
   (sqlplus "rtrg/rtrg@//localhost:1521/orcl"))

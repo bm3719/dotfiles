@@ -1,0 +1,131 @@
+// -*- mode: espresso; -*-
+// Conkeror rc file.
+//
+// Notes: On Windows eval this first: M-: user_pref("conkeror.rcfile",
+// "c:\\bm3719\\conkerorrc"); When switching between *nix and Windows, change
+// the first three settings groups.
+
+// Theme: Blackened theme.  Make sure the blackened dir exists at this target
+// first.
+theme_load_paths.push("/home/bm3719/.conkeror.mozdev.org");
+//theme_load_paths.push("C:\\bm3719\\bin\\conkeror\\style");
+theme_load("blackened");
+
+// Start page
+homepage = "/home/bm3719/lynx_bookmarks.html";
+//homepage = "C:\\bm3719\\lynx_bookmarks.html";
+
+// External editor: Setting this sends editor shell commands to the Emacs
+// server session.  Note that this feature isn't yet supported on Windows.
+// editor_shell_command = "gnuclient-emacs";
+editor_shell_command = "emacsclient";
+
+// about:config: Using session_pref here doesn't save to the actual profile.
+// Reduce disk cache from 50000 to 40000
+session_pref("browser.cache.disk.capacity", 40000);
+// Default 9.
+session_pref("browser.history_expire_days", 3);
+// Copy on select (only works in *nix).
+session_pref("clipboard.autocopy", true);
+// Disable favicons.
+session_pref("conkeror.load.favicon", 0);
+// Middle mouse paste.
+session_pref("middlemouse.paste", true);
+
+// Custom keybindings
+define_key(default_global_keymap, "C-x C-b", "switch-to-buffer");
+define_key(default_global_keymap, "C-x C-k", "kill-current-buffer");
+define_key(default_global_keymap, "C-x o", "buffer-next");
+define_key(default_global_keymap, "C-x right", "buffer-next");
+define_key(default_global_keymap, "C-x left", "buffer-previous");
+
+// Webjumps
+define_webjump("amazon", "http://www.amazon.com/exec/obidos/external-search/?field-keywords=%s&mode=blended");
+define_webjump("a", "http://www.amazon.com/exec/obidos/external-search/?field-keywords=%s&mode=blended");
+define_webjump("finance", "http://www.google.com/finance?client=ob&q=%s");
+define_webjump("f", "http://www.google.com/finance?client=ob&q=%s");
+define_webjump("hoogle", "http://www.haskell.org/hoogle/?hoogle=%s");
+define_webjump("ports", "http://www.freebsd.org/cgi/ports.cgi?query=%s&stype=all");
+define_webjump("freshports", "http://www.freshports.org/search.php?query=%s&search=go&num=10&stype=name&method=match&deleted=excludedeleted&start=1&casesensitivity=caseinsensitive");
+define_webjump("fp", "http://www.freshports.org/search.php?query=%s&search=go&num=10&stype=name&method=match&deleted=excludedeleted&start=1&casesensitivity=caseinsensitive");
+
+// Tabs: New tabs version.
+require("new-tabs.js");
+
+// Downloads: Open downloads display in a new buffer instead of a new frame and
+// bury it.
+download_buffer_automatic_open_target = OPEN_NEW_BUFFER_BACKGROUND;
+
+// Mouse-2 behavior: Lets middle click open link in new buffer and switches to
+// it.
+require("clicks-in-new-buffer.js");
+// Make middle click open new buffers in the background.
+clicks_in_new_buffer_target = OPEN_NEW_BUFFER_BACKGROUND;
+
+// MIME types: Remove all typeset document handlers.
+remove_mime_type_external_handler("application/pdf");
+remove_mime_type_external_handler("application/postscript");
+remove_mime_type_external_handler("application/x-dvi");
+
+// Completion: Swap the default completion behavior.  Note that these are
+// mutually exclusive.
+url_completion_use_bookmarks = false;
+url_completion_use_history = true;
+
+// URL Remoting: Change the default function for handling URLs from other apps.
+// Default is load_url_in_new_window.
+url_remoting_fn = load_url_in_new_buffer;
+
+// View source: Enabling this sends view source requests to my external editor
+// (gc).
+view_source_use_external_editor = true;
+
+// Darken page function (from http://conkeror.org/Tips): This creates a
+// function to darken pages and binds it to C-d.
+function darken_page (I) {
+    var newSS, styles='* { background: black ! important; color: grey !important }'
+        + ':link, :link * { color: #4986dd !important }'
+        + ':visited, :visited * { color: #d75047 !important }';
+    var document = I.window.buffers.current.document;
+    if (document.createStyleSheet) {
+        document.createStyleSheet("javascript:'" + styles + "'");
+    }
+    else {
+        newSS=document.createElement('link');
+        newSS.rel='stylesheet';
+        newSS.href='data:text/css,'+escape(styles);
+        document.getElementsByTagName("head")[0].appendChild(newSS);
+    }
+}
+interactive("darken-page", "Darken the page in an attempt to save your eyes.",
+            darken_page);
+define_key(content_buffer_normal_keymap, "C-d", "darken-page");
+
+// Remember last save path.
+let _save_path = get_home_directory();
+
+function update_save_path(info) {
+    _save_path = info.target_file.parent.path;
+}
+
+add_hook("download_added_hook", update_save_path);
+
+suggest_save_path_from_file_name = function (filename, buffer) {
+    let file = make_file(_save_path);
+    file.append(filename);
+    return file.path;
+}
+
+// Mozrepl: This activates a MozRepl server on port 4242.
+if ('@hyperstruct.net/mozlab/mozrepl;1' in Cc) {
+    var mozrepl = Cc['@hyperstruct.net/mozlab/mozrepl;1']
+        .getService(Ci.nsIMozRepl);
+    if (! mozrepl.isActive())
+        mozrepl.start(4242);
+}
+// Automatically enter Conkeror's application context at startup.  This calls
+// an external file called .mozrepl.js.
+let (mozrepl_init = get_home_directory()) {
+    mozrepl_init.appendRelativePath(".mozrepl.js");
+    session_pref('extensions.mozrepl.initUrl', make_uri(mozrepl._init).spec);
+}

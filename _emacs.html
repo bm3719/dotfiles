@@ -1,0 +1,1497 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.37 in css mode. -->
+<html>
+  <head>
+    <title>.emacs</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #f6f3e8;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8ac6f2;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #99968b;
+        font-style: italic;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #99968b;
+        font-style: italic;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #e5786d;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #99968b;
+        font-style: italic;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #cae682;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #8ac6f2;
+      }
+      .negation-char {
+        /* font-lock-negation-char-face */
+        color: #e7f6da;
+      }
+      .regexp-grouping-backslash {
+        /* font-lock-regexp-grouping-backslash */
+        font-weight: bold;
+      }
+      .regexp-grouping-construct {
+        /* font-lock-regexp-grouping-construct */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #95e454;
+        font-style: italic;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #cae682;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #cae682;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;;; </span><span class="comment">-*- mode: Emacs-Lisp; outline-minor-mode:t -*-
+</span><span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Bruce C. Miller - bm3719@gmail.com
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Time-stamp: &lt;2010-07-28 14:46:24 (bm3719)&gt;
+</span><span class="comment-delimiter">;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;; </span><span class="comment">NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">and Windows, but all or parts of this file should work with older GNU
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
+</span><span class="comment-delimiter">;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;; </span><span class="comment">External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">swank-clojure, haskell-mode, agda-mode, scala-mode, ensime, sbt.el, gtags,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">python-mode, flymake-pylint, ipython, ruby-mode, auctex, espresso,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">flymake-jslint, moz.el, batch-mode, sqlplus, nxhtml, cedet, ecb, jdee,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">jde-eclipse-compiler-server, elscreen, elscreen-w3m, w3m (+ flim, apel),
+</span><span class="comment-delimiter">;;;; </span><span class="comment">multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz.
+</span><span class="comment-delimiter">;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;; </span><span class="comment">External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Global, python-doc-html, pylint, iPython, Ruby, Rhino, MozRepl, JDK, ECJ,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Maxima, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Consolas font (Windows only).
+</span>
+<span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Initial Startup
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Getting rid of the toolbar first prevents it from showing in the few seconds
+</span><span class="comment-delimiter">;; </span><span class="comment">needed for the rest of this stuff to load, though disabling it in .Xdefaults
+</span><span class="comment-delimiter">;; </span><span class="comment">is even better.
+</span>(tool-bar-mode -1)
+
+<span class="comment-delimiter">;; </span><span class="comment">Store boolean values for various system-specific settings.
+</span>(<span class="keyword">defvar</span> <span class="variable-name">*freebsd-system*</span> (string-match <span class="string">"freebsd"</span> system-configuration))
+(<span class="keyword">defvar</span> <span class="variable-name">*linux-system*</span> (string-match <span class="string">"linux"</span> system-configuration))
+(<span class="keyword">defvar</span> <span class="variable-name">*nt-system*</span> (string-match <span class="string">"nt"</span> system-configuration))
+
+(setq inhibit-startup-message t) <span class="comment-delimiter">; </span><span class="comment">Disable splash screen.
+</span>(set-scroll-bar-mode 'right)     <span class="comment-delimiter">; </span><span class="comment">If turned on, use right scrollbars.
+</span>(scroll-bar-mode -1)             <span class="comment-delimiter">; </span><span class="comment">Hide the scroll bar.
+</span>(tooltip-mode 0)                 <span class="comment-delimiter">; </span><span class="comment">Disable tooltips.
+</span>(menu-bar-mode -1)               <span class="comment-delimiter">; </span><span class="comment">Hide the menu bar.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Rearrange the menubars, so it goes tools | buffers | help.
+</span>(setq menu-bar-final-items '(tools buffer help-menu))
+
+<span class="comment-delimiter">;; </span><span class="comment">Remove wasted pixels left of col1.
+</span>(<span class="keyword">when</span> (fboundp 'set-fringe-mode) <span class="comment-delimiter">; </span><span class="comment">Added in &gt;22.
+</span>    (set-fringe-mode 1))         <span class="comment-delimiter">; </span><span class="comment">Space in pixels.
+</span>
+(global-font-lock-mode 1)        <span class="comment-delimiter">; </span><span class="comment">Turn on font lock mode everywhere.
+</span>(blink-cursor-mode nil)          <span class="comment-delimiter">; </span><span class="comment">Disable cursor blinking.
+</span>(setq visible-bell t)            <span class="comment-delimiter">; </span><span class="comment">Make bell visible, not aural.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Add the directory containing .el files in into the default load path.
+</span>(setq load-path (cons <span class="string">"~/.emacs.d"</span> load-path))
+
+<span class="comment-delimiter">;; </span><span class="comment">Shut off message buffer.  To debug Emacs, comment these out so you can see
+</span><span class="comment-delimiter">;; </span><span class="comment">what's going on.
+</span>(setq message-log-max nil)
+<span class="comment-delimiter">;; </span><span class="comment">Check if message buffer exists before killing (not doing so errors
+</span><span class="comment-delimiter">;; </span><span class="comment">eval-buffers of .emacs file).
+</span>(<span class="keyword">cond</span> ((not (eq nil (get-buffer <span class="string">"*Messages*"</span>)))
+      (kill-buffer <span class="string">"*Messages*"</span>)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Provide a useful error trace if loading this .emacs fails.
+</span>(setq debug-on-error t)
+
+<span class="comment-delimiter">;; </span><span class="comment">Change backup behavior to save in a directory, not in a miscellany of files
+</span><span class="comment-delimiter">;; </span><span class="comment">all over the place, and disable autosaves completely.
+</span>(setq make-backup-files t           <span class="comment-delimiter">; </span><span class="comment">Do make backups.
+</span>      backup-by-copying t           <span class="comment-delimiter">; </span><span class="comment">Don't clobber symlinks.
+</span>      backup-directory-alist
+      '((<span class="string">"."</span> . <span class="string">"~/.emacs.d/saves"</span>)) <span class="comment-delimiter">; </span><span class="comment">Don't litter my fs tree.
+</span>      delete-old-versions t         <span class="comment-delimiter">; </span><span class="comment">Get rid of old versions of files.
+</span>      kept-new-versions 4
+      kept-old-versions 2
+      version-control t             <span class="comment-delimiter">; </span><span class="comment">Use versioned backups.
+</span>      auto-save-default nil)        <span class="comment-delimiter">; </span><span class="comment">Normal backups are enough for me.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Specify UTF-8 for a few addons that are too dumb to default to it.
+</span>(set-default-coding-systems 'utf-8-unix)
+
+<span class="comment-delimiter">;; </span><span class="comment">Load Common Lisp features.
+</span>(<span class="keyword">require</span> '<span class="constant">cl</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Provides zap-up-to-char.
+</span>(load-library <span class="string">"misc"</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Work-around for a bug in w32 Emacs 23.
+</span>(<span class="keyword">when</span> *nt-system*
+  (and (= emacs-major-version 23) (<span class="keyword">defun</span> <span class="function-name">server-ensure-safe-dir</span> (dir) <span class="doc">"Noop"</span> t)))
+
+<span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Basic Key Bindings
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">General convenience remappings.
+</span>(global-set-key <span class="string">"\C-w"</span> 'backward-kill-word)
+(global-set-key <span class="string">"\C-xw"</span> 'kill-region)
+(global-set-key <span class="string">"\C-xs"</span> 'save-buffer)
+(global-set-key <span class="string">"\C-m"</span> 'newline-and-indent)
+(global-set-key <span class="string">"\M-g"</span> 'goto-line)
+(global-set-key <span class="string">"\M-G"</span> 'goto-char)
+(global-set-key <span class="string">"\M-?"</span> 'help-for-help)
+(global-set-key <span class="string">"\C-x\C-k"</span> 'kill-this-buffer)  <span class="comment-delimiter">; </span><span class="comment">Bypasses the C-x k prompt.
+</span>(global-set-key <span class="string">"\C-r"</span> 'isearch-backward)
+(global-set-key <span class="string">"\C-c\C-r"</span> 'revert-buffer)
+(global-set-key <span class="string">"\C-x\C-i"</span> 'indent-region)
+(global-set-key <span class="string">"\C-c\C-i"</span> 'indent-region)
+(global-set-key <span class="string">"\C-ce"</span> 'fixup-whitespace)
+(global-set-key <span class="string">"\C-x\C-u"</span> 'undo)
+(global-set-key <span class="string">"\C-cg"</span> 'replace-string)
+(global-set-key <span class="string">"\C-c;"</span> 'comment-region)
+(global-set-key <span class="string">"\C-c'"</span> 'uncomment-region)
+(global-set-key <span class="string">"\M-/"</span> 'hippie-expand)         <span class="comment-delimiter">; </span><span class="comment">Superior to dabbrev-expand.
+</span>(global-set-key <span class="string">"\M-z"</span> 'zap-up-to-char)        <span class="comment-delimiter">; </span><span class="comment">Mimic vim delete to char.
+</span><span class="comment-delimiter">;; </span><span class="comment">Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
+</span><span class="comment-delimiter">;; </span><span class="comment">intending to do a find-file.
+</span>(global-set-key <span class="string">"\C-xf"</span> 'find-file)
+(global-set-key <span class="string">"\C-x\M-f"</span> 'set-fill-column)
+
+<span class="comment-delimiter">;; </span><span class="comment">For quick macro running
+</span>(global-set-key [f9]  'start-kbd-macro)
+(global-set-key [f10]  'edit-kdb-macro)
+(global-set-key [f11] 'end-kbd-macro)
+(global-set-key [f12] 'call-last-kbd-macro)
+
+<span class="comment-delimiter">;; </span><span class="comment">Cycle through buffers with Ctrl-Tab.
+</span>(global-set-key (kbd <span class="string">"&lt;C-tab&gt;"</span>) 'bury-buffer)
+
+<span class="comment-delimiter">;; </span><span class="comment">M-x compile and M-x grep mnemonics.
+</span>(global-set-key [f5] 'compile)
+(global-set-key <span class="string">"\C-cn"</span> 'next-error)
+(global-set-key <span class="string">"\C-cp"</span> 'previous-error)
+
+<span class="comment-delimiter">;; </span><span class="comment">Defines a function to do nothing.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-noop</span> ()
+  (interactive))
+
+<span class="comment-delimiter">;; </span><span class="comment">My KVM switch uses scroll lock, and Emacs complains about it.
+</span>(global-set-key [Scroll_Lock] 'bcm-noop)
+<span class="comment-delimiter">;; </span><span class="comment">Silence drag-mouse-9 complaints
+</span>(global-set-key [mouse-9] 'bcm-noop)
+(global-set-key [double-mouse-9] 'bcm-noop)
+(global-set-key [drag-mouse-9] 'bcm-noop)
+
+<span class="comment-delimiter">;; </span><span class="comment">Disable C-z on X11 sessions.
+</span>(<span class="keyword">when</span> window-system
+  (global-unset-key <span class="string">"\C-z"</span>))
+
+<span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">General Text Editing
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Set fill width to 79 (default was 70).
+</span>(setq-default fill-column 79)
+
+<span class="comment-delimiter">;; </span><span class="comment">Takes a multi-line paragraph and makes it into a single line of text.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-unfill-paragraph</span> ()
+  (interactive)
+  (<span class="keyword">let</span> ((fill-column (point-max)))
+    (fill-paragraph nil)))
+(global-set-key <span class="string">"\M-p"</span> 'bcm-unfill-paragraph)
+
+<span class="comment-delimiter">;; </span><span class="comment">Heretical tab settings.  Emacs is smart enough to auto-disable this when
+</span><span class="comment-delimiter">;; </span><span class="comment">editing makefiles.
+</span>(setq-default indent-tabs-mode nil)
+<span class="comment-delimiter">;; </span><span class="comment">Using a tab-stop-list will preserve 8-space tabs for documents that have
+</span><span class="comment-delimiter">;; </span><span class="comment">them, but make my own tabs 2 spaces.
+</span>(setq tab-stop-list '(2 4 6 8 10 12 14 16 18))
+<span class="comment-delimiter">;</span><span class="comment">(setq-default tab-width 2)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Always flash for parens.
+</span>(show-paren-mode 1)
+
+<span class="comment-delimiter">;; </span><span class="comment">Enable narrowing of regions.
+</span>(put 'narrow-to-region 'disabled nil)
+
+<span class="comment-delimiter">;; </span><span class="comment">Allow a command to erase an entire buffer.
+</span>(put 'erase-buffer 'disabled nil)
+
+<span class="comment-delimiter">;; </span><span class="comment">Disable over-write mode.
+</span>(<span class="keyword">defun</span> <span class="function-name">overwrite-mode</span> (arg) (interactive <span class="string">"P"</span>))
+
+<span class="comment-delimiter">;; </span><span class="comment">Modify hippie-expand functions.
+</span>(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-all-abbrevs
+        try-expand-list
+        try-expand-line
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
+<span class="comment-delimiter">;; </span><span class="comment">Don't expand symbols.
+</span>(setq hippie-expand-dabbrev-as-symbol nil)
+
+<span class="comment-delimiter">;; </span><span class="comment">Use cursor color to indicate some modes.  Modified version that ignores
+</span><span class="comment-delimiter">;; </span><span class="comment">overwrite.  Original snippet from:
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/EmacsNiftyTricks#toc4
+</span>(setq bcm-set-cursor-color-color <span class="string">""</span>)
+(setq bcm-set-cursor-color-buffer <span class="string">""</span>)
+(<span class="keyword">defun</span> <span class="function-name">bcm-set-cursor-color-according-to-mode</span> ()
+  <span class="doc">"change cursor color according to some minor modes."</span>
+  <span class="comment-delimiter">;; </span><span class="comment">Set-cursor-color is somewhat costly, so we only call it when needed.
+</span>  (<span class="keyword">let</span> ((color
+    (<span class="keyword">if</span> buffer-read-only <span class="string">"red"</span> <span class="string">"DarkSlateGray"</span>)))
+    (<span class="keyword">unless</span> (and
+      (string= color bcm-set-cursor-color-color)
+      (string= (buffer-name) bcm-set-cursor-color-buffer))
+      (set-cursor-color (setq bcm-set-cursor-color-color color))
+      (setq bcm-set-cursor-color-buffer (buffer-name)))))
+(add-hook 'post-command-hook 'bcm-set-cursor-color-according-to-mode)
+
+<span class="comment-delimiter">;; </span><span class="comment">Alias to prompt for a regex and a replacement string.
+</span>(<span class="keyword">defalias</span> '<span class="function-name">qrr</span> 'query-replace-regexp)
+
+<span class="comment-delimiter">;; </span><span class="comment">Don't bother entering search and replace args if the buffer is read-only.
+</span>(<span class="keyword">defadvice</span> <span class="function-name">query-replace-read-args</span> (before barf-if-buffer-read-only activate)
+  <span class="doc">"Signal a `</span><span class="doc"><span class="constant">buffer-read-only</span></span><span class="doc">' error if the current buffer is read-only."</span>
+  (barf-if-buffer-read-only))
+
+<span class="comment-delimiter">;; </span><span class="comment">Change pasting behavior.  Normally, it pastes where the mouse is at, which
+</span><span class="comment-delimiter">;; </span><span class="comment">is not necessarily where the cursor is.  This changes things so whether they
+</span><span class="comment-delimiter">;; </span><span class="comment">be middle-click, C-y, or menu, all paste at the cursor.
+</span>(setq mouse-yank-at-point t)
+
+<span class="comment-delimiter">;; </span><span class="comment">SavePlace: This puts the cursor in the last place you edited a particular
+</span><span class="comment-delimiter">;; </span><span class="comment">file.  A very useful default vim feature.
+</span>(<span class="keyword">require</span> '<span class="constant">saveplace</span>)
+(setq-default save-place t)
+
+<span class="comment-delimiter">;; </span><span class="comment">I use sentences.  Like this.
+</span>(setq sentence-end-double-space t)
+
+<span class="comment-delimiter">;; </span><span class="comment">Highlight regions so one can see what one is doing.
+</span><span class="comment-delimiter">;; </span><span class="comment">Defaults on in &gt;23.
+</span>(transient-mark-mode 1)
+
+<span class="comment-delimiter">;; </span><span class="comment">Text files supposedly end in new lines, or they should.
+</span>(setq require-final-newline t)
+
+<span class="comment-delimiter">;; </span><span class="comment">Defines a function to kill text from point to beginning of line.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-backward-kill-line</span> (arg)
+  <span class="doc">"Kill chars backward until encountering the end of a line."</span>
+  (interactive <span class="string">"p"</span>)
+  (kill-line 0))
+(global-set-key <span class="string">"\M-\C-k"</span> 'bcm-backward-kill-line)
+
+<span class="comment-delimiter">;; </span><span class="comment">Copy a line without killing it.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-copy-line</span> (<span class="type">&amp;optional</span> arg)
+  <span class="doc">"Do a kill-line but copy rather than kill."</span>
+  (interactive <span class="string">"P"</span>)
+  (toggle-read-only 1)
+  (kill-line arg)
+  (toggle-read-only 0))
+(setq-default kill-read-only-ok t)
+(global-set-key <span class="string">"\C-c\C-k"</span> 'bcm-copy-line)
+
+<span class="comment-delimiter">;; </span><span class="comment">For composing in Emacs then pasting into a word processor, this un-fills all
+</span><span class="comment-delimiter">;; </span><span class="comment">the paragraphs (i.e. turns each paragraph into one very long line) and
+</span><span class="comment-delimiter">;; </span><span class="comment">removes any blank lines that previously separated paragraphs.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-wp-munge</span> ()
+  <span class="doc">"un-fill paragraphs and remove blank lines."</span>
+  (interactive)
+  (<span class="keyword">let</span> ((save-fill-column fill-column))
+    (set-fill-column 1000000)
+    (mark-whole-buffer)
+    (fill-individual-paragraphs (point-min) (point-max))
+    (delete-matching-lines <span class="string">"^$"</span>)
+    (set-fill-column save-fill-column)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Add a function to strip DOS endlines.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-cut-ctrlm</span> ()
+  <span class="doc">"Cut all visible ^M."</span>
+  (interactive)
+  (beginning-of-buffer)
+  (<span class="keyword">while</span> (search-forward <span class="string">"\r"</span> nil t)
+    (replace-match <span class="string">""</span> nil t)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Insert a date string in the format I most commonly use in textfiles.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-date</span> ()
+  <span class="doc">"Insert a nicely formated date string."</span>
+  (interactive)
+  (insert (format-time-string <span class="string">"%m/%d/%Y"</span>)))
+
+<span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Buffer Navigation
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Shift-arrow keys to move between windows.
+</span>(windmove-default-keybindings)
+
+<span class="comment-delimiter">;; </span><span class="comment">Scrolling
+</span><span class="comment-delimiter">;; </span><span class="comment">Fix the whole huge-jumps-scrolling-between-windows nastiness.
+</span>(setq scroll-conservatively 4)
+<span class="comment-delimiter">;; </span><span class="comment">Don't hscroll unless needed.
+</span>(setq hscroll-margin 1)
+<span class="comment-delimiter">;; </span><span class="comment">Start scrolling when 2 lines from top/bottom.
+</span>(setq scroll-margin 2)
+<span class="comment-delimiter">;; </span><span class="comment">Keeps the cursor in the same relative row during pgups and downs.
+</span>(setq scroll-preserve-screen-position t)
+
+<span class="comment-delimiter">;; </span><span class="comment">Make cursor stay in the same column when scrolling using pgup/dn.
+</span><span class="comment-delimiter">;; </span><span class="comment">Previously pgup/dn clobbers column position, moving it to the beginning of
+</span><span class="comment-delimiter">;; </span><span class="comment">the line.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.dotemacs.de/dotfiles/ElijahDaniel.emacs.html
+</span>(<span class="keyword">defadvice</span> <span class="function-name">scroll-up</span> (around ewd-scroll-up first act)
+  <span class="doc">"Keep cursor in the same column."</span>
+  (<span class="keyword">let</span> ((col (current-column)))
+    ad-do-it
+    (move-to-column col)))
+(<span class="keyword">defadvice</span> <span class="function-name">scroll-down</span> (around ewd-scroll-down first act)
+  <span class="doc">"Keep cursor in the same column."</span>
+  (<span class="keyword">let</span> ((col (current-column)))
+    ad-do-it
+    (move-to-column col)))
+
+<span class="comment-delimiter">;; </span><span class="comment">M-dn and M-up do nothing.  Let's make them do something, like M-left and
+</span><span class="comment-delimiter">;; </span><span class="comment">M-right do.
+</span>(global-set-key [M-down]
+  '(<span class="keyword">lambda</span> () (interactive) (<span class="keyword">progn</span> (forward-line 4) (recenter))))
+(global-set-key [M-up]
+  '(<span class="keyword">lambda</span> () (interactive) (<span class="keyword">progn</span> (forward-line -4) (recenter))))
+
+<span class="comment-delimiter">;; </span><span class="comment">Change C-x C-b behavior so it uses bs; shows only interesting buffers.
+</span>(global-set-key <span class="string">"\C-x\C-b"</span> 'bs-show)
+
+<span class="comment-delimiter">;; </span><span class="comment">The first invocation of Home/End moves to the beginning of the *text* line.
+</span><span class="comment-delimiter">;; </span><span class="comment">A second invocation moves the cursor to beginning of the *absolute* line.
+</span><span class="comment-delimiter">;; </span><span class="comment">Most of the time this won't matter even be noticeable, but when it does (in
+</span><span class="comment-delimiter">;; </span><span class="comment">comments, for example) it will quite convenient.  By sw77@cornell.edu.
+</span>(global-set-key [home] 'bcm-my-smart-home)
+(global-set-key [end] 'bcm-my-smart-end)
+(<span class="keyword">defun</span> <span class="function-name">bcm-my-smart-home</span> ()
+  <span class="doc">"Odd home to beginning of line, even home to beginning of text/code."</span>
+  (interactive)
+  (<span class="keyword">if</span> (and (eq last-command 'bcm-my-smart-home)
+           (/= (line-beginning-position) (point)))
+      (beginning-of-line)
+      (beginning-of-line-text)))
+(<span class="keyword">defun</span> <span class="function-name">bcm-my-smart-end</span> ()
+  <span class="doc">"Odd end to end of line, even end to begin of text/code."</span>
+  (interactive)
+  (<span class="keyword">if</span> (and (eq last-command 'bcm-my-smart-end)
+           (= (line-end-position) (point)))
+      (bcm-end-of-line-text)
+      (end-of-line)))
+(<span class="keyword">defun</span> <span class="function-name">bcm-end-of-line-text</span> ()
+  <span class="doc">"Move to end of current line and skip comments and trailing space."</span>
+  (interactive)
+  (end-of-line)
+  (<span class="keyword">let</span> ((bol (line-beginning-position)))
+    (<span class="keyword">unless</span> (eq font-lock-comment-face (get-text-property bol 'face))
+      (<span class="keyword">while</span> (and (/= bol (point))
+                  (eq font-lock-comment-face
+                      (get-text-property (point) 'face)))
+        (backward-char 1))
+      (<span class="keyword">unless</span> (= (point) bol)
+        (forward-char 1) (skip-chars-backward <span class="string">" \t\n"</span>)))))
+<span class="comment-delimiter">;; </span><span class="comment">But what about the normal use for home and end?  We can still have them!
+</span><span class="comment-delimiter">;; </span><span class="comment">Just prefixed with control.
+</span>(global-set-key [\C-home] 'beginning-of-buffer)
+(global-set-key [\C-end] 'end-of-buffer)
+
+<span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Miscellaneous Customizations
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This sets garbage collection to hundred times of the default; supposedly
+</span><span class="comment-delimiter">;; </span><span class="comment">significantly speeds up startup time.  Disable this if RAM is limited.
+</span>(setq gc-cons-threshold 50000000)
+
+<span class="comment-delimiter">;; </span><span class="comment">Prevent windows from getting too small.
+</span>(setq window-min-height 3)
+
+<span class="comment-delimiter">;; </span><span class="comment">Show column number in mode line.
+</span>(setq column-number-mode t)
+
+<span class="comment-delimiter">;; </span><span class="comment">Set shells.
+</span>(<span class="keyword">when</span> *freebsd-system*
+  (setq shell-file-name <span class="string">"/usr/local/bin/zsh"</span>)
+  (setq tex-shell-file-name <span class="string">"/usr/local/bin/zsh"</span>))
+(<span class="keyword">when</span> *linux-system*
+  (setq shell-file-name <span class="string">"/usr/bin/zsh"</span>)
+  (setq tex-shell-file-name <span class="string">"/usr/bin/zsh"</span>))
+(<span class="keyword">when</span> *nt-system*
+  (setq shell-file-name <span class="string">"/usr/bin/bash"</span>)
+  (setq tex-shell-file-name <span class="string">"/usr/bin/bash"</span>))
+
+<span class="comment-delimiter">;; </span><span class="comment">Answer 'y' or &lt;CR&gt; for yes and 'n' for no at minibar prompts.
+</span>(<span class="keyword">defalias</span> '<span class="function-name">yes-or-no-p</span> 'y-or-n-p)
+(define-key query-replace-map [return] 'act)
+(define-key query-replace-map [?\C-m] 'act)
+
+<span class="comment-delimiter">;; </span><span class="comment">Don't echo passwords when communicating with interactive programs.
+</span><span class="comment-delimiter">;; </span><span class="comment">Basic security.
+</span>(add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
+
+<span class="comment-delimiter">;; </span><span class="comment">Gets rid of disabled commands prompting.
+</span>(setq disabled-command-hook nil)
+
+<span class="comment-delimiter">;; </span><span class="comment">Allow seamless editing of files in a tar/jar/zip file.
+</span>(auto-compression-mode 1)
+
+<span class="comment-delimiter">;; </span><span class="comment">We can also get completion in the mini-buffer as well.
+</span>(icomplete-mode t)
+
+<span class="comment-delimiter">;; </span><span class="comment">Completion ignores case.
+</span>(setq read-buffer-completion-ignore-case t)
+(setq read-file-name-completion-ignore-case t)
+<span class="comment-delimiter">;; </span><span class="comment">In Emacs &lt;23, use the following.
+</span><span class="comment-delimiter">;</span><span class="comment">(setq completion-ignore-case t)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Completion ignores filenames ending in any string in this list.
+</span>(setq completion-ignored-extensions
+  '(<span class="string">".o"</span> <span class="string">".elc"</span> <span class="string">".class"</span> <span class="string">"java~"</span> <span class="string">".ps"</span> <span class="string">".abs"</span> <span class="string">".mx"</span> <span class="string">".~jv"</span> <span class="string">".bak"</span> ))
+
+<span class="comment-delimiter">;; </span><span class="comment">Startup message with Emacs version.  Modified from original at:
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/DotEmacsChallenge
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-emacs-reloaded</span> ()
+  (animate-string (concat <span class="string">";; Initialization successful.  Welcome to "</span>
+      (substring (emacs-version) 0 16)
+      <span class="string">"."</span>)
+    0 0)
+  (newline-and-indent)  (newline-and-indent))
+(add-hook 'after-init-hook 'bcm-emacs-reloaded)
+
+<span class="comment-delimiter">;; </span><span class="comment">Call this function to increase/decrease font size.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-zoom</span> (n)
+  <span class="doc">"with positive N, increase the font size, otherwise decrease it"</span>
+  (set-face-attribute 'default (selected-frame) <span class="builtin">:height</span>
+                      (+ (face-attribute 'default <span class="builtin">:height</span>)
+                         (* (<span class="keyword">if</span> (&gt; n 0) 1 -1) 10))))
+<span class="comment-delimiter">;; </span><span class="comment">Add some zoom keybindings.
+</span>(global-set-key (kbd <span class="string">"C-+"</span>) '(<span class="keyword">lambda</span> nil (interactive) (bcm-zoom 1)))
+(global-set-key [C-kp-add] '(<span class="keyword">lambda</span> nil (interactive) (bcm-zoom 1)))
+(global-set-key (kbd <span class="string">"C--"</span>) '(<span class="keyword">lambda</span> nil (interactive) (bcm-zoom -1)))
+(global-set-key [C-kp-subtract] '(<span class="keyword">lambda</span> nil (interactive) (bcm-zoom -1)))
+
+<span class="comment-delimiter">;; </span><span class="comment">time-stamps
+</span><span class="comment-delimiter">;; </span><span class="comment">When there is a "Time-stamp: &lt;&gt;" in the first 10 lines of the file,
+</span><span class="comment-delimiter">;; </span><span class="comment">Emacs will write time-stamp information there when saving.
+</span>(setq time-stamp-active t          <span class="comment-delimiter">; </span><span class="comment">Do enable time-stamps.
+</span>      time-stamp-line-limit 10     <span class="comment-delimiter">; </span><span class="comment">Check first 10 buffer lines for stamp.
+</span>      time-stamp-format <span class="string">"%04y-%02m-%02d %02H:%02M:%02S (%u)"</span>) <span class="comment-delimiter">; </span><span class="comment">Date format.
+</span>(add-hook 'write-file-hooks 'time-stamp) <span class="comment-delimiter">; </span><span class="comment">Update when saving.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">I always compile my .emacs, saving about two seconds startup time.  But that
+</span><span class="comment-delimiter">;; </span><span class="comment">only helps if the .emacs.elc is newer than the .emacs.  So, compile .emacs
+</span><span class="comment-delimiter">;; </span><span class="comment">if it's not.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-autocompile</span> nil
+  <span class="doc">"compile itself if ~/.emacs.d/build"</span>
+  (interactive)
+  (<span class="keyword">require</span> '<span class="constant">bytecomp</span>)
+  (<span class="keyword">if</span> (string= (buffer-file-name)
+               (expand-file-name
+                (concat default-directory <span class="string">"~/.emacs.d/build"</span>)))
+      (byte-compile-file (buffer-file-name))))
+(add-hook 'after-save-hook 'bcm-autocompile)
+
+<span class="comment-delimiter">;; </span><span class="comment">A function to close all buffers except scratch.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-cleanup</span> ()
+  <span class="doc">"Kill all buffers except *scratch*."</span>
+  (interactive)
+  (mapcar (<span class="keyword">lambda</span> (x) (kill-buffer x)) (buffer-list)) (delete-other-windows))
+
+<span class="comment-delimiter">;; </span><span class="comment">Indents the entire buffer according to whatever indenting rules are present.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-indent</span> ()
+  <span class="doc">"Indent whole buffer"</span>
+  (interactive)
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil)
+  (untabify (point-min) (point-max)))
+<span class="comment-delimiter">;; </span><span class="comment">This is so commonly used, binding to F4.
+</span>(global-set-key (kbd <span class="string">"&lt;f4&gt;"</span>) 'bcm-indent)
+
+<span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Built-in Modes
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">scheme-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">Bind M-x run-scheme to Gauche.
+</span><span class="comment-delimiter">;; </span><span class="comment">TODO: Change to use CCL on Windows.
+</span>(<span class="keyword">when</span> (or *freebsd-system* *linux-system*)
+  (<span class="keyword">defvar</span> <span class="variable-name">scheme-program-name</span> <span class="string">"gosh"</span>
+    <span class="doc">"*Program invoked by the run-scheme command"</span>))
+<span class="comment-delimiter">;; </span><span class="comment">Spell-check comments.
+</span>(add-hook 'scheme-mode-hook 'flyspell-prog-mode)
+
+<span class="comment-delimiter">;; </span><span class="comment">emacs-lisp-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">Spell-check comments.
+</span>(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
+
+<span class="comment-delimiter">;; </span><span class="comment">c-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">Resize the compilation window so that it doesn't take up half the frame.
+</span>(setq compilation-window-height 16)
+<span class="comment-delimiter">;; </span><span class="comment">Always scroll the compilation window.
+</span>(setq compilation-scroll-output t)
+<span class="comment-delimiter">;; </span><span class="comment">If there were no errors, there's not much to look at in a compilation
+</span><span class="comment-delimiter">;; </span><span class="comment">buffer, so make it go away in 2 seconds.
+</span>(setq compilation-finish-function
+      (<span class="keyword">lambda</span> (buf str)
+        (<span class="keyword">if</span> (string-match <span class="string">"exited abnormally"</span> str)
+            <span class="comment-delimiter">;; </span><span class="comment">There were errors.
+</span>            (message <span class="string">"Compilation errors, press C-x ` to visit."</span>)
+            <span class="comment-delimiter">;; </span><span class="comment">No errors; make the compilation window go away in 2 seconds.
+</span>            (run-at-time 2 nil 'delete-windows-on buf)
+            (message <span class="string">"Build Succeeded."</span>))))
+<span class="comment-delimiter">;; </span><span class="comment">Use c-mode for flex files (cc-mode is probably better for this though).
+</span>(setq auto-mode-alist
+      (append '((<span class="string">"\\.l$"</span>    . c-mode))
+                auto-mode-alist))
+<span class="comment-delimiter">;; </span><span class="comment">Change default indent style from "gnu".  I actually use 1TBS, but BSD style
+</span><span class="comment-delimiter">;; </span><span class="comment">auto-indents properly.
+</span>(setq c-default-style <span class="string">"bsd"</span>
+      c-basic-offset 4)
+<span class="comment-delimiter">;; </span><span class="comment">Spell-check comments.
+</span>(add-hook 'c-mode-hook 'flyspell-prog-mode)
+
+<span class="comment-delimiter">;; </span><span class="comment">sql-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">This adds a connection for my local l1j-en test database on mysql, with the
+</span><span class="comment-delimiter">;; </span><span class="comment">ability to add others later by appending to sql-connection-alist.
+</span>(setq sql-connection-alist
+      '((pool-a
+         (sql-product 'mysql)
+         (sql-server <span class="string">"127.0.0.1"</span>)
+         (sql-user <span class="string">"root"</span>)
+         (sql-password <span class="string">"lintest"</span>)
+         (sql-database <span class="string">"l1jdb"</span>)
+         (sql-port 3306))))
+(<span class="keyword">defun</span> <span class="function-name">sql-connect-preset</span> (name)
+  <span class="doc">"Connect to a predefined SQL connection listed in `</span><span class="doc"><span class="constant">sql-connection-alist</span></span><span class="doc">'"</span>
+  (eval `(<span class="keyword">let</span> ,(cdr (assoc name sql-connection-alist))
+           (<span class="keyword">flet</span> ((sql-get-login (<span class="type">&amp;rest</span> what)))
+             (sql-product-interactive sql-product)))))
+<span class="comment-delimiter">;; </span><span class="comment">Execute this function to log in.
+</span>(<span class="keyword">defun</span> <span class="function-name">sql-pool-a</span> ()
+  (interactive)
+  (sql-connect-preset 'pool-a))
+<span class="comment-delimiter">;; </span><span class="comment">Use sql-mode for .script files (used by jetty and tomcat).
+</span>(setq auto-mode-alist
+      (append '((<span class="string">"\\.script$"</span> . sql-mode))
+                auto-mode-alist))
+
+<span class="comment-delimiter">;; </span><span class="comment">flymake
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/cgi-bin/wiki/FlymakeHaskell#toc9
+</span><span class="comment-delimiter">;; </span><span class="comment">Minibuffer fix.  Without this, you can't see the flymake warning text in
+</span><span class="comment-delimiter">;; </span><span class="comment">console mode.  Not ideal, but better than nothing.
+</span>(<span class="keyword">when</span> (fboundp 'resize-minibuffer-mode)
+  (resize-minibuffer-mode)
+  (setq resize-minibuffer-window-exactly nil))
+(<span class="keyword">defun</span> <span class="function-name">bcm-flymake-display-err-minibuf</span> ()
+  <span class="doc">"Displays the error/warning for the current line in the minibuffer"</span>
+  (interactive)
+  (<span class="keyword">let*</span> ((line-no (flymake-current-line-no))
+         (line-err-info-list (nth 0 (flymake-find-err-info
+                                     flymake-err-info line-no)))
+         (count (length line-err-info-list)))
+    (<span class="keyword">while</span> (&gt; count 0)
+      (<span class="keyword">when</span> line-err-info-list
+        (<span class="keyword">let*</span> ((file (flymake-ler-file (nth (1- count) line-err-info-list)))
+               (full-file (flymake-ler-full-file (nth (1- count)
+                                                      line-err-info-list)))
+               (text (flymake-ler-text (nth (1- count) line-err-info-list)))
+               (line (flymake-ler-line (nth (1- count) line-err-info-list))))
+          (message <span class="string">"[%s] %s"</span> line text)))
+      (setq count (1- count)))))
+<span class="comment-delimiter">;; </span><span class="comment">flymake keybindings.
+</span>(global-set-key <span class="string">"\C-c["</span> 'flymake-goto-prev-error)
+(global-set-key <span class="string">"\C-c]"</span> 'flymake-goto-next-error)
+(global-set-key <span class="string">"\C-c\\"</span> 'bcm-flymake-display-err-minibuf)
+
+<span class="comment-delimiter">;; </span><span class="comment">prolog-mode
+</span>(autoload 'prolog-mode <span class="string">"prolog"</span> <span class="doc">"Major mode for editing Prolog programs."</span> t)
+(autoload 'run-prolog <span class="string">"prolog"</span> <span class="doc">"Start a Prolog sub-process."</span> t)
+(setq prolog-system 'swi)
+(setq prolog-program-switches
+      '((sicstus (<span class="string">"-i"</span>)) (swi (<span class="string">"-L0"</span> <span class="string">"-G0"</span> <span class="string">"-T0"</span> <span class="string">"-A0"</span>)) (t nil)))
+<span class="comment-delimiter">;; </span><span class="comment">Since .pl is more commonly used as an extension for Perl, I use .plg.
+</span>(add-to-list 'auto-mode-alist '(<span class="string">"\\.plg$"</span> . prolog-mode))
+<span class="comment-delimiter">;; </span><span class="comment">Add auto-mode for Mercury source, which is close enough to Prolog to benefit
+</span><span class="comment-delimiter">;; </span><span class="comment">from syntax highlighting.  This overrides the default ObjC auto-mode for .m.
+</span>(setq auto-mode-alist (cons '(<span class="string">"\\.m$"</span> . prolog-mode) auto-mode-alist))
+
+<span class="comment-delimiter">;; </span><span class="comment">cperl-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">Always use cperl-mode instead of perl-mode.
+</span>(<span class="keyword">defalias</span> '<span class="function-name">perl-mode</span> 'cperl-mode)
+(add-to-list 'auto-mode-alist '(<span class="string">"\\.pl$"</span> . cperl-mode))
+(add-to-list 'auto-mode-alist '(<span class="string">"\\.cgi$"</span> . cperl-mode))
+(add-to-list 'auto-mode-alist '(<span class="string">"\\.pm$"</span> . cperl-mode))
+(add-to-list 'interpreter-mode-alist '(<span class="string">"perl"</span> . cperl-mode))
+
+<span class="comment-delimiter">;; </span><span class="comment">nxml-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">Included in Emacs 23.  Using nXhtml for .xhtml files.
+</span>(setq auto-mode-alist
+      (cons '(<span class="string">"\\.</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">xml</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">xsl</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">rng</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\\'"</span> . nxml-mode)
+            auto-mode-alist))
+
+<span class="comment-delimiter">;; </span><span class="comment">conf-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">Ignore single quote highlighting in .properties files.
+</span>(add-hook 'conf-javaprop-mode-hook
+          '(<span class="keyword">lambda</span> () (conf-quote-normal nil)))
+
+<span class="comment-delimiter">;; </span><span class="comment">shell-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">Use ANSI colors within shell-mode.
+</span>(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+<span class="comment-delimiter">;; </span><span class="comment">flyspell
+</span><span class="comment-delimiter">;; </span><span class="comment">Turn on flyspell mode for text editing.
+</span>(<span class="keyword">dolist</span> (hook '(text-mode-hook))
+  (add-hook hook (<span class="keyword">lambda</span> () (flyspell-mode 1))))
+(<span class="keyword">dolist</span> (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (<span class="keyword">lambda</span> () (flyspell-mode -1))))
+<span class="comment-delimiter">;; </span><span class="comment">aspell &gt; ispell
+</span><span class="comment-delimiter">;; </span><span class="comment">Suggestion mode tuned to fastest possible.
+</span>(setq ispell-program-name <span class="string">"aspell"</span>
+      ispell-extra-args '(<span class="string">"--sug-mode=ultra"</span>))
+
+<span class="comment-delimiter">;; </span><span class="comment">org-mode: Now included with &gt;22.1.
+</span><span class="comment-delimiter">;; </span><span class="comment">Initiate org-mode when opening .org files.
+</span>(add-to-list 'auto-mode-alist '(<span class="string">"\\.org$"</span> . org-mode))
+<span class="comment-delimiter">;; </span><span class="comment">C-c l stores links, C-c C-l calls them.
+</span>(define-key global-map <span class="string">"\C-cl"</span> 'org-store-link)
+<span class="comment-delimiter">;; </span><span class="comment">org-agenda displays this week's scheduled items.
+</span>(define-key global-map <span class="string">"\C-ca"</span> 'org-agenda)
+<span class="comment-delimiter">;; </span><span class="comment">Change default TODO keywords and coloring.
+</span>(setq
+ org-todo-keywords (quote ((sequence
+                            <span class="string">"TODO(t)"</span>
+                            <span class="string">"STARTED(s!)"</span>
+                            <span class="string">"|"</span>
+                            <span class="string">"DONE(d!/!)"</span>
+                            <span class="string">"CANCELED(c!)"</span>)))
+ org-todo-keyword-faces
+      (quote ((<span class="string">"TODO"</span> <span class="builtin">:foreground</span> <span class="string">"red"</span> <span class="builtin">:weight</span> bold)
+              (<span class="string">"STARTED"</span> <span class="builtin">:foreground</span> <span class="string">"blue"</span> <span class="builtin">:weight</span> bold)
+              (<span class="string">"DONE"</span> <span class="builtin">:foreground</span> <span class="string">"forest green"</span> <span class="builtin">:weight</span> bold)
+              (<span class="string">"CANCELED"</span> <span class="builtin">:foreground</span> <span class="string">"yellow"</span> <span class="builtin">:weight</span> bold))))
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+<span class="comment-delimiter">;; </span><span class="comment">remember-mode: Now included in Emacs 23.
+</span><span class="comment-delimiter">;; </span><span class="comment">org-remember-insinuate
+</span>(setq remember-annotation-functions '(org-remember-annotation))
+<span class="comment-delimiter">;</span><span class="comment">(setq remember-handler-functions '(org-remember-handler))
+</span>(add-hook 'remember-mode-hook 'org-remember-apply-template)
+<span class="comment-delimiter">;; </span><span class="comment">Setup for C-c r note taking
+</span>(setq remember-data-file <span class="string">"~/notes.org"</span>)
+(global-set-key (kbd <span class="string">"\C-cr"</span>) 'org-remember)
+
+<span class="comment-delimiter">;; </span><span class="comment">add-log
+</span><span class="comment-delimiter">;; </span><span class="comment">Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.
+</span>(setq user-mail-address <span class="string">"bm3719@gmail.com"</span>)  <span class="comment-delimiter">; </span><span class="comment">Default: user@host
+</span>(setq change-log-default-name <span class="string">"CHANGELOG"</span>)   <span class="comment-delimiter">; </span><span class="comment">Default: ChangeLog
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">savehist-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">Mode requires customizations set prior to enabling.
+</span>(setq savehist-additional-variables
+      '(search-ring regexp-search-ring)    <span class="comment-delimiter">; </span><span class="comment">Save search entries.
+</span>      savehist-file <span class="string">"~/.emacs.d/savehist"</span>) <span class="comment-delimiter">; </span><span class="comment">Keep this out of ~.
+</span>(savehist-mode t)                          <span class="comment-delimiter">; </span><span class="comment">Turn savehist-mode on.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">calendar
+</span><span class="comment-delimiter">;; </span><span class="comment">Add calendar control-navigation.
+</span>(add-hook 'calendar-load-hook
+  '(<span class="keyword">lambda</span> ()
+    (define-key calendar-mode-map <span class="string">"\C-x&gt;"</span> 'scroll-calendar-right)
+    (define-key calendar-mode-map <span class="string">"\C-x&lt;"</span> 'scroll-calendar-left)))
+<span class="comment-delimiter">;; </span><span class="comment">Change some self-explanatory calendar settings.
+</span>(setq
+ mark-holidays-in-calendar t
+ all-christian-calendar-holidays t
+ all-islamic-calendar-holidays nil
+ all-hebrew-calendar-holidays nil
+ display-time-24hr-format t)
+
+<span class="comment-delimiter">;; </span><span class="comment">diary
+</span>(setq diary-file <span class="string">"~/.emacs.d/.diary"</span>)    <span class="comment-delimiter">; </span><span class="comment">Might as well keep this out of ~.
+</span>(setq mark-diary-entries-in-calendar t)  <span class="comment-delimiter">; </span><span class="comment">Add entries to calendar.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">tetris
+</span>(setq tetris-score-file <span class="string">"~/.emacs.d/tetris-scores"</span>) <span class="comment-delimiter">; </span><span class="comment">Moved from ~.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">rmail
+</span>(setq mail-archive-file-name <span class="string">"~/Mail/sent"</span>)  <span class="comment-delimiter">; </span><span class="comment">Reuse the gnus mail dir.
+</span>(<span class="keyword">defconst</span> <span class="variable-name">user-mail-address</span> <span class="string">"bm3719@gmail.com"</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Alias man to woman, since the latter offers completion.
+</span>(<span class="keyword">defalias</span> '<span class="function-name">man</span> 'woman)
+
+<span class="comment-delimiter">;; </span><span class="comment">Emacs bookmarks
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: C-x r m: create new bookmark, C-x r b: navigate to bookmark, C-x r l:
+</span><span class="comment-delimiter">;;       </span><span class="comment">list bookmarks.
+</span>(setq
+ bookmark-default-file <span class="string">"~/.emacs.d/bookmarks"</span> <span class="comment-delimiter">; </span><span class="comment">Moved from ~.
+</span> bookmark-save-flag 1)                        <span class="comment-delimiter">; </span><span class="comment">Autosave each change.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Extra miscellaneous mode associations.
+</span>(setq auto-mode-alist (cons '(<span class="string">"\\.plan$"</span> . text-mode) auto-mode-alist)
+      auto-mode-alist (cons '(<span class="string">"\\.project$"</span> . text-mode) auto-mode-alist)
+      auto-mode-alist (cons '(<span class="string">"\\.doc$"</span> . text-mode) auto-mode-alist)
+      auto-mode-alist (cons '(<span class="string">"\\.zsh$"</span> . sh-mode) auto-mode-alist)
+      auto-mode-alist (cons '(<span class="string">"\\CHANGELOG$"</span> . text-mode) auto-mode-alist)
+      auto-mode-alist (cons '(<span class="string">"\\INSTALL$"</span> . text-mode) auto-mode-alist)
+      auto-mode-alist (cons '(<span class="string">"\\README$"</span> . text-mode) auto-mode-alist)
+      auto-mode-alist (cons '(<span class="string">"\\TODO$"</span> . text-mode) auto-mode-alist))      
+
+<span class="comment-delimiter">;; </span><span class="comment">Use file&lt;pathname&gt; instead of file&lt;n&gt; to uniquify buffer names.
+</span>(<span class="keyword">require</span> '<span class="constant">uniquify</span>)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
+<span class="comment-delimiter">;; </span><span class="comment">server-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">This starts up a server automatically, allowing emacsclient to connect to
+</span><span class="comment-delimiter">;; </span><span class="comment">a single Emacs instance.  If a server already exists, it is killed.
+</span>(server-force-delete)
+(server-start)
+
+<span class="comment-delimiter">;; </span><span class="comment">TRAMP
+</span>(<span class="keyword">when</span> *nt-system*
+  (setq shell-file-name <span class="string">"bash"</span>)
+  (setq explicit-shell-file-name shell-file-name))
+(setq tramp-default-method <span class="string">"scp"</span>)
+
+<span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">External Addons
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Add all ~/.emacs.d subfolders to load path.
+</span>(<span class="keyword">if</span> (fboundp 'normal-top-level-add-subdirs-to-load-path)
+        (<span class="keyword">let*</span> ((my-lisp-dir <span class="string">"~/.emacs.d/"</span>)
+              (default-directory my-lisp-dir))
+           (add-to-list 'load-path my-lisp-dir)
+           (normal-top-level-add-subdirs-to-load-path)))
+
+<span class="comment-delimiter">;; </span><span class="comment">pabbrev
+</span><span class="comment-delimiter">;; </span><span class="comment">http://homepages.cs.ncl.ac.uk/phillip.lord/download/emacs/pabbrev.el
+</span><span class="comment-delimiter">;; </span><span class="comment">Add this to the mode-hook for any major modes I want this auto-activated.
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: Both pabbrev and YASsnippet bind to TAB, so only activate one of them.
+</span>(<span class="keyword">require</span> '<span class="constant">pabbrev</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">pretty-symbols.el
+</span><span class="comment-delimiter">;; </span><span class="comment">Converts various mathematical symbols and Greek letters to their Unicode
+</span><span class="comment-delimiter">;; </span><span class="comment">versions.  Useful for Lisp-variants, ML-variants, and Haskell.
+</span>(<span class="keyword">require</span> '<span class="constant">pretty-symbols</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">SLIME
+</span><span class="comment-delimiter">;; </span><span class="comment">http://common-lisp.net/project/slime/
+</span>(<span class="keyword">when</span> *freebsd-system* <span class="comment-delimiter">; </span><span class="comment">FreeBSD CVS version.
+</span>  (setq inferior-lisp-program <span class="string">"/usr/local/bin/sbcl"</span>
+        common-lisp-hyperspec-root
+        <span class="string">"file:///usr/local/share/doc/clisp-hyperspec/HyperSpec/"</span>))
+(<span class="keyword">when</span> *linux-system*   <span class="comment-delimiter">; </span><span class="comment">Linux CVS version (only using with remote sbcl).
+</span>  (setq inferior-lisp-program <span class="string">"/usr/bin/sbcl"</span>
+        common-lisp-hyperspec-root <span class="string">"file:///home/bm3719/doc/HyperSpec/"</span>))
+(<span class="keyword">when</span> *nt-system*      <span class="comment-delimiter">; </span><span class="comment">Windows CVS version.
+</span>  (setq inferior-lisp-program <span class="string">"sbcl.exe"</span>
+        common-lisp-hyperspec-root <span class="string">"file:///C:/bm3719/doc/HyperSpec/"</span>))
+<span class="comment-delimiter">;; </span><span class="comment">Common SLIME setup.
+</span>(setq lisp-indent-function 'common-lisp-indent-function
+      slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+      slime-startup-animation t
+      slime-complete-symbol*-fancy t)
+(<span class="keyword">require</span> '<span class="constant">slime</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Startup SLIME when a lisp file is open.
+</span>(add-hook 'lisp-mode-hook (<span class="keyword">lambda</span> () (slime-mode t)))
+(add-hook 'inferior-lisp-mode-hook (<span class="keyword">lambda</span> () (inferior-slime-mode t)))
+(global-set-key <span class="string">"\C-cs"</span> 'slime-selector)
+
+<span class="comment-delimiter">;; </span><span class="comment">SLIME contribs.
+</span>(slime-setup '(slime-autodoc <span class="comment-delimiter">; </span><span class="comment">Show information about symbols near the point.
+</span>               slime-fancy   <span class="comment-delimiter">; </span><span class="comment">Some fancy SLIME contribs.
+</span>               slime-banner  <span class="comment-delimiter">; </span><span class="comment">Persistent header line and startup animation.
+</span>               slime-asdf))  <span class="comment-delimiter">; </span><span class="comment">ASDF support.
+</span><span class="comment-delimiter">;; </span><span class="comment">SLIME contribs init.
+</span>(slime-banner-init)          <span class="comment-delimiter">; </span><span class="comment">Sets banner function to slime-startup-message.
+</span>(slime-asdf-init)            <span class="comment-delimiter">; </span><span class="comment">Hooks slime-asdf-on-connect.
+</span><span class="comment-delimiter">;; </span><span class="comment">Spell-check comments.
+</span>(add-hook 'slime-mode-hook 'flyspell-prog-mode)
+<span class="comment-delimiter">;; </span><span class="comment">Enable pretty-symbols for Greek letters.
+</span>(add-hook 'slime-mode-hook 'pretty-greek)
+
+<span class="comment-delimiter">;; </span><span class="comment">Translates from Emacs buffer to filename on remote machine.
+</span>(setf slime-translate-to-lisp-filename-function
+  (<span class="keyword">lambda</span> (file-name)
+    (subseq file-name (length <span class="string">"/ssh:[userid]:"</span>)))
+  slime-translate-from-lisp-filename-function
+    (<span class="keyword">lambda</span> (file-name)
+    (concat <span class="string">"/[userid]:"</span> file-name)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Fontify *SLIME Description* buffer for SBCL.
+</span>(<span class="keyword">defun</span> <span class="function-name">slime-description-fontify</span> ()
+  <span class="doc">"Fontify sections of SLIME Description."</span>
+  (<span class="keyword">with-current-buffer</span> <span class="string">"*SLIME Description &lt;sbcl&gt;*"</span>
+    (highlight-regexp
+     (concat <span class="string">"^Function:</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">"</span>
+             <span class="string">"^Macro-function:</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">"</span>
+             <span class="string">"^Its associated name.+?) is</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">"</span>
+             <span class="string">"^The .+'s arguments are:</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">"</span>
+             <span class="string">"^Function documentation:$</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">"</span>
+             <span class="string">"^Its.+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">is</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">are</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">:</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">"</span>
+             <span class="string">"^On.+it was compiled from:$"</span>)
+     'hi-blue)))
+(<span class="keyword">defadvice</span> <span class="function-name">slime-show-description</span> (after slime-description-fontify activate)
+  <span class="doc">"Fontify sections of SLIME Description."</span>
+  (slime-description-fontify))
+
+<span class="comment-delimiter">;; </span><span class="comment">Improve usability of slime-apropos: slime-apropos-minor-mode
+</span>(<span class="keyword">defvar</span> <span class="variable-name">slime-apropos-anchor-regexp</span> <span class="string">"^[</span><span class="string"><span class="negation-char">^</span></span><span class="string"> ]"</span>)
+(<span class="keyword">defun</span> <span class="function-name">slime-apropos-next-anchor</span> ()
+  (interactive)
+  (<span class="keyword">let</span> ((pt (point)))
+    (forward-line 1)
+    (<span class="keyword">if</span> (re-search-forward slime-apropos-anchor-regexp nil t)
+        (goto-char (match-beginning 0))
+      (goto-char pt)
+      (<span class="warning">error</span> <span class="string">"anchor not found"</span>))))
+(<span class="keyword">defun</span> <span class="function-name">slime-apropos-prev-anchor</span> ()
+  (interactive)
+  (<span class="keyword">let</span> ((p (point)))
+    (<span class="keyword">if</span> (re-search-backward slime-apropos-anchor-regexp nil t)
+        (goto-char (match-beginning 0))
+      (goto-char p)
+      (<span class="warning">error</span> <span class="string">"anchor not found"</span>))))
+(<span class="keyword">defvar</span> <span class="variable-name">slime-apropos-minor-mode-map</span> (make-sparse-keymap))
+(define-key slime-apropos-minor-mode-map <span class="string">"\C-m"</span> 'slime-describe-symbol)
+(define-key slime-apropos-minor-mode-map <span class="string">"l"</span> 'slime-describe-symbol)
+(define-key slime-apropos-minor-mode-map <span class="string">"j"</span> 'slime-apropos-next-anchor)
+(define-key slime-apropos-minor-mode-map <span class="string">"k"</span> 'slime-apropos-prev-anchor)
+(<span class="keyword">define-minor-mode</span> <span class="function-name">slime-apropos-minor-mode</span> <span class="doc">""</span>)
+(<span class="keyword">defadvice</span> <span class="function-name">slime-show-apropos</span> (after slime-apropos-minor-mode activate)
+  <span class="doc">""</span>
+  (<span class="keyword">when</span> (get-buffer <span class="string">"*SLIME Apropos*"</span>)
+    (<span class="keyword">with-current-buffer</span> <span class="string">"*SLIME Apropos*"</span> (slime-apropos-minor-mode 1))))
+
+<span class="comment-delimiter">;; </span><span class="comment">clojure-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">http://github.com/technomancy/clojure-mode
+</span>(<span class="keyword">require</span> '<span class="constant">clojure-mode</span>)
+<span class="comment-delimiter">;; </span><span class="comment">swank-clojure
+</span><span class="comment-delimiter">;; </span><span class="comment">http://github.com/technomancy/swank-clojure
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: Using older version, since current SLIME is incompatible with the
+</span><span class="comment-delimiter">;;       </span><span class="comment">latest swank-clojure.  Be sure to copy clojure-contrib directory.
+</span>(<span class="keyword">when</span> *nt-system*
+    (setq swank-clojure-jar-path <span class="string">"C:\\bin\\java\\clojure-1.1.0\\clojure.jar"</span>
+          swank-clojure-classpath <span class="string">"C:\\bin\\java\\clojure-1.1.0"</span>))
+(<span class="keyword">when</span> *freebsd-system*
+  (setq swank-clojure-jar-path <span class="string">"/usr/local/share/java/classes/clojure.jar"</span>
+        swank-clojure-classpath <span class="string">"/usr/local/share/java/classes"</span>))
+(<span class="keyword">when</span> *linux-system*
+  (setq swank-clojure-jar-path <span class="string">"/usr/lib/clojure.jar"</span>
+        swank-clojure-classpath <span class="string">"/usr/lib"</span>))
+(<span class="keyword">require</span> '<span class="constant">swank-clojure-autoload</span>)
+(setq swank-clojure-extra-classpaths (list
+                                      <span class="string">"~/.emacs.d/clojure"</span>
+                                      <span class="string">"~/.emacs.d/clojure-contrib"</span>))
+<span class="comment-delimiter">;; </span><span class="comment">Restore SBCL as default SLIME Lisp implementation.  To specify clojure on
+</span><span class="comment-delimiter">;; </span><span class="comment">SLIME start, run with: M-- M-x slime clojure
+</span>(add-to-list 'slime-lisp-implementations '(sbcl (<span class="string">"sbcl"</span>)))
+
+<span class="comment-delimiter">;; </span><span class="comment">haskell-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">http://projects.haskell.org/haskellmode-emacs/
+</span>(<span class="keyword">cond</span> ((or *freebsd-system* *linux-system*) <span class="comment-delimiter">; </span><span class="comment">FreeBSD/Linux CVS versions.
+</span>       (load <span class="string">"~/.emacs.d/haskell-mode/haskell-site-file.el"</span>))
+      (*nt-system*                          <span class="comment-delimiter">; </span><span class="comment">NT manual install.
+</span>       (load <span class="string">"C:\\bm3719\\.emacs.d\\haskell-mode\\haskell-site-file.el"</span>)))
+<span class="comment-delimiter">;; </span><span class="comment">Append haskell extensions to auto-mode association list.
+</span>(setq auto-mode-alist
+  (append auto-mode-alist
+    '((<span class="string">"\\.[hg]s$"</span> . haskell-mode)
+      (<span class="string">"\\.hi$"</span> . haskell-mode)
+      (<span class="string">"\\.l[hg]s$"</span> . literate-haskell-mode))))
+(autoload 'haskell-mode <span class="string">"haskell-mode"</span>
+   <span class="doc">"Major mode for editing Haskell scripts."</span> t)
+(autoload 'literate-haskell-mode <span class="string">"haskell-mode"</span>
+   <span class="doc">"Major mode for editing literate Haskell scripts."</span> t)
+<span class="comment-delimiter">;; </span><span class="comment">hslint
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/cgi-bin/wiki/FlymakeHaskell
+</span><span class="comment-delimiter">;; </span><span class="comment">Requires a Perl script called `</span><span class="comment"><span class="constant">hslint</span></span><span class="comment">' to be in $PATH.
+</span>(autoload 'flymake-mode <span class="string">"flymake"</span> <span class="doc">""</span> t)
+(<span class="keyword">eval-after-load</span> <span class="string">"flymake"</span>
+  '(<span class="keyword">progn</span>
+    (<span class="keyword">defun</span> <span class="function-name">flymake-hslint-init</span> ()
+      (<span class="keyword">let*</span> ((temp-file (flymake-init-create-temp-buffer-copy
+                         'flymake-create-temp-inplace))
+             (local-file (file-relative-name
+                          temp-file
+                          (file-name-directory buffer-file-name))))
+        (list <span class="string">"hslint"</span> (list local-file))))
+    (add-to-list 'flymake-allowed-file-name-masks
+     '(<span class="string">"\\.l?hs\\'"</span> flymake-hslint-init))))
+<span class="comment-delimiter">;; </span><span class="comment">haskell-mode-hook customizations.
+</span>(add-hook 'haskell-mode-hook
+          '(<span class="keyword">lambda</span> ()
+            (turn-on-haskell-decl-scan)
+            (turn-on-haskell-doc-mode)
+            (turn-on-font-lock)
+            <span class="comment-delimiter">;; </span><span class="comment">Mutually exclusive indenting modes - choose one.
+</span>            (turn-on-haskell-indentation)
+            <span class="comment-delimiter">;; </span><span class="comment">(turn-on-haskell-indent)
+</span>            <span class="comment-delimiter">;; </span><span class="comment">(turn-on-haskell-simple-indent)
+</span>            <span class="comment-delimiter">;; </span><span class="comment">Spell-check comments.
+</span>            (flyspell-prog-mode)
+            <span class="comment-delimiter">;; </span><span class="comment">Highlight trailing whitespace.
+</span>            (setq show-trailing-whitespace t)
+            <span class="comment-delimiter">;; </span><span class="comment">Enable Greek letters and math symbols.
+</span>            (pretty-greek)
+            (haskell-unicode)
+            <span class="comment-delimiter">;; </span><span class="comment">flymake (GHC is a bit slow, so disable this on old machines).
+</span>            (flymake-mode 1)))
+<span class="comment-delimiter">;; </span><span class="comment">literate-haskell-mode hook customization.
+</span>(add-hook 'literate-haskell-mode
+          '(<span class="keyword">lambda</span> ()
+            (flyspell-mode 1)
+            (pretty-greek)
+            (haskell-unicode)
+            (flymake-mode 1)))
+<span class="comment-delimiter">;; </span><span class="comment">Write literate Haskell in LaTeX style (default is Bird style).  This
+</span><span class="comment-delimiter">;; </span><span class="comment">requires code blocks to be between \begin{code} and \end{code}.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.haskell.org/haskellwiki/Literate_programming
+</span>(setq haskell-literate-default 'latex)
+
+<span class="comment-delimiter">;; </span><span class="comment">agda-mode: Cabal version.
+</span>(<span class="keyword">when</span> *freebsd-system*
+  (load-file (<span class="keyword">let</span> ((coding-system-for-read 'utf-8))
+               (shell-command-to-string <span class="string">"agda-mode locate"</span>)))
+  (autoload 'agda-mode <span class="string">"agda2-mode.el"</span>
+    <span class="doc">"Major mode for Agda files"</span> t)
+  (<span class="keyword">unless</span> (assoc <span class="string">"\\.agda"</span> auto-mode-alist)
+    (setq auto-mode-alist
+          (nconc '((<span class="string">"\\.agda"</span> . agda2-mode)
+                   (<span class="string">"\\.alfa"</span> . agda2-mode)) auto-mode-alist))))
+
+<span class="comment-delimiter">;; </span><span class="comment">scala-mode: Comes with Scala distribution.
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: Activate REPL with M-x scala-run-scala.  Activate menu-bar-mode to see
+</span><span class="comment-delimiter">;;       </span><span class="comment">all snippets.
+</span>(<span class="keyword">when</span> *nt-system*
+  (add-to-list 'load-path
+               <span class="string">"C:\\bin\\java\\scala-2.7.7\\misc\\scala-tool-support\\emacs"</span>))
+(<span class="keyword">when</span> *freebsd-system*
+  (add-to-list 'load-path
+               <span class="string">"/usr/local/share/scala-2.7.7/misc/scala-tool-support/emacs"</span>))
+<span class="comment-delimiter">;; </span><span class="comment">Arch Linux's scala package doesn't include scala-tool-support, so this is a
+</span><span class="comment-delimiter">;; </span><span class="comment">manually copied version.
+</span>(<span class="keyword">when</span> *linux-system*
+  (add-to-list 'load-path
+               <span class="string">"~/lib/scala-tool"</span>))
+(<span class="keyword">require</span> '<span class="constant">scala-mode-auto</span>)
+<span class="comment-delimiter">;; </span><span class="comment">Spell-check comments.
+</span>(add-hook 'scala-mode-hook 'flyspell-prog-mode)
+<span class="comment-delimiter">;; </span><span class="comment">ENSIME: Enhanced Scala Interaction Mode for Emacs.
+</span>(<span class="keyword">require</span> '<span class="constant">ensime</span>)
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+<span class="comment-delimiter">;; </span><span class="comment">SBT: Scala Build Tool
+</span><span class="comment-delimiter">;; </span><span class="comment">http://github.com/RayRacine/scallap/blob/master/tools/emacs/sbt.el
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: Not sure I want to use this yet.
+</span>(load <span class="string">"~/.emacs.d/sbt.el"</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">gtags
+</span><span class="comment-delimiter">;; </span><span class="comment">Requires an install of GNU Global.  Currently only using for c-mode.
+</span>(<span class="keyword">when</span> *freebsd-system*
+  (setq load-path (cons <span class="string">"/usr/local/share/gtags"</span> load-path))
+  (autoload 'gtags-mode <span class="string">"gtags"</span> <span class="doc">""</span> t)
+  (setq c-mode-hook '(<span class="keyword">lambda</span> () (gtags-mode 1))))
+
+<span class="comment-delimiter">;; </span><span class="comment">python-mode: Replaces the built-in python.el.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://launchpad.net/python-mode/trunk/5.1.0/+download/python-mode.el
+</span>(autoload 'python-mode <span class="string">"python-mode"</span> <span class="doc">"Python Mode."</span> t)
+(add-to-list 'auto-mode-alist '(<span class="string">"\\.py\\'"</span> . python-mode))
+(add-to-list 'interpreter-mode-alist '(<span class="string">"python"</span> . python-mode))
+<span class="comment-delimiter">;; </span><span class="comment">NOTE: python-describe-symbol requires the python-doc-html package and
+</span><span class="comment-delimiter">;;       </span><span class="comment">the PYTHONDOCS environment variable to be set.
+</span>(add-hook 'python-mode-hook
+          (<span class="keyword">lambda</span> ()
+            (set (make-variable-buffer-local 'beginning-of-defun-function)
+                 'py-beginning-of-def-or-class)
+            (setq outline-regexp <span class="string">"def</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">class "</span>)
+            (pabbrev-mode)
+            (flyspell-prog-mode)))
+<span class="comment-delimiter">;; </span><span class="comment">flymake-pylint: Allow flymake checking of Python scripts, which
+</span><span class="comment-delimiter">;; </span><span class="comment">auto-highlights syntax errors/warnings.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/cgi-bin/wiki/PythonMode#toc7
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: This requires an install of pylint and (with Emacs &gt;23) a script
+</span><span class="comment-delimiter">;;       </span><span class="comment">called epylint in PATH (mine is in ~/bin).  Python flymake can be
+</span><span class="comment-delimiter">;;       </span><span class="comment">activated then by running M-x flymake-mode inside a Python file.
+</span>(<span class="keyword">when</span> (load <span class="string">"flymake"</span> t)
+  (<span class="keyword">defun</span> <span class="function-name">flymake-pylint-init</span> ()
+    (<span class="keyword">let*</span> ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list <span class="string">"epylint"</span> (list local-file))))    
+  (add-to-list 'flymake-allowed-file-name-masks
+               '(<span class="string">"\\.py\\'"</span> flymake-pylint-init)))
+<span class="comment-delimiter">;; </span><span class="comment">ipython: Support for a replacement to the default Python shell.  Requires an
+</span><span class="comment-delimiter">;; </span><span class="comment">install of the iPython application.
+</span>(<span class="keyword">require</span> '<span class="constant">ipython</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">ruby-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/RubyMode
+</span>(autoload 'ruby-mode <span class="string">"ruby-mode"</span> <span class="doc">"Major mode for ruby files"</span> t)
+(add-to-list 'auto-mode-alist '(<span class="string">"\\.rb$"</span> . ruby-mode))
+(add-to-list 'interpreter-mode-alist '(<span class="string">"ruby"</span> . ruby-mode))
+(autoload 'run-ruby <span class="string">"inf-ruby"</span> <span class="doc">"Run an inferior Ruby process"</span>)
+(autoload 'inf-ruby-keys <span class="string">"inf-ruby"</span>
+  <span class="doc">"Set local key defs for inf-ruby in ruby-mode"</span>)
+(add-hook 'ruby-mode-hook
+         '(<span class="keyword">lambda</span> ()
+           (inf-ruby-keys)
+           (flyspell-prog-mode)))
+
+<span class="comment-delimiter">;; </span><span class="comment">AUCTeX
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.gnu.org/software/auctex/
+</span><span class="comment-delimiter">;; </span><span class="comment">FreeBSD ports, Linux apt-get version.
+</span>(<span class="keyword">when</span> (not *nt-system*)
+  (load <span class="string">"auctex.el"</span> nil t t)
+  (load <span class="string">"preview-latex.el"</span> nil t t)
+  (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  <span class="comment-delimiter">;; </span><span class="comment">Enable this when working with multi-file document structures.
+</span>  <span class="comment-delimiter">;</span><span class="comment">(setq-default TeX-master nil)
+</span>  <span class="comment-delimiter">;; </span><span class="comment">Enable document parsing.
+</span>  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  <span class="comment-delimiter">;; </span><span class="comment">Full section options.  See Sectioning page in AUCTeX info.
+</span>  (setq LaTeX-section-hook
+        '(LaTeX-section-heading
+          LaTeX-section-title
+          LaTeX-section-toc
+          LaTeX-section-section
+          LaTeX-section-label)))
+
+<span class="comment-delimiter">;; </span><span class="comment">nXhtml
+</span><span class="comment-delimiter">;; </span><span class="comment">http://ourcomments.org/Emacs/nXhtml/doc/nxhtml.html
+</span><span class="comment-delimiter">;; </span><span class="comment">Includes MuMaMo.
+</span><span class="comment-delimiter">;; </span><span class="comment">TODO: Consider turning off or changing the ugly block-coloring.
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: This needs to be run before espresso, since parts of its JavaScript
+</span><span class="comment-delimiter">;;       </span><span class="comment">setup need to get clobbered.
+</span>(load <span class="string">"~/.emacs.d/nxhtml/autostart.el"</span>)
+<span class="comment-delimiter">;; </span><span class="comment">Turn on spell-checking for markup files.
+</span>(<span class="keyword">dolist</span> (hook '(nxhtml-mode-hook))
+  (add-hook hook (<span class="keyword">lambda</span> () (flyspell-prog-mode))))
+<span class="comment-delimiter">;; </span><span class="comment">Get rid of the default top-level block color.
+</span>(custom-set-faces
+  <span class="comment-delimiter">;; </span><span class="comment">custom-set-faces was added by Custom.
+</span>  <span class="comment-delimiter">;; </span><span class="comment">If you edit it by hand, you could mess it up, so be careful.
+</span>  <span class="comment-delimiter">;; </span><span class="comment">Your init file should contain only one such instance.
+</span>  <span class="comment-delimiter">;; </span><span class="comment">If there is more than one, they won't work right.
+</span> '(mumamo-background-chunk-major ((((class color) (min-colors 88)
+                                    (background dark)) nil))))
+
+<span class="comment-delimiter">;; </span><span class="comment">espresso
+</span><span class="comment-delimiter">;; </span><span class="comment">http://download.savannah.gnu.org/releases-noredirect/espresso/espresso.el
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: Will eventually be incorporated into Emacs as js-mode.
+</span>(autoload #'espresso-mode <span class="string">"espresso"</span> <span class="doc">"Start espresso-mode"</span> t)
+(add-to-list 'auto-mode-alist '(<span class="string">"\\.js$"</span> . espresso-mode))
+(add-to-list 'auto-mode-alist '(<span class="string">"\\.json$"</span> . espresso-mode))
+
+<span class="comment-delimiter">;; </span><span class="comment">flymake-jslint
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/FlymakeJavaScript
+</span><span class="comment-delimiter">;; </span><span class="comment">This setup requires Rhino (a JavaScript engine), a flymake-jslint.el file in
+</span><span class="comment-delimiter">;; </span><span class="comment">~/.emacs.d, and JSLint (available from http://www.jslint.com).
+</span><span class="comment-delimiter">;; </span><span class="comment">TODO: Try to get lintnode working instead of this method at some later date.
+</span><span class="comment-delimiter">;;       </span><span class="comment">Last attempt on 05/10/2010 failed.
+</span>(<span class="keyword">require</span> '<span class="constant">flymake-jslint</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">moz.el
+</span><span class="comment-delimiter">;; </span><span class="comment">http://download.savannah.gnu.org/releases-noredirect/espresso/moz.el
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: Requires json.el on &lt;23.
+</span>(autoload 'moz-minor-mode <span class="string">"moz"</span> <span class="doc">"Mozilla Minor and Inferior Mozilla Modes"</span> t)
+<span class="comment-delimiter">;; </span><span class="comment">Now that all JavaScript stuff is setup, create full espresso-mode hook.
+</span>(add-hook 'espresso-mode-hook
+          '(<span class="keyword">lambda</span> ()
+            (moz-minor-mode 1)
+            (pabbrev-mode)
+            (flymake-mode)
+            (flyspell-prog-mode)))
+
+<span class="comment-delimiter">;; </span><span class="comment">batch-mode
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/download/batch-mode.el
+</span>(<span class="keyword">require</span> '<span class="constant">batch-mode</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">sqlplus
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/SqlPlus
+</span><span class="comment-delimiter">;; </span><span class="comment">Add plsql.el later if needed.
+</span>(<span class="keyword">require</span> '<span class="constant">sqlplus</span>)
+(add-to-list 'auto-mode-alist '(<span class="string">"\\.sqp\\'"</span> . sqlplus-mode))
+<span class="comment-delimiter">;; </span><span class="comment">NOTE: This auto-logs me into SQL*Plus, but doesn't execute commands sent
+</span><span class="comment-delimiter">;;       </span><span class="comment">from the current .sqp file for some reason.  A working method is to
+</span><span class="comment-delimiter">;;       </span><span class="comment">open the .sqp file, an run commands with C-Ret.
+</span>(<span class="keyword">defun</span> <span class="function-name">bcm-sqlplus</span> ()
+  (interactive)
+  (sqlplus <span class="string">"rtrg/rtrg@//localhost:1521/orcl"</span>))
+
+<span class="comment-delimiter">;; </span><span class="comment">CEDET
+</span><span class="comment-delimiter">;; </span><span class="comment">http://cedet.sourceforge.net/
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: Included in Emacs 23.2.
+</span>(<span class="keyword">when</span> *nt-system*       <span class="comment-delimiter">; </span><span class="comment">NT manual install.
+</span>  (load-file <span class="string">"~/.emacs.d/cedet-1.0pre6/common/cedet.el"</span>))
+(setq semantic-load-turn-useful-things-on t)
+<span class="comment-delimiter">;; </span><span class="comment">On FreeBSD and Linux, ECB drags this in as a dependency.
+</span>(<span class="keyword">require</span> '<span class="constant">cedet</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">ECB
+</span><span class="comment-delimiter">;; </span><span class="comment">http://ecb.sourceforge.net/
+</span><span class="comment-delimiter">;; </span><span class="comment">Windows manual install.
+</span>(<span class="keyword">when</span> *freebsd-system*  <span class="comment-delimiter">; </span><span class="comment">FreeBSD ports version.
+</span>  (add-to-list 'load-path <span class="string">"/usr/local/share/emacs/22.3/site-lisp/ecb"</span>))
+(<span class="keyword">when</span> *linux-system*    <span class="comment-delimiter">; </span><span class="comment">Linux apt-get version.
+</span>  (add-to-list 'load-path <span class="string">"/usr/share/emacs22/site-lisp/ecb"</span>))
+(<span class="keyword">require</span> '<span class="constant">ecb</span>)
+<span class="comment-delimiter">;; </span><span class="comment">Keep semantic.cache files from littering my FS.
+</span>(setq semanticdb-default-save-directory <span class="string">"~/.emacs.d/saves/semantic.cache"</span>)
+<span class="comment-delimiter">;; </span><span class="comment">Disable tip of the day (especially annoying in GUI mode).
+</span>(setq ecb-tip-of-the-day nil)
+<span class="comment-delimiter">;; </span><span class="comment">Ensure the options save buffer doesn't appear.
+</span>(custom-set-variables
+  <span class="comment-delimiter">;; </span><span class="comment">custom-set-variables was added by Custom.
+</span>  <span class="comment-delimiter">;; </span><span class="comment">If you edit it by hand, you could mess it up, so be careful.
+</span>  <span class="comment-delimiter">;; </span><span class="comment">Your init file should contain only one such instance.
+</span>  <span class="comment-delimiter">;; </span><span class="comment">If there is more than one, they won't work right.
+</span> '(ecb-gzip-setup (quote cons))
+ '(ecb-layout-name <span class="string">"leftright1"</span>)
+ '(ecb-options-version <span class="string">"2.32"</span>)
+ '(ecb-source-path (quote (<span class="string">"~/"</span>)))
+ '(ecb-tar-setup (quote cons))
+ '(ecb-wget-setup (quote cons))
+ '(safe-local-variable-values (quote ((outline-minor-mode . t))))
+ '(global-semantic-decoration-mode nil nil (semantic-decorate-mode))
+ '(global-semantic-highlight-edits-mode nil nil (semantic-util-modes))
+ '(global-semantic-highlight-func-mode nil nil (semantic-util-modes))
+ '(global-semantic-idle-completions-mode t nil (semantic-idle))
+ '(global-semantic-idle-scheduler-mode nil nil (semantic-idle))
+ '(global-semantic-idle-summary-mode nil nil (semantic-idle))
+ '(global-semantic-idle-tag-highlight-mode nil nil (semantic-idle))
+ '(global-semantic-show-parser-state-mode nil nil (semantic-util-modes))
+ '(global-semantic-show-unmatched-syntax-mode nil nil (semantic-util-modes))
+ '(global-semantic-stickyfunc-mode nil nil (semantic-util-modes))
+ '(global-senator-minor-mode t nil (senator))
+ '(semantic-complete-inline-analyzer-displayor-class
+   (quote semantic-displayor-tooltip))
+ '(semantic-complete-inline-analyzer-idle-displayor-class
+   (quote semantic-displayor-tooltip))
+ '(semantic-idle-scheduler-verbose-flag nil)
+ '(semantic-imenu-sort-bucket-function
+   (quote semantic-sort-tags-by-name-increasing))
+ '(semanticdb-global-mode t nil (semanticdb))
+ '(which-function-mode nil))
+
+<span class="comment-delimiter">;; </span><span class="comment">JDEE
+</span><span class="comment-delimiter">;; </span><span class="comment">http://jdee.sourceforge.net/
+</span>(<span class="keyword">require</span> '<span class="constant">jde</span>)
+<span class="comment-delimiter">;; </span><span class="comment">Kill the bsh buffer created on init.
+</span>(<span class="keyword">when</span> (not (eq nil (get-buffer <span class="string">"*JDEE bsh*"</span>)))
+  (kill-buffer <span class="string">"*JDEE bsh*"</span>))
+<span class="comment-delimiter">;; </span><span class="comment">This fixes the "The JDE does not recognize JDK 1.6 javac." issue.
+</span>(<span class="keyword">when</span> *freebsd-system*
+  (setq jde-jdk-registry '((<span class="string">"1.6.0"</span> . <span class="string">"/usr/local/diablo-jdk1.6.0"</span>))))
+(<span class="keyword">when</span> *linux-system*
+  <span class="comment-delimiter">;; </span><span class="comment">Handle differences between Arch and Ubuntu.
+</span>  (<span class="keyword">if</span> (file-exists-p <span class="string">"/usr/lib/jvm/java-6-openjdk"</span>)
+      (setq jde-jdk-registry '((<span class="string">"1.6.0"</span> . <span class="string">"/usr/lib/jvm/java-6-openjdk"</span>)))
+      (setq jde-jdk-registry '((<span class="string">"1.6.0"</span> . <span class="string">"/usr/lib/jvm/java-6-sun"</span>)))))      
+(<span class="keyword">when</span> *nt-system*
+  <span class="comment-delimiter">;; </span><span class="comment">Handle differences between 32-bit and 64-bit JDKs.
+</span>  (<span class="keyword">if</span> (file-exists-p <span class="string">"C:\\Program Files\\Java\\jdk1.6.0_18"</span>)
+      (setq jde-jdk-registry
+            '((<span class="string">"1.6.0"</span> . <span class="string">"C:\\Program Files\\Java\\jdk1.6.0_18"</span>)))
+      (setq jde-jdk-registry
+            '((<span class="string">"1.6.0"</span> . <span class="string">"C:\\Program Files (x86)\\Java\\jdk1.6.0_18"</span>)))))
+<span class="comment-delimiter">;; </span><span class="comment">Various JDEE settings.
+</span>(setq
+ <span class="comment-delimiter">;; </span><span class="comment">Set the JDK version.
+</span> jde-jdk '(<span class="string">"1.6.0"</span>)
+ <span class="comment-delimiter">;; </span><span class="comment">Ideally, I'd prefer K&amp;R, but hardly anyone programs Java this way.  I
+</span> <span class="comment-delimiter">;; </span><span class="comment">toggle this on for my own code though.
+</span> jde-gen-k&amp;r nil
+ <span class="comment-delimiter">;; </span><span class="comment">Enable control flow abbreviations.
+</span> jde-enable-abbrev-mode t
+ <span class="comment-delimiter">;; </span><span class="comment">Set JDEE to show a completion menu instead of just completing with the
+</span> <span class="comment-delimiter">;; </span><span class="comment">first thing it finds.  Only works in GUI mode.  In console mode, just run
+</span> <span class="comment-delimiter">;; </span><span class="comment">C-c C-v C-. multiple times to scroll through them.
+</span> jde-complete-function 'jde-complete-menu
+ <span class="comment-delimiter">;; </span><span class="comment">Define defaults for jde-sourcepath and jde-global-classpath.  These can be
+</span> <span class="comment-delimiter">;; </span><span class="comment">redefined in in prj.el.
+</span> jde-sourcepath '((<span class="string">"."</span>))
+ jde-global-classpath '(<span class="string">"."</span>))
+<span class="comment-delimiter">;; </span><span class="comment">Looks like the `</span><span class="comment"><span class="constant">main</span></span><span class="comment">' control flow template is missing (or maybe never
+</span><span class="comment-delimiter">;; </span><span class="comment">existed), so this is my own version of it.
+</span>(jde-gen-define-abbrev-template
+ <span class="string">"main"</span>
+ '('&gt; <span class="string">"public static void main (String[] args) {"</span> '&gt; 'n '&gt; 'r 'n '&gt; <span class="string">"}"</span> '&gt;))
+<span class="comment-delimiter">;; </span><span class="comment">JDEE flymake, using ECJ (the Eclipse batch compiler).  This can not be a
+</span><span class="comment-delimiter">;; </span><span class="comment">relative path.
+</span>(<span class="keyword">when</span> (or *freebsd-system* *linux-system*)
+  (<span class="keyword">defvar</span> <span class="variable-name">ecj-path</span> <span class="string">"/home/bm3719/.ant/lib/ecj-3.6.jar"</span>))
+<span class="comment-delimiter">;; </span><span class="comment">Copy this jar from an Eclipse install.  Make sure the version numbers match.
+</span>(<span class="keyword">when</span> *nt-system*
+  (<span class="keyword">defvar</span> <span class="variable-name">ecj-path</span>
+    <span class="string">"C:\\bm3719\\bin\\org.eclipse.jdt.core_3.5.2.v_981_R35x.jar"</span>))
+<span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/jde-eclipse-compiler-server.el
+</span>(<span class="keyword">require</span> '<span class="constant">jde-eclipse-compiler-server</span>)
+(setq jde-compiler (list (list <span class="string">"eclipse java compiler server"</span> ecj-path)))
+(setq jde-ecj-command-line-args (list <span class="string">"-d"</span> <span class="string">"none"</span>
+                                      <span class="string">"-target"</span> <span class="string">"1.6"</span> <span class="string">"-source"</span> <span class="string">"1.6"</span>
+                                      <span class="string">"-proceedOnError"</span>))
+(push '(<span class="string">".+\\.java$"</span> jde-ecj-flymake-init jde-ecj-flymake-cleanup)
+      flymake-allowed-file-name-masks)
+(push '(<span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*?</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">:</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[0-9]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">: error: </span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*?</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\n"</span> 1 2 nil 2 3
+        (6 compilation-error-face)) compilation-error-regexp-alist)
+(push '(<span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*?</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">:</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[0-9]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">: warning: </span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*?</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\n"</span> 1 2 nil 1 3
+        (6 compilation-warning-face)) compilation-error-regexp-alist)
+<span class="comment-delimiter">;; </span><span class="comment">Define mode hook.  Note that spell-checking comments doesn't operate on doc
+</span><span class="comment-delimiter">;; </span><span class="comment">comments.
+</span>(add-hook 'jde-mode-hook '(<span class="keyword">lambda</span> ()
+                           (flymake-mode)
+                           (flyspell-prog-mode)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Maxima support
+</span><span class="comment-delimiter">;; </span><span class="comment">NOTE: Gnuplot on Windows not setup yet.
+</span>(setq auto-mode-alist (cons '(<span class="string">"\\.max"</span> . maxima-mode) auto-mode-alist))
+(<span class="keyword">when</span> *freebsd-system*
+  (setq load-path (cons <span class="string">"/usr/local/share/maxima/5.19.2/emacs"</span> load-path)))
+(<span class="keyword">when</span> *linux-system*
+  (setq load-path (cons <span class="string">"/usr/share/maxima/5.20.1/emacs"</span> load-path)))
+(<span class="keyword">when</span> *nt-system*
+  (setq load-path
+        (cons <span class="string">"C:\\bin\\utils\\maxima\\share\\maxima\\5.20.1\\emacs"</span>
+              load-path)))
+(autoload 'maxima <span class="string">"maxima"</span> <span class="doc">"Running Maxima interactively"</span> t)
+(autoload 'maxima-mode <span class="string">"maxima"</span> <span class="doc">"Maxima editing mode"</span> t)
+
+<span class="comment-delimiter">;; </span><span class="comment">Mutt client integration.
+</span><span class="comment-delimiter">;; </span><span class="comment">This associates file whose name contains "/mutt" to be in mail-mode and the
+</span><span class="comment-delimiter">;; </span><span class="comment">"It's All Text" FF add-on (Windows only).
+</span>(add-to-list 'auto-mode-alist
+             '(<span class="string">"/mutt-</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">itsalltext.*mail\\.google"</span> . mail-mode))
+(add-hook 'mail-mode-hook 'turn-on-auto-fill)
+<span class="comment-delimiter">;; </span><span class="comment">Use C-c C-c to complete mutt message buffers without prompting for saving.
+</span>(add-hook
+ 'mail-mode-hook
+ (<span class="keyword">lambda</span> ()
+   (define-key mail-mode-map [(control c) (control c)]
+     (<span class="keyword">lambda</span> ()
+       (interactive)
+       (save-buffer)
+       (server-edit)))))
+
+<span class="comment-delimiter">;; </span><span class="comment">elscreen
+</span><span class="comment-delimiter">;; </span><span class="comment">ftp://ftp.morishima.net/pub/morishima.net/naoto/ElScreen/
+</span><span class="comment-delimiter">;; </span><span class="comment">Screen navigation: C-z [np0-9].
+</span><span class="comment-delimiter">;; </span><span class="comment">Requires Apel, which will need to be manuallly installed on Windows/Linux
+</span>(load <span class="string">"elscreen"</span> <span class="string">"ElScreen"</span> t)
+<span class="comment-delimiter">;; </span><span class="comment">F7 creates a new elscreen, F8 kills it.
+</span>(global-set-key (kbd <span class="string">"&lt;f7&gt;"</span>) 'elscreen-create)
+(global-set-key (kbd <span class="string">"&lt;f8&gt;"</span>) 'elscreen-kill)
+<span class="comment-delimiter">;; </span><span class="comment">elscreen-w3m
+</span>(<span class="keyword">require</span> '<span class="constant">elscreen-w3m</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">emacs-w3m
+</span><span class="comment-delimiter">;; </span><span class="comment">http://emacs-w3m.namazu.org/
+</span><span class="comment-delimiter">;; </span><span class="comment">FreeBSD: ports w3m-m17n; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
+</span><span class="comment-delimiter">;; </span><span class="comment">TODO: w3m on Emacs 23 currently only sort of working.  Fix this.
+</span><span class="comment-delimiter">;; </span><span class="comment">Only use w3m as default browser if in text mode.
+</span>(<span class="keyword">if</span> window-system
+    (<span class="keyword">progn</span>
+      (setq browse-url-browser-function 'browse-url-generic)
+      (<span class="keyword">when</span> *nt-system*
+        (setq browse-url-generic-program
+              <span class="string">"C:\\Program Files\\Mozilla Firefox\\firefox.exe"</span>))
+      (<span class="keyword">when</span> *freebsd-system*
+        (setq browse-url-generic-program <span class="string">"/usr/local/bin/conkeror"</span>))
+      (<span class="keyword">when</span> *linux-system*
+        (setq browse-url-generic-program <span class="string">"/home/bm3719/bin/conkeror"</span>)))
+    (setq browse-url-browser-function 'w3m-browse-url))
+(autoload 'w3m-browse-url <span class="string">"w3m"</span> <span class="doc">"Ask a WWW browser to show a URL."</span> t)
+<span class="comment-delimiter">;; </span><span class="comment">Optional keyboard short-cut.
+</span>(global-set-key <span class="string">"\C-x\M-m"</span> 'browse-url-at-point)
+<span class="comment-delimiter">;; </span><span class="comment">Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
+</span>(setq w3m-use-tab t)
+(setq w3m-use-cookies t)
+<span class="comment-delimiter">;; </span><span class="comment">NOTE: This is a (hopefully) temporary fix to define these functions that
+</span><span class="comment-delimiter">;;       </span><span class="comment">don't exist in the current emacs-w3m source.
+</span>(<span class="keyword">defun</span> <span class="function-name">w3m-setup-session-menu</span> () 'bcm-noop)
+(<span class="keyword">defun</span> <span class="function-name">w3m-session-crash-recovery-save</span> () 'bcm-noop)
+(<span class="keyword">defun</span> <span class="function-name">w3m-session-crash-recovery-remove</span> () 'bcm-noop)
+(<span class="keyword">defun</span> <span class="function-name">w3m-session-automatic-save</span> () 'bcm-noop)
+(<span class="keyword">defun</span> <span class="function-name">w3m-session-last-crashed-session</span> () 'bcm-noop)
+
+<span class="comment-delimiter">;; </span><span class="comment">multi-term
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/download/multi-term.el
+</span>(autoload 'multi-term <span class="string">"multi-term"</span> nil t)
+(autoload 'multi-term-next <span class="string">"multi-term"</span> nil t)
+(<span class="keyword">when</span> *freebsd-system*
+  (setq multi-term-program <span class="string">"/usr/local/bin/zsh"</span>))
+(<span class="keyword">when</span> *linux-system*
+  (setq multi-term-program <span class="string">"/usr/bin/zsh"</span>))
+(<span class="keyword">when</span> *nt-system*
+  (setq multi-term-program <span class="string">"/usr/bin/bash"</span>))
+(global-set-key (kbd <span class="string">"C-c t"</span>) 'multi-term-next)
+(global-set-key (kbd <span class="string">"C-c T"</span>) 'multi-term)
+
+<span class="comment-delimiter">;; </span><span class="comment">lusty-explorer
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/download/lusty-explorer.el
+</span>(<span class="keyword">require</span> '<span class="constant">lusty-explorer</span>)
+(global-set-key (kbd <span class="string">"C-x C-f"</span>) 'lusty-file-explorer)
+(global-set-key (kbd <span class="string">"C-x b"</span>) 'lusty-buffer-explorer)
+
+<span class="comment-delimiter">;; </span><span class="comment">EMMS
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.gnu.org/software/emms/
+</span><span class="comment-delimiter">;; </span><span class="comment">Currently using mplayer backend - seems superior to mpg321, which doesn't
+</span><span class="comment-delimiter">;; </span><span class="comment">support seeking.
+</span>(add-to-list 'load-path <span class="string">"~/.emacs.d/emms/"</span>)
+(<span class="keyword">require</span> '<span class="constant">emms-setup</span>)
+(emms-standard)
+(emms-default-players)
+(push 'emms-player-mplayer emms-player-list)
+<span class="comment-delimiter">;; </span><span class="comment">Show the current track each time EMMS starts to play a track with "NP: ".
+</span>(add-hook 'emms-player-started-hook 'emms-show)
+(setq emms-show-format <span class="string">"NP: %s"</span>)
+<span class="comment-delimiter">;; </span><span class="comment">When asked for emms-play-directory, always start from this one.
+</span>(setq emms-source-file-default-directory <span class="string">"~/snd/"</span>)
+<span class="comment-delimiter">;; </span><span class="comment">Some global playlist management keybindings.
+</span>(global-set-key (kbd <span class="string">"&lt;kp-subtract&gt;"</span>) 'emms-previous)
+(global-set-key (kbd <span class="string">"&lt;kp-add&gt;"</span>) 'emms-next)
+(global-set-key (kbd <span class="string">"&lt;insert&gt;"</span>) 'emms-pause)
+(global-set-key (kbd <span class="string">"&lt;kp-insert&gt;"</span>) 'emms-pause)
+(global-set-key (kbd <span class="string">"&lt;f3&gt;"</span>) 'emms)
+(global-set-key (kbd <span class="string">"&lt;kp-right&gt;"</span>) 'emms-seek-forward)
+(global-set-key (kbd <span class="string">"&lt;kp-left&gt;"</span>) 'emms-seek-backward)
+
+<span class="comment-delimiter">;; </span><span class="comment">color-theme
+</span><span class="comment-delimiter">;; </span><span class="comment">http://download.savannah.nongnu.org/releases/color-theme/
+</span>(<span class="keyword">require</span> '<span class="constant">color-theme</span>)
+(color-theme-initialize)
+<span class="comment-delimiter">;; </span><span class="comment">color-theme-wombat: Custom version of wombat color theme, with few colors
+</span><span class="comment-delimiter">;; </span><span class="comment">changed from the original.
+</span>(<span class="keyword">require</span> '<span class="constant">color-theme-wombat</span>)
+(<span class="keyword">if</span> (not window-system) 'bcm-noop (color-theme-wombat))
+
+<span class="comment-delimiter">;; </span><span class="comment">Darcsum: A pcl-cvs like interface for managing darcs patches.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://chneukirchen.org/repos/darcsum/
+</span>(<span class="keyword">require</span> '<span class="constant">darcsum</span>)
+<span class="comment-delimiter">;</span><span class="comment">(autoload 'darcs-mode "~/.emacs.d/darcsum/darcsum.el"
+</span><span class="comment-delimiter">;  </span><span class="comment">"Minor mode for dealing with a darcs repository." t)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">psvn.el: SVN VC
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.xsteve.at/prg/vc_svn/
+</span><span class="comment-delimiter">;; </span><span class="comment">M-x svn-examine DIR, M-x svn-status DIR
+</span>(<span class="keyword">require</span> '<span class="constant">psvn</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">egg: Git VC
+</span><span class="comment-delimiter">;; </span><span class="comment">http://github.com/bogolisk/egg
+</span>(<span class="keyword">require</span> '<span class="constant">egg</span>)
+<span class="comment-delimiter">;; </span><span class="comment">For some reason, Egg thinks it's a good idea to create this buffer at init.
+</span><span class="comment-delimiter">;; </span><span class="comment">Probably a better course of action for this, but in the meantime, this gets
+</span><span class="comment-delimiter">;; </span><span class="comment">rid of it.
+</span>(<span class="keyword">when</span> (not (eq nil (get-buffer <span class="string">"*Egg:Select Action*"</span>)))
+  (kill-buffer <span class="string">"*Egg:Select Action*"</span>))
+
+<span class="comment-delimiter">;; </span><span class="comment">lojban-mode: Requires lojban.el.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.emacswiki.org/emacs/download/lojban.el
+</span>(autoload 'lojban-parse-region <span class="string">"lojban"</span> nil t)
+(autoload 'lojban-mode <span class="string">"lojban-mode"</span> nil t)
+
+<span class="comment-delimiter">;; </span><span class="comment">lambdacalc.el
+</span><span class="comment-delimiter">;; </span><span class="comment">http://mwolson.org/static/dist/elisp/lambdacalc.el
+</span>(<span class="keyword">require</span> '<span class="constant">lambdacalc</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">malyon: Z-machine interpreter.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.ifarchive.org/if-archive/infocom/interpreters/emacs/malyon.el
+</span>(<span class="keyword">require</span> '<span class="constant">malyon</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">keywiz: An educational game which tests you on esoteric keystrokes.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://www.ifa.au.dk/~harder/keywiz.el
+</span>(<span class="keyword">require</span> '<span class="constant">keywiz</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">htmlize.el: Converts buffer to HTML.
+</span><span class="comment-delimiter">;; </span><span class="comment">http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el
+</span><span class="comment-delimiter">;; </span><span class="comment">TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
+</span>(<span class="keyword">require</span> '<span class="constant">htmlize</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Font face
+</span><span class="comment-delimiter">;; </span><span class="comment">Requires an install of Consolas on Windows.  Using Inconsolata on FreeBSD,
+</span><span class="comment-delimiter">;; </span><span class="comment">but defined that in .Xdefaults.
+</span>(<span class="keyword">when</span> *nt-system*
+  (set-default-font
+   <span class="string">"-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1"</span>))
+
+<span class="comment-delimiter">;; </span><span class="comment">Printing
+</span><span class="comment-delimiter">;; </span><span class="comment">Requires install of Ghostscript and GSView native ports on Windows.
+</span>(<span class="keyword">when</span> *nt-system*
+  (<span class="keyword">progn</span>
+    (setq-default ps-lpr-command
+                  (expand-file-name
+                   <span class="string">"C:\\bin\\utils\\gs\\gsview\\gsview\\gsprint.exe"</span>))
+    (setq-default ps-printer-name t)
+    (setq-default ps-printer-name-option nil)
+    (setq ps-lpr-switches '(<span class="string">"-query"</span>))   <span class="comment-delimiter">; </span><span class="comment">Show printer dialog.
+</span>    (setq ps-right-header
+          '(<span class="string">"/pagenumberstring load"</span> ps-time-stamp-mon-dd-yyyy))))
+<span class="comment-delimiter">;; </span><span class="comment">Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.
+</span>(<span class="keyword">when</span> *freebsd-system*
+  (setq lpr-command <span class="string">"xpp"</span>))
+
+<span class="comment-delimiter">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Final init
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Replace echo area startup message
+</span>(run-with-timer 1 nil #'yow)
+
+</pre>
+  </body>
+</html>

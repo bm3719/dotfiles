@@ -1,0 +1,203 @@
+# -*- Mode: Shell-script -*-
+# Bruce C. Miller
+# Time-stamp: <2010-10-09 12:19:53 (bm3719)>
+# FreeBSD and GNU/Linux version
+# NOTE: To use as root, which is probably not a good idea to begin with:
+#       - Remove . from PATH.
+#       - Change compinstall filename path.
+# TIPS: The <() construct lets you avoid having to use temporary files as
+#       arguments to commands, e.g. `diff -y <(wc -l 1/*) <(wc -l 2/*)'
+
+# Huge history file; great for C-r searching long ago used commands.
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+
+setopt appendhistory    # Save history from all zsh sessions.
+setopt beep             # Gets overridden by screen's visual bell.
+setopt extendedglob     # zsh pattern matching.
+setopt nomatch          #
+setopt nocheckjobs      # Don't complain about background jobs on exit.
+setopt nohup            # Don't kill background jobs on exit.
+# printexitvalue        # Print exit value from jobs. Useful for shell scripts.
+# pushd: Creates directory stacks that you can popd back to with cd -n, where n
+# is an integer.
+setopt auto_pushd
+
+# Detect OS type.  Currently only using for the difference in `ls' flags.
+platform='unknown'
+unamestr=`uname`
+if [[ "$unamestr" == 'Linux' ]]; then
+    platform='linux'
+elif [[ "$unamestr" == 'FreeBSD' ]]; then
+    platform='freebsd'
+fi
+
+bindkey -e              # Emacs keybindings.
+
+# zstyle modifications.
+zstyle :compinstall filename '/home/bm3719/.zshrc'
+# Hostname completions based on the contents of ~/.ssh/known_hosts file.
+# Requires ~/.ssh/config change of: HashKnownHosts no
+# Disabling this by default on multi-user machines, since anyone that gains
+# read access can help themselves to a non-hashed list, and known_hosts is by
+# default chmod 0644.
+#hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\*}%%,*})
+#zstyle ':completion:*:hosts' hosts $hosts
+
+autoload -Uz compinit
+compinit
+
+# A righteous umask.
+umask 027               # u=rw,g=r,o=
+
+# $PATH
+PATH=$PATH:$HOME/bin:$HOME/.cabal/bin:/sbin:/usr/sbin:/bin:/usr/bin
+PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec
+PATH=$PATH:/usr/local/diablo-jdk1.6.0/bin:.
+# Append /usr/games to $PATH if it exists.
+if [ -d /usr/games ]
+then
+    PATH=$PATH:/usr/games
+fi
+# FreeBSD no longer includes this directory.  Not even sure who does, actually.
+if [ -d /usr/X11R6/bin ]
+then
+    PATH=$PATH:/usr/X11R6/bin
+fi
+
+# Autoload zsh modules when they are referenced.
+zmodload -a zsh/stat stat
+zmodload -a zsh/zpty zpty
+zmodload -a zsh/zprof zprof
+zmodload -ap zsh/mapfile mapfile
+
+# Useful in Emacs shell/TRAMP.
+[ $TERM = "dumb" ] && unsetopt zle 
+
+# Prompt
+autoload colors zsh/terminfo
+if [[ "$terminfo[colors]" -ge 8 ]]; then
+  colors
+fi
+for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+  eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+  eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
+  (( count = $count + 1 ))
+done
+PR_NO_COLOR="%{$terminfo[sgr0]%}"
+PS1=`echo "[$PR_BLUE%n@%m:%c$PR_NO_COLOR]%# " | tr -d "$<2>"`
+#PS1="[$PR_WHITE%n@%m:%c$PR_NO_COLOR]%# "
+#PS1='%{\e[0;31m%}%m%{\e[0m%} '
+
+export SBCL_HOME=/usr/local/lib/sbcl
+export FTPANONPASS=nobody@nodomain.nox
+# `less' gets aliased later, so unaliasing here if it's aliased prevents errors
+# when sourcing this file.
+if [ -n "`alias -m \"*less*\"`" ]
+then
+    unalias less >& /dev/null
+fi
+# Set PAGER to `less' only if it exists.
+if [ -x $(which less) ]
+then
+    export PAGER=less
+else
+    alias less=more
+fi
+export EDITOR='emacsclient -n'
+export SVN_EDITOR='emacsclient -n'
+# Set lynx start page to bookmarks file.
+export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
+export GREP_COLOR='01;32'              # Set grep color to green (default red).
+export DARCS_EMAIL=mutt                # Mail client used with 'darcs send'.
+export CLASSPATH=.:/usr/local/share/scala-2.7.7/lib:~/lib/classes:~/lib/archive/'*'
+export CLASSPATH=$CLASSPATH:/usr/local/share/java/classes/jline.jar
+# Regionalization used by w3m.
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+# Python-related stuff.
+if [ -d /usr/local/share/doc/python2.6 ]
+then
+    export PYTHONDOCS=/usr/local/share/doc/python2.6
+elif [ -d /usr/share/doc/python2.5 ]
+then
+    export PYTHONDOCS=/usr/share/doc/python2.5
+else
+    export PTHONDOCS=/usr/share/doc/python/html
+fi
+# Work-specific stuff.
+if [ -d ~/src/python/augustus-trunk-read-only ]
+then
+    export PYTHONPATH=~/src/python/augustus-trunk-read-only
+    export PATH=$PATH:~/src/python/augustus-trunk-read-only/bin
+fi
+if [ -d ~/project ]
+then
+    export PROJECT=~/project
+    export PYTHONPATH=$PYTHONPATH:$PROJECT
+fi
+if [ -d ~/src/java/apache-activemq-5.4.1/bin ]
+then
+    export PATH=$PATH:~/src/java/apache-activemq-5.4.1/bin
+fi
+
+# Colorized manpages.
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+# Disable flow control handling (can mess up screen sessions if C-s or C-a s is
+# hit).
+stty -ixon -ixoff
+# Stop background job output to stdout until foregrounded.  A message will be
+# printed before the next prompt display.  Usually don't want this.
+#stty tostop
+
+# Aliases
+alias -g ...="../.."
+alias -g ....="../../.."
+alias -g .....="../../../.."
+alias f="finger"
+if [[ $platform == 'linux' ]]
+then
+    alias ls='ls --color=auto'
+elif [[ $platform == 'freebsd' ]]
+then
+    alias ls='ls -G'
+fi
+alias ll="ls -al"
+alias diff="colordiff"
+alias grep="grep --colour=auto"
+alias s="screen -U"
+alias sd="screen -d"
+alias sr="screen -rx"
+alias untar="tar xzfv"
+alias unbz2="tar xvfj"
+alias sui="sudo -i"
+alias lup="sudo /usr/libexec/locate.updatedb"
+alias rz="lrz -e"
+alias sz="lsz -e"
+alias ec="emacsclient -n"    # Use this with server-start.
+alias gc="gnuclient-emacs"   # Use this with gnuserv-emacs.
+alias em="emacs -nw"
+alias xpdf="xpdf -z 135"
+alias less="less -RXF"
+alias bc="bc -ql"
+alias ttt="telnet yay.tim.org 5440"
+alias dwnl="darcs whatsnew -l"
+# Aliases for x11 fwding.
+alias rurxvt="urxvt -sl 10000 -ls -geometry 120x48"
+# Disk Hogs Summary - disk usage by directory beneath this, sorted by
+# size. (Directories that contain less than 100k are silently removed.)
+alias dfs="du -kd 1000 \"\$@\" | awk '(\$1 >= 100)' | sort -rn"
+
+# Functions
+# A find function, saving some typing for the most common find call.
+ff() {
+    find . -name \*$1\* -print;
+}

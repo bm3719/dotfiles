@@ -1,0 +1,43 @@
+# .screenrc
+# Bruce C. Miller
+# Time-stamp: <2009-11-30 16:14:11 (bm3719)>
+# NOTE: Region management:
+#       C-a S - split region
+#       C-a :resize <int> - resize active region
+#       C-a <tab> - next region focus
+#       C-a X - region kill
+
+autodetach on        # Autodetach session on hangup instead of terminating.
+startup_message off  # Turn off the splash screen.
+defscrollback 30000  # Use a 30000-line scrollback buffer.
+defflow off          # Disable C-S/C-Q flow control.
+vbell on             # Use visual bell.
+
+# Do not use alternate text buffer (allows scrollbar).
+termcapinfo xterm ti@:te@ 
+
+# UTF-8 support.
+setenv LC_CTYPE en_US.UTF-8
+defutf8 on           # UTF-8 everywhere.
+
+# Use unix style linebreaks when copying.
+crlf off
+
+# Enable this to connect windows to the display so programs like mplayer can
+# find it when inside a screen on a terminal in a GUI.
+#setenv DISPLAY ':0'
+
+# Ensure emacs initialization for shell buffer terminals
+#[[ $EMACS = t ]] && unsetopt zle
+
+# Dead windows become zombies.
+# C-a k then kills the window, C-a c recreates it with the same command.
+#defzombie kc
+
+# Default windows created on startup.
+#screen -t irssi irssi
+screen -t zsh
+screen -t root su -l
+screen -t emacs emacs -nw
+screen -t zsh
+#screen -t sdfg ssh sdfg

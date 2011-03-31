@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2010-10-09 12:19:53 (bm3719)>
+# Time-stamp: <2011-02-15 14:34:56 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -107,15 +107,17 @@ else
 fi
 export EDITOR='emacsclient -n'
 export SVN_EDITOR='emacsclient -n'
-# Set lynx start page to bookmarks file.
-export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
 export GREP_COLOR='01;32'              # Set grep color to green (default red).
 export DARCS_EMAIL=mutt                # Mail client used with 'darcs send'.
-export CLASSPATH=.:/usr/local/share/scala-2.7.7/lib:~/lib/classes:~/lib/archive/'*'
-export CLASSPATH=$CLASSPATH:/usr/local/share/java/classes/jline.jar
+# Set lynx start page to bookmarks file.
+export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
 # Regionalization used by w3m.
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+# Java ecology stuff
+export CLASSPATH=.:/usr/local/share/scala-2.7.7/lib:~/lib/classes:~/lib/archive/'*'
+export CLASSPATH=$CLASSPATH:/usr/local/share/java/classes/jline.jar
+export ANT_HOME=/home/bm3719/.ant
 # Python-related stuff.
 if [ -d /usr/local/share/doc/python2.6 ]
 then

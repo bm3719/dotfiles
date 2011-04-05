@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2011-02-15 14:34:56 (bm3719)>
+# Time-stamp: <2011-04-05 13:32:13 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -106,7 +106,7 @@ else
     alias less=more
 fi
 export EDITOR='emacsclient -n'
-export SVN_EDITOR='emacsclient -n'
+export SVN_EDITOR='vim'
 export GREP_COLOR='01;32'              # Set grep color to green (default red).
 export DARCS_EMAIL=mutt                # Mail client used with 'darcs send'.
 # Set lynx start page to bookmarks file.
@@ -187,11 +187,12 @@ alias sz="lsz -e"
 alias ec="emacsclient -n"    # Use this with server-start.
 alias gc="gnuclient-emacs"   # Use this with gnuserv-emacs.
 alias em="emacs -nw"
-alias xpdf="xpdf -z 135"
+alias xpdf="xpdf -z page"
 alias less="less -RXF"
 alias bc="bc -ql"
 alias ttt="telnet yay.tim.org 5440"
 alias dwnl="darcs whatsnew -l"
+alias g="git"
 # Aliases for x11 fwding.
 alias rurxvt="urxvt -sl 10000 -ls -geometry 120x48"
 # Disk Hogs Summary - disk usage by directory beneath this, sorted by

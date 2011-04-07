@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; outline-minor-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-03-24 16:15:43 (bm3719)>
+;;;; Time-stamp: <2011-04-07 08:49:59 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -13,7 +13,8 @@
 ;;;; flymake-jslint, moz.el, ess, batch-mode, sqlplus, nxhtml, cedet, ecb,
 ;;;; jdee, jde-eclipse-compiler-server, elscreen, elscreen-w3m, w3m (+ flim,
 ;;;; apel), multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
-;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz.
+;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz,
+;;;; redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
 ;;;; Global, python-doc-html, pylint, iPython, Ruby, Rhino, MozRepl, JDK, ECJ,
@@ -1415,6 +1416,14 @@
 ;; keywiz: An educational game which tests you on esoteric keystrokes.
 ;; http://www.ifa.au.dk/~harder/keywiz.el
 (require 'keywiz)
+
+;; redo+.el: An extended version of XEmacs' redo package.
+;; http://www.emacswiki.org/emacs/download/redo%2b.el
+;; TODO: Consider replacing this with undo-tree-mode.  I'm sticking with this
+;; for now since it's considerably more intuitive and the need for undo-trees
+;; hasn't ever yet come up.
+(require 'redo+)
+(global-set-key "\C-x\M-_" 'redo)
 
 ;; htmlize.el: Converts buffer to HTML.
 ;; http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el

@@ -1,7 +1,7 @@
-;;;; -*- mode: Emacs-Lisp; outline-minor-mode:t -*-
+;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-04-07 08:49:59 (bm3719)>
+;;;; Time-stamp: <2011-04-12 21:28:32 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -61,7 +61,7 @@
 ;; what's going on.
 (setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
-;; eval-buffers of .emacs file).
+;; eval-buffers of a .emacs file).
 (cond ((not (eq nil (get-buffer "*Messages*")))
       (kill-buffer "*Messages*")))
 
@@ -86,12 +86,14 @@
 ;; Load Common Lisp features.
 (require 'cl)
 
-;; Provides zap-up-to-char.
+;; Provides zap-up-to-char (M-z), different than the default zap-to-char which
+;; includes deleting the argument character.
 (load-library "misc")
 
 ;; Work-around for a bug in w32 Emacs 23.
 (when *nt-system*
-  (and (= emacs-major-version 23) (defun server-ensure-safe-dir (dir) "Noop" t)))
+  (and (= emacs-major-version 23)
+       (defun server-ensure-safe-dir (dir) "Noop" t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Basic Key Bindings
@@ -240,6 +242,9 @@
 ;; Defaults on in >23.
 (transient-mark-mode 1)
 
+;; Allow for mark ring traversal without popping them off the stack.
+(setq set-mark-command-repeat-pop t)
+
 ;; Text files supposedly end in new lines, or they should.
 (setq require-final-newline t)
 
@@ -257,6 +262,7 @@
   (toggle-read-only 1)
   (kill-line arg)
   (toggle-read-only 0))
+;; Replace error message on read-only kill with an echo area message.
 (setq-default kill-read-only-ok t)
 (global-set-key "\C-c\C-k" 'bcm-copy-line)
 
@@ -397,6 +403,10 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (define-key query-replace-map [return] 'act)
 (define-key query-replace-map [?\C-m] 'act)
+
+;; Always use the echo area instead of dialog boxes in console mode.
+(when (not window-system)
+  (setq use-dialog-box nil))
 
 ;; Don't echo passwords when communicating with interactive programs.
 ;; Basic security.
@@ -1470,6 +1480,8 @@
  '(global-semantic-show-unmatched-syntax-mode nil nil (semantic-util-modes))
  '(global-semantic-stickyfunc-mode nil nil (semantic-util-modes))
  '(global-senator-minor-mode t nil (senator))
+ '(safe-local-variable-values (quote ((eldoc-mode . t)
+                                      (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class
    (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class

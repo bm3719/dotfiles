@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-04-12 21:28:32 (bm3719)>
+;;;; Time-stamp: <2011-05-04 19:36:24 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -555,7 +555,9 @@
 ;; Use sql-mode for .script files (used by Jetty and Tomcat).
 (setq auto-mode-alist
       (append '(("\\.script$" . sql-mode))
-                auto-mode-alist))
+                auto-mode-Alister))
+;; Add an auto-mode for the HiveQL extension I use.
+(add-to-list 'auto-mode-alist '("\\.hql$" . sql-mode))
 
 ;; flymake
 ;; http://www.emacswiki.org/cgi-bin/wiki/FlymakeHaskell#toc9
@@ -630,6 +632,8 @@
 ;; Suggestion mode tuned to fastest possible.
 (setq ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
+;; Solves aspell startup problem on some Linuxes.
+(setq flyspell-issue-welcome-flag nil)
 
 ;; org-mode: Now included with >22.1.
 ;; Initiate org-mode when opening .org files.
@@ -1079,8 +1083,7 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(mumamo-background-chunk-major ((((class color) (min-colors 88)
-                                    (background dark)) nil))))
+ '(mumamo-background-chunk-major ((((class color) (min-colors 88) (background dark)) nil))))
 
 ;; espresso
 ;; http://download.savannah.gnu.org/releases-noredirect/espresso/espresso.el
@@ -1311,7 +1314,8 @@
 ;; emacs-w3m
 ;; http://emacs-w3m.namazu.org/
 ;; FreeBSD: ports w3m-m17n; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
-;; TODO: w3m on Emacs 23 currently only sort of working.  Fix this.
+;; NOTE: I also modify the local copies of w3m.el and w3m-search.el.  See
+;;       projects.org for details.
 ;; Only use w3m as default browser if in text mode.
 (if window-system
     (progn
@@ -1480,15 +1484,11 @@
  '(global-semantic-show-unmatched-syntax-mode nil nil (semantic-util-modes))
  '(global-semantic-stickyfunc-mode nil nil (semantic-util-modes))
  '(global-senator-minor-mode t nil (senator))
- '(safe-local-variable-values (quote ((eldoc-mode . t)
-                                      (outline-minor-mode . t))))
- '(semantic-complete-inline-analyzer-displayor-class
-   (quote semantic-displayor-tooltip))
- '(semantic-complete-inline-analyzer-idle-displayor-class
-   (quote semantic-displayor-tooltip))
+ '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
+ '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
+ '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-idle-scheduler-verbose-flag nil)
- '(semantic-imenu-sort-bucket-function
-   (quote semantic-sort-tags-by-name-increasing))
+ '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing))
  '(semanticdb-global-mode t nil (semanticdb))
  '(which-function-mode nil))
 

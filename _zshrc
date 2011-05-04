@@ -1,10 +1,11 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2011-04-05 13:32:13 (bm3719)>
+# Time-stamp: <2011-05-04 19:33:28 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
 #       - Change compinstall filename path.
+#       - Change WWW_HOME and ANT_HOME.
 # TIPS: The <() construct lets you avoid having to use temporary files as
 #       arguments to commands, e.g. `diff -y <(wc -l 1/*) <(wc -l 2/*)'
 
@@ -203,4 +204,8 @@ alias dfs="du -kd 1000 \"\$@\" | awk '(\$1 >= 100)' | sort -rn"
 # A find function, saving some typing for the most common find call.
 ff() {
     find . -name \*$1\* -print;
+}
+# Colorize `svn diff' output.  Requires colordiff to be installed.
+svndiff() {
+    svn diff "${@}" | colordiff
 }

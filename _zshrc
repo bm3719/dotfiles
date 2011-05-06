@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2011-05-04 19:33:28 (bm3719)>
+# Time-stamp: <2011-05-06 08:26:49 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -127,7 +127,7 @@ elif [ -d /usr/share/doc/python2.5 ]
 then
     export PYTHONDOCS=/usr/share/doc/python2.5
 else
-    export PTHONDOCS=/usr/share/doc/python/html
+    export PYTHONDOCS=/usr/share/doc/python/html
 fi
 # Work-specific stuff.
 if [ -d ~/src/python/augustus-trunk-read-only ]

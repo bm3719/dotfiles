@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-05-04 19:36:24 (bm3719)>
+;;;; Time-stamp: <2011-05-11 21:46:49 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -9,17 +9,17 @@
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
 ;;;; swank-clojure, haskell-mode, agda-mode, scala-mode, ensime, sbt.el, gtags,
-;;;; python-mode, flymake-pylint, ipython, ruby-mode, auctex, espresso,
-;;;; flymake-jslint, moz.el, ess, batch-mode, sqlplus, nxhtml, cedet, ecb,
-;;;; jdee, jde-eclipse-compiler-server, elscreen, elscreen-w3m, w3m (+ flim,
-;;;; apel), multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
+;;;; python-mode, ipython, ruby-mode, auctex, espresso, flymake-jslint, moz.el,
+;;;; ess, batch-mode, sqlplus, nxhtml, cedet, ecb, jdee,
+;;;; jde-eclipse-compiler-server, elscreen, elscreen-w3m, w3m (+ flim, apel),
+;;;; multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
 ;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz,
 ;;;; redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
-;;;; Global, python-doc-html, pylint, iPython, Ruby, Rhino, MozRepl, JDK, ECJ,
-;;;; R, Maxima, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
-;;;; Consolas font (Windows only).
+;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, MozRepl, JDK,
+;;;; ECJ, R, Maxima, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows
+;;;; only), Consolas font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -139,6 +139,7 @@
 
 ;; Defines a function to do nothing.
 (defun bcm-noop ()
+  "Do ()."
   (interactive))
 
 ;; My KVM switch uses scroll lock, and Emacs complains about it.
@@ -160,6 +161,7 @@
 
 ;; Takes a multi-line paragraph and makes it into a single line of text.
 (defun bcm-unfill-paragraph ()
+  "Un-fill paragraph at point."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
@@ -206,7 +208,7 @@
 (setq bcm-set-cursor-color-color "")
 (setq bcm-set-cursor-color-buffer "")
 (defun bcm-set-cursor-color-according-to-mode ()
-  "change cursor color according to some minor modes."
+  "Change cursor color according to some minor modes."
   ;; Set-cursor-color is somewhat costly, so we only call it when needed.
   (let ((color
     (if buffer-read-only "red" "DarkSlateGray")))
@@ -270,7 +272,7 @@
 ;; the paragraphs (i.e. turns each paragraph into one very long line) and
 ;; removes any blank lines that previously separated paragraphs.
 (defun bcm-wp-munge ()
-  "un-fill paragraphs and remove blank lines."
+  "Un-fill paragraphs and remove blank lines."
   (interactive)
   (let ((save-fill-column fill-column))
     (set-fill-column 1000000)
@@ -434,6 +436,7 @@
 ;; Startup message with Emacs version.  Modified from original at:
 ;; http://www.emacswiki.org/emacs/DotEmacsChallenge
 (defun bcm-emacs-reloaded ()
+  "Display animated startup message."
   (animate-string (concat ";; Initialization successful.  Welcome to "
       (substring (emacs-version) 0 16)
       ".")
@@ -443,7 +446,7 @@
 
 ;; Call this function to increase/decrease font size.
 (defun bcm-zoom (n)
-  "with positive N, increase the font size, otherwise decrease it"
+  "With positive N, increase the font size, otherwise decrease it."
   (set-face-attribute 'default (selected-frame) :height
                       (+ (face-attribute 'default :height)
                          (* (if (> n 0) 1 -1) 10))))
@@ -482,7 +485,7 @@
 
 ;; Indents the entire buffer according to whatever indenting rules are present.
 (defun bcm-indent ()
-  "Indent whole buffer"
+  "Indent whole buffer."
   (interactive)
   (delete-trailing-whitespace)
   (indent-region (point-min) (point-max) nil)
@@ -544,12 +547,13 @@
          (sql-database "l1jdb")
          (sql-port 3306))))
 (defun sql-connect-preset (name)
-  "Connect to a predefined SQL connection listed in `sql-connection-alist'"
+  "Connect to a predefined SQL connection listed in `sql-connection-alist'."
   (eval `(let ,(cdr (assoc name sql-connection-alist))
            (flet ((sql-get-login (&rest what)))
              (sql-product-interactive sql-product)))))
 ;; Execute this function to log in.
 (defun sql-pool-a ()
+  "Connect to SQL pool 0."
   (interactive)
   (sql-connect-preset 'pool-a))
 ;; Use sql-mode for .script files (used by Jetty and Tomcat).
@@ -567,7 +571,7 @@
   (resize-minibuffer-mode)
   (setq resize-minibuffer-window-exactly nil))
 (defun bcm-flymake-display-err-minibuf ()
-  "Displays the error/warning for the current line in the minibuffer"
+  "Displays the error/warning for the current line in the minibuffer."
   (interactive)
   (let* ((line-no (flymake-current-line-no))
          (line-err-info-list (nth 0 (flymake-find-err-info
@@ -723,6 +727,34 @@
       auto-mode-alist (cons '("\\README$" . text-mode) auto-mode-alist)
       auto-mode-alist (cons '("\\TODO$" . text-mode) auto-mode-alist))      
 
+;; Custom generic mode for arff files (Used with Weka).
+(require 'generic)
+(define-generic-mode 'arff-file-mode
+    (list ?%)
+  (list "attribute" "relation" "end" "data")
+  '(("\\('.*'\\)" 1 'font-lock-string-face)
+    ("^\\@\\S-*\\s-\\(\\S-*\\)" 1 'font-lock-string-face)
+    ("^\\@.*\\(real\\)" 1 'font-lock-type-face)
+    ("^\\@.*\\(integer\\)" 1 'font-lock-type-face)
+    ("^\\@.*\\(numeric\\)" 1 'font-lock-type-face)
+    ("^\\@.*\\(string\\)" 1 'font-lock-type-face)
+    ("^\\@.*\\(date\\)" 1 'font-lock-type-face)
+    ("^\\@.*\\({.*}\\)" 1 'font-lock-type-face)
+    ("^\\({\\).*\\(}\\)$" (1 'font-lock-reference-face)
+     (2 'font-lock-reference-face))
+    ("\\(\\?\\)" 1 'font-lock-reference-face)
+    ("\\(\\,\\)" 1 'font-lock-keyword-face)
+    ("\\(-?[0-9]+?.?[0-9]+\\)" 1 'font-lock-constant-face)
+    ("\\(\\@\\)" 1 'font-lock-preprocessor-face))
+  (list "\.arff?")
+  (list
+   (function
+    (lambda ()
+     (setq font-lock-defaults
+           (list 'generic-font-lock-defaults nil t   ; case insensitive
+                 (list (cons ?* "w") (cons ?- "w"))))
+     (turn-on-font-lock)))) "Mode for arff-files.")
+
 ;; Use file<pathname> instead of file<n> to uniquify buffer names.
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
@@ -825,6 +857,7 @@
 ;; Improve usability of slime-apropos: slime-apropos-minor-mode
 (defvar slime-apropos-anchor-regexp "^[^ ]")
 (defun slime-apropos-next-anchor ()
+  "Navigate to next SLIME apropos anchor."
   (interactive)
   (let ((pt (point)))
     (forward-line 1)
@@ -833,6 +866,7 @@
       (goto-char pt)
       (error "anchor not found"))))
 (defun slime-apropos-prev-anchor ()
+  "Navigate to previous SLIME apropos anchor."
   (interactive)
   (let ((p (point)))
     (if (re-search-backward slime-apropos-anchor-regexp nil t)
@@ -892,11 +926,13 @@
    "Major mode for editing literate Haskell scripts." t)
 ;; Haskell flymake
 (defun flymake-Haskell-init ()
+  "Initialize flymake-haskell."
   (flymake-simple-make-init-impl
    'flymake-create-temp-with-folder-structure nil nil
    (file-name-nondirectory buffer-file-name)
    'flymake-get-Haskell-cmdline))
 (defun flymake-get-Haskell-cmdline (source base-dir)
+  "Handles command line GHC call."
   (list "ghc"
         (list "--make" "-fbyte-code"
               ;; Can be expanded for additional -i options as in the Perl
@@ -998,8 +1034,9 @@
   (autoload 'gtags-mode "gtags" "" t)
   (setq c-mode-hook '(lambda () (gtags-mode 1))))
 
-;; python-mode: Replaces the built-in python.el.
-;; http://launchpad.net/python-mode/trunk/5.1.0/+download/python-mode.el
+;; python-mode: Replaces the built-in python.el.  Currently this is better,
+;; since it supports iPython.
+;; http://launchpad.net/python-mode/
 (autoload 'python-mode "python-mode" "Python Mode." t)
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
@@ -1012,22 +1049,19 @@
             (setq outline-regexp "def\\|class ")
             (pabbrev-mode)
             (flyspell-prog-mode)))
-;; flymake-pylint: Allow flymake checking of Python scripts, which
-;; auto-highlights syntax errors/warnings.
-;; http://www.emacswiki.org/cgi-bin/wiki/PythonMode#toc7
-;; NOTE: This requires an install of pylint and (with Emacs >23) a script
-;;       called epylint in PATH (mine is in ~/bin).  Python flymake can be
-;;       activated then by running M-x flymake-mode inside a Python file.
-(when (load "flymake" t)
-  (defun flymake-pylint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "epylint" (list local-file))))    
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pylint-init)))
+;; Replaced pylint with pyflakes, as it's super fast.  However, it doesn't
+;; catch a lot of style problems, so it's still a good idea to pylint it later.
+;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
+(defun flymake-pyflakes-init ()
+  "Initialize Flymake for Python, using pyflakes."
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "pyflakes" (list local-file))))
+(add-to-list 'flymake-allowed-file-name-masks
+             '("\\.py\\'" flymake-pyflakes-init))
 ;; ipython: Support for a replacement to the default Python shell.  Requires an
 ;; install of the iPython application.  Run with M-x py-shell.
 (require 'ipython)
@@ -1037,6 +1071,7 @@
 ;; http://www.emacswiki.org/emacs/RubyMode
 (autoload 'ruby-mode "ruby-mode" "Major mode for ruby files" t)
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
 (autoload 'run-ruby "inf-ruby" "Run an inferior Ruby process")
 (autoload 'inf-ruby-keys "inf-ruby"
@@ -1125,6 +1160,7 @@
 ;;       from the current .sqp file for some reason.  A working method is to
 ;;       open the .sqp file, and run commands with C-Ret.
 (defun bcm-sqlplus ()
+  "Start an interactive SQL*Plus session, with pre-defined connection string."
   (interactive)
   (sqlplus "rtrg/rtrg@//localhost:1521/orcl"))
 
@@ -1241,6 +1277,7 @@
       ess-ps-viewer-pref "gs")
 ;; Start R if it's not running when S-RET is hit.
 (defun bcm-ess-start-R ()
+  "Start R."
   (interactive)
   (if (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
       (progn
@@ -1252,6 +1289,7 @@
         (set-window-buffer w2 "*R*")
         (set-window-buffer w1 w1name))))
 (defun bcm-ess-eval ()
+  "Eval ESS region."
   (interactive)
   (bcm-ess-start-R)
   (if (and transient-mark-mode mark-active)

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-05-11 22:21:49 (bm3719)>
+;;;; Time-stamp: <2011-05-11 22:43:06 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -450,10 +450,10 @@
                       (+ (face-attribute 'default :height)
                          (* (if (> n 0) 1 -1) 10))))
 ;; Add some zoom keybindings.
-(global-set-key (kbd "C-+") '(lambda nil (interactive) (bcm-zoom 1)))
-(global-set-key [C-kp-add] '(lambda nil (interactive) (bcm-zoom 1)))
-(global-set-key (kbd "C--") '(lambda nil (interactive) (bcm-zoom -1)))
-(global-set-key [C-kp-subtract] '(lambda nil (interactive) (bcm-zoom -1)))
+(global-set-key (kbd "C-+") '(lambda () (interactive) (bcm-zoom 1)))
+(global-set-key [C-kp-add] '(lambda () (interactive) (bcm-zoom 1)))
+(global-set-key (kbd "C--") '(lambda () (interactive) (bcm-zoom -1)))
+(global-set-key [C-kp-subtract] '(lambda () (interactive) (bcm-zoom -1)))
 
 ;; time-stamps
 ;; When there is a "Time-stamp: <>" in the first 10 lines of the file,
@@ -466,7 +466,7 @@
 ;; I always compile my .emacs, saving about two seconds startup time.  But that
 ;; only helps if the .emacs.elc is newer than the .emacs.  So, compile .emacs
 ;; if it's not.
-(defun bcm-autocompile nil
+(defun bcm-autocompile ()
   "Compile self in ~/.emacs.d/build"
   (interactive)
   (require 'bytecomp)
@@ -556,9 +556,7 @@
   (interactive)
   (sql-connect-preset 'pool-a))
 ;; Use sql-mode for .script files (used by Jetty and Tomcat).
-(setq auto-mode-alist
-      (append '(("\\.script$" . sql-mode))
-                auto-mode-Alister))
+(add-to-list 'auto-mode-alist '("\\.script$" . sql-mode))
 ;; Add an auto-mode for the HiveQL extension I use.
 (add-to-list 'auto-mode-alist '("\\.hql$" . sql-mode))
 
@@ -1059,8 +1057,9 @@
                       temp-file
                       (file-name-directory buffer-file-name))))
     (list "pyflakes" (list local-file))))
-(add-to-list 'flymake-allowed-file-name-masks
-             '("\\.py\\'" flymake-pyflakes-init))
+(when (load "flymake" t)
+  (push '("\\.py\\'" flymake-pyflakes-init)
+        flymake-allowed-file-name-masks))
 ;; ipython: Support for a replacement to the default Python shell.  Requires an
 ;; install of the iPython application.  Run with M-x py-shell.
 (require 'ipython)

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-05-11 22:43:06 (bm3719)>
+;;;; Time-stamp: <2011-05-11 23:25:15 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -61,8 +61,8 @@
 (setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffers of a .emacs file).
-(cond ((not (eq nil (get-buffer "*Messages*")))
-      (kill-buffer "*Messages*")))
+(when (not (eq nil (get-buffer "*Messages*")))
+      (kill-buffer "*Messages*"))
 
 ;; Provide a useful error trace if loading this .emacs fails.
 (setq debug-on-error t)
@@ -209,8 +209,7 @@
 (defun bcm-set-cursor-color-according-to-mode ()
   "Change cursor color according to some minor modes."
   ;; Set-cursor-color is somewhat costly, so we only call it when needed.
-  (let ((color
-    (if buffer-read-only "red" "DarkSlateGray")))
+  (let ((color (if buffer-read-only "red" "DarkSlateGray")))
     (unless (and
       (string= color bcm-set-cursor-color-color)
       (string= (buffer-name) bcm-set-cursor-color-buffer))
@@ -387,7 +386,8 @@
 (setq column-number-mode t)
 
 ;; Variables to mark as safe.
-(setq safe-local-variable-values (quote ((outline-minor-mode . t))))
+(setq safe-local-variable-values '((outline-minor-mode . t)
+                                   (eldoc-mode . t)))
 
 ;; Set shells.
 (when *freebsd-system*
@@ -1533,4 +1533,3 @@
 
 ;; Replace echo area startup message
 (run-with-timer 1 nil #'yow)
-

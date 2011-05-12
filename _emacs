@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-05-11 21:46:49 (bm3719)>
+;;;; Time-stamp: <2011-05-11 22:21:49 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -27,7 +27,7 @@
 ;; Getting rid of the toolbar first prevents it from showing in the few seconds
 ;; needed for the rest of this stuff to load, though disabling it in .Xdefaults
 ;; is even better.
-(if window-system
+(when window-system
     (tool-bar-mode -1))
 
 ;; Store boolean values for various system-specific settings.
@@ -36,11 +36,10 @@
 (defvar *nt-system* (string-match "nt" system-configuration))
 
 (setq inhibit-startup-message t)   ; Disable splash screen.
-(if window-system
-    (progn
-      (set-scroll-bar-mode 'right) ; If turned on, use right scrollbars.
-      (scroll-bar-mode -1)         ; Hide the scroll bar.
-      (tooltip-mode 0)))           ; Disable tooltips.
+(when window-system
+  (set-scroll-bar-mode 'right)     ; If turned on, use right scrollbars.
+  (scroll-bar-mode -1)             ; Hide the scroll bar.
+  (tooltip-mode 0))                ; Disable tooltips.
 (menu-bar-mode -1)                 ; Hide the menu bar.
 
 ;; Rearrange the menubars, so it goes tools | buffers | help.
@@ -1279,15 +1278,14 @@
 (defun bcm-ess-start-R ()
   "Start R."
   (interactive)
-  (if (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
-      (progn
-        (delete-other-windows)
-        (setq w1 (selected-window))
-        (setq w1name (buffer-name))
-        (setq w2 (split-window w1))
-        (R)
-        (set-window-buffer w2 "*R*")
-        (set-window-buffer w1 w1name))))
+  (when (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
+    (delete-other-windows)
+    (setq w1 (selected-window))
+    (setq w1name (buffer-name))
+    (setq w2 (split-window w1))
+    (R)
+    (set-window-buffer w2 "*R*")
+    (set-window-buffer w1 w1name)))
 (defun bcm-ess-eval ()
   "Eval ESS region."
   (interactive)
@@ -1429,7 +1427,8 @@
 ;; color-theme-wombat: Custom version of wombat color theme, with few colors
 ;; changed from the original.
 (require 'color-theme-wombat)
-(if (not window-system) 'bcm-noop (color-theme-wombat))
+(when window-system
+  (color-theme-wombat))
 
 ;; Darcsum: A pcl-cvs like interface for managing darcs patches.
 ;; http://chneukirchen.org/repos/darcsum/

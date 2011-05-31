@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-05-11 23:25:15 (bm3719)>
+;;;; Time-stamp: <2011-05-31 08:19:06 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -117,6 +117,7 @@
 (global-set-key "\C-c'" 'uncomment-region)
 (global-set-key "\M-/" 'hippie-expand)         ; Superior to dabbrev-expand.
 (global-set-key "\M-z" 'zap-up-to-char)        ; Mimic vim delete to char.
+(global-set-key "\M-o" 'other-window)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
 ;; intending to do a find-file.
 (global-set-key "\C-xf" 'find-file)
@@ -137,9 +138,9 @@
 (global-set-key "\C-cp" 'previous-error)
 
 ;; Defines a function to do nothing.
-(defun bcm-noop ()
+(defun bcm-noop (&rest args)
   "Do ()."
-  (interactive))
+  (interactive "i"))
 
 ;; My KVM switch uses scroll lock, and Emacs complains about it.
 (global-set-key [Scroll_Lock] 'bcm-noop)
@@ -663,7 +664,7 @@
 (setq remember-annotation-functions '(org-remember-annotation))
 ;(setq remember-handler-functions '(org-remember-handler))
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
-;; Setup for C-c r note taking
+;; Setup for C-c r note taking.
 (setq remember-data-file "~/notes.org")
 (global-set-key (kbd "\C-cr") 'org-remember)
 

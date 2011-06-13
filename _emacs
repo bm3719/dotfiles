@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-05-31 08:19:06 (bm3719)>
+;;;; Time-stamp: <2011-06-13 13:32:22 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -137,17 +137,12 @@
 (global-set-key "\C-cn" 'next-error)
 (global-set-key "\C-cp" 'previous-error)
 
-;; Defines a function to do nothing.
-(defun bcm-noop (&rest args)
-  "Do ()."
-  (interactive "i"))
-
 ;; My KVM switch uses scroll lock, and Emacs complains about it.
-(global-set-key [Scroll_Lock] 'bcm-noop)
+(global-set-key [Scroll_Lock] 'ignore)
 ;; Silence drag-mouse-9 complaints
-(global-set-key [mouse-9] 'bcm-noop)
-(global-set-key [double-mouse-9] 'bcm-noop)
-(global-set-key [drag-mouse-9] 'bcm-noop)
+(global-set-key [mouse-9] 'ignore)
+(global-set-key [double-mouse-9] 'ignore)
+(global-set-key [drag-mouse-9] 'ignore)
 
 ;; Disable C-z on X11 sessions.
 (when window-system
@@ -763,6 +758,16 @@
 (server-force-delete)
 (server-start)
 
+;; comint-mode
+;; Various comint settings.
+(setq comint-scroll-to-bottom-on-input t
+      comint-scroll-to-bottom-on-output nil
+      comint-scroll-show-maximum-output t
+      ;; Match most shell's insert of space/slash after file completion
+      comint-completion-addsuffix t
+      comint-buffer-maximum-size 100000
+      comint-input-ring-size 5000)
+
 ;; TRAMP
 (when *nt-system*
   (setq shell-file-name "bash")
@@ -815,10 +820,14 @@
 (global-set-key "\C-cs" 'slime-selector)
 
 ;; SLIME contribs.
-(slime-setup '(slime-autodoc ; Show information about symbols near the point.
-               slime-fancy   ; Some fancy SLIME contribs.
-               slime-banner  ; Persistent header line and startup animation.
-               slime-asdf))  ; ASDF support.
+(slime-setup '(slime-autodoc       ; Show information about symbols near point.
+               slime-fancy         ; Some fancy SLIME contribs.
+               slime-banner        ; Persistent header line, startup animation.
+               slime-asdf          ; ASDF support.
+               slime-indentation)) ; Customizable indentation.
+;; Indentation customizations.
+(setq lisp-lambda-list-keyword-parameter-alignment t)
+(setq lisp-lambda-list-keyword-alignment t)
 ;; SLIME contribs init.
 (slime-banner-init)          ; Sets banner function to slime-startup-message.
 (slime-asdf-init)            ; Hooks slime-asdf-on-connect.
@@ -1372,11 +1381,11 @@
 (setq w3m-use-cookies t)
 ;; NOTE: This is a (hopefully) temporary fix to define these functions that
 ;;       don't exist in the current emacs-w3m source.
-(defun w3m-setup-session-menu () 'bcm-noop)
-(defun w3m-session-crash-recovery-save () 'bcm-noop)
-(defun w3m-session-crash-recovery-remove () 'bcm-noop)
-(defun w3m-session-automatic-save () 'bcm-noop)
-(defun w3m-session-last-crashed-session () 'bcm-noop)
+(defun w3m-setup-session-menu () 'ignore)
+(defun w3m-session-crash-recovery-save () 'ignore)
+(defun w3m-session-crash-recovery-remove () 'ignore)
+(defun w3m-session-automatic-save () 'ignore)
+(defun w3m-session-last-crashed-session () 'ignore)
 
 ;; multi-term
 ;; http://www.emacswiki.org/emacs/download/multi-term.el

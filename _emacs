@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2011-06-13 13:32:22 (bm3719)>
+;;;; Time-stamp: <2012-04-01 19:41:53 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -118,6 +118,7 @@
 (global-set-key "\M-/" 'hippie-expand)         ; Superior to dabbrev-expand.
 (global-set-key "\M-z" 'zap-up-to-char)        ; Mimic vim delete to char.
 (global-set-key "\M-o" 'other-window)
+(global-set-key "\C-x\C-a" 'align-regexp)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
 ;; intending to do a find-file.
 (global-set-key "\C-xf" 'find-file)
@@ -406,7 +407,6 @@
   (setq use-dialog-box nil))
 
 ;; Don't echo passwords when communicating with interactive programs.
-;; Basic security.
 (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
 
 ;; Gets rid of disabled commands prompting.
@@ -655,7 +655,7 @@
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
 ;; remember-mode: Now included in Emacs 23.
-;; org-remember-insinuate
+(org-remember-insinuate)
 (setq remember-annotation-functions '(org-remember-annotation))
 ;(setq remember-handler-functions '(org-remember-handler))
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
@@ -763,7 +763,7 @@
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output nil
       comint-scroll-show-maximum-output t
-      ;; Match most shell's insert of space/slash after file completion
+      ;; Match most shells' insert of space/slash after file completion.
       comint-completion-addsuffix t
       comint-buffer-maximum-size 100000
       comint-input-ring-size 5000)
@@ -814,7 +814,7 @@
       slime-complete-symbol*-fancy t)
 (require 'slime)
 
-;; Startup SLIME when a lisp file is open.
+;; Startup SLIME when a Lisp file is open.
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
 (global-set-key "\C-cs" 'slime-selector)
@@ -932,13 +932,7 @@
 (autoload 'literate-haskell-mode "haskell-mode"
    "Major mode for editing literate Haskell scripts." t)
 ;; Haskell flymake
-(defun flymake-Haskell-init ()
-  "Initialize flymake-haskell."
-  (flymake-simple-make-init-impl
-   'flymake-create-temp-with-folder-structure nil nil
-   (file-name-nondirectory buffer-file-name)
-   'flymake-get-Haskell-cmdline))
-(defun flymake-get-Haskell-cmdline (source base-dir)
+(defun flymake-get-haskell-cmdline (source base-dir)
   "Handles command line GHC call."
   (list "ghc"
         (list "--make" "-fbyte-code"
@@ -946,6 +940,12 @@
               ;; script.
               (concat "-i"base-dir)
               source)))
+(defun flymake-haskell-init ()
+  "Initialize flymake-haskell."
+  (flymake-simple-make-init-impl
+   'flymake-create-temp-with-folder-structure nil nil
+   (file-name-nondirectory buffer-file-name)
+   'flymake-get-haskell-cmdline))
 (defvar multiline-flymake-mode nil)
 (defvar flymake-split-output-multiline nil)
 ;; This needs to be advised as flymake-split-string is used in other places and
@@ -963,7 +963,7 @@
 (eval-after-load "flymake"
   '(progn
     (add-to-list 'flymake-allowed-file-name-masks
-     '("\\.l?hs$" flymake-Haskell-init flymake-simple-java-cleanup))
+     '("\\.l?hs$" flymake-haskell-init flymake-simple-java-cleanup))
     (add-to-list 'flymake-err-line-patterns
      '("^\\(.+\\.l?hs\\):\\([0-9]+\\):\\([0-9]+\\):\\(\\(?:.\\|\\W\\)+\\)"
        1 2 3 4))))
@@ -996,7 +996,10 @@
 ;; Write literate Haskell in LaTeX style (default is Bird style).  This
 ;; requires code blocks to be between \begin{code} and \end{code}.
 ;; http://www.haskell.org/haskellwiki/Literate_programming
-(setq haskell-literate-default 'latex)
+;(setq haskell-literate-default 'latex)
+;; Get rid of file dialogs in GUI mode.  This only shows up for me in GHCI
+;; errors, so putting it here.
+(setq use-dialog-box nil)
 
 ;; agda-mode: Cabal version.
 (when *freebsd-system*

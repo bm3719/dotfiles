@@ -8,6 +8,10 @@ xset fp+ /usr/local/lib/X11/fonts/code2000
 xset fp+ /usr/local/lib/X11/fonts/bitstream-vera
 xset fp+ /usr/local/lib/X11/fonts/OTF
 xset fp+ /usr/local/lib/X11/fonts/dejavu
+
+# Install this if I have cutbuffer apps.
+# autocutsel &
+# autocutsel -s PRIMARY &
  
 #xmodmap -e "keycode 233 = Page_Down"
 #xmodmap -e "keycode 234 = Page_Up"
@@ -21,5 +25,5 @@ xmodmap -e "keysym Alt_L = Meta_L Alt_L"
 #/usr/local/bin/xmonad &
 xmonad &
 
-# wait for xmonad
+# Wait for xmonad
 wait $!

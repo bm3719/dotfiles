@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-04-01 19:41:53 (bm3719)>
+;;;; Time-stamp: <2012-04-18 09:05:58 (bm3719)>
 ;;;;
 ;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1382,13 +1382,6 @@
 ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
 (setq w3m-use-tab t)
 (setq w3m-use-cookies t)
-;; NOTE: This is a (hopefully) temporary fix to define these functions that
-;;       don't exist in the current emacs-w3m source.
-(defun w3m-setup-session-menu () 'ignore)
-(defun w3m-session-crash-recovery-save () 'ignore)
-(defun w3m-session-crash-recovery-remove () 'ignore)
-(defun w3m-session-automatic-save () 'ignore)
-(defun w3m-session-last-crashed-session () 'ignore)
 
 ;; multi-term
 ;; http://www.emacswiki.org/emacs/download/multi-term.el

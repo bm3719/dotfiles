@@ -63,6 +63,7 @@ define_webjump("fp", "http://www.freshports.org/search.php?query=%s&search=go&nu
 define_webjump("d", "http://dictionary.reference.com/search?q=%s");
 define_webjump("blekko", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
 define_webjump("b", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
+define_search_engine_webjump("wikipedia.xml", "w")
 
 // Tabs: New tabs version.
 require("new-tabs.js");

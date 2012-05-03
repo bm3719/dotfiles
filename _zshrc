@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2012-05-03 14:50:31 (bm3719)>
+# Time-stamp: <2012-05-03 15:55:06 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -316,11 +316,6 @@ function svn_dirty {
 # oh-my-zsh/lib/theme-and-appearance.zsh: Only relevant stuff used here.
 # Apply theming defaults.
 PS1="%n@%m:%~%# "
-# git theming default: Variables for theming the git info prompt.
-ZSH_THEME_GIT_PROMPT_PREFIX="git:("         # Prefix at the very beginning of the prompt, before the branch name
-ZSH_THEME_GIT_PROMPT_SUFFIX=")"             # At the very end of the prompt
-ZSH_THEME_GIT_PROMPT_DIRTY="*"              # Text to display if the branch is dirty
-ZSH_THEME_GIT_PROMPT_CLEAN=""               # Text to display if the branch is clean
 # Setup the prompt with pretty colors.
 setopt prompt_subst
 

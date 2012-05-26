@@ -1,18 +1,18 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-05-26 01:00:22 (bm3719)>
+;;;; Time-stamp: <2012-05-26 01:35:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
-;;;; swank-clojure, paredit.el, haskell-mode, agda-mode, gtags, python-mode,
-;;;; ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint, moz.el,
-;;;; batch-mode, cedet, jdee, jde-eclipse-compiler-server, ess, elscreen,
-;;;; elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer, emms,
-;;;; color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
+;;;; swank-clojure, paredit.el, haskell-mode, agda-mode, python-mode, ipython,
+;;;; helm, helm-ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint,
+;;;; moz.el, batch-mode, cedet, jdee, jde-eclipse-compiler-server, gtags, ess,
+;;;; elscreen, elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer,
+;;;; emms, color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
 ;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
@@ -1019,12 +1019,6 @@
           (nconc '(("\\.agda" . agda2-mode)
                    ("\\.alfa" . agda2-mode)) auto-mode-alist))))
 
-;; gtags: Requires an install of GNU Global.  Currently only using for c-mode.
-(when *freebsd-system*
-  (setq load-path (cons "/usr/local/share/gtags" load-path))
-  (autoload 'gtags-mode "gtags" "" t)
-  (setq c-mode-hook '(lambda () (gtags-mode 1))))
-
 ;; python-mode: Replaces the built-in python.el.  Currently this is better,
 ;; since it supports iPython.
 ;; http://launchpad.net/python-mode/
@@ -1309,6 +1303,12 @@
        (interactive)
        (save-buffer)
        (server-edit)))))
+
+;; gtags: Requires an install of GNU Global.  Currently only using for c-mode.
+(when *freebsd-system*
+  (setq load-path (cons "/usr/local/share/gtags" load-path))
+  (autoload 'gtags-mode "gtags" "" t)
+  (setq c-mode-hook '(lambda () (gtags-mode 1))))
 
 ;; elscreen
 ;; ftp://ftp.morishima.net/pub/morishima.net/naoto/ElScreen/

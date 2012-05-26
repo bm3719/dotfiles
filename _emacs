@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-05-26 01:35:26 (bm3719)>
+;;;; Time-stamp: <2012-05-26 01:40:19 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1228,8 +1228,9 @@
 ;; comments.
 (add-hook 'jde-mode-hook '(lambda ()
                            (flymake-mode)
-                           (flyspell-prog-mode)))
-(global-set-key (kbd "C-c C-v TAB") 'jde-complete-menu)
+                           (flyspell-prog-mode)
+                           (local-set-key (kbd "C-c C-v TAB")
+                                          'jde-complete-menu)))
 
 ;; Emacs Speaks Statistics (ESS)
 ;; http://ess.r-project.org/

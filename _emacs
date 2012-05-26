@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-05-25 21:57:43 (bm3719)>
+;;;; Time-stamp: <2012-05-26 01:00:22 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -10,9 +10,9 @@
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
 ;;;; swank-clojure, paredit.el, haskell-mode, agda-mode, gtags, python-mode,
 ;;;; ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint, moz.el,
-;;;; batch-mode, sqlplus, cedet, jdee, jde-eclipse-compiler-server, ess,
-;;;; elscreen, elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer,
-;;;; emms, color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
+;;;; batch-mode, cedet, jdee, jde-eclipse-compiler-server, ess, elscreen,
+;;;; elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer, emms,
+;;;; color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
 ;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
@@ -752,9 +752,9 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
-;; server-mode
-;; This starts up a server automatically, allowing emacsclient to connect to
-;; a single Emacs instance.  If a server already exists, it is killed.
+;; server-mode: This starts up a server automatically, allowing emacsclient to
+;; connect to a single Emacs instance.  If a server already exists, it is
+;; killed.
 (server-force-delete)
 (server-start)
 
@@ -784,15 +784,14 @@
            (add-to-list 'load-path my-lisp-dir)
            (normal-top-level-add-subdirs-to-load-path)))
 
-;; pabbrev
+;; pabbrev: Add this to the mode-hook for any major modes I want this
+;; lightweight completion auto-activated.
 ;; http://homepages.cs.ncl.ac.uk/phillip.lord/download/emacs/pabbrev.el
-;; Add this to the mode-hook for any major modes I want this auto-activated.
-;; NOTE: Both pabbrev and YASsnippet bind to TAB, so only activate one of them.
 (require 'pabbrev)
 
-;; pretty-symbols.el
-;; Converts various mathematical symbols and Greek letters to their Unicode
-;; versions.  Useful for Lisp-variants, ML-variants, and Haskell.
+;; pretty-symbols.el: Converts various mathematical symbols and Greek letters
+;; to their Unicode versions.  Useful for Lisp-variants, ML-variants, and
+;; Haskell.
 (require 'pretty-symbols)
 
 ;; ;; SLIME
@@ -1020,8 +1019,7 @@
           (nconc '(("\\.agda" . agda2-mode)
                    ("\\.alfa" . agda2-mode)) auto-mode-alist))))
 
-;; gtags
-;; Requires an install of GNU Global.  Currently only using for c-mode.
+;; gtags: Requires an install of GNU Global.  Currently only using for c-mode.
 (when *freebsd-system*
   (setq load-path (cons "/usr/local/share/gtags" load-path))
   (autoload 'gtags-mode "gtags" "" t)
@@ -1033,15 +1031,18 @@
 (autoload 'python-mode "python-mode" "Python Mode." t)
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-;; NOTE: python-describe-symbol requires the python-doc-html package and
-;;       the PYTHONDOCS environment variable to be set.
+;; NOTE: python-describe-symbol requires the python-doc-html package and the
+;;       PYTHONDOCS environment variable to be set.  This isn't valid in
+;;       python-mode though, only in python.el.
 (add-hook 'python-mode-hook
           (lambda ()
             (set (make-variable-buffer-local 'beginning-of-defun-function)
                  'py-beginning-of-def-or-class)
             (setq outline-regexp "def\\|class ")
             (pabbrev-mode)
-            (flyspell-prog-mode)))
+            (flyspell-prog-mode)
+            (flymake-mode)
+            (local-set-key "\C-cL" 'py-execute-buffer)))
 ;; Replaced pylint with pyflakes, as it's super fast.  However, it doesn't
 ;; catch a lot of style problems, so it's still a good idea to pylint it later.
 ;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
@@ -1056,10 +1057,22 @@
 (when (load "flymake" t)
   (push '("\\.py\\'" flymake-pyflakes-init)
         flymake-allowed-file-name-masks))
+
+
 ;; ipython: Support for a replacement to the default Python shell.  Requires an
 ;; install of the iPython application.  Run with M-x py-shell.
 (require 'ipython)
-(global-set-key "\C-cL" 'py-execute-buffer)
+
+;; helm: An incremental completion and selection narrowing framework.
+;; https://github.com/emacs-helm/helm
+(require 'helm-config)
+;; helm-ipython
+;; https://raw.github.com/emacs-helm/helm-ipython/master/helm-ipython.el
+(require 'helm-ipython)
+(define-key py-mode-map (kbd "M-<tab>") 'helm-ipython-complete)
+(define-key py-shell-map (kbd "M-<tab>") 'helm-ipython-complete)
+(define-key py-mode-map (kbd "C-c M") 'helm-ipython-import-modules-from-buffer)
+
 
 ;; ruby-mode
 ;; http://www.emacswiki.org/emacs/RubyMode
@@ -1096,9 +1109,8 @@
           LaTeX-section-section
           LaTeX-section-label)))
 
-;; nXhtml
+;; nXhtml: Includes MuMaMo.
 ;; http://ourcomments.org/Emacs/nXhtml/doc/nxhtml.html
-;; Includes MuMaMo.
 ;; TODO: Consider turning off or changing the ugly block-coloring.
 ;; NOTE: This needs to be run before espresso, since parts of its JavaScript
 ;;       setup need to get clobbered.
@@ -1144,19 +1156,6 @@
 ;; batch-mode
 ;; http://www.emacswiki.org/emacs/download/batch-mode.el
 (require 'batch-mode)
-
-;; sqlplus
-;; http://www.emacswiki.org/emacs/SqlPlus
-;; Add plsql.el later if needed.
-(require 'sqlplus)
-(add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
-;; NOTE: This auto-logs me into SQL*Plus, but doesn't execute commands sent
-;;       from the current .sqp file for some reason.  A working method is to
-;;       open the .sqp file, and run commands with C-Ret.
-(defun bcm-sqlplus ()
-  "Start an interactive SQL*Plus session, with pre-defined connection string."
-  (interactive)
-  (sqlplus "rtrg/rtrg@//localhost:1521/orcl"))
 
 ;; CEDET
 ;; http://cedet.sourceforge.net/
@@ -1313,8 +1312,8 @@
 
 ;; elscreen
 ;; ftp://ftp.morishima.net/pub/morishima.net/naoto/ElScreen/
-;; Screen navigation: C-z [np0-9].
-;; Requires Apel, which will need to be manuallly installed on Windows/Linux
+;; Requires Apel, which will need to be manuallly installed on Windows and some
+;; GNU/Linux distros.
 (load "elscreen" "ElScreen" t)
 ;; F7 creates a new elscreen, F8 kills it.
 (global-set-key (kbd "<f7>") 'elscreen-create)
@@ -1449,9 +1448,8 @@
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
 
-;; Font face
-;; Requires an install of Consolas on Windows.  Using Inconsolata on FreeBSD,
-;; but defined that in .Xdefaults.
+;; Font face: Requires an install of Consolas on Windows.  Using DejaVu Sans
+;; Mono on FreeBSD, but that's defined in .Xdefaults.
 (when *nt-system*
   (set-default-font
    "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1"))

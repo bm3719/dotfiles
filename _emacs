@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-05-25 21:23:38 (bm3719)>
+;;;; Time-stamp: <2012-05-25 21:57:43 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -10,7 +10,7 @@
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
 ;;;; swank-clojure, paredit.el, haskell-mode, agda-mode, gtags, python-mode,
 ;;;; ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint, moz.el,
-;;;; batch-mode, sqlplus, cedet, ecb, jdee, jde-eclipse-compiler-server, ess,
+;;;; batch-mode, sqlplus, cedet, jdee, jde-eclipse-compiler-server, ess,
 ;;;; elscreen, elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer,
 ;;;; emms, color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
 ;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
@@ -1164,29 +1164,9 @@
 (when *nt-system*       ; NT manual install.
   (load-file "~/.emacs.d/cedet-1.0pre6/common/cedet.el"))
 (setq semantic-load-turn-useful-things-on t)
-;; On FreeBSD and Linux, ECB drags this in as a dependency.
-(require 'cedet)
-
-;; ECB
-;; http://ecb.sourceforge.net/
-;; Windows manual install.
-(when *freebsd-system*  ; FreeBSD ports version.
-  (add-to-list 'load-path "/usr/local/share/emacs/22.3/site-lisp/ecb"))
-(when *linux-system*    ; Linux apt-get version.
-  (add-to-list 'load-path "/usr/share/emacs22/site-lisp/ecb"))
-(require 'ecb)
 ;; Keep semantic.cache files from littering my FS.
 (setq semanticdb-default-save-directory "~/.emacs.d/saves/semantic.cache")
-;; Disable tip of the day (especially annoying in GUI mode).
-(setq ecb-tip-of-the-day nil)
-;; Ensure the options save buffer doesn't appear.  I left ecb-options-version
-;; in the custom-set-variables block, since that's often overwritten when
-;; upgrading, in which case that buffer shows up anyway.
-(setq ecb-gzip-setup (quote cons)
-      ecb-layout-name "leftright1"
-      ecb-source-path (quote ("~/"))
-      ecb-tar-setup (quote cons)
-      ecb-wget-setup (quote cons))
+(require 'cedet)
 
 ;; JDEE
 ;; http://jdee.sourceforge.net/
@@ -1497,7 +1477,9 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(ecb-options-version "2.32")
+ '(global-senator-minor-mode t nil (senator))
+ '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
+ '(which-function-mode nil)
  '(global-semantic-decoration-mode nil nil (semantic-decorate-mode))
  '(global-semantic-highlight-edits-mode nil nil (semantic-util-modes))
  '(global-semantic-highlight-func-mode nil nil (semantic-util-modes))
@@ -1508,14 +1490,11 @@
  '(global-semantic-show-parser-state-mode nil nil (semantic-util-modes))
  '(global-semantic-show-unmatched-syntax-mode nil nil (semantic-util-modes))
  '(global-semantic-stickyfunc-mode nil nil (semantic-util-modes))
- '(global-senator-minor-mode t nil (senator))
- '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-idle-scheduler-verbose-flag nil)
  '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing))
- '(semanticdb-global-mode t nil (semanticdb))
- '(which-function-mode nil))
+ '(semanticdb-global-mode t nil (semanticdb)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Final init

@@ -1,20 +1,19 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-04-18 09:05:58 (bm3719)>
+;;;; Time-stamp: <2012-05-25 21:23:38 (bm3719)>
 ;;;;
-;;;; NOTE: This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux,
-;;;; and Windows, but all or parts of this file should work with older GNU
-;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
+;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
+;;;; Windows, but all or parts of this file should work with older GNU Emacs
+;;;; versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
-;;;; swank-clojure, haskell-mode, agda-mode, scala-mode, ensime, sbt.el, gtags,
-;;;; python-mode, ipython, ruby-mode, auctex, espresso, flymake-jslint, moz.el,
-;;;; ess, batch-mode, sqlplus, nxhtml, cedet, ecb, jdee,
-;;;; jde-eclipse-compiler-server, elscreen, elscreen-w3m, w3m (+ flim, apel),
-;;;; multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
-;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz,
-;;;; redo+.el, htmlize.el.
+;;;; swank-clojure, paredit.el, haskell-mode, agda-mode, gtags, python-mode,
+;;;; ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint, moz.el,
+;;;; batch-mode, sqlplus, cedet, ecb, jdee, jde-eclipse-compiler-server, ess,
+;;;; elscreen, elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer,
+;;;; emms, color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
+;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
 ;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, MozRepl, JDK,
@@ -261,7 +260,7 @@
   (toggle-read-only 0))
 ;; Replace error message on read-only kill with an echo area message.
 (setq-default kill-read-only-ok t)
-(global-set-key "\C-c\C-k" 'bcm-copy-line)
+;(global-set-key "\C-c\C-k" 'bcm-copy-line)
 
 ;; For composing in Emacs then pasting into a word processor, this un-fills all
 ;; the paragraphs (i.e. turns each paragraph into one very long line) and
@@ -513,7 +512,8 @@
 ;; buffer, so make it go away in 2 seconds.
 (setq compilation-finish-function
       (lambda (buf str)
-        (if (string-match "exited abnormally" str)
+        (if (or (string-match "exited abnormally" str)
+                 (string-match (buffer-name buf) "*grep*"))
             ;; There were errors.
             (message "Compilation errors, press C-x ` to visit.")
             ;; No errors; make the compilation window go away in 2 seconds.
@@ -795,125 +795,133 @@
 ;; versions.  Useful for Lisp-variants, ML-variants, and Haskell.
 (require 'pretty-symbols)
 
-;; SLIME
-;; http://common-lisp.net/project/slime/
-(when *freebsd-system* ; FreeBSD CVS version.
-  (setq inferior-lisp-program "/usr/local/bin/sbcl"
-        common-lisp-hyperspec-root
-        "file:///usr/local/share/doc/clisp-hyperspec/HyperSpec/"))
-(when *linux-system*   ; Linux CVS version (only using with remote sbcl).
-  (setq inferior-lisp-program "/usr/bin/sbcl"
-        common-lisp-hyperspec-root "file:///home/bm3719/doc/HyperSpec/"))
-(when *nt-system*      ; Windows CVS version.
-  (setq inferior-lisp-program "sbcl.exe"
-        common-lisp-hyperspec-root "file:///C:/bm3719/doc/HyperSpec/"))
-;; Common SLIME setup.
-(setq lisp-indent-function 'common-lisp-indent-function
-      slime-complete-symbol-function 'slime-fuzzy-complete-symbol
-      slime-startup-animation t
-      slime-complete-symbol*-fancy t)
-(require 'slime)
+;; ;; SLIME
+;; ;; http://common-lisp.net/project/slime/
+;; (when *freebsd-system* ; FreeBSD CVS version.
+;;   (setq inferior-lisp-program "/usr/local/bin/sbcl"
+;;         common-lisp-hyperspec-root
+;;         "file:///usr/local/share/doc/clisp-hyperspec/HyperSpec/"))
+;; (when *linux-system*   ; Linux CVS version (only using with remote sbcl).
+;;   (setq inferior-lisp-program "/usr/bin/sbcl"
+;;         common-lisp-hyperspec-root "file:///home/bm3719/doc/HyperSpec/"))
+;; (when *nt-system*      ; Windows CVS version.
+;;   (setq inferior-lisp-program "sbcl.exe"
+;;         common-lisp-hyperspec-root "file:///C:/bm3719/doc/HyperSpec/"))
+;; ;; Common SLIME setup.
+;; (setq lisp-indent-function 'common-lisp-indent-function
+;;       slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+;;       slime-startup-animation t
+;;       slime-complete-symbol*-fancy t)
+;; (require 'slime)
 
-;; Startup SLIME when a Lisp file is open.
-(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
-(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
-(global-set-key "\C-cs" 'slime-selector)
+;; ;; Startup SLIME when a Lisp file is open.
+;; (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+;; (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+;; (global-set-key "\C-cs" 'slime-selector)
 
-;; SLIME contribs.
-(slime-setup '(slime-autodoc       ; Show information about symbols near point.
-               slime-fancy         ; Some fancy SLIME contribs.
-               slime-banner        ; Persistent header line, startup animation.
-               slime-asdf          ; ASDF support.
-               slime-indentation)) ; Customizable indentation.
-;; Indentation customizations.
-(setq lisp-lambda-list-keyword-parameter-alignment t)
-(setq lisp-lambda-list-keyword-alignment t)
-;; SLIME contribs init.
-(slime-banner-init)          ; Sets banner function to slime-startup-message.
-(slime-asdf-init)            ; Hooks slime-asdf-on-connect.
-;; Spell-check comments.
-(add-hook 'slime-mode-hook 'flyspell-prog-mode)
-;; Enable pretty-symbols for Greek letters.
-(add-hook 'slime-mode-hook 'pretty-greek)
+;; ;; SLIME contribs.
+;; (slime-setup '(slime-autodoc       ; Show information about symbols near point.
+;;                slime-fancy         ; Some fancy SLIME contribs.
+;;                slime-banner        ; Persistent header line, startup animation.
+;;                slime-asdf          ; ASDF support.
+;;                slime-indentation)) ; Customizable indentation.
+;; ;; Indentation customizations.
+;; (setq lisp-lambda-list-keyword-parameter-alignment t)
+;; (setq lisp-lambda-list-keyword-alignment t)
+;; ;; SLIME contribs init.
+;; (slime-banner-init)          ; Sets banner function to slime-startup-message.
+;; (slime-asdf-init)            ; Hooks slime-asdf-on-connect.
+;; ;; Spell-check comments.
+;; (add-hook 'slime-mode-hook 'flyspell-prog-mode)
+;; ;; Enable pretty-symbols for Greek letters.
+;; (add-hook 'slime-mode-hook 'pretty-greek)
 
-;; Translates from Emacs buffer to filename on remote machine.
-(setf slime-translate-to-lisp-filename-function
-  (lambda (file-name)
-    (subseq file-name (length "/ssh:[userid]:")))
-  slime-translate-from-lisp-filename-function
-    (lambda (file-name)
-    (concat "/[userid]:" file-name)))
+;; ;; Translates from Emacs buffer to filename on remote machine.
+;; (setf slime-translate-to-lisp-filename-function
+;;   (lambda (file-name)
+;;     (subseq file-name (length "/ssh:[userid]:")))
+;;   slime-translate-from-lisp-filename-function
+;;     (lambda (file-name)
+;;     (concat "/[userid]:" file-name)))
 
-;; Fontify *SLIME Description* buffer for SBCL.
-(defun slime-description-fontify ()
-  "Fontify sections of SLIME Description."
-  (with-current-buffer "*SLIME Description <sbcl>*"
-    (highlight-regexp
-     (concat "^Function:\\|"
-             "^Macro-function:\\|"
-             "^Its associated name.+?) is\\|"
-             "^The .+'s arguments are:\\|"
-             "^Function documentation:$\\|"
-             "^Its.+\\(is\\|are\\):\\|"
-             "^On.+it was compiled from:$")
-     'hi-blue)))
-(defadvice slime-show-description (after slime-description-fontify activate)
-  "Fontify sections of SLIME Description."
-  (slime-description-fontify))
+;; ;; Fontify *SLIME Description* buffer for SBCL.
+;; (defun slime-description-fontify ()
+;;   "Fontify sections of SLIME Description."
+;;   (with-current-buffer "*SLIME Description <sbcl>*"
+;;     (highlight-regexp
+;;      (concat "^Function:\\|"
+;;              "^Macro-function:\\|"
+;;              "^Its associated name.+?) is\\|"
+;;              "^The .+'s arguments are:\\|"
+;;              "^Function documentation:$\\|"
+;;              "^Its.+\\(is\\|are\\):\\|"
+;;              "^On.+it was compiled from:$")
+;;      'hi-blue)))
+;; (defadvice slime-show-description (after slime-description-fontify activate)
+;;   "Fontify sections of SLIME Description."
+;;   (slime-description-fontify))
 
-;; Improve usability of slime-apropos: slime-apropos-minor-mode
-(defvar slime-apropos-anchor-regexp "^[^ ]")
-(defun slime-apropos-next-anchor ()
-  "Navigate to next SLIME apropos anchor."
-  (interactive)
-  (let ((pt (point)))
-    (forward-line 1)
-    (if (re-search-forward slime-apropos-anchor-regexp nil t)
-        (goto-char (match-beginning 0))
-      (goto-char pt)
-      (error "anchor not found"))))
-(defun slime-apropos-prev-anchor ()
-  "Navigate to previous SLIME apropos anchor."
-  (interactive)
-  (let ((p (point)))
-    (if (re-search-backward slime-apropos-anchor-regexp nil t)
-        (goto-char (match-beginning 0))
-      (goto-char p)
-      (error "anchor not found"))))
-(defvar slime-apropos-minor-mode-map (make-sparse-keymap))
-(define-key slime-apropos-minor-mode-map "\C-m" 'slime-describe-symbol)
-(define-key slime-apropos-minor-mode-map "l" 'slime-describe-symbol)
-(define-key slime-apropos-minor-mode-map "j" 'slime-apropos-next-anchor)
-(define-key slime-apropos-minor-mode-map "k" 'slime-apropos-prev-anchor)
-(define-minor-mode slime-apropos-minor-mode "")
-(defadvice slime-show-apropos (after slime-apropos-minor-mode activate)
-  ""
-  (when (get-buffer "*SLIME Apropos*")
-    (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
+;; ;; Improve usability of slime-apropos: slime-apropos-minor-mode
+;; (defvar slime-apropos-anchor-regexp "^[^ ]")
+;; (defun slime-apropos-next-anchor ()
+;;   "Navigate to next SLIME apropos anchor."
+;;   (interactive)
+;;   (let ((pt (point)))
+;;     (forward-line 1)
+;;     (if (re-search-forward slime-apropos-anchor-regexp nil t)
+;;         (goto-char (match-beginning 0))
+;;       (goto-char pt)
+;;       (error "anchor not found"))))
+;; (defun slime-apropos-prev-anchor ()
+;;   "Navigate to previous SLIME apropos anchor."
+;;   (interactive)
+;;   (let ((p (point)))
+;;     (if (re-search-backward slime-apropos-anchor-regexp nil t)
+;;         (goto-char (match-beginning 0))
+;;       (goto-char p)
+;;       (error "anchor not found"))))
+;; (defvar slime-apropos-minor-mode-map (make-sparse-keymap))
+;; (define-key slime-apropos-minor-mode-map "\C-m" 'slime-describe-symbol)
+;; (define-key slime-apropos-minor-mode-map "l" 'slime-describe-symbol)
+;; (define-key slime-apropos-minor-mode-map "j" 'slime-apropos-next-anchor)
+;; (define-key slime-apropos-minor-mode-map "k" 'slime-apropos-prev-anchor)
+;; (define-minor-mode slime-apropos-minor-mode "")
+;; (defadvice slime-show-apropos (after slime-apropos-minor-mode activate)
+;;   ""
+;;   (when (get-buffer "*SLIME Apropos*")
+;;     (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
 
 ;; clojure-mode
 ;; http://github.com/technomancy/clojure-mode
 (require 'clojure-mode)
-;; swank-clojure
-;; http://github.com/technomancy/swank-clojure
-;; NOTE: Using older version, since current SLIME is incompatible with the
-;;       latest swank-clojure.  Be sure to copy clojure-contrib directory.
-(when *nt-system*
-    (setq swank-clojure-jar-path "C:\\bin\\java\\clojure-1.1.0\\clojure.jar"
-          swank-clojure-classpath "C:\\bin\\java\\clojure-1.1.0"))
-(when *freebsd-system*
-  (setq swank-clojure-jar-path "/usr/local/share/java/classes/clojure.jar"
-        swank-clojure-classpath "/usr/local/share/java/classes"))
-(when *linux-system*
-  (setq swank-clojure-jar-path "/usr/lib/clojure.jar"
-        swank-clojure-classpath "/usr/lib"))
-(require 'swank-clojure-autoload)
-(setq swank-clojure-extra-classpaths (list
-                                      "~/.emacs.d/clojure"
-                                      "~/.emacs.d/clojure-contrib"))
-;; Restore SBCL as default SLIME Lisp implementation.  To specify clojure on
-;; SLIME start, run with: M-- M-x slime clojure
-(add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+;; ;; swank-clojure
+;; ;; http://github.com/technomancy/swank-clojure
+;; ;; NOTE: Using older version, since current SLIME is incompatible with the
+;; ;;       latest swank-clojure.  Be sure to copy clojure-contrib directory.
+;; (when *nt-system*
+;;     (setq swank-clojure-jar-path "C:\\bin\\java\\clojure-1.1.0\\clojure.jar"
+;;           swank-clojure-classpath "C:\\bin\\java\\clojure-1.1.0"))
+;; (when *freebsd-system*
+;;   (setq swank-clojure-jar-path "/usr/local/share/java/classes/clojure.jar"
+;;         swank-clojure-classpath "/usr/local/share/java/classes"))
+;; (when *linux-system*
+;;   (setq swank-clojure-jar-path "/usr/lib/clojure.jar"
+;;         swank-clojure-classpath "/usr/lib"))
+;; (require 'swank-clojure-autoload)
+;; (setq swank-clojure-extra-classpaths (list
+;;                                       "~/.emacs.d/clojure"
+;;                                       "~/.emacs.d/clojure-contrib"))
+;; ;; Restore SBCL as default SLIME Lisp implementation.  To specify clojure on
+;; ;; SLIME start, run with: M-- M-x slime clojure
+;; (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+
+;; paredit (beta)
+;; http://mumble.net/~campbell/emacs/paredit-beta.el
+(require 'paredit)
+(autoload 'enable-paredit-mode "paredit"
+  "Turn on pseudo-structural editing of Lisp code."
+  t)
+(add-hook 'clojure-mode-hook 'enable-paredit-mode)
 
 ;; haskell-mode
 ;; http://projects.haskell.org/haskellmode-emacs/
@@ -1011,31 +1019,6 @@
     (setq auto-mode-alist
           (nconc '(("\\.agda" . agda2-mode)
                    ("\\.alfa" . agda2-mode)) auto-mode-alist))))
-
-;; scala-mode: Comes with Scala distribution.
-;; NOTE: Activate REPL with M-x scala-run-scala.  Activate menu-bar-mode to see
-;;       all snippets.
-(when *nt-system*
-  (add-to-list 'load-path
-               "C:\\bin\\java\\scala-2.7.7\\misc\\scala-tool-support\\emacs"))
-(when *freebsd-system*
-  (add-to-list 'load-path
-               "/usr/local/share/scala-2.7.7/misc/scala-tool-support/emacs"))
-;; Arch Linux's scala package doesn't include scala-tool-support, so this is a
-;; manually copied version.
-(when *linux-system*
-  (add-to-list 'load-path
-               "~/lib/scala-tool"))
-(require 'scala-mode-auto)
-;; Spell-check comments.
-(add-hook 'scala-mode-hook 'flyspell-prog-mode)
-;; ENSIME: Enhanced Scala Interaction Mode for Emacs.
-(require 'ensime)
-(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-;; SBT: Scala Build Tool
-;; http://github.com/RayRacine/scallap/blob/master/tools/emacs/sbt.el
-;; NOTE: Not sure I want to use this yet.
-(load "~/.emacs.d/sbt.el")
 
 ;; gtags
 ;; Requires an install of GNU Global.  Currently only using for c-mode.

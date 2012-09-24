@@ -1,16 +1,16 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-05-26 01:40:19 (bm3719)>
+;;;; Time-stamp: <2012-09-24 00:23:11 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
-;;;; swank-clojure, paredit.el, haskell-mode, agda-mode, python-mode, ipython,
-;;;; helm, helm-ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint,
-;;;; moz.el, batch-mode, cedet, jdee, jde-eclipse-compiler-server, gtags, ess,
+;;;; swank-clojure, haskell-mode, agda-mode, python-mode, ipython, helm,
+;;;; helm-ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint, moz.el,
+;;;; batch-mode, cedet, jdee, jde-eclipse-compiler-server, gtags, ess,
 ;;;; elscreen, elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer,
 ;;;; emms, color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
 ;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
@@ -914,14 +914,6 @@
 ;; ;; SLIME start, run with: M-- M-x slime clojure
 ;; (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
 
-;; paredit (beta)
-;; http://mumble.net/~campbell/emacs/paredit-beta.el
-(require 'paredit)
-(autoload 'enable-paredit-mode "paredit"
-  "Turn on pseudo-structural editing of Lisp code."
-  t)
-(add-hook 'clojure-mode-hook 'enable-paredit-mode)
-
 ;; haskell-mode
 ;; http://projects.haskell.org/haskellmode-emacs/
 (cond ((or *freebsd-system* *linux-system*) ; FreeBSD/Linux CVS versions.
@@ -1234,46 +1226,48 @@
 
 ;; Emacs Speaks Statistics (ESS)
 ;; http://ess.r-project.org/
-(require 'ess-site)
-;; Provides the useful ess-rutils-rmall and ess-rutils-rsitesearch.
-(require 'ess-rutils)
-(setq ess-ask-for-ess-directory nil
-      ess-local-process-name "R"
-      ess-imenu-use-S t
-      ess-language "R"
-      ess-pdf-viewer-pref "xpdf"
-      ess-ps-viewer-pref "gs")
-;; Start R if it's not running when S-RET is hit.
-(defun bcm-ess-start-R ()
-  "Start R."
-  (interactive)
-  (when (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
-    (delete-other-windows)
-    (setq w1 (selected-window))
-    (setq w1name (buffer-name))
-    (setq w2 (split-window w1))
-    (R)
-    (set-window-buffer w2 "*R*")
-    (set-window-buffer w1 w1name)))
-(defun bcm-ess-eval ()
-  "Eval ESS region."
-  (interactive)
-  (bcm-ess-start-R)
-  (if (and transient-mark-mode mark-active)
-      (call-interactively 'ess-eval-region)
+;; Not in use on FreeBSD.
+(when (not *freebsd-system*)
+  (require 'ess-site)
+  ;; Provides the useful ess-rutils-rmall and ess-rutils-rsitesearch.
+  (require 'ess-rutils)
+  (setq ess-ask-for-ess-directory nil
+        ess-local-process-name "R"
+        ess-imenu-use-S t
+        ess-language "R"
+        ess-pdf-viewer-pref "xpdf"
+        ess-ps-viewer-pref "gs")
+  ;; Start R if it's not running when S-RET is hit.
+  (defun bcm-ess-start-R ()
+    "Start R."
+    (interactive)
+    (when (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
+      (delete-other-windows)
+      (setq w1 (selected-window))
+      (setq w1name (buffer-name))
+      (setq w2 (split-window w1))
+      (R)
+      (set-window-buffer w2 "*R*")
+      (set-window-buffer w1 w1name)))
+  (defun bcm-ess-eval ()
+    "Eval ESS region."
+    (interactive)
+    (bcm-ess-start-R)
+    (if (and transient-mark-mode mark-active)
+        (call-interactively 'ess-eval-region)
       (call-interactively 'ess-eval-line-and-step)))
-;; ESS/iESS mode hooks, defining some extra ESS keybindings.
-(add-hook 'ess-mode-hook
-          '(lambda ()
-            (local-set-key [(shift return)] 'bcm-ess-eval)
-            (local-set-key [?\C-c ?\M-r] 'ess-rutils-rmall)
-            (local-set-key [?\C-c ?\C-f] 'ess-rutils-rsitesearch)))
-(add-hook 'inferior-ess-mode-hook
-          '(lambda ()
-            (local-set-key [C-up] 'comint-previous-input)
-            (local-set-key [C-down] 'comint-next-input)
-            (local-set-key [?\C-c ?\M-r] 'ess-rutils-rmall)
-            (local-set-key [?\C-c ?\C-f] 'ess-rutils-rsitesearch)))
+  ;; ESS/iESS mode hooks, defining some extra ESS keybindings.
+  (add-hook 'ess-mode-hook
+            '(lambda ()
+               (local-set-key [(shift return)] 'bcm-ess-eval)
+               (local-set-key [?\C-c ?\M-r] 'ess-rutils-rmall)
+               (local-set-key [?\C-c ?\C-f] 'ess-rutils-rsitesearch)))
+  (add-hook 'inferior-ess-mode-hook
+            '(lambda ()
+               (local-set-key [C-up] 'comint-previous-input)
+               (local-set-key [C-down] 'comint-next-input)
+               (local-set-key [?\C-c ?\M-r] 'ess-rutils-rmall)
+               (local-set-key [?\C-c ?\C-f] 'ess-rutils-rsitesearch))))
 
 ;; Maxima support
 ;; NOTE: Gnuplot on Windows not setup yet.
@@ -1327,18 +1321,8 @@
 ;; FreeBSD: ports w3m-m17n; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
 ;; NOTE: I also modify the local copies of w3m.el and w3m-search.el.  See
 ;;       projects.org for details.
-;; Only use w3m as default browser if in text mode.
-(if window-system
-    (progn
-      (setq browse-url-browser-function 'browse-url-generic)
-      (when *nt-system*
-        (setq browse-url-generic-program
-              "C:\\Program Files\\Mozilla Firefox\\firefox.exe"))
-      (when *freebsd-system*
-        (setq browse-url-generic-program "/usr/local/bin/conkeror"))
-      (when *linux-system*
-        (setq browse-url-generic-program "/home/bm3719/bin/conkeror")))
-    (setq browse-url-browser-function 'w3m-browse-url))
+;; Use w3m for all URLs (deprecated code to use available GUI browser).
+(setq browse-url-browser-function 'w3m-browse-url)
 (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 ;; Optional keyboard short-cut.
 (global-set-key "\C-x\M-m" 'browse-url-at-point)
@@ -1369,7 +1353,6 @@
 ;; http://www.gnu.org/software/emms/
 ;; Currently using mplayer backend - seems superior to mpg321, which doesn't
 ;; support seeking.
-(add-to-list 'load-path "~/.emacs.d/emms/")
 (require 'emms-setup)
 (emms-standard)
 (emms-default-players)
@@ -1433,7 +1416,7 @@
 (require 'malyon)
 
 ;; keywiz: An educational game which tests you on esoteric keystrokes.
-;; http://www.ifa.au.dk/~harder/keywiz.el
+;; http://users-phys.au.dk/harder/keywiz.el
 (require 'keywiz)
 
 ;; redo+.el: An extended version of XEmacs' redo package.
@@ -1445,7 +1428,7 @@
 (global-set-key "\C-x\M-_" 'redo)
 
 ;; htmlize.el: Converts buffer to HTML.
-;; http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el
+;; http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el.cgi
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
 

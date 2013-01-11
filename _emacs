@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-09-24 00:23:11 (bm3719)>
+;;;; Time-stamp: <2012-12-10 10:38:22 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -33,6 +33,13 @@
 (defvar *freebsd-system* (string-match "freebsd" system-configuration))
 (defvar *linux-system* (string-match "linux" system-configuration))
 (defvar *nt-system* (string-match "nt" system-configuration))
+
+;; Font face: Requires appropriate fonts to be installed.  
+(if *nt-system*
+  (set-default-font
+   "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
+  (when window-system
+    (set-face-attribute 'default nil :font "dejavu sans mono-12")))
 
 (setq inhibit-startup-message t)   ; Disable splash screen.
 (when window-system
@@ -914,6 +921,18 @@
 ;; ;; SLIME start, run with: M-- M-x slime clojure
 ;; (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
 
+;; scala-mode
+;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs
+(require 'scala-mode-auto)
+;; ENSIME
+;; https://github.com/aemoncannon/ensime
+(require 'ensime)
+(add-hook 'scala-mode-hook
+          (lambda ()
+            (local-set-key "\C-c\C-t\C-b" 'scala-eval-buffer)
+            (local-set-key "\C-c\C-t\C-r" 'scala-eval-region)
+            'ensime-scala-mode-hook))
+
 ;; haskell-mode
 ;; http://projects.haskell.org/haskellmode-emacs/
 (cond ((or *freebsd-system* *linux-system*) ; FreeBSD/Linux CVS versions.
@@ -1329,6 +1348,15 @@
 ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
 (setq w3m-use-tab t)
 (setq w3m-use-cookies t)
+;; Add some extra search engine URIs.
+(eval-after-load "w3m-search"
+  '(progn (add-to-list 'w3m-search-engine-alist
+                       '("hoogle" "http://haskell.org/hoogle/?q=%s" nil)
+                       '("ports" "http://freebsd.org/cgi/ports.cgi/?query=%s"
+                         nil))
+          (add-to-list 'w3m-uri-replace-alist
+                       '("\\`h:" w3m-search-uri-replace "hoogle")
+                       '("\\`p:" w3m-search-uri-replace "ports"))))
 
 ;; multi-term
 ;; http://www.emacswiki.org/emacs/download/multi-term.el
@@ -1431,12 +1459,6 @@
 ;; http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el.cgi
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
-
-;; Font face: Requires an install of Consolas on Windows.  Using DejaVu Sans
-;; Mono on FreeBSD, but that's defined in .Xdefaults.
-(when *nt-system*
-  (set-default-font
-   "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1"))
 
 ;; Printing
 ;; Requires install of Ghostscript and GSView native ports on Windows.

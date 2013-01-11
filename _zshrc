@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2012-05-03 22:34:31 (bm3719)>
+# Time-stamp: <2012-12-03 14:36:13 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -11,8 +11,8 @@
 
 # Huge history file; great for C-r searching long ago used commands.
 HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 
 setopt appendhistory    # Save history from all zsh sessions.
 setopt beep             # Gets overridden by screen's visual bell.
@@ -54,9 +54,11 @@ compinit
 umask 027               # u=rw,g=r,o=
 
 # $PATH
-PATH=$PATH:$HOME/bin:$HOME/.cabal/bin:/sbin:/usr/sbin:/bin:/usr/bin
-PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec
-PATH=$PATH:/usr/local/diablo-jdk1.6.0/bin:.
+PATH=$HOME/bin:$HOME/.cabal/bin:/sbin:/usr/sbin:/bin:/usr/bin:$PATH
+PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec:$HOME/.local/bin
+PATH=$PATH:/usr/local/diablo-jdk1.6.0/bin
+PATH=$PATH:$HOME/src/scala/scala-2.9.2/bin
+PATH=$PATH:.
 # Append /usr/games to $PATH if it exists.
 if [ -d /usr/games ]
 then
@@ -82,13 +84,13 @@ autoload colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
   colors
 fi
-for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-  eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-  eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
-  (( count = $count + 1 ))
-done
-PR_NO_COLOR="%{$terminfo[sgr0]%}"
-#PS1=`echo "[$PR_BLUE%n@%m:%c$PR_NO_COLOR]%# " | tr -d "$<2>"`
+# for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+#   eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+#   eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
+#   (( count = $count + 1 ))
+# done
+# PR_NO_COLOR="%{$terminfo[sgr0]%}"
+# PS1=`echo "[$PR_BLUE%n@%m:%c$PR_NO_COLOR]%# " | tr -d "$<2>"`
 
 export SBCL_HOME=/usr/local/lib/sbcl
 export FTPANONPASS=nobody@nodomain.nox
@@ -109,14 +111,16 @@ export EDITOR='emacsclient -n'
 export SVN_EDITOR='vim'
 export GREP_COLOR='01;32'              # Set grep color to green (default red).
 export DARCS_EMAIL=mutt                # Mail client used with 'darcs send'.
-# Set lynx start page to bookmarks file.
+# Set Lynx start page to bookmarks file.
 export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
 # Regionalization used by w3m.
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 # Java ecology stuff
-export CLASSPATH=.:/usr/local/share/scala-2.7.7/lib:~/lib/classes:~/lib/archive/'*'
+export JAVA_HOME=/usr/local/diablo-jdk1.6.0
+export CLASSPATH=.:$HOME/lib/classes:$HOME/lib/archive/'*'
 export CLASSPATH=$CLASSPATH:/usr/local/share/java/classes/jline.jar
+export CLASSPATH=$CLASSPATH:$HOME/src/scala/scala-2.9.2/lib
 export ANT_HOME=/home/bm3719/.ant
 # Python-related stuff.
 if [ -d /usr/local/share/doc/python2.6 ]
@@ -128,20 +132,9 @@ then
 else
     export PYTHONDOCS=/usr/share/doc/python/html
 fi
-# Work-specific stuff.
-if [ -d ~/src/python/augustus-trunk-read-only ]
+if [ -d $HOME/src/scala/scala-2.9.2 ]
 then
-    export PYTHONPATH=~/src/python/augustus-trunk-read-only
-    export PATH=$PATH:~/src/python/augustus-trunk-read-only/bin
-fi
-if [ -d ~/project ]
-then
-    export PROJECT=~/project
-    export PYTHONPATH=$PYTHONPATH:$PROJECT
-fi
-if [ -d ~/src/java/apache-activemq-5.4.1/bin ]
-then
-    export PATH=$PATH:~/src/java/apache-activemq-5.4.1/bin
+    export SCALA_HOME=$HOME/src/scala/scala-2.9.2
 fi
 
 # Colorized manpages.

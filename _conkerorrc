@@ -14,7 +14,7 @@
  *
  * Notes: On Windows eval this first: M-: user_pref("conkeror.rcfile",
  * "c:\\bm3719\\conkerorrc"); When switching between *nix and Windows, change
- * the first three settings groups.
+ * the first two settings groups.
  */
 
 // Theme: Blackened theme.  Make sure the blackened dir exists at this target
@@ -23,14 +23,16 @@ theme_load_paths.push("/home/bm3719/.conkeror.mozdev.org");
 //theme_load_paths.push("C:\\bm3719\\bin\\conkeror\\style");
 theme_load("blackened");
 
-// Start page
-homepage = "/home/bm3719/lynx_bookmarks.html";
-//homepage = "C:\\bm3719\\lynx_bookmarks.html";
-
 // External editor: Setting this sends editor shell commands to the Emacs
 // server session.  Note that this feature isn't yet supported on Windows.
 // editor_shell_command = "gnuclient-emacs";
 editor_shell_command = "emacsclient";
+
+// Start page
+let (home = get_home_directory()) {
+    home.append("lynx_bookmarks.html");
+    homepage = home.path;
+}
 
 // about:config: Using session_pref here doesn't save to the actual profile.
 // Reduce disk cache from 50000 to 40000
@@ -43,6 +45,8 @@ session_pref("clipboard.autocopy", true);
 session_pref("conkeror.load.favicon", 0);
 // Middle mouse paste.
 session_pref("middlemouse.paste", true);
+// Disable gif animation.
+session_pref("image.animation_mode", "none");
 
 // Custom keybindings
 define_key(default_global_keymap, "C-x C-b", "switch-to-buffer");
@@ -64,6 +68,10 @@ define_webjump("d", "http://dictionary.reference.com/search?q=%s");
 define_webjump("blekko", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
 define_webjump("b", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
 define_search_engine_webjump("wikipedia.xml", "w")
+
+// NoScript plugin.  This is currently broken in my version.  A fix exists for
+// this, but it's not been merged in yet and is rather extensive.
+// require("noscript.js");
 
 // Tabs: New tabs version.
 require("new-tabs.js");
@@ -93,7 +101,7 @@ url_completion_use_history = true;
 url_remoting_fn = load_url_in_new_buffer;
 
 // View source: Enabling this sends view source requests to my external editor
-// (gc).
+// (ec).
 view_source_use_external_editor = true;
 
 // Darken page function (from http://conkeror.org/Tips): This creates a
@@ -145,3 +153,9 @@ let (mozrepl_init = get_home_directory()) {
     mozrepl_init.appendRelativePath(".mozrepl.js");
     session_pref('extensions.mozrepl.initUrl', make_uri(mozrepl._init).spec);
 }
+// Open a new buffer (and tab, if tabs are active) with the current page.
+interactive("duplicate-buffer", "Duplicate buffer",
+            function (I) {
+                browser_object_follow(I.buffer, OPEN_NEW_BUFFER, I.buffer.current_uri.spec);
+            });
+define_key(content_buffer_normal_keymap, "C-t", "duplicate-buffer");

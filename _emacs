@@ -1,18 +1,18 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2012-12-10 10:38:22 (bm3719)>
+;;;; Time-stamp: <2013-11-01 21:56:35 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
-;;;; swank-clojure, haskell-mode, agda-mode, python-mode, ipython, helm,
+;;;; cl-lib, nrepl.el, haskell-mode, agda-mode, python-mode, ipython, helm,
 ;;;; helm-ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint, moz.el,
-;;;; batch-mode, cedet, jdee, jde-eclipse-compiler-server, gtags, ess,
-;;;; elscreen, elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer,
-;;;; emms, color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
+;;;; batch-mode, cedet, jdee, jde-eclipse-compiler-server, gtags, elscreen,
+;;;; elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer, emms,
+;;;; color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
 ;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
@@ -900,26 +900,15 @@
 ;; clojure-mode
 ;; http://github.com/technomancy/clojure-mode
 (require 'clojure-mode)
-;; ;; swank-clojure
-;; ;; http://github.com/technomancy/swank-clojure
-;; ;; NOTE: Using older version, since current SLIME is incompatible with the
-;; ;;       latest swank-clojure.  Be sure to copy clojure-contrib directory.
-;; (when *nt-system*
-;;     (setq swank-clojure-jar-path "C:\\bin\\java\\clojure-1.1.0\\clojure.jar"
-;;           swank-clojure-classpath "C:\\bin\\java\\clojure-1.1.0"))
-;; (when *freebsd-system*
-;;   (setq swank-clojure-jar-path "/usr/local/share/java/classes/clojure.jar"
-;;         swank-clojure-classpath "/usr/local/share/java/classes"))
-;; (when *linux-system*
-;;   (setq swank-clojure-jar-path "/usr/lib/clojure.jar"
-;;         swank-clojure-classpath "/usr/lib"))
-;; (require 'swank-clojure-autoload)
-;; (setq swank-clojure-extra-classpaths (list
-;;                                       "~/.emacs.d/clojure"
-;;                                       "~/.emacs.d/clojure-contrib"))
-;; ;; Restore SBCL as default SLIME Lisp implementation.  To specify clojure on
-;; ;; SLIME start, run with: M-- M-x slime clojure
-;; (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+
+;; cl-lib: Required by nrepl.el.
+;; http://elpa.gnu.org/packages/cl-lib.html
+(require 'cl-lib)
+;; nrepl.el
+;; https://raw.github.com/clojure-emacs/nrepl.el/master/nrepl.el
+(require 'nrepl)
+;; Enable eldoc in Clojure buffers.
+(add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
 
 ;; scala-mode
 ;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs
@@ -934,7 +923,7 @@
             'ensime-scala-mode-hook))
 
 ;; haskell-mode
-;; http://projects.haskell.org/haskellmode-emacs/
+;; https://github.com/haskell/haskell-mode/
 (cond ((or *freebsd-system* *linux-system*) ; FreeBSD/Linux CVS versions.
        (load "~/.emacs.d/haskell-mode/haskell-site-file.el"))
       (*nt-system*                          ; NT manual install.
@@ -1119,7 +1108,7 @@
 ;; TODO: Consider turning off or changing the ugly block-coloring.
 ;; NOTE: This needs to be run before espresso, since parts of its JavaScript
 ;;       setup need to get clobbered.
-(load "~/.emacs.d/nxhtml/autostart.el")
+;(load "~/.emacs.d/nxhtml/autostart.el")
 ;; Turn on spell-checking for markup files.
 (dolist (hook '(nxhtml-mode-hook))
   (add-hook hook (lambda () (flyspell-prog-mode))))
@@ -1242,51 +1231,6 @@
                            (flyspell-prog-mode)
                            (local-set-key (kbd "C-c C-v TAB")
                                           'jde-complete-menu)))
-
-;; Emacs Speaks Statistics (ESS)
-;; http://ess.r-project.org/
-;; Not in use on FreeBSD.
-(when (not *freebsd-system*)
-  (require 'ess-site)
-  ;; Provides the useful ess-rutils-rmall and ess-rutils-rsitesearch.
-  (require 'ess-rutils)
-  (setq ess-ask-for-ess-directory nil
-        ess-local-process-name "R"
-        ess-imenu-use-S t
-        ess-language "R"
-        ess-pdf-viewer-pref "xpdf"
-        ess-ps-viewer-pref "gs")
-  ;; Start R if it's not running when S-RET is hit.
-  (defun bcm-ess-start-R ()
-    "Start R."
-    (interactive)
-    (when (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
-      (delete-other-windows)
-      (setq w1 (selected-window))
-      (setq w1name (buffer-name))
-      (setq w2 (split-window w1))
-      (R)
-      (set-window-buffer w2 "*R*")
-      (set-window-buffer w1 w1name)))
-  (defun bcm-ess-eval ()
-    "Eval ESS region."
-    (interactive)
-    (bcm-ess-start-R)
-    (if (and transient-mark-mode mark-active)
-        (call-interactively 'ess-eval-region)
-      (call-interactively 'ess-eval-line-and-step)))
-  ;; ESS/iESS mode hooks, defining some extra ESS keybindings.
-  (add-hook 'ess-mode-hook
-            '(lambda ()
-               (local-set-key [(shift return)] 'bcm-ess-eval)
-               (local-set-key [?\C-c ?\M-r] 'ess-rutils-rmall)
-               (local-set-key [?\C-c ?\C-f] 'ess-rutils-rsitesearch)))
-  (add-hook 'inferior-ess-mode-hook
-            '(lambda ()
-               (local-set-key [C-up] 'comint-previous-input)
-               (local-set-key [C-down] 'comint-next-input)
-               (local-set-key [?\C-c ?\M-r] 'ess-rutils-rmall)
-               (local-set-key [?\C-c ?\C-f] 'ess-rutils-rsitesearch))))
 
 ;; Maxima support
 ;; NOTE: Gnuplot on Windows not setup yet.

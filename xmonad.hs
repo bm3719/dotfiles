@@ -1,6 +1,6 @@
 -- xmonad.hs - bm3719
 --
--- Time-stamp: <2012-05-03 13:46:25 (bm3719)>
+-- Time-stamp: <2013-01-11 10:53:34 (bm3719)>
 -- DESC: Since the default xmonad config is pretty good, there's only minimal
 -- customization here.
 -- NOTE: Requires xmonad-contrib for ThreeCoumns and NoBorders.
@@ -14,6 +14,7 @@ import XMonad.Layout.NoBorders
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
+-- On FreeBSD, this requires a custom urxvtcd script.
 myTerminal      = "urxvtcd -ls"
 myBorderWidth   = 1
 

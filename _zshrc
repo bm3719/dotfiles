@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2012-12-03 14:36:13 (bm3719)>
+# Time-stamp: <2013-08-05 23:46:13 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -136,6 +136,9 @@ if [ -d $HOME/src/scala/scala-2.9.2 ]
 then
     export SCALA_HOME=$HOME/src/scala/scala-2.9.2
 fi
+# Disable newer JVM options for Leiningen 2.2.x.  Remove this later after
+# upgrading to JVM 1.7.x.
+export LEIN_JVM_OPTS=
 
 # Colorized manpages.
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -280,6 +283,9 @@ function in_svn() {
     if [[ -d .svn ]]; then
         echo 1
     fi
+}
+function in_exclude() {
+    # TODO: Exclude /usr/ports.
 }
 function svn_get_repo_name {
     if [ $(in_svn) ]; then

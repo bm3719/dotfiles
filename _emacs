@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2013-11-01 21:56:35 (bm3719)>
+;;;; Time-stamp: <2013-11-27 03:39:33 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -10,15 +10,15 @@
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
 ;;;; cl-lib, nrepl.el, haskell-mode, agda-mode, python-mode, ipython, helm,
 ;;;; helm-ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint, moz.el,
-;;;; batch-mode, cedet, jdee, jde-eclipse-compiler-server, gtags, elscreen,
-;;;; elscreen-w3m, w3m (+ flim, apel), multi-term, lusty-explorer, emms,
-;;;; color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
-;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
+;;;; batch-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
+;;;; multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
+;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz,
+;;;; redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
-;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, MozRepl, JDK,
-;;;; ECJ, R, Maxima, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows
-;;;; only), Consolas font (Windows only).
+;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, MozRepl, Maxima,
+;;;; mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only), Consolas
+;;;; font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -537,6 +537,15 @@
 ;; Spell-check comments.
 (add-hook 'c-mode-hook 'flyspell-prog-mode)
 
+;; java-mode
+;; This mode doesn't properly indent Java out of the box.  This combined with
+;; the C settings above fixes that.
+(add-hook 'java-mode-hook
+          (lambda ()
+            "Treat Java 1.5 @-style annotations as comments."
+            (setq c-comment-start-regexp "(@|/(/|[*][*]?))")
+            (modify-syntax-entry ?@ "< b" java-mode-syntax-table)))
+
 ;; sql-mode
 ;; This adds a connection for my local l1j-en test database on mysql, with the
 ;; ability to add others later by appending to sql-connection-alist.
@@ -801,102 +810,102 @@
 ;; Haskell.
 (require 'pretty-symbols)
 
-;; ;; SLIME
-;; ;; http://common-lisp.net/project/slime/
-;; (when *freebsd-system* ; FreeBSD CVS version.
-;;   (setq inferior-lisp-program "/usr/local/bin/sbcl"
-;;         common-lisp-hyperspec-root
-;;         "file:///usr/local/share/doc/clisp-hyperspec/HyperSpec/"))
-;; (when *linux-system*   ; Linux CVS version (only using with remote sbcl).
-;;   (setq inferior-lisp-program "/usr/bin/sbcl"
-;;         common-lisp-hyperspec-root "file:///home/bm3719/doc/HyperSpec/"))
-;; (when *nt-system*      ; Windows CVS version.
-;;   (setq inferior-lisp-program "sbcl.exe"
-;;         common-lisp-hyperspec-root "file:///C:/bm3719/doc/HyperSpec/"))
-;; ;; Common SLIME setup.
-;; (setq lisp-indent-function 'common-lisp-indent-function
-;;       slime-complete-symbol-function 'slime-fuzzy-complete-symbol
-;;       slime-startup-animation t
-;;       slime-complete-symbol*-fancy t)
-;; (require 'slime)
+;; SLIME
+;; http://common-lisp.net/project/slime/
+(when *freebsd-system* ; FreeBSD CVS version.
+  (setq inferior-lisp-program "/usr/local/bin/sbcl"
+        common-lisp-hyperspec-root
+        "file:///usr/local/share/doc/clisp-hyperspec/HyperSpec/"))
+(when *linux-system*   ; Linux CVS version (only using with remote sbcl).
+  (setq inferior-lisp-program "/usr/bin/sbcl"
+        common-lisp-hyperspec-root "file:///home/bm3719/doc/HyperSpec/"))
+(when *nt-system*      ; Windows CVS version.
+  (setq inferior-lisp-program "sbcl.exe"
+        common-lisp-hyperspec-root "file:///C:/bm3719/doc/HyperSpec/"))
+;; Common SLIME setup.
+(setq lisp-indent-function 'common-lisp-indent-function
+      slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+      slime-startup-animation t
+      slime-complete-symbol*-fancy t)
+(require 'slime)
 
-;; ;; Startup SLIME when a Lisp file is open.
-;; (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
-;; (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
-;; (global-set-key "\C-cs" 'slime-selector)
+;; Startup SLIME when a Lisp file is open.
+(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+(global-set-key "\C-cs" 'slime-selector)
 
-;; ;; SLIME contribs.
-;; (slime-setup '(slime-autodoc       ; Show information about symbols near point.
-;;                slime-fancy         ; Some fancy SLIME contribs.
-;;                slime-banner        ; Persistent header line, startup animation.
-;;                slime-asdf          ; ASDF support.
-;;                slime-indentation)) ; Customizable indentation.
-;; ;; Indentation customizations.
-;; (setq lisp-lambda-list-keyword-parameter-alignment t)
-;; (setq lisp-lambda-list-keyword-alignment t)
-;; ;; SLIME contribs init.
-;; (slime-banner-init)          ; Sets banner function to slime-startup-message.
-;; (slime-asdf-init)            ; Hooks slime-asdf-on-connect.
-;; ;; Spell-check comments.
-;; (add-hook 'slime-mode-hook 'flyspell-prog-mode)
-;; ;; Enable pretty-symbols for Greek letters.
-;; (add-hook 'slime-mode-hook 'pretty-greek)
+;; SLIME contribs.
+(slime-setup '(slime-autodoc       ; Show information about symbols near point.
+               slime-fancy         ; Some fancy SLIME contribs.
+               slime-banner        ; Persistent header line, startup animation.
+               slime-asdf          ; ASDF support.
+               slime-indentation)) ; Customizable indentation.
+;; Indentation customizations.
+(setq lisp-lambda-list-keyword-parameter-alignment t)
+(setq lisp-lambda-list-keyword-alignment t)
+;; SLIME contribs init.
+(slime-banner-init)          ; Sets banner function to slime-startup-message.
+(slime-asdf-init)            ; Hooks slime-asdf-on-connect.
+;; Spell-check comments.
+(add-hook 'slime-mode-hook 'flyspell-prog-mode)
+;; Enable pretty-symbols for Greek letters.
+;(add-hook 'slime-mode-hook 'pretty-greek)
 
-;; ;; Translates from Emacs buffer to filename on remote machine.
-;; (setf slime-translate-to-lisp-filename-function
-;;   (lambda (file-name)
-;;     (subseq file-name (length "/ssh:[userid]:")))
-;;   slime-translate-from-lisp-filename-function
-;;     (lambda (file-name)
-;;     (concat "/[userid]:" file-name)))
+;; Translates from Emacs buffer to filename on remote machine.
+(setf slime-translate-to-lisp-filename-function
+  (lambda (file-name)
+    (subseq file-name (length "/ssh:[userid]:")))
+  slime-translate-from-lisp-filename-function
+    (lambda (file-name)
+    (concat "/[userid]:" file-name)))
 
-;; ;; Fontify *SLIME Description* buffer for SBCL.
-;; (defun slime-description-fontify ()
-;;   "Fontify sections of SLIME Description."
-;;   (with-current-buffer "*SLIME Description <sbcl>*"
-;;     (highlight-regexp
-;;      (concat "^Function:\\|"
-;;              "^Macro-function:\\|"
-;;              "^Its associated name.+?) is\\|"
-;;              "^The .+'s arguments are:\\|"
-;;              "^Function documentation:$\\|"
-;;              "^Its.+\\(is\\|are\\):\\|"
-;;              "^On.+it was compiled from:$")
-;;      'hi-blue)))
-;; (defadvice slime-show-description (after slime-description-fontify activate)
-;;   "Fontify sections of SLIME Description."
-;;   (slime-description-fontify))
+;; Fontify *slime-description* buffer.
+(defun slime-description-fontify ()
+  "Fontify sections of SLIME Description."
+  (with-current-buffer "*slime-description*"
+    (highlight-regexp
+     (concat "^Function:\\|"
+             "^Macro-function:\\|"
+             "^Its associated name.+?) is\\|"
+             "^The .+'s arguments are:\\|"
+             "^Function documentation:$\\|"
+             "^Its.+\\(is\\|are\\):\\|"
+             "^On.+it was compiled from:$")
+     'hi-blue)))
+(defadvice slime-show-description (after slime-description-fontify activate)
+  "Fontify sections of SLIME Description."
+  (slime-description-fontify))
 
-;; ;; Improve usability of slime-apropos: slime-apropos-minor-mode
-;; (defvar slime-apropos-anchor-regexp "^[^ ]")
-;; (defun slime-apropos-next-anchor ()
-;;   "Navigate to next SLIME apropos anchor."
-;;   (interactive)
-;;   (let ((pt (point)))
-;;     (forward-line 1)
-;;     (if (re-search-forward slime-apropos-anchor-regexp nil t)
-;;         (goto-char (match-beginning 0))
-;;       (goto-char pt)
-;;       (error "anchor not found"))))
-;; (defun slime-apropos-prev-anchor ()
-;;   "Navigate to previous SLIME apropos anchor."
-;;   (interactive)
-;;   (let ((p (point)))
-;;     (if (re-search-backward slime-apropos-anchor-regexp nil t)
-;;         (goto-char (match-beginning 0))
-;;       (goto-char p)
-;;       (error "anchor not found"))))
-;; (defvar slime-apropos-minor-mode-map (make-sparse-keymap))
-;; (define-key slime-apropos-minor-mode-map "\C-m" 'slime-describe-symbol)
-;; (define-key slime-apropos-minor-mode-map "l" 'slime-describe-symbol)
-;; (define-key slime-apropos-minor-mode-map "j" 'slime-apropos-next-anchor)
-;; (define-key slime-apropos-minor-mode-map "k" 'slime-apropos-prev-anchor)
-;; (define-minor-mode slime-apropos-minor-mode "")
-;; (defadvice slime-show-apropos (after slime-apropos-minor-mode activate)
-;;   ""
-;;   (when (get-buffer "*SLIME Apropos*")
-;;     (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
-
+;; Improve usability of slime-apropos: slime-apropos-minor-mode
+(defvar slime-apropos-anchor-regexp "^[^ ]")
+(defun slime-apropos-next-anchor ()
+  "Navigate to next SLIME apropos anchor."
+  (interactive)
+  (let ((pt (point)))
+    (forward-line 1)
+    (if (re-search-forward slime-apropos-anchor-regexp nil t)
+        (goto-char (match-beginning 0))
+      (goto-char pt)
+      (error "anchor not found"))))
+(defun slime-apropos-prev-anchor ()
+  "Navigate to previous SLIME apropos anchor."
+  (interactive)
+  (let ((p (point)))
+    (if (re-search-backward slime-apropos-anchor-regexp nil t)
+        (goto-char (match-beginning 0))
+      (goto-char p)
+      (error "anchor not found"))))
+(defvar slime-apropos-minor-mode-map (make-sparse-keymap))
+(define-key slime-apropos-minor-mode-map "\C-m" 'slime-describe-symbol)
+(define-key slime-apropos-minor-mode-map "l" 'slime-describe-symbol)
+(define-key slime-apropos-minor-mode-map "j" 'slime-apropos-next-anchor)
+(define-key slime-apropos-minor-mode-map "k" 'slime-apropos-prev-anchor)
+(define-minor-mode slime-apropos-minor-mode "")
+(defadvice slime-show-apropos (after slime-apropos-minor-mode activate)
+  ""
+  (when (get-buffer "*SLIME Apropos*")
+    (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
+ 
 ;; clojure-mode
 ;; http://github.com/technomancy/clojure-mode
 (require 'clojure-mode)
@@ -1160,77 +1169,6 @@
 ;; Keep semantic.cache files from littering my FS.
 (setq semanticdb-default-save-directory "~/.emacs.d/saves/semantic.cache")
 (require 'cedet)
-
-;; JDEE
-;; http://jdee.sourceforge.net/
-(require 'jde)
-;; Kill the bsh buffer created on init.
-(when (not (eq nil (get-buffer "*JDEE bsh*")))
-  (kill-buffer "*JDEE bsh*"))
-;; This fixes the "The JDE does not recognize JDK 1.6 javac." issue.
-(when *freebsd-system*
-  (setq jde-jdk-registry '(("1.6.0" . "/usr/local/diablo-jdk1.6.0"))))
-(when *linux-system*
-  ;; Handle differences between Arch and Ubuntu.
-  (if (file-exists-p "/usr/lib/jvm/java-6-openjdk")
-      (setq jde-jdk-registry '(("1.6.0" . "/usr/lib/jvm/java-6-openjdk")))
-      (setq jde-jdk-registry '(("1.6.0" . "/usr/lib/jvm/java-6-sun")))))      
-(when *nt-system*
-  ;; Handle differences between the 32-bit and 64-bit JDK.
-  (if (file-exists-p "C:\\Program Files\\Java\\jdk1.6.0_18")
-      (setq jde-jdk-registry
-            '(("1.6.0" . "C:\\Program Files\\Java\\jdk1.6.0_18")))
-      (setq jde-jdk-registry
-            '(("1.6.0" . "C:\\Program Files (x86)\\Java\\jdk1.6.0_18")))))
-;; Various JDEE settings.
-(setq
- ;; Set the JDK version.
- jde-jdk '("1.6.0")
- ;; Ideally, I'd prefer K&R, but hardly anyone programs Java this way.  I
- ;; toggle this on for my own code though.
- jde-gen-k&r nil
- ;; Enable control flow abbreviations.
- jde-enable-abbrev-mode t
- ;; Set JDEE to show a completion menu instead of just completing with the
- ;; first thing it finds.  Only works in GUI mode.  In console mode, just run
- ;; C-c C-v C-. multiple times to scroll through them.
- jde-complete-function 'jde-complete-menu
- ;; Define defaults for jde-sourcepath and jde-global-classpath.  These can be
- ;; redefined in in prj.el.
- jde-sourcepath '(("."))
- jde-global-classpath '("."))
-;; Looks like the `main' control flow template is missing (or maybe never
-;; existed), so this is my own version of it.
-(jde-gen-define-abbrev-template
- "main"
- '('> "public static void main (String[] args) {" '> 'n '> 'r 'n '> "}" '>))
-;; JDEE flymake, using ECJ (the Eclipse batch compiler).  This can not be a
-;; relative path.
-(when (or *freebsd-system* *linux-system*)
-  (defvar ecj-path "/home/bm3719/.ant/lib/ecj-3.6.jar"))
-;; Copy this jar from an Eclipse install.  Make sure the version numbers match.
-(when *nt-system*
-  (defvar ecj-path
-    "C:\\bm3719\\bin\\org.eclipse.jdt.core_3.5.2.v_981_R35x.jar"))
-;; http://www.emacswiki.org/emacs/jde-eclipse-compiler-server.el
-(require 'jde-eclipse-compiler-server)
-(setq jde-compiler (list (list "eclipse java compiler server" ecj-path)))
-(setq jde-ecj-command-line-args (list "-d" "none"
-                                      "-target" "1.6" "-source" "1.6"
-                                      "-proceedOnError"))
-(push '(".+\\.java$" jde-ecj-flymake-init jde-ecj-flymake-cleanup)
-      flymake-allowed-file-name-masks)
-(push '("\\(.*?\\):\\([0-9]+\\): error: \\(.*?\\)\n" 1 2 nil 2 3
-        (6 compilation-error-face)) compilation-error-regexp-alist)
-(push '("\\(.*?\\):\\([0-9]+\\): warning: \\(.*?\\)\n" 1 2 nil 1 3
-        (6 compilation-warning-face)) compilation-error-regexp-alist)
-;; Define mode hook.  Note that spell-checking comments doesn't operate on doc
-;; comments.
-(add-hook 'jde-mode-hook '(lambda ()
-                           (flymake-mode)
-                           (flyspell-prog-mode)
-                           (local-set-key (kbd "C-c C-v TAB")
-                                          'jde-complete-menu)))
 
 ;; Maxima support
 ;; NOTE: Gnuplot on Windows not setup yet.

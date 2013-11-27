@@ -67,7 +67,9 @@ define_webjump("fp", "http://www.freshports.org/search.php?query=%s&search=go&nu
 define_webjump("d", "http://dictionary.reference.com/search?q=%s");
 define_webjump("blekko", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
 define_webjump("b", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
-define_search_engine_webjump("wikipedia.xml", "w")
+define_search_engine_webjump("wikipedia.xml", "w");
+// In later versions of Conkeror, use this instead of the above.
+// define_opensearch_webjump("w", "wikipedia.xml");
 
 // NoScript plugin.  This is currently broken in my version.  A fix exists for
 // this, but it's not been merged in yet and is rather extensive.
@@ -139,23 +141,29 @@ suggest_save_path_from_file_name = function (filename, buffer) {
     return file.path;
 }
 
-// Mozrepl: This activates a MozRepl server on port 4242.
-if ('@hyperstruct.net/mozlab/mozrepl;1' in Cc) {
-    var mozrepl = Cc['@hyperstruct.net/mozlab/mozrepl;1']
-        .getService(Ci.nsIMozRepl);
-    if (!mozrepl.isActive()) {
-        mozrepl.start(4242);
-    }
+// // Mozrepl: This activates a MozRepl server on port 4242.
+// if ('@hyperstruct.net/mozlab/mozrepl;1' in Cc) {
+//     var mozrepl = Cc['@hyperstruct.net/mozlab/mozrepl;1']
+//         .getService(Ci.nsIMozRepl);
+//     if (!mozrepl.isActive()) {
+//         mozrepl.start(4242);
+//     }
+// }
+// // Automatically enter Conkeror's application context at startup.  This calls
+// // an external file called .mozrepl.js.
+// let (mozrepl_init = get_home_directory()) {
+//     mozrepl_init.appendRelativePath(".mozrepl.js");
+//     session_pref('extensions.mozrepl.initUrl', make_uri(mozrepl._init).spec);
+// }
+// // Open a new buffer (and tab, if tabs are active) with the current page.
+// interactive("duplicate-buffer", "Duplicate buffer",
+//             function (I) {
+//                 browser_object_follow(I.buffer, OPEN_NEW_BUFFER, I.buffer.current_uri.spec);
+//             });
+// define_key(content_buffer_normal_keymap, "C-t", "duplicate-buffer");
+
+// Set default zoom level to 120%.
+function my_zoom_set(buffer) {
+    browser_zoom_set(buffer, false, 120);
 }
-// Automatically enter Conkeror's application context at startup.  This calls
-// an external file called .mozrepl.js.
-let (mozrepl_init = get_home_directory()) {
-    mozrepl_init.appendRelativePath(".mozrepl.js");
-    session_pref('extensions.mozrepl.initUrl', make_uri(mozrepl._init).spec);
-}
-// Open a new buffer (and tab, if tabs are active) with the current page.
-interactive("duplicate-buffer", "Duplicate buffer",
-            function (I) {
-                browser_object_follow(I.buffer, OPEN_NEW_BUFFER, I.buffer.current_uri.spec);
-            });
-define_key(content_buffer_normal_keymap, "C-t", "duplicate-buffer");
+add_hook('create_buffer_late_hook', my_zoom_set);

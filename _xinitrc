@@ -1,4 +1,4 @@
-xrdb -merge .Xdefaults
+xrdb -merge ~/.Xdefaults
 
 xset b 100 0 0
 #xset r rate 140 200
@@ -10,8 +10,8 @@ xset fp+ /usr/local/lib/X11/fonts/OTF
 xset fp+ /usr/local/lib/X11/fonts/dejavu
 
 # Install this if I have cutbuffer apps.
-# autocutsel &
-# autocutsel -s PRIMARY &
+autocutsel &
+autocutsel -s PRIMARY &
  
 #xmodmap -e "keycode 233 = Page_Down"
 #xmodmap -e "keycode 234 = Page_Up"

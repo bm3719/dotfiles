@@ -1,0 +1,51 @@
+emacs*reverseVideo:       true
+!emacs*font:               -misc-fixed-medium-*-*-*-18-*-*-*-*-*-*-*
+!emacs*font:               -xos4-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
+!emacs*font:               Inconsolata-12
+!emacs*font:               dejavu sans mono-12
+!emacs*geometry:           96x36
+emacs*pointerColor:       Blue
+emacs*cursorColor:        DarkSlateGray
+emacs*toolBar:            false
+emacs*verticalScrollBars: false
+emacs*menuBar:            false
+emacs*scrollBarWidth:     12
+
+URxvt*scrollBar_right:  true
+URxvt*loginShell:       true
+URxvt*background:	black
+URxvt*foreground:	#686868
+URxvt*scrollColor:	gray40
+URxvt*borderColor:	gray10
+URxvt*troughColor:      gray20
+URxvt*saveLines:        10000
+!URxvt*font:             xft:Inconsolata:pixelsize=12
+URxvt*font:             xft:dejavu sans mono:pixelsize=15
+!urxvt*font:             -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
+!URxvt*font:		 -misc-fixed-medium-r-*-*-*-140-*-*-*-*-*-*
+!! Disabled this since Perl interpreter is removed.
+!URxvt*urlLauncher:      /usr/local/bin/conkeror
+!URxvt*matcher.button:   1
+!URxvt.perl-ext-common:  matcher,readline
+URxvt*color0:           #000000
+URxvt*color1:           #cd5c5c
+URxvt*color2:           #86af80
+URxvt*color3:           #e8ae5b
+URxvt*color4:           #6495ed
+URxvt*color5:           #deb887
+URxvt*color6:           #b0c4de
+URxvt*color7:           #bbaa99
+URxvt*color8:           #554444
+URxvt*color9:           #cc5533
+URxvt*color10:          #88aa22
+URxvt*color11:          #ffa75d
+URxvt*color12:          #87ceeb
+URxvt*color13:          #996600
+URxvt*color14:          #b0c4de
+URxvt*color15:          #ddccbb
+
+xterm*termName:         xterm
+xterm*loginShell:       true
+xterm*background:       #000000
+xterm*foreground:       #A8A8A8
+

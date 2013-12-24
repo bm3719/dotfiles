@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2013-11-27 03:39:33 (bm3719)>
+;;;; Time-stamp: <2013-12-24 16:08:46 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -187,7 +187,7 @@
 (put 'erase-buffer 'disabled nil)
 
 ;; Disable over-write mode.
-(defun overwrite-mode (arg) (interactive "P"))
+(defun overwrite-mode (arg) (interactive "p"))
 
 ;; Modify hippie-expand functions.
 (setq hippie-expand-try-functions-list
@@ -261,7 +261,7 @@
 ;; Copy a line without killing it.
 (defun bcm-copy-line (&optional arg)
   "Do a kill-line but copy rather than kill."
-  (interactive "P")
+  (interactive "p")
   (toggle-read-only 1)
   (kill-line arg)
   (toggle-read-only 0))
@@ -292,9 +292,14 @@
 
 ;; Insert a date string in the format I most commonly use in textfiles.
 (defun bcm-date ()
-  "Insert a nicely formated date string."
+  "Insert an ISO 8601 formatted date string."
   (interactive)
   (insert (format-time-string "%Y-%m-%d")))
+;; Insert a UTC datetime string in ISO 8601 format.
+(defun bcm-datetime ()
+  "Insert an ISO 8601 formatted datetime string, with time in UTC."
+  (interactive)
+  (insert (format-time-string "%Y-%m-%dT%H:%M:%SZ" nil 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation
@@ -547,7 +552,7 @@
             (modify-syntax-entry ?@ "< b" java-mode-syntax-table)))
 
 ;; sql-mode
-;; This adds a connection for my local l1j-en test database on mysql, with the
+;; This adds a connection for my local l1j-en test database on MySQL, with the
 ;; ability to add others later by appending to sql-connection-alist.
 (setq sql-connection-alist
       '((pool-a
@@ -952,9 +957,8 @@
   "Handles command line GHC call."
   (list "ghc"
         (list "--make" "-fbyte-code"
-              ;; Can be expanded for additional -i options as in the Perl
-              ;; script.
-              (concat "-i"base-dir)
+              ;; Expand for additional -i options as in the Perl script.
+              (concat "-i" base-dir)
               source)))
 (defun flymake-haskell-init ()
   "Initialize flymake-haskell."
@@ -1358,6 +1362,9 @@
 (when *freebsd-system*
   (setq lpr-command "xpp"))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Final init
+
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -1381,9 +1388,6 @@
  '(semantic-idle-scheduler-verbose-flag nil)
  '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing))
  '(semanticdb-global-mode t nil (semanticdb)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Final init
 
 ;; Replace echo area startup message
 (run-with-timer 1 nil #'yow)

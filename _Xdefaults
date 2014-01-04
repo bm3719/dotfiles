@@ -1,7 +1,6 @@
 emacs*reverseVideo:       true
 !emacs*font:               -misc-fixed-medium-*-*-*-18-*-*-*-*-*-*-*
 !emacs*font:               -xos4-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
-!emacs*font:               Inconsolata-12
 !emacs*font:               dejavu sans mono-12
 !emacs*geometry:           96x36
 emacs*pointerColor:       Blue
@@ -19,14 +18,9 @@ URxvt*scrollColor:	gray40
 URxvt*borderColor:	gray10
 URxvt*troughColor:      gray20
 URxvt*saveLines:        10000
-!URxvt*font:             xft:Inconsolata:pixelsize=12
 URxvt*font:             xft:dejavu sans mono:pixelsize=15
 !urxvt*font:             -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
 !URxvt*font:		 -misc-fixed-medium-r-*-*-*-140-*-*-*-*-*-*
-!! Disabled this since Perl interpreter is removed.
-!URxvt*urlLauncher:      /usr/local/bin/conkeror
-!URxvt*matcher.button:   1
-!URxvt.perl-ext-common:  matcher,readline
 URxvt*color0:           #000000
 URxvt*color1:           #cd5c5c
 URxvt*color2:           #86af80
@@ -43,6 +37,10 @@ URxvt*color12:          #87ceeb
 URxvt*color13:          #996600
 URxvt*color14:          #b0c4de
 URxvt*color15:          #ddccbb
+!! Enable if using embedded Perl interpreter.
+!URxvt*urlLauncher:      /usr/local/bin/conkeror
+!URxvt*matcher.button:   1
+!URxvt.perl-ext-common:  matcher,readline
 
 xterm*termName:         xterm
 xterm*loginShell:       true

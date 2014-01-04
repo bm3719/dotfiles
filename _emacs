@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2013-12-24 16:08:46 (bm3719)>
+;;;; Time-stamp: <2014-01-04 18:37:22 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -9,11 +9,11 @@
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
 ;;;; cl-lib, nrepl.el, haskell-mode, agda-mode, python-mode, ipython, helm,
-;;;; helm-ipython, ruby-mode, auctex, nxhtml, espresso, flymake-jslint, moz.el,
-;;;; batch-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
-;;;; multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
-;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz,
-;;;; redo+.el, htmlize.el.
+;;;; helm-ipython, ruby-mode, auctex, nxhtml, flymake-cursor, espresso,
+;;;; flymake-jslint, moz.el, batch-mode, cedet, gtags, elscreen, elscreen-w3m
+;;;; (+ flim, apel), multi-term, lusty-explorer, emms, color-theme,
+;;;; color-theme-wombat, darcsum, psvn, egg, lojban-mode (+ lojban.el),
+;;;; lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
 ;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, MozRepl, Maxima,
@@ -514,6 +514,9 @@
 ;; emacs-lisp-mode
 ;; Spell-check comments.
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
 ;; c-mode
 ;; Resize the compilation window so that it doesn't take up half the frame.
@@ -578,32 +581,9 @@
 (add-to-list 'auto-mode-alist '("\\.hql$" . sql-mode))
 
 ;; flymake
-;; http://www.emacswiki.org/cgi-bin/wiki/FlymakeHaskell#toc9
-;; Minibuffer fix.  Without this, you can't see the flymake warning text in
-;; console mode.  Not ideal, but better than nothing.
-(when (fboundp 'resize-minibuffer-mode)
-  (resize-minibuffer-mode)
-  (setq resize-minibuffer-window-exactly nil))
-(defun bcm-flymake-display-err-minibuf ()
-  "Displays the error/warning for the current line in the minibuffer."
-  (interactive)
-  (let* ((line-no (flymake-current-line-no))
-         (line-err-info-list (nth 0 (flymake-find-err-info
-                                     flymake-err-info line-no)))
-         (count (length line-err-info-list)))
-    (while (> count 0)
-      (when line-err-info-list
-        (let* ((file (flymake-ler-file (nth (1- count) line-err-info-list)))
-               (full-file (flymake-ler-full-file (nth (1- count)
-                                                      line-err-info-list)))
-               (text (flymake-ler-text (nth (1- count) line-err-info-list)))
-               (line (flymake-ler-line (nth (1- count) line-err-info-list))))
-          (message "[%s] %s" line text)))
-      (setq count (1- count)))))
-;; flymake keybindings.
+;; See flymake-cursor entry for minibuffer fix.
 (global-set-key "\C-c[" 'flymake-goto-prev-error)
 (global-set-key "\C-c]" 'flymake-goto-next-error)
-(global-set-key "\C-c\\" 'bcm-flymake-display-err-minibuf)
 
 ;; prolog-mode
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
@@ -1132,6 +1112,10 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(mumamo-background-chunk-major ((((class color) (min-colors 88) (background dark)) nil))))
+
+;; flymake-cursor
+;; http://www.emacswiki.org/emacs/download/flymake-cursor.el
+(require 'flymake-cursor)
 
 ;; espresso
 ;; http://download.savannah.gnu.org/releases-noredirect/espresso/espresso.el

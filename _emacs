@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-01-04 18:37:22 (bm3719)>
+;;;; Time-stamp: <2014-01-04 19:01:24 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -789,6 +789,8 @@
 ;; lightweight completion auto-activated.
 ;; http://homepages.cs.ncl.ac.uk/phillip.lord/download/emacs/pabbrev.el
 (require 'pabbrev)
+;; Disable minibuffer message when expansion occurs.
+(setq pabbrev-idle-timer-verbose nil)
 
 ;; pretty-symbols.el: Converts various mathematical symbols and Greek letters
 ;; to their Unicode versions.  Useful for Lisp-variants, ML-variants, and

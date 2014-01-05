@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-01-04 19:01:24 (bm3719)>
+;;;; Time-stamp: <2014-01-04 20:14:19 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -10,15 +10,15 @@
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
 ;;;; cl-lib, nrepl.el, haskell-mode, agda-mode, python-mode, ipython, helm,
 ;;;; helm-ipython, ruby-mode, auctex, nxhtml, flymake-cursor, espresso,
-;;;; flymake-jslint, moz.el, batch-mode, cedet, gtags, elscreen, elscreen-w3m
-;;;; (+ flim, apel), multi-term, lusty-explorer, emms, color-theme,
-;;;; color-theme-wombat, darcsum, psvn, egg, lojban-mode (+ lojban.el),
-;;;; lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
+;;;; flymake-jslint, batch-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim,
+;;;; apel), multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
+;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz,
+;;;; redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
-;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, MozRepl, Maxima,
-;;;; mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only), Consolas
-;;;; font (Windows only).
+;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, Maxima, mutt,
+;;;; w3m, xpp (*nix only), Ghostscript/GSView (Windows only), Consolas font
+;;;; (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -803,7 +803,7 @@
   (setq inferior-lisp-program "/usr/local/bin/sbcl"
         common-lisp-hyperspec-root
         "file:///usr/local/share/doc/clisp-hyperspec/HyperSpec/"))
-(when *linux-system*   ; Linux CVS version (only using with remote sbcl).
+(when *linux-system*   ; Linux CVS version (only using with remote SBCL).
   (setq inferior-lisp-program "/usr/bin/sbcl"
         common-lisp-hyperspec-root "file:///home/bm3719/doc/HyperSpec/"))
 (when *nt-system*      ; Windows CVS version.
@@ -1134,14 +1134,9 @@
 ;;       Last attempt on 05/10/2010 failed.
 (require 'flymake-jslint)
 
-;; moz.el
-;; http://download.savannah.gnu.org/releases-noredirect/espresso/moz.el
-;; NOTE: Requires json.el on <23.
-(autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 ;; Now that all JavaScript stuff is setup, create full espresso-mode hook.
 (add-hook 'espresso-mode-hook
           '(lambda ()
-            (moz-minor-mode 1)
             (pabbrev-mode)
             (flymake-mode)
             (flyspell-prog-mode)))

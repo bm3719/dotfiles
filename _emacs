@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-01-07 09:16:44 (bm3719)>
+;;;; Time-stamp: <2014-01-07 10:02:56 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -10,10 +10,10 @@
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
 ;;;; cl-lib, nrepl.el, haskell-mode, agda-mode, python-mode, ipython, helm,
 ;;;; helm-ipython, ruby-mode, auctex, nxhtml, flymake-cursor, espresso,
-;;;; flymake-jslint, markdown-mode, batch-mode, cedet, gtags, elscreen,
-;;;; elscreen-w3m (+ flim, apel), multi-term, lusty-explorer, emms,
-;;;; color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
-;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
+;;;; flymake-jslint, markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+
+;;;; flim, apel), multi-term, lusty-explorer, emms, color-theme,
+;;;; color-theme-wombat, darcsum, psvn, egg, lojban-mode (+ lojban.el), malyon,
+;;;; redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
 ;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, Maxima, mutt,
@@ -1148,10 +1148,6 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-;; batch-mode
-;; http://www.emacswiki.org/emacs/download/batch-mode.el
-(require 'batch-mode)
-
 ;; CEDET
 ;; http://cedet.sourceforge.net/
 ;; NOTE: Included in Emacs 23.2.
@@ -1309,17 +1305,9 @@
 (autoload 'lojban-parse-region "lojban" nil t)
 (autoload 'lojban-mode "lojban-mode" nil t)
 
-;; lambdacalc.el
-;; http://mwolson.org/static/dist/elisp/lambdacalc.el
-(require 'lambdacalc)
-
 ;; malyon: Z-machine interpreter.
 ;; http://www.ifarchive.org/if-archive/infocom/interpreters/emacs/malyon.el
 (require 'malyon)
-
-;; keywiz: An educational game which tests you on esoteric keystrokes.
-;; http://users-phys.au.dk/harder/keywiz.el
-(require 'keywiz)
 
 ;; redo+.el: An extended version of XEmacs' redo package.
 ;; http://www.emacswiki.org/emacs/download/redo%2b.el

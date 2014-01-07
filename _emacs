@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-01-04 20:14:19 (bm3719)>
+;;;; Time-stamp: <2014-01-07 09:16:44 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -10,10 +10,10 @@
 ;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
 ;;;; cl-lib, nrepl.el, haskell-mode, agda-mode, python-mode, ipython, helm,
 ;;;; helm-ipython, ruby-mode, auctex, nxhtml, flymake-cursor, espresso,
-;;;; flymake-jslint, batch-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim,
-;;;; apel), multi-term, lusty-explorer, emms, color-theme, color-theme-wombat,
-;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), lambdacalc, malyon, keywiz,
-;;;; redo+.el, htmlize.el.
+;;;; flymake-jslint, markdown-mode, batch-mode, cedet, gtags, elscreen,
+;;;; elscreen-w3m (+ flim, apel), multi-term, lusty-explorer, emms,
+;;;; color-theme, color-theme-wombat, darcsum, psvn, egg, lojban-mode (+
+;;;; lojban.el), lambdacalc, malyon, keywiz, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
 ;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, Maxima, mutt,
@@ -1140,6 +1140,13 @@
             (pabbrev-mode)
             (flymake-mode)
             (flyspell-prog-mode)))
+
+;; markdown-mode
+;; git://jblevins.org/git/markdown-mode.git
+(autoload 'markdown-mode "markdown-mode"
+          "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; batch-mode
 ;; http://www.emacswiki.org/emacs/download/batch-mode.el

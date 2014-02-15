@@ -34,6 +34,11 @@ let (home = get_home_directory()) {
     homepage = home.path;
 }
 
+// Fix the missing modifier key in later versions of xulrunner.
+modifiers.M = new modifier(
+    function (event) { return event.metaKey; },
+    function (event) { event.metaKey = true; });
+
 // about:config: Using session_pref here doesn't save to the actual profile.
 // Reduce disk cache from 50000 to 40000
 session_pref("browser.cache.disk.capacity", 40000);
@@ -55,22 +60,6 @@ define_key(default_global_keymap, "C-x o", "buffer-next");
 define_key(default_global_keymap, "C-x right", "buffer-next");
 define_key(default_global_keymap, "C-x left", "buffer-previous");
 
-// Webjumps
-define_webjump("amazon", "http://www.amazon.com/exec/obidos/external-search/?field-keywords=%s&mode=blended");
-define_webjump("a", "http://www.amazon.com/exec/obidos/external-search/?field-keywords=%s&mode=blended");
-define_webjump("finance", "http://www.google.com/finance?client=ob&q=%s");
-define_webjump("f", "http://www.google.com/finance?client=ob&q=%s");
-define_webjump("hoogle", "http://www.haskell.org/hoogle/?hoogle=%s");
-define_webjump("ports", "http://www.freebsd.org/cgi/ports.cgi?query=%s&stype=all");
-define_webjump("freshports", "http://www.freshports.org/search.php?query=%s&search=go&num=10&stype=name&method=match&deleted=excludedeleted&start=1&casesensitivity=caseinsensitive");
-define_webjump("fp", "http://www.freshports.org/search.php?query=%s&search=go&num=10&stype=name&method=match&deleted=excludedeleted&start=1&casesensitivity=caseinsensitive");
-define_webjump("d", "http://dictionary.reference.com/search?q=%s");
-define_webjump("blekko", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
-define_webjump("b", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
-define_search_engine_webjump("wikipedia.xml", "w");
-// In later versions of Conkeror, use this instead of the above.
-// define_opensearch_webjump("w", "wikipedia.xml");
-
 // NoScript plugin.  This is currently broken in my version.  A fix exists for
 // this, but it's not been merged in yet and is rather extensive.
 // require("noscript.js");
@@ -89,9 +78,10 @@ require("clicks-in-new-buffer.js");
 clicks_in_new_buffer_target = OPEN_NEW_BUFFER_BACKGROUND;
 
 // MIME types: Remove all typeset document handlers.
-remove_mime_type_external_handler("application/pdf");
-remove_mime_type_external_handler("application/postscript");
-remove_mime_type_external_handler("application/x-dvi");
+// Looks like this feature might no longer exist.
+// remove_mime_type_external_handler("application/pdf");
+// remove_mime_type_external_handler("application/postscript");
+// remove_mime_type_external_handler("application/x-dvi");
 
 // Completion: Swap the default completion behavior.  Note that these are
 // mutually exclusive.
@@ -162,8 +152,17 @@ suggest_save_path_from_file_name = function (filename, buffer) {
 //             });
 // define_key(content_buffer_normal_keymap, "C-t", "duplicate-buffer");
 
-// Set default zoom level to 120%.
-function my_zoom_set(buffer) {
-    browser_zoom_set(buffer, false, 120);
-}
-add_hook('create_buffer_late_hook', my_zoom_set);
+// Webjumps
+define_webjump("amazon", "http://www.amazon.com/exec/obidos/external-search/?field-keywords=%s&mode=blended");
+define_webjump("a", "http://www.amazon.com/exec/obidos/external-search/?field-keywords=%s&mode=blended");
+define_webjump("finance", "http://www.google.com/finance?client=ob&q=%s");
+define_webjump("f", "http://www.google.com/finance?client=ob&q=%s");
+define_webjump("hoogle", "http://www.haskell.org/hoogle/?hoogle=%s");
+define_webjump("ports", "http://www.freebsd.org/cgi/ports.cgi?query=%s&stype=all");
+define_webjump("freshports", "http://www.freshports.org/search.php?query=%s&search=go&num=10&stype=name&method=match&deleted=excludedeleted&start=1&casesensitivity=caseinsensitive");
+define_webjump("fp", "http://www.freshports.org/search.php?query=%s&search=go&num=10&stype=name&method=match&deleted=excludedeleted&start=1&casesensitivity=caseinsensitive");
+define_webjump("d", "http://dictionary.reference.com/search?q=%s");
+define_webjump("blekko", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
+define_webjump("b", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
+define_webjump("w", "http://en.wikipedia.org/wiki/%s");
+require("page-modes/wikipedia.js");

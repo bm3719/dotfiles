@@ -3,9 +3,9 @@ xrdb -merge ~/.Xdefaults
 xset b 100 0 0
 #xset r rate 140 200
 
-xset fp+ /usr/local/lib/X11/fonts/terminus-font
+#xset fp+ /usr/local/lib/X11/fonts/terminus-font
 xset fp+ /usr/local/lib/X11/fonts/code2000
-xset fp+ /usr/local/lib/X11/fonts/bitstream-vera
+#xset fp+ /usr/local/lib/X11/fonts/bitstream-vera
 xset fp+ /usr/local/lib/X11/fonts/OTF
 xset fp+ /usr/local/lib/X11/fonts/dejavu
 

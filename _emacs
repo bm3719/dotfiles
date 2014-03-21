@@ -1,21 +1,22 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-01-07 10:02:56 (bm3719)>
+;;;; Time-stamp: <2014-03-21 02:04:49 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; External addons used: pabbrev, pretty-symbols.el, slime, clojure-mode,
-;;;; cl-lib, nrepl.el, haskell-mode, agda-mode, python-mode, ipython, helm,
-;;;; helm-ipython, ruby-mode, auctex, nxhtml, flymake-cursor, espresso,
-;;;; flymake-jslint, markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+
-;;;; flim, apel), multi-term, lusty-explorer, emms, color-theme,
-;;;; color-theme-wombat, darcsum, psvn, egg, lojban-mode (+ lojban.el), malyon,
-;;;; redo+.el, htmlize.el.
+;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
+;;;; slime, marmalade via package.el (clojure-mode, clojure-test-mode, CIDER),
+;;;; haskell-mode, python-mode, ipython, helm, helm-ipython, ruby-mode, auctex,
+;;;; nxhtml, flymake-cursor, espresso, flymake-jslint, markdown-mode, cedet,
+;;;; gtags, elscreen, elscreen-w3m (+ flim, apel), emacs-w3m (development
+;;;; branch), multi-term, lusty-explorer, emms, wombat-custom-theme.el,
+;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), malyon, redo+.el,
+;;;; htmlize.el.
 ;;;;
-;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, Agda, GNU
+;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
 ;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, Maxima, mutt,
 ;;;; w3m, xpp (*nix only), Ghostscript/GSView (Windows only), Consolas font
 ;;;; (Windows only).
@@ -124,7 +125,7 @@
 (global-set-key "\M-/" 'hippie-expand)         ; Superior to dabbrev-expand.
 (global-set-key "\M-z" 'zap-up-to-char)        ; Mimic vim delete to char.
 (global-set-key "\M-o" 'other-window)
-(global-set-key "\C-x\C-a" 'align-regexp)
+(global-set-key "\C-x\M-a" 'align-regexp)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
 ;; intending to do a find-file.
 (global-set-key "\C-xf" 'find-file)
@@ -502,6 +503,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes
 
+;; Color themes are now integrated into Emacs 24.
+;; Define where to find themes for M-x load-theme and load wombat-custom.
+(when (and (>= emacs-major-version 24) window-system)
+ (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+ (load-theme 'wombat-custom t nil))
+
 ;; scheme-mode
 ;; Bind M-x run-scheme to Gauche.
 ;; TODO: Change to use CCL on Windows.
@@ -656,7 +663,7 @@
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
 ;; remember-mode: Now included in Emacs 23.
-(org-remember-insinuate)
+;(org-remember-insinuate)
 (setq remember-annotation-functions '(org-remember-annotation))
 ;(setq remember-handler-functions '(org-remember-handler))
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
@@ -797,6 +804,10 @@
 ;; Haskell.
 (require 'pretty-symbols)
 
+;; volatile-highlights.el
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
+
 ;; SLIME
 ;; http://common-lisp.net/project/slime/
 (when *freebsd-system* ; FreeBSD CVS version.
@@ -818,7 +829,8 @@
 
 ;; Startup SLIME when a Lisp file is open.
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
-(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+(add-hook 'inferior-lisp-mode-hook (lambda ()
+                                     (inferior-slime-mode t)))
 (global-set-key "\C-cs" 'slime-selector)
 
 ;; SLIME contribs.
@@ -893,18 +905,21 @@
   (when (get-buffer "*SLIME Apropos*")
     (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
  
-;; clojure-mode
-;; http://github.com/technomancy/clojure-mode
-(require 'clojure-mode)
-
-;; cl-lib: Required by nrepl.el.
-;; http://elpa.gnu.org/packages/cl-lib.html
-(require 'cl-lib)
-;; nrepl.el
-;; https://raw.github.com/clojure-emacs/nrepl.el/master/nrepl.el
-(require 'nrepl)
-;; Enable eldoc in Clojure buffers.
-(add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
+;; clojure-mode and CIDER (via Marmalade).
+(require 'package)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/"))
+(package-initialize)
+(defvar my-packages '(clojure-mode
+                      clojure-test-mode
+                      cider))
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+;; CIDER
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
 ;; scala-mode
 ;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs
@@ -1003,17 +1018,6 @@
 ;; errors, so putting it here.
 (setq use-dialog-box nil)
 
-;; agda-mode: Cabal version.
-(when *freebsd-system*
-  (load-file (let ((coding-system-for-read 'utf-8))
-               (shell-command-to-string "agda-mode locate")))
-  (autoload 'agda-mode "agda2-mode.el"
-    "Major mode for Agda files" t)
-  (unless (assoc "\\.agda" auto-mode-alist)
-    (setq auto-mode-alist
-          (nconc '(("\\.agda" . agda2-mode)
-                   ("\\.alfa" . agda2-mode)) auto-mode-alist))))
-
 ;; python-mode: Replaces the built-in python.el.  Currently this is better,
 ;; since it supports iPython.
 ;; http://launchpad.net/python-mode/
@@ -1050,17 +1054,17 @@
 
 ;; ipython: Support for a replacement to the default Python shell.  Requires an
 ;; install of the iPython application.  Run with M-x py-shell.
-(require 'ipython)
+;(require 'ipython)
 
 ;; helm: An incremental completion and selection narrowing framework.
 ;; https://github.com/emacs-helm/helm
 (require 'helm-config)
 ;; helm-ipython
 ;; https://raw.github.com/emacs-helm/helm-ipython/master/helm-ipython.el
-(require 'helm-ipython)
-(define-key py-mode-map (kbd "M-<tab>") 'helm-ipython-complete)
-(define-key py-shell-map (kbd "M-<tab>") 'helm-ipython-complete)
-(define-key py-mode-map (kbd "C-c M") 'helm-ipython-import-modules-from-buffer)
+;(require 'helm-ipython)
+;(define-key py-mode-map (kbd "M-<tab>") 'helm-ipython-complete)
+;(define-key py-shell-map (kbd "M-<tab>") 'helm-ipython-complete)
+;(define-key py-mode-map (kbd "C-c M") 'helm-ipython-import-modules-from-buffer)
 
 
 ;; ruby-mode
@@ -1141,6 +1145,17 @@
             (flymake-mode)
             (flyspell-prog-mode)))
 
+;; gnuplot-mode
+;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el
+(require 'gnuplot-mode)
+(add-hook 'gnuplot-mode-hook
+          '(lambda ()
+            (flyspell-prog-mode)
+            (add-hook 'before-save-hook
+             'whitespace-cleanup nil t)))
+;; .gp is my personally-designated Gnuplot extension.
+(add-to-list 'auto-mode-alist '("\\.gp$" . gnuplot-mode))
+
 ;; markdown-mode
 ;; git://jblevins.org/git/markdown-mode.git
 (autoload 'markdown-mode "markdown-mode"
@@ -1162,7 +1177,7 @@
 ;; NOTE: Gnuplot on Windows not setup yet.
 (setq auto-mode-alist (cons '("\\.max" . maxima-mode) auto-mode-alist))
 (when *freebsd-system*
-  (setq load-path (cons "/usr/local/share/maxima/5.20.1/emacs" load-path)))
+  (setq load-path (cons "/usr/local/share/maxima/5.31.3/emacs" load-path)))
 (when *linux-system*
   (setq load-path (cons "/usr/share/maxima/5.20.1/emacs" load-path)))
 (when *nt-system*
@@ -1210,6 +1225,7 @@
 ;; FreeBSD: ports w3m-m17n; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
 ;; NOTE: I also modify the local copies of w3m.el and w3m-search.el.  See
 ;;       projects.org for details.
+(autoload 'w3m "w3m" "Interface for w3m on Emacs." t)
 ;; Use w3m for all URLs (deprecated code to use available GUI browser).
 (setq browse-url-browser-function 'w3m-browse-url)
 (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
@@ -1268,16 +1284,6 @@
 (global-set-key (kbd "<f3>") 'emms)
 (global-set-key (kbd "<kp-right>") 'emms-seek-forward)
 (global-set-key (kbd "<kp-left>") 'emms-seek-backward)
-
-;; color-theme
-;; http://download.savannah.nongnu.org/releases/color-theme/
-(require 'color-theme)
-(color-theme-initialize)
-;; color-theme-wombat: Custom version of wombat color theme, with few colors
-;; changed from the original.
-(require 'color-theme-wombat)
-(when window-system
-  (color-theme-wombat))
 
 ;; Darcsum: A pcl-cvs like interface for managing darcs patches.
 ;; http://chneukirchen.org/repos/darcsum/
@@ -1346,24 +1352,24 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(global-senator-minor-mode t nil (senator))
+ ;; '(global-senator-minor-mode t nil (senator))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(which-function-mode nil)
- '(global-semantic-decoration-mode nil nil (semantic-decorate-mode))
- '(global-semantic-highlight-edits-mode nil nil (semantic-util-modes))
- '(global-semantic-highlight-func-mode nil nil (semantic-util-modes))
- '(global-semantic-idle-completions-mode t nil (semantic-idle))
- '(global-semantic-idle-scheduler-mode nil nil (semantic-idle))
- '(global-semantic-idle-summary-mode nil nil (semantic-idle))
- '(global-semantic-idle-tag-highlight-mode nil nil (semantic-idle))
- '(global-semantic-show-parser-state-mode nil nil (semantic-util-modes))
- '(global-semantic-show-unmatched-syntax-mode nil nil (semantic-util-modes))
- '(global-semantic-stickyfunc-mode nil nil (semantic-util-modes))
+ ;; '(global-semantic-decoration-mode nil nil (semantic-decorate-mode))
+ ;; '(global-semantic-highlight-edits-mode nil nil (semantic-util-modes))
+ ;; '(global-semantic-highlight-func-mode nil nil (semantic-util-modes))
+ ;; '(global-semantic-idle-completions-mode t nil (semantic-idle))
+ ;; '(global-semantic-idle-scheduler-mode nil nil (semantic-idle))
+ ;; '(global-semantic-idle-summary-mode nil nil (semantic-idle))
+ ;; '(global-semantic-idle-tag-highlight-mode nil nil (semantic-idle))
+ ;; '(global-semantic-show-parser-state-mode nil nil (semantic-util-modes))
+ ;; '(global-semantic-show-unmatched-syntax-mode nil nil (semantic-util-modes))
+ ;; '(global-semantic-stickyfunc-mode nil nil (semantic-util-modes))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-idle-scheduler-verbose-flag nil)
- '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing))
- '(semanticdb-global-mode t nil (semanticdb)))
+ '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing)))
+; '(semanticdb-global-mode t nil (semanticdb)))
 
 ;; Replace echo area startup message
 (run-with-timer 1 nil #'yow)

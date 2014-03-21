@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2013-11-15 13:47:40 (bm3719)>
+# Time-stamp: <2014-02-01 00:35:34 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -56,8 +56,6 @@ umask 027               # u=rw,g=r,o=
 # $PATH
 PATH=$HOME/bin:$HOME/.cabal/bin:/sbin:/usr/sbin:/bin:/usr/bin:$PATH
 PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec:$HOME/.local/bin
-PATH=$PATH:/usr/local/diablo-jdk1.6.0/bin
-PATH=$PATH:$HOME/src/scala/scala-2.9.2/bin
 PATH=$PATH:.
 # Append /usr/games to $PATH if it exists.
 if [ -d /usr/games ]
@@ -117,7 +115,7 @@ export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 # Java ecology stuff
-export JAVA_HOME=/usr/local/diablo-jdk1.6.0
+export JAVA_HOME=/usr/local/openjdk7
 export CLASSPATH=.:$HOME/lib/classes:$HOME/lib/archive/'*'
 export CLASSPATH=$CLASSPATH:/usr/local/share/java/classes/jline.jar
 export CLASSPATH=$CLASSPATH:$HOME/src/scala/scala-2.9.2/lib

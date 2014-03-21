@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-03-21 02:04:49 (bm3719)>
+;;;; Time-stamp: <2014-03-21 02:44:32 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -9,17 +9,16 @@
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
 ;;;; slime, marmalade via package.el (clojure-mode, clojure-test-mode, CIDER),
-;;;; haskell-mode, python-mode, ipython, helm, helm-ipython, ruby-mode, auctex,
-;;;; nxhtml, flymake-cursor, espresso, flymake-jslint, markdown-mode, cedet,
-;;;; gtags, elscreen, elscreen-w3m (+ flim, apel), emacs-w3m (development
-;;;; branch), multi-term, lusty-explorer, emms, wombat-custom-theme.el,
-;;;; darcsum, psvn, egg, lojban-mode (+ lojban.el), malyon, redo+.el,
-;;;; htmlize.el.
+;;;; haskell-mode, python-mode, helm, ruby-mode, auctex, nxhtml,
+;;;; flymake-cursor, espresso, flymake-jslint, markdown-mode, cedet, gtags,
+;;;; elscreen, elscreen-w3m (+ flim, apel), emacs-w3m (development branch),
+;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, darcsum, psvn,
+;;;; egg, lojban-mode (+ lojban.el), malyon, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
-;;;; Global, python-doc-html, iPython, pyflakes, Ruby, Rhino, Maxima, mutt,
-;;;; w3m, xpp (*nix only), Ghostscript/GSView (Windows only), Consolas font
-;;;; (Windows only).
+;;;; Global, python-doc-html, pyflakes, Ruby, Rhino, Maxima, mutt, w3m, xpp
+;;;; (*nix only), Ghostscript/GSView (Windows only), Consolas font (Windows
+;;;; only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -663,9 +662,8 @@
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
 ;; remember-mode: Now included in Emacs 23.
-;(org-remember-insinuate)
 (setq remember-annotation-functions '(org-remember-annotation))
-;(setq remember-handler-functions '(org-remember-handler))
+(setq remember-handler-functions '(org-remember-handler))
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
 ;; Setup for C-c r note taking.
 (setq remember-data-file "~/notes.org")
@@ -1018,8 +1016,8 @@
 ;; errors, so putting it here.
 (setq use-dialog-box nil)
 
-;; python-mode: Replaces the built-in python.el.  Currently this is better,
-;; since it supports iPython.
+;; python-mode: Replaces the built-in python.el, though I'm no longer using its
+;; integrated iPython support.
 ;; http://launchpad.net/python-mode/
 (autoload 'python-mode "python-mode" "Python Mode." t)
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
@@ -1051,21 +1049,9 @@
   (push '("\\.py\\'" flymake-pyflakes-init)
         flymake-allowed-file-name-masks))
 
-
-;; ipython: Support for a replacement to the default Python shell.  Requires an
-;; install of the iPython application.  Run with M-x py-shell.
-;(require 'ipython)
-
 ;; helm: An incremental completion and selection narrowing framework.
 ;; https://github.com/emacs-helm/helm
 (require 'helm-config)
-;; helm-ipython
-;; https://raw.github.com/emacs-helm/helm-ipython/master/helm-ipython.el
-;(require 'helm-ipython)
-;(define-key py-mode-map (kbd "M-<tab>") 'helm-ipython-complete)
-;(define-key py-shell-map (kbd "M-<tab>") 'helm-ipython-complete)
-;(define-key py-mode-map (kbd "C-c M") 'helm-ipython-import-modules-from-buffer)
-
 
 ;; ruby-mode
 ;; http://www.emacswiki.org/emacs/RubyMode
@@ -1352,24 +1338,12 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- ;; '(global-senator-minor-mode t nil (senator))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(which-function-mode nil)
- ;; '(global-semantic-decoration-mode nil nil (semantic-decorate-mode))
- ;; '(global-semantic-highlight-edits-mode nil nil (semantic-util-modes))
- ;; '(global-semantic-highlight-func-mode nil nil (semantic-util-modes))
- ;; '(global-semantic-idle-completions-mode t nil (semantic-idle))
- ;; '(global-semantic-idle-scheduler-mode nil nil (semantic-idle))
- ;; '(global-semantic-idle-summary-mode nil nil (semantic-idle))
- ;; '(global-semantic-idle-tag-highlight-mode nil nil (semantic-idle))
- ;; '(global-semantic-show-parser-state-mode nil nil (semantic-util-modes))
- ;; '(global-semantic-show-unmatched-syntax-mode nil nil (semantic-util-modes))
- ;; '(global-semantic-stickyfunc-mode nil nil (semantic-util-modes))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-idle-scheduler-verbose-flag nil)
  '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing)))
-; '(semanticdb-global-mode t nil (semanticdb)))
 
 ;; Replace echo area startup message
 (run-with-timer 1 nil #'yow)

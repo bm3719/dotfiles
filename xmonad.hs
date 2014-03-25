@@ -1,6 +1,6 @@
 -- xmonad.hs - bm3719
 --
--- Time-stamp: <2014-01-26 14:03:28 (bm3719)>
+-- Time-stamp: <2014-03-25 12:47:21 (bm3719)>
 -- DESC: Since the default xmonad config is pretty good, there's only minimal
 -- customization here.
 -- NOTE: Requires xmonad-contrib for ThreeCoumns and NoBorders.
@@ -15,7 +15,7 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 -- On FreeBSD, this requires a custom urxvtcd script.
-myTerminal      = "urxvt -sl 10000 -ls"
+myTerminal      = "urxvtcd" -- "urxvt -sl 10000 -ls"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -32,7 +32,7 @@ myModMask       = mod3Mask
 
 -- A tagging example:
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
-myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces    = ["1","2","3","4","5","6"]
 
 myNormalBorderColor  = "#404040"
 myFocusedBorderColor = "#A9A9F5"

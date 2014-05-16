@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-03-21 02:44:32 (bm3719)>
+;;;; Time-stamp: <2014-05-15 22:38:47 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -9,11 +9,12 @@
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
 ;;;; slime, marmalade via package.el (clojure-mode, clojure-test-mode, CIDER),
-;;;; haskell-mode, python-mode, helm, ruby-mode, auctex, nxhtml,
+;;;; haskell-mode, python-mode, helm, ruby-mode, groovy-mode, auctex, nxhtml,
 ;;;; flymake-cursor, espresso, flymake-jslint, markdown-mode, cedet, gtags,
 ;;;; elscreen, elscreen-w3m (+ flim, apel), emacs-w3m (development branch),
 ;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, darcsum, psvn,
-;;;; egg, lojban-mode (+ lojban.el), malyon, redo+.el, htmlize.el.
+;;;; magit (+ git-modes), lojban-mode (+ lojban.el), malyon, redo+.el,
+;;;; htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
 ;;;; Global, python-doc-html, pyflakes, Ruby, Rhino, Maxima, mutt, w3m, xpp
@@ -648,6 +649,7 @@
 (define-key global-map "\C-ca" 'org-agenda)
 ;; Change default TODO keywords and coloring.
 (setq
+ org-src-fontify-natively t
  org-todo-keywords (quote ((sequence
                             "TODO(t)"
                             "STARTED(s!)"
@@ -916,8 +918,16 @@
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
-;; CIDER
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(defun cider-reset ()
+  "Sends (refresh) to the remote CIDER REPL buffer.  Only works
+in M-x cider buffers connected to localhost."
+  (interactive)
+  (set-buffer "*cider-repl 127.0.0.1*")
+  (goto-char (point-max))
+  (insert "(refresh)")
+  (cider-repl-return))
+(define-key cider-mode-map "\C-c\C-o" 'cider-reset)
 
 ;; scala-mode
 ;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs
@@ -1066,6 +1076,19 @@
          '(lambda ()
            (inf-ruby-keys)
            (flyspell-prog-mode)))
+
+;; groovy-mode
+;; https://raw.githubusercontent.com/nealford/emacs/master/groovy-mode.el
+(autoload 'groovy-mode "groovy-mode" "Major mode for editing Groovy code." t)
+(add-to-list 'auto-mode-alist '("\.groovy$" . groovy-mode))
+(add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))
+(add-to-list 'interpreter-mode-alist '("groovy" . groovy-mode))
+(autoload 'groovy-mode "groovy-mode" "Groovy mode." t)
+(defconst groovy-block-mid-re "Need something here or it blows up.")
+;; Add auto-indenting on newline.
+(add-hook 'groovy-mode-hook
+          (lambda ()
+            (local-set-key "\C-m" 'reindent-then-newline-and-indent)))
 
 ;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
@@ -1282,14 +1305,11 @@
 ;; M-x svn-examine DIR, M-x svn-status DIR
 (require 'psvn)
 
-;; egg: Git VC
-;; http://github.com/bogolisk/egg
-(require 'egg)
-;; For some reason, Egg thinks it's a good idea to create this buffer at init.
-;; Probably a better course of action for this, but in the meantime, this gets
-;; rid of it.
-(when (not (eq nil (get-buffer "*Egg:Select Action*")))
-  (kill-buffer "*Egg:Select Action*"))
+;; Magit
+;; https://github.com/magit/magit
+;; Note: On FreeBSD, this currently requires using the ports version due to
+;; Makefile parsing errors.
+(require 'magit)
 
 ;; lojban-mode: Requires lojban.el.
 ;; http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el

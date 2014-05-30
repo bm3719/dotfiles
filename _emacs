@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-05-15 22:38:47 (bm3719)>
+;;;; Time-stamp: <2014-05-22 07:46:03 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -387,6 +387,9 @@
 ;; This sets garbage collection to hundred times of the default; supposedly
 ;; significantly speeds up startup time.  Disable this if RAM is limited.
 (setq gc-cons-threshold 50000000)
+
+;; Warn only when opening files bigger than 100MB (default is 10MB).
+(setq large-file-warning-threshold 100000000)
 
 ;; Prevent windows from getting too small.
 (setq window-min-height 3)
@@ -928,6 +931,24 @@ in M-x cider buffers connected to localhost."
   (insert "(refresh)")
   (cider-repl-return))
 (define-key cider-mode-map "\C-c\C-o" 'cider-reset)
+;; kibit
+;; https://github.com/jonase/kibit
+(require 'compile)
+(add-to-list 'compilation-error-regexp-alist-alist
+             '(kibit "At \\([^:]+\\):\\([[:digit:]]+\\):" 1 2 nil 0))
+(add-to-list 'compilation-error-regexp-alist 'kibit)
+(defun kibit ()
+  "Run kibit on the current project.
+Display the results in a hyperlinked *compilation* buffer."
+  (interactive)
+  (compile "lein kibit")
+  ;; This will clobber the custom function set above.
+  (setq compilation-finish-function '()))
+(defun kibit-current-file ()
+  "Run kibit on the current file.
+Display the results in a hyperlinked *compilation* buffer."
+  (interactive)
+  (compile (concat "lein kibit " buffer-file-name)))
 
 ;; scala-mode
 ;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs

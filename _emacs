@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-06-01 14:25:14 (bm3719)>
+;;;; Time-stamp: <2014-06-01 14:48:59 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -930,7 +930,7 @@ in M-x cider buffers connected to localhost."
   (goto-char (point-max))
   (insert "(refresh)")
   (cider-repl-return))
-(define-key cider-mode-map "\C-c\C-o" 'cider-reset)
+;(define-key cider-mode-map "\C-c\C-o" 'cider-reset)
 ;; kibit
 ;; https://github.com/jonase/kibit
 (require 'compile)
@@ -1237,15 +1237,12 @@ Display the results in a hyperlinked *compilation* buffer."
   (setq c-mode-hook '(lambda () (gtags-mode 1))))
 
 ;; elscreen
-;; ftp://ftp.morishima.net/pub/morishima.net/naoto/ElScreen/
-;; Requires Apel, which will need to be manuallly installed on Windows and some
-;; GNU/Linux distros.
-(load "elscreen" "ElScreen" t)
+;; https://raw.githubusercontent.com/shosti/elscreen/master/elscreen.el
+(require 'elscreen)
+(elscreen-start)
 ;; F7 creates a new elscreen, F8 kills it.
 (global-set-key (kbd "<f7>") 'elscreen-create)
 (global-set-key (kbd "<f8>") 'elscreen-kill)
-;; elscreen-w3m
-(require 'elscreen-w3m)
 
 ;; emacs-w3m
 ;; http://emacs-w3m.namazu.org/

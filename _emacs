@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-06-01 14:19:00 (bm3719)>
+;;;; Time-stamp: <2014-06-01 14:25:14 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1194,10 +1194,7 @@ Display the results in a hyperlinked *compilation* buffer."
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; CEDET
-;; http://cedet.sourceforge.net/
-;; NOTE: Included in Emacs 23.2.
-(when *nt-system*       ; NT manual install.
-  (load-file "~/.emacs.d/cedet-1.1/common/cedet.el"))
+;; Included in Emacs >=23.2.
 (setq semantic-load-turn-useful-things-on t)
 ;; Keep semantic.cache files from littering my FS.
 (setq semanticdb-default-save-directory "~/.emacs.d/saves/semantic.cache")

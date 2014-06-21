@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-06-20 22:06:17 (bm3719)>
+;;;; Time-stamp: <2014-06-20 22:09:35 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -9,12 +9,12 @@
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
 ;;;; slime, marmalade via package.el (clojure-mode, clojure-test-mode, CIDER),
-;;;; haskell-mode, python-mode, helm, ruby-mode, groovy-mode, auctex, nxhtml,
-;;;; flymake-cursor, espresso, flymake-jslint, markdown-mode, cedet, gtags,
-;;;; elscreen, elscreen-w3m (+ flim, apel), emacs-w3m (development branch),
-;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, darcsum, psvn,
-;;;; magit (+ git-modes), lojban-mode (+ lojban.el), malyon, redo+.el,
-;;;; htmlize.el.
+;;;; rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
+;;;; groovy-mode, auctex, nxhtml, flymake-cursor, espresso, flymake-jslint,
+;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
+;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
+;;;; wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes), lojban-mode (+
+;;;; lojban.el), malyon, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
 ;;;; Global, python-doc-html, pyflakes, Ruby, Rhino, Maxima, mutt, w3m, xpp

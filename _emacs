@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-06-20 22:09:35 (bm3719)>
+;;;; Time-stamp: <2014-07-01 11:02:05 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -34,6 +34,7 @@
 (defvar *freebsd-system* (string-match "freebsd" system-configuration))
 (defvar *linux-system* (string-match "linux" system-configuration))
 (defvar *nt-system* (string-match "nt" system-configuration))
+(defvar *osx-system* (string-match "darwin" system-configuration))
 
 ;; Font face: Requires appropriate fonts to be installed.  
 (if *nt-system*
@@ -813,7 +814,7 @@
 
 ;; SLIME
 ;; http://common-lisp.net/project/slime/
-(when *freebsd-system* ; FreeBSD CVS version.
+(when (or *freebsd-system* *osx-system*) ; FreeBSD CVS version.
   (setq inferior-lisp-program "/usr/local/bin/sbcl"
         common-lisp-hyperspec-root
         "file:///usr/local/share/doc/clisp-hyperspec/HyperSpec/"))
@@ -921,7 +922,9 @@
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+;; CIDER
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook 'flyspell-prog-mode)
 (defun cider-reset ()
   "Sends (refresh) to the remote CIDER REPL buffer.  Only works
 in M-x cider buffers connected to localhost."
@@ -949,7 +952,7 @@ Display the results in a hyperlinked *compilation* buffer."
 Display the results in a hyperlinked *compilation* buffer."
   (interactive)
   (compile (concat "lein kibit " buffer-file-name)))
-;; rainbow-delimiters
+;; rainbow-delimiters.el
 ;; https://github.com/jlr/rainbow-delimiters
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
@@ -968,7 +971,7 @@ Display the results in a hyperlinked *compilation* buffer."
 
 ;; haskell-mode
 ;; https://github.com/haskell/haskell-mode/
-(cond ((or *freebsd-system* *linux-system*) ; FreeBSD/Linux CVS versions.
+(cond ((or *freebsd-system* *linux-system* *osx-system*) ; FreeBSD/Linux/OSX CVS versions.
        (load "~/.emacs.d/haskell-mode/haskell-site-file.el"))
       (*nt-system*                          ; NT manual install.
        (load "C:\\bm3719\\.emacs.d\\haskell-mode\\haskell-site-file.el")))

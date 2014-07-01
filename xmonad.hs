@@ -1,6 +1,6 @@
 -- xmonad.hs - bm3719
 --
--- Time-stamp: <2014-03-25 12:47:21 (bm3719)>
+-- Time-stamp: <2014-06-30 21:58:30 (bm3719)>
 -- DESC: Since the default xmonad config is pretty good, there's only minimal
 -- customization here.
 -- NOTE: Requires xmonad-contrib for ThreeCoumns and NoBorders.
@@ -133,7 +133,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = tiled ||| Mirror tiled ||| Full
+myLayout = smartBorders $ tiled ||| Mirror tiled ||| Full
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio

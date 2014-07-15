@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-07-01 11:02:05 (bmiller)>
+;;;; Time-stamp: <2014-07-15 01:38:51 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -503,6 +503,14 @@
   (untabify (point-min) (point-max)))
 ;; This is so commonly used, binding to F4.
 (global-set-key (kbd "<f4>") 'bcm-indent)
+
+;; Convenience function for formatting JSON.  Requires Python.
+(defun bcm-json-format ()
+  "Format a region of JSON."
+  (interactive)
+  (save-excursion
+   (shell-command-on-region (mark) (point) "python -m json.tool" (buffer-name)
+   t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes

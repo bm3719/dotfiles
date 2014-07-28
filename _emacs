@@ -1,16 +1,16 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-07-27 21:47:43 (bm3719)>
+;;;; Time-stamp: <2014-07-28 09:26:23 (bmiller)>
 ;;;;
-;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
+;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
 ;;;; slime, marmalade via package.el (clojure-mode, clojure-test-mode, CIDER),
 ;;;; ac-nrepl, rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
-;;;; groovy-mode, auctex, nxhtml, flymake-cursor, espresso, flymake-jslint,
+;;;; groovy-mode, auctex, web-mode, flymake-cursor, espresso, flymake-jslint,
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
 ;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
 ;;;; wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes), lojban-mode (+
@@ -1166,22 +1166,20 @@ Display the results in a hyperlinked *compilation* buffer."
           LaTeX-section-section
           LaTeX-section-label)))
 
-;; nXhtml: Includes MuMaMo.
-;; http://ourcomments.org/Emacs/nXhtml/doc/nxhtml.html
-;; TODO: Consider turning off or changing the ugly block-coloring.
-;; NOTE: This needs to be run before espresso, since parts of its JavaScript
-;;       setup need to get clobbered.
-;(load "~/.emacs.d/nxhtml/autostart.el")
-;; Turn on spell-checking for markup files.
-(dolist (hook '(nxhtml-mode-hook))
-  (add-hook hook (lambda () (flyspell-prog-mode))))
-;; Get rid of the default top-level block color.
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(mumamo-background-chunk-major ((((class color) (min-colors 88) (background dark)) nil))))
+;; web-mode: An autonomous major-mode for editing web templates (HTML documents
+;; embedding parts (CSS/JavaScript) and blocks (client/server side).
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[gj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-css-indent-offset 2)
+(setq web-mode-code-indent-offset 2)
 
 ;; flymake-cursor
 ;; http://www.emacswiki.org/emacs/download/flymake-cursor.el

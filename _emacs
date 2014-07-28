@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-07-15 01:38:51 (bm3719)>
+;;;; Time-stamp: <2014-07-27 21:47:43 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 23.1.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -9,7 +9,7 @@
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
 ;;;; slime, marmalade via package.el (clojure-mode, clojure-test-mode, CIDER),
-;;;; rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
+;;;; ac-nrepl, rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
 ;;;; groovy-mode, auctex, nxhtml, flymake-cursor, espresso, flymake-jslint,
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
 ;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
@@ -964,6 +964,25 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; https://github.com/jlr/rainbow-delimiters
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+;; ac-nrepl: In-buffer completion for Clojure projects.
+;; https://github.com/clojure-emacs/ac-nrepl
+(require 'ac-nrepl)
+(defun clojure-auto-complete ()
+  (interactive)
+  (let ((ac-sources
+          `(ac-source-nrepl-ns
+            ac-source-nrepl-vars
+            ac-source-nrepl-ns-classes
+            ac-source-nrepl-all-classes
+            ac-source-nrepl-java-methods
+            ac-source-nrepl-static-methods
+            ,@ac-sources)))
+    (auto-complete)))
+(defun bcm-clojure-hook ()
+  (auto-complete-mode 1)
+  (define-key clojure-mode-map
+      (kbd "<backtab>") 'clojure-auto-complete))
+(add-hook 'clojure-mode-hook 'bcm-clojure-hook)
 
 ;; scala-mode
 ;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-07-29 10:56:15 (bmiller)>
+;;;; Time-stamp: <2014-07-29 11:00:56 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1136,6 +1136,14 @@ Display the results in a hyperlinked *compilation* buffer."
 
 ;; groovy-mode
 ;; https://raw.githubusercontent.com/nealford/emacs/master/groovy-mode.el
+(when *osx-system*
+  (setenv "GROOVY_HOME" "/usr/local/opt/groovy/libexec")
+  (setenv "GRADLE_HOME" "/usr/local/Cellar/gradle/1.11/libexec")
+  (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home")
+  (setenv "PATH" (concat (getenv "PATH")
+                         ":" (getenv "JAVA_HOME") "/bin"
+                         ":" (getenv "GROOVY_HOME") "/bin"
+                         ":" (getenv "GRADLE_HOME") "/bin")))
 (autoload 'groovy-mode "groovy-mode" "Major mode for editing Groovy code." t)
 (add-to-list 'auto-mode-alist '("\.groovy$" . groovy-mode))
 (add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-07-28 21:05:09 (bm3719)>
+;;;; Time-stamp: <2014-07-29 08:53:03 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -412,6 +412,9 @@
 (when *nt-system*
   (setq shell-file-name "/usr/bin/bash")
   (setq tex-shell-file-name "/usr/bin/bash"))
+(when *osx-system*
+  (setq shell-file-name "/bin/zsh")
+  (setq tex-shell-file-name "/bin/zsh"))
 
 ;; Answer 'y' or <CR> for yes and 'n' for no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)

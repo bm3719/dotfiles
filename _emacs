@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-07-28 16:10:18 (bmiller)>
+;;;; Time-stamp: <2014-07-28 21:05:09 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -10,7 +10,7 @@
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
 ;;;; slime, marmalade via package.el (clojure-mode, clojure-test-mode, CIDER),
 ;;;; ac-nrepl, rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
-;;;; groovy-mode, auctex, web-mode, flymake-cursor, js2-mode, flymake-jslint,
+;;;; groovy-mode, auctex, web-mode, flymake-cursor, js2-mode, flymake-jshint,
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
 ;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
 ;;;; wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes), lojban-mode (+
@@ -1168,6 +1168,7 @@ Display the results in a hyperlinked *compilation* buffer."
 
 ;; web-mode: An autonomous major-mode for editing web templates (HTML documents
 ;; embedding parts (CSS/JavaScript) and blocks (client/server side).
+;; https://github.com/fxbois/web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -1191,20 +1192,11 @@ Display the results in a hyperlinked *compilation* buffer."
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . js2-mode))
 
-;; ;; flymake-jslint
-;; ;; http://www.emacswiki.org/emacs/FlymakeJavaScript
-;; ;; This setup requires Rhino (a JavaScript engine), a flymake-jslint.el file in
-;; ;; ~/.emacs.d, and JSLint (available from http://www.jslint.com).
-;; ;; TODO: Try to get lintnode working instead of this method at some later date.
-;; ;;       Last attempt on 05/10/2010 failed.
-;; (require 'flymake-jslint)
-
-;; ;; Now that all JavaScript stuff is setup, create full espresso-mode hook.
-;; (add-hook 'espresso-mode-hook
-;;           '(lambda ()
-;;             (pabbrev-mode)
-;;             (flymake-mode)
-;;             (flyspell-prog-mode)))
+;; flymake-jshint
+;; https://github.com/daleharvey/jshint-mode/blob/master/flymake-jshint.el
+(require 'flymake-jshint)
+;; Leaving flymake-jshint off by default due to bugs.
+;(add-hook 'js2-mode-hook (lambda () (flymake-jshint)))
 
 ;; gnuplot-mode
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-02 20:57:27 (bm3719)>
+;;;; Time-stamp: <2014-09-03 10:10:42 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -412,6 +412,9 @@
 (when *nt-system*
   (setq shell-file-name "/usr/bin/bash")
   (setq tex-shell-file-name "/usr/bin/bash"))
+(when *osx-system*
+  (setq shell-file-name "/bin/zsh")
+  (setq tex-shell-file-name "/bin/zsh"))
 
 ;; Answer 'y' or <CR> for yes and 'n' for no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -524,7 +527,7 @@
 ;; scheme-mode
 ;; Bind M-x run-scheme to Gauche.
 ;; TODO: Change to use CCL on Windows.
-(when (or *freebsd-system* *linux-system*)
+(when (or *freebsd-system* *linux-system* *osx-system*)
   (defvar scheme-program-name "gosh"
     "*Program invoked by the run-scheme command"))
 ;; Spell-check comments.
@@ -1306,6 +1309,8 @@ Display the results in a hyperlinked *compilation* buffer."
   (setq multi-term-program "/usr/bin/zsh"))
 (when *nt-system*
   (setq multi-term-program "/usr/bin/bash"))
+(when *osx-system*
+  (setq multi-term-program "/bin/zsh"))
 (global-set-key (kbd "C-c t") 'multi-term-next)
 (global-set-key (kbd "C-c T") 'multi-term)
 

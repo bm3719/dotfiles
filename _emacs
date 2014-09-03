@@ -1,15 +1,15 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-07-29 14:54:47 (bmiller)>
+;;;; Time-stamp: <2014-09-02 20:57:27 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
-;;;; slime, marmalade via package.el (clojure-mode, clojure-test-mode, CIDER),
-;;;; ac-nrepl, rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
+;;;; SLIME, marmalade via package.el (clojure-mode, CIDER, ac-cider),
+;;;; rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
 ;;;; groovy-mode, auctex, web-mode, flymake-cursor, js2-mode, flymake-jshint,
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
 ;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
@@ -17,8 +17,9 @@
 ;;;; lojban.el), malyon, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
-;;;; Global, python-doc-html, pyflakes, Ruby, Maxima, mutt, w3m, xpp (*nix
-;;;; only), Ghostscript/GSView (Windows only), Consolas font (Windows only).
+;;;; Global, python-doc-html, pyflakes, Ruby, Rhino, Maxima, mutt, w3m, xpp
+;;;; (*nix only), Ghostscript/GSView (Windows only), Consolas font (Windows
+;;;; only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -411,9 +412,6 @@
 (when *nt-system*
   (setq shell-file-name "/usr/bin/bash")
   (setq tex-shell-file-name "/usr/bin/bash"))
-(when *osx-system*
-  (setq shell-file-name "/bin/zsh")
-  (setq tex-shell-file-name "/bin/zsh"))
 
 ;; Answer 'y' or <CR> for yes and 'n' for no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -927,8 +925,8 @@
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 (defvar my-packages '(clojure-mode
-                      clojure-test-mode
-                      cider))
+                      cider
+                      ac-cider))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
@@ -966,26 +964,30 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; https://github.com/jlr/rainbow-delimiters
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-;; ac-nrepl: In-buffer completion for Clojure projects.
-;; https://github.com/clojure-emacs/ac-nrepl
-(require 'ac-nrepl)
-(defun clojure-auto-complete ()
-  (interactive)
-  (let ((ac-sources
-          `(ac-source-nrepl-ns
-            ac-source-nrepl-vars
-            ac-source-nrepl-ns-classes
-            ac-source-nrepl-all-classes
-            ac-source-nrepl-java-methods
-            ac-source-nrepl-static-methods
-            ,@ac-sources)))
-    (auto-complete)))
+;; ac-cider: In-buffer completion for Clojure projects.
+;; https://github.com/clojure-emacs/ac-cider
+(require 'ac-cider)
+(add-hook 'cider-mode-hook 'ac-flyspell-workaround)
+(add-hook 'cider-mode-hook 'ac-cider-setup)
+(add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'cider-mode))
+(defun set-auto-complete-as-completion-at-point-function ()
+  (setq completion-at-point-functions '(auto-complete)))
+(add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+(add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (defun bcm-clojure-hook ()
   (auto-complete-mode 1)
   (define-key clojure-mode-map
-      (kbd "<backtab>") 'clojure-auto-complete))
+      (kbd "<backtab>") 'auto-complete))
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
 
+(require 'ac-cider)
+(add-hook 'cider-mode-hook 'ac-flyspell-workaround)
+(add-hook 'cider-mode-hook 'ac-cider-setup)
+(add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'cider-mode))
 ;; scala-mode
 ;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs
 (require 'scala-mode-auto)
@@ -1136,14 +1138,6 @@ Display the results in a hyperlinked *compilation* buffer."
 
 ;; groovy-mode
 ;; https://raw.githubusercontent.com/nealford/emacs/master/groovy-mode.el
-(when *osx-system*
-  (setenv "GROOVY_HOME" "/usr/local/opt/groovy/libexec")
-  (setenv "GRADLE_HOME" "/usr/local/Cellar/gradle/1.11/libexec")
-  (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home")
-  (setenv "PATH" (concat (getenv "PATH")
-                         ":" (getenv "JAVA_HOME") "/bin"
-                         ":" (getenv "GROOVY_HOME") "/bin"
-                         ":" (getenv "GRADLE_HOME") "/bin")))
 (autoload 'groovy-mode "groovy-mode" "Major mode for editing Groovy code." t)
 (add-to-list 'auto-mode-alist '("\.groovy$" . groovy-mode))
 (add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))

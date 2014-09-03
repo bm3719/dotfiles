@@ -1,11 +1,11 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-03 10:10:42 (bmiller)>
+;;;; Time-stamp: <2014-09-03 10:11:34 (bmiller)>
 ;;;;
-;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, and
-;;;; Windows, but all or parts of this file should work with older GNU Emacs
-;;;; versions, on other OSes, or even on XEmacs with minor adjustments.
+;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
+;;;; and Windows, but all or parts of this file should work with older GNU
+;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
 ;;;; SLIME, marmalade via package.el (clojure-mode, CIDER, ac-cider),

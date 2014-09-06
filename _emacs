@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-03 10:11:34 (bmiller)>
+;;;; Time-stamp: <2014-09-04 21:13:46 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -985,12 +985,6 @@ Display the results in a hyperlinked *compilation* buffer."
       (kbd "<backtab>") 'auto-complete))
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
 
-(require 'ac-cider)
-(add-hook 'cider-mode-hook 'ac-flyspell-workaround)
-(add-hook 'cider-mode-hook 'ac-cider-setup)
-(add-hook 'cider-repl-mode-hook 'ac-cider-setup)
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'cider-mode))
 ;; scala-mode
 ;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs
 (require 'scala-mode-auto)

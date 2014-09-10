@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-04 21:13:46 (bm3719)>
+;;;; Time-stamp: <2014-09-10 10:28:04 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -823,6 +823,10 @@
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 
+;; paredit
+;; http://mumble.net/~campbell/emacs/paredit.el
+(require 'paredit)
+
 ;; SLIME
 ;; http://common-lisp.net/project/slime/
 (when (or *freebsd-system* *osx-system*) ; FreeBSD CVS version.
@@ -933,9 +937,11 @@
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+(add-hook 'clojure-mode-hook 'paredit-mode)
 ;; CIDER
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
+(add-hook 'cider-mode-hook 'paredit-mode)
 (defun cider-reset ()
   "Sends (refresh) to the remote CIDER REPL buffer.  Only works
 in M-x cider buffers connected to localhost."

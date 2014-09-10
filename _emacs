@@ -1,14 +1,14 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-10 10:28:04 (bmiller)>
+;;;; Time-stamp: <2014-09-10 11:10:30 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
-;;;; SLIME, marmalade via package.el (clojure-mode, CIDER, ac-cider),
+;;;; paredit, SLIME, marmalade via package.el (clojure-mode, CIDER, ac-cider),
 ;;;; rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
 ;;;; groovy-mode, auctex, web-mode, flymake-cursor, js2-mode, flymake-jshint,
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
@@ -17,9 +17,8 @@
 ;;;; lojban.el), malyon, redo+.el, htmlize.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
-;;;; Global, python-doc-html, pyflakes, Ruby, Rhino, Maxima, mutt, w3m, xpp
-;;;; (*nix only), Ghostscript/GSView (Windows only), Consolas font (Windows
-;;;; only).
+;;;; Global, python-doc-html, pyflakes, Maxima, mutt, w3m, xpp (*nix only),
+;;;; Ghostscript/GSView (Windows only), Consolas font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -942,6 +941,7 @@
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
 (add-hook 'cider-mode-hook 'paredit-mode)
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
 (defun cider-reset ()
   "Sends (refresh) to the remote CIDER REPL buffer.  Only works
 in M-x cider buffers connected to localhost."

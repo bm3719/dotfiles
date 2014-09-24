@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-10 19:40:40 (bm3719)>
+;;;; Time-stamp: <2014-09-24 11:06:14 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -653,6 +653,18 @@
       ispell-extra-args '("--sug-mode=ultra"))
 ;; Solves aspell startup problem on some Linuxes.
 (setq flyspell-issue-welcome-flag nil)
+;; Some OSX-specific cocoAspell config.
+(when *osx-system*
+  (setq ispell-program-name "aspell"
+        ispell-dictionary "english"
+        ispell-dictionary-alist
+        (let ((default '("[A-Za-z]" "[^A-Za-z]" "[']" nil
+                         ("-B" "-d" "english" "--dict-dir"
+                          "/Library/Application Support/cocoAspell/aspell6-en-6.0-0")
+                         nil iso-8859-1)))
+          `((nil ,@default)
+            ("english" ,@default))))
+  (add-to-list 'exec-path "/usr/local/bin"))
 
 ;; org-mode: Now included with >22.1.
 ;; Initiate org-mode when opening .org files.
@@ -1140,6 +1152,14 @@ Display the results in a hyperlinked *compilation* buffer."
 
 ;; groovy-mode
 ;; https://raw.githubusercontent.com/nealford/emacs/master/groovy-mode.el
+(when *osx-system*
+  (setenv "GROOVY_HOME" "/usr/local/opt/groovy/libexec")
+  (setenv "GRADLE_HOME" "/usr/local/Cellar/gradle/1.11/libexec")
+  (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home")
+  (setenv "PATH" (concat (getenv "PATH")
+                         ":" (getenv "JAVA_HOME") "/bin"
+                         ":" (getenv "GROOVY_HOME") "/bin"
+                         ":" (getenv "GRADLE_HOME") "/bin")))
 (autoload 'groovy-mode "groovy-mode" "Major mode for editing Groovy code." t)
 (add-to-list 'auto-mode-alist '("\.groovy$" . groovy-mode))
 (add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))

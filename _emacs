@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-29 09:28:22 (bmiller)>
+;;;; Time-stamp: <2014-09-29 09:54:41 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1308,6 +1308,8 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
 (setq w3m-use-tab t)
 (setq w3m-use-cookies t)
+;; Activate Conkeror-style link selection (toggle with f key).
+(add-hook 'w3m-mode-hook 'w3m-lnum-mode)
 ;; Add some extra search engine URIs.
 ;; TODO: Seems to not work anymore.  Test this on FreeBSD.
 (eval-after-load "w3m-search"

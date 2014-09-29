@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-24 11:06:14 (bmiller)>
+;;;; Time-stamp: <2014-09-29 09:28:22 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1309,14 +1309,31 @@ Display the results in a hyperlinked *compilation* buffer."
 (setq w3m-use-tab t)
 (setq w3m-use-cookies t)
 ;; Add some extra search engine URIs.
+;; TODO: Seems to not work anymore.  Test this on FreeBSD.
 (eval-after-load "w3m-search"
-  '(progn (add-to-list 'w3m-search-engine-alist
-                       '("hoogle" "http://haskell.org/hoogle/?q=%s" nil)
-                       '("ports" "http://freebsd.org/cgi/ports.cgi/?query=%s"
-                         nil))
-          (add-to-list 'w3m-uri-replace-alist
-                       '("\\`h:" w3m-search-uri-replace "hoogle")
-                       '("\\`p:" w3m-search-uri-replace "ports"))))
+                 '(progn (add-to-list 'w3m-search-engine-alist
+                          '("hoogle" "http://haskell.org/hoogle/?q=%s" nil)
+                          '("ports" "http://freebsd.org/cgi/ports.cgi/?query=%s"
+                            nil)
+                          '("wikipedia"
+                            "http://en.m.wikipedia.org/w/index.php?search="
+                            nil))
+                   (add-to-list 'w3m-uri-replace-alist
+                    '("\\`h:" w3m-search-uri-replace "hoogle")
+                    '("\\`p:" w3m-search-uri-replace "ports")
+                    '("\\`w:" w3m-search-uri-replace "wikipedia"))))
+;; Create this var so we can nconc it later.
+(setq w3m-command-arguments nil)
+;; A Wikipedia search function.
+(defun bcm-wikipedia-search (search-term)
+  "Search for SEARCH-TERM on Wikipedia."
+  (interactive
+   (let ((term (if mark-active
+                   (buffer-substring (region-beginning) (region-end))
+                   (word-at-point))))
+     (list (read-string (format "Wikipedia (%s):" term) nil nil term))))
+  (browse-url
+   (concat "http://en.m.wikipedia.org/w/index.php?search=" search-term)))
 
 ;; multi-term
 ;; http://www.emacswiki.org/emacs/download/multi-term.el

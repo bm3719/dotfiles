@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-09-29 09:54:41 (bmiller)>
+;;;; Time-stamp: <2014-10-13 15:00:16 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -783,6 +783,7 @@
      (turn-on-font-lock)))) "Mode for arff-files.")
 
 ;; Use file<pathname> instead of file<n> to uniquify buffer names.
+;; Note: Will be enabled by default in 24.4.
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 

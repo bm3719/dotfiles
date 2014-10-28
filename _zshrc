@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2014-10-27 16:16:47 (bmiller)>
+# Time-stamp: <2014-10-27 20:48:54 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -56,6 +56,7 @@ umask 027               # u=rw,g=r,o=
 # $PATH
 PATH=$HOME/bin:$HOME/.cabal/bin:/sbin:/usr/sbin:/bin:/usr/bin:$PATH
 PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec:$HOME/.local/bin
+PATH=$PATH:$HOME/node_modules/.bin
 PATH=$PATH:.
 # Append /usr/games to $PATH if it exists.
 if [ -d /usr/games ]
@@ -119,7 +120,7 @@ export JAVA_HOME=/usr/local/openjdk7
 export CLASSPATH=.:$HOME/lib/classes:$HOME/lib/archive/'*'
 export CLASSPATH=$CLASSPATH:/usr/local/share/java/classes/jline.jar
 export CLASSPATH=$CLASSPATH:$HOME/src/scala/scala-2.9.2/lib
-export ANT_HOME=/home/bm3719/.ant
+export ANT_HOME=/usr/local/share/java/apache-ant
 # Python-related stuff.
 if [ -d /usr/local/share/doc/python2.6 ]
 then

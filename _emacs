@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-10-23 10:49:29 (bmiller)>
+;;;; Time-stamp: <2014-12-01 13:14:43 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -318,6 +318,11 @@
 (setq scroll-margin 2)
 ;; Keeps the cursor in the same relative row during pgups and downs.
 (setq scroll-preserve-screen-position t)
+
+;; Mouse wheel scrolling
+;; Scroll in 1-line increments for the buffer under pointer.
+(setq mouse-wheel-follow-mouse t)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
 ;; Make cursor stay in the same column when scrolling using pgup/dn.
 ;; Previously pgup/dn clobbers column position, moving it to the beginning of

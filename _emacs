@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2014-12-01 13:14:43 (bmiller)>
+;;;; Time-stamp: <2015-04-09 10:18:29 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -35,7 +35,7 @@
 (defvar *nt-system* (string-match "nt" system-configuration))
 (defvar *osx-system* (string-match "darwin" system-configuration))
 
-;; Font face: Requires appropriate fonts to be installed.  
+;; Font face: Requires appropriate fonts to be installed.
 (if *nt-system*
   (set-default-font
    "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
@@ -62,6 +62,15 @@
 
 ;; Add the directory containing .el files in into the default load path.
 (setq load-path (cons "~/.emacs.d" load-path))
+;; Disable the warning added in 24.4 about this.  Probably should follow its
+;; advice later once I standardize on 24.4 though.
+(defadvice display-warning
+    (around no-warn-.emacs.d-in-load-path (type message &rest unused) activate)
+  "Ignore the warning about the `.emacs.d' directory being in `load-path'."
+  (unless (and (eq type 'initialization)
+               (string-prefix-p "Your `load-path' seems to contain\nyour `.emacs.d' directory"
+                                message t))
+    ad-do-it))
 
 ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
 ;; what's going on.
@@ -104,10 +113,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Basic Key Bindings
 
+;; Define a function to auto-delete trailing whitespace upon save.
+(defun bcm-delete-ws-save ()
+  (interactive)
+  (progn (delete-trailing-whitespace)
+         (save-buffer)))
+
 ;; General convenience remappings.
 (global-set-key "\C-w" 'backward-kill-word)
 (global-set-key "\C-xw" 'kill-region)
-(global-set-key "\C-xs" 'save-buffer)
+(global-set-key "\C-xs" 'bcm-delete-ws-save)
 (global-set-key "\C-m" 'newline-and-indent)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\M-G" 'goto-char)
@@ -130,6 +145,7 @@
 ;; intending to do a find-file.
 (global-set-key "\C-xf" 'find-file)
 (global-set-key "\C-x\M-f" 'set-fill-column)
+(global-set-key "\C-x\C-s" 'bcm-delete-ws-save)
 
 ;; For quick macro running
 (global-set-key [f9] 'start-kbd-macro)
@@ -176,7 +192,7 @@
 ;; Using a tab-stop-list will preserve 8-space tabs for documents that have
 ;; them, but make my own tabs 2 spaces.
 (setq tab-stop-list '(2 4 6 8 10 12 14 16 18))
-;(setq-default tab-width 2)
+;; (setq-default tab-width 2)
 
 ;; Always flash for parens.
 (show-paren-mode 1)
@@ -268,7 +284,7 @@
   (toggle-read-only 0))
 ;; Replace error message on read-only kill with an echo area message.
 (setq-default kill-read-only-ok t)
-;(global-set-key "\C-c\C-k" 'bcm-copy-line)
+;; (global-set-key "\C-c\C-k" 'bcm-copy-line)
 
 ;; For composing in Emacs then pasting into a word processor, this un-fills all
 ;; the paragraphs (i.e. turns each paragraph into one very long line) and
@@ -445,7 +461,7 @@
 (setq read-buffer-completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
 ;; In Emacs <23, use the following.
-;(setq completion-ignore-case t)
+;; (setq completion-ignore-case t)
 
 ;; Completion ignores filenames ending in any string in this list.
 (setq completion-ignored-extensions
@@ -757,7 +773,7 @@
       auto-mode-alist (cons '("\\CHANGELOG$" . text-mode) auto-mode-alist)
       auto-mode-alist (cons '("\\INSTALL$" . text-mode) auto-mode-alist)
       auto-mode-alist (cons '("\\README$" . text-mode) auto-mode-alist)
-      auto-mode-alist (cons '("\\TODO$" . text-mode) auto-mode-alist))      
+      auto-mode-alist (cons '("\\TODO$" . text-mode) auto-mode-alist))
 
 ;; Custom generic mode for arff files (Used with Weka).
 (require 'generic)
@@ -814,6 +830,11 @@
   (setq explicit-shell-file-name shell-file-name))
 (setq tramp-default-method "scp")
 
+;; icomplete.el
+;; Disable icomplete, since I prefer using lusty-explorer for this and don't
+;; want both enabled.
+(icomplete-mode 0)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons
 
@@ -843,6 +864,11 @@
 ;; paredit
 ;; http://mumble.net/~campbell/emacs/paredit.el
 (require 'paredit)
+(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook #'enable-paredit-mode)
 
 ;; SLIME
 ;; http://common-lisp.net/project/slime/
@@ -884,7 +910,7 @@
 ;; Spell-check comments.
 (add-hook 'slime-mode-hook 'flyspell-prog-mode)
 ;; Enable pretty-symbols for Greek letters.
-;(add-hook 'slime-mode-hook 'pretty-greek)
+;; (add-hook 'slime-mode-hook 'pretty-greek)
 
 ;; Translates from Emacs buffer to filename on remote machine.
 (setf slime-translate-to-lisp-filename-function
@@ -940,14 +966,21 @@
   ""
   (when (get-buffer "*SLIME Apropos*")
     (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
- 
+
 ;; clojure-mode and CIDER (via Marmalade).
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/"))
-(package-initialize)
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/"))
+(when (boundp 'package-pinned-packages)
+  (setq package-pinned-packages
+        '((clojure-mode . "melpa-stable")
+          (cider . "melpa-stable")
+          (ac-cider . "melpa-stable"))))
+(package-initialize t)
 (defvar my-packages '(clojure-mode
                       cider
                       ac-cider))
@@ -956,9 +989,14 @@
     (package-install p)))
 (add-hook 'clojure-mode-hook 'paredit-mode)
 ;; CIDER
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+;; Work-around for a bug with eldoc integration in 0.8.2.  Remove when next
+;; version comes out.
+(remove-hook 'cider-mode-hook #'eldoc-mode)
+(defun eldoc-print-current-symbol-info ()
+  nil)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
+(setq cider-repl-pop-to-buffer-on-connect t)
 (defun cider-reset ()
   "Sends (refresh) to the remote CIDER REPL buffer.  Only works
 in M-x cider buffers connected to localhost."
@@ -967,7 +1005,7 @@ in M-x cider buffers connected to localhost."
   (goto-char (point-max))
   (insert "(refresh)")
   (cider-repl-return))
-;(define-key cider-mode-map "\C-c\C-o" 'cider-reset)
+;; (define-key cider-mode-map "\C-c\C-o" 'cider-reset)
 ;; kibit
 ;; https://github.com/jonase/kibit
 (require 'compile)
@@ -1086,7 +1124,7 @@ Display the results in a hyperlinked *compilation* buffer."
             ;; Highlight trailing whitespace.
             (setq show-trailing-whitespace t)
             ;; Enable Greek letters and math symbols.
-            ;(pretty-greek)
+            ;; (pretty-greek)
             ;; flymake (GHC is a bit slow, so disable this on old machines).
             (set (make-local-variable 'multiline-flymake-mode) t)
             (flymake-mode 1)))
@@ -1100,7 +1138,7 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; Write literate Haskell in LaTeX style (default is Bird style).  This
 ;; requires code blocks to be between \begin{code} and \end{code}.
 ;; http://www.haskell.org/haskellwiki/Literate_programming
-;(setq haskell-literate-default 'latex)
+;; (setq haskell-literate-default 'latex)
 ;; Get rid of file dialogs in GUI mode.  This only shows up for me in GHCI
 ;; errors, so putting it here.
 (setq use-dialog-box nil)
@@ -1228,8 +1266,8 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; flymake-jshint
 ;; https://github.com/daleharvey/jshint-mode/blob/master/flymake-jshint.el
 (require 'flymake-jshint)
-;; Leaving flymake-jshint off by default due to bugs.
-;(add-hook 'js2-mode-hook (lambda () (flymake-jshint)))
+;; Leaving this off by default, due to bugs.
+;; (add-hook 'js2-mode-hook (lambda () (flymake-jshint)))
 
 ;; gnuplot-mode
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-04-09 10:18:29 (bmiller)>
+;;;; Time-stamp: <2015-04-14 14:11:57 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1494,6 +1494,13 @@ Display the results in a hyperlinked *compilation* buffer."
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-idle-scheduler-verbose-flag nil)
  '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing)))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 ;; Replace echo area startup message
 (run-with-timer 1 nil #'yow)

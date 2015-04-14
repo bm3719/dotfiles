@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-04-14 14:11:57 (bmiller)>
+;;;; Time-stamp: <2015-04-14 14:15:00 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1045,18 +1045,6 @@ Display the results in a hyperlinked *compilation* buffer."
   (define-key clojure-mode-map
       (kbd "<backtab>") 'auto-complete))
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
-
-;; scala-mode
-;; https://github.com/scala/scala-dist/tree/master/tool-support/src/emacs
-(require 'scala-mode-auto)
-;; ENSIME
-;; https://github.com/aemoncannon/ensime
-(require 'ensime)
-(add-hook 'scala-mode-hook
-          (lambda ()
-            (local-set-key "\C-c\C-t\C-b" 'scala-eval-buffer)
-            (local-set-key "\C-c\C-t\C-r" 'scala-eval-region)
-            'ensime-scala-mode-hook))
 
 ;; haskell-mode
 ;; https://github.com/haskell/haskell-mode/

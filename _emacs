@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-04-14 14:15:00 (bmiller)>
+;;;; Time-stamp: <2015-05-02 14:10:16 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -14,7 +14,7 @@
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
 ;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
 ;;;; wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes), lojban-mode (+
-;;;; lojban.el), malyon, redo+.el, htmlize.el.
+;;;; lojban.el), malyon, redo+.el, htmlize.el, google-maps.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
 ;;;; Global, python-doc-html, pyflakes, Maxima, mutt, w3m, xpp (*nix only),
@@ -1451,6 +1451,10 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el.cgi
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
+
+;; google-maps.el: Displays interactive Google Maps within Emacs.
+;; https://github.com/jd/google-maps.el
+(require 'google-maps)
 
 ;; Printing
 ;; Requires install of Ghostscript and GSView native ports on Windows.

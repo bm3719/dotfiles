@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-06-04 05:02:53 (bm3719)>
+;;;; Time-stamp: <2015-06-04 05:46:41 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1046,12 +1046,16 @@ Display the results in a hyperlinked *compilation* buffer."
       (kbd "<backtab>") 'auto-complete))
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
 
-;; haskell-mode
+;; haskell-mode: Using melpa version.
 ;; https://github.com/haskell/haskell-mode/
-(cond ((or *freebsd-system* *linux-system* *osx-system*) ; FreeBSD/Linux/OSX CVS versions.
-       (load "~/.emacs.d/haskell-mode/haskell-site-file.el"))
-      (*nt-system*                          ; NT manual install.
-       (load "C:\\bm3719\\.emacs.d\\haskell-mode\\haskell-site-file.el")))
+(when (boundp 'package-pinned-packages)
+  (setq package-pinned-packages
+        '((haskell-mode . "melpa-stable"))))
+(package-initialize t)
+(defvar my-packages '(haskell-mode))
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 ;; Append haskell extensions to auto-mode association list.
 (setq auto-mode-alist
   (append auto-mode-alist
@@ -1062,41 +1066,6 @@ Display the results in a hyperlinked *compilation* buffer."
    "Major mode for editing Haskell scripts." t)
 (autoload 'literate-haskell-mode "haskell-mode"
    "Major mode for editing literate Haskell scripts." t)
-;; Haskell flymake
-(defun flymake-get-haskell-cmdline (source base-dir)
-  "Handles command line GHC call."
-  (list "ghc"
-        (list "--make" "-fbyte-code"
-              ;; Expand for additional -i options as in the Perl script.
-              (concat "-i" base-dir)
-              source)))
-(defun flymake-haskell-init ()
-  "Initialize flymake-haskell."
-  (flymake-simple-make-init-impl
-   'flymake-create-temp-with-folder-structure nil nil
-   (file-name-nondirectory buffer-file-name)
-   'flymake-get-haskell-cmdline))
-(defvar multiline-flymake-mode nil)
-(defvar flymake-split-output-multiline nil)
-;; This needs to be advised as flymake-split-string is used in other places and
-;; I don't know of a better way to get at the caller's details.
-(defadvice flymake-split-output
-    (around flymake-split-output-multiline activate protect)
-  (if multiline-flymake-mode
-      (let ((flymake-split-output-multiline t))
-        ad-do-it)
-      ad-do-it))
-(defadvice flymake-split-string
-    (before flymake-split-string-multiline activate)
-  (when flymake-split-output-multiline
-    (ad-set-arg 1 "^\\s *$")))
-(eval-after-load "flymake"
-  '(progn
-    (add-to-list 'flymake-allowed-file-name-masks
-     '("\\.l?hs$" flymake-haskell-init flymake-simple-java-cleanup))
-    (add-to-list 'flymake-err-line-patterns
-     '("^\\(.+\\.l?hs\\):\\([0-9]+\\):\\([0-9]+\\):\\(\\(?:.\\|\\W\\)+\\)"
-       1 2 3 4))))
 ;; haskell-mode-hook customizations.
 (add-hook 'haskell-mode-hook
           '(lambda ()

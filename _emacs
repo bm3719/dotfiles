@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-05-02 14:10:16 (bm3719)>
+;;;; Time-stamp: <2015-06-04 05:02:53 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -14,7 +14,7 @@
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
 ;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
 ;;;; wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes), lojban-mode (+
-;;;; lojban.el), malyon, redo+.el, htmlize.el, google-maps.el.
+;;;; lojban.el), malyon, redo+.el, htmlize.el, google-maps.el, powerline.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
 ;;;; Global, python-doc-html, pyflakes, Maxima, mutt, w3m, xpp (*nix only),
@@ -971,8 +971,8 @@
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-stable" . "http://stable.melpa.org/packages/"))
 (when (boundp 'package-pinned-packages)
@@ -1455,6 +1455,12 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; google-maps.el: Displays interactive Google Maps within Emacs.
 ;; https://github.com/jd/google-maps.el
 (require 'google-maps)
+
+;; powerline.el: Mode line replacement.  Using a fork that fixes some display
+;; issues.  https://github.com/milkypostman/powerline.git
+(when window-system
+  (require 'powerline)
+  (powerline-default-theme))
 
 ;; Printing
 ;; Requires install of Ghostscript and GSView native ports on Windows.

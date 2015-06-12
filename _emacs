@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-06-12 02:21:43 (bm3719)>
+;;;; Time-stamp: <2015-06-12 02:32:27 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1070,6 +1070,9 @@ Display the results in a hyperlinked *compilation* buffer."
    "Major mode for editing Haskell scripts." t)
 (autoload 'literate-haskell-mode "haskell-mode"
    "Major mode for editing literate Haskell scripts." t)
+;; cabal-repl: REPL integration that ensures projects stay sandboxed instead of
+;; polluting the global database.
+(custom-set-variables '(haskell-process-type 'cabal-repl))
 ;; haskell-mode-hook customizations.
 (add-hook 'haskell-mode-hook
           '(lambda ()

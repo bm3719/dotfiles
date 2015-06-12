@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-06-12 02:56:37 (bm3719)>
+;;;; Time-stamp: <2015-06-12 03:11:33 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1070,11 +1070,24 @@ Display the results in a hyperlinked *compilation* buffer."
    "Major mode for editing Haskell scripts." t)
 (autoload 'literate-haskell-mode "haskell-mode"
    "Major mode for editing literate Haskell scripts." t)
-;; Setup a keybinding to connect a cabal REPL.
+;; Some mode keybindings that don't interfere with ghc-mode and HaRe.
 (eval-after-load
  'haskell-mode
- '(progn (define-key haskell-mode-map (kbd "C-c C-l")
-          'haskell-process-load-or-reload)))
+ '(progn
+   (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+   (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+   (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
+   (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
+   (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
+   (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)
+   (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)))
+(eval-after-load
+ 'haskell-cabal
+ '(progn
+   (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+   (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+   (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+   (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
 ;; haskell-mode-hook customizations.
 (add-hook 'haskell-mode-hook
           '(lambda ()
@@ -1469,7 +1482,11 @@ Display the results in a hyperlinked *compilation* buffer."
  '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing))
  ;; cabal-repl: REPL integration that ensures projects stay sandboxed instead of
  ;; polluting the global database.
- '(haskell-process-type 'cabal-repl))
+ '(haskell-process-type 'cabal-repl)
+ ;; More haskell-mode settings.
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

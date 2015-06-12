@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-06-12 02:09:10 (bm3719)>
+;;;; Time-stamp: <2015-06-12 02:21:43 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1083,7 +1083,9 @@ Display the results in a hyperlinked *compilation* buffer."
             ;; Enable Greek letters and math symbols.
             ;; (pretty-greek)
             ;; flymake (GHC is a bit slow, so disable this on old machines).
-            (set (make-local-variable 'multiline-flymake-mode) t)))
+            ;; (set (make-local-variable 'multiline-flymake-mode) t)
+            ;; (flymake-mode 1)
+            ))
 ;; literate-haskell-mode hook customization.
 (add-hook 'literate-haskell-mode
           '(lambda ()

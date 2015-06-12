@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-06-04 05:46:41 (bm3719)>
+;;;; Time-stamp: <2015-06-12 01:56:07 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -9,7 +9,7 @@
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
 ;;;; paredit, SLIME, marmalade via package.el (clojure-mode, CIDER, ac-cider),
-;;;; rainbow-delimiters, haskell-mode, python-mode, helm, ruby-mode,
+;;;; rainbow-delimiters, haskell-mode, hi2, python-mode, helm, ruby-mode,
 ;;;; groovy-mode, auctex, web-mode, flymake-cursor, js2-mode, flymake-jshint,
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
 ;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
@@ -1056,6 +1056,10 @@ Display the results in a hyperlinked *compilation* buffer."
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+;; hi2: haskell-indentation, 2nd try.
+;; https://github.com/nilcons/hi2
+(require 'hi2)
+(add-hook 'haskell-mode-hook 'turn-on-hi2)
 ;; Append haskell extensions to auto-mode association list.
 (setq auto-mode-alist
   (append auto-mode-alist
@@ -1072,10 +1076,6 @@ Display the results in a hyperlinked *compilation* buffer."
             (turn-on-haskell-decl-scan)
             (turn-on-haskell-doc-mode)
             (turn-on-font-lock)
-            ;; Mutually exclusive indenting modes - choose one.
-            (turn-on-haskell-indentation)
-            ;; (turn-on-haskell-indent)
-            ;; (turn-on-haskell-simple-indent)
             ;; Spell-check comments.
             (flyspell-prog-mode)
             ;; Highlight trailing whitespace.

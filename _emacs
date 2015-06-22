@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-06-12 03:11:33 (bm3719)>
+;;;; Time-stamp: <2015-06-21 21:07:36 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -331,7 +331,7 @@
 (setq hscroll-margin 1)
 ;; Start scrolling when 2 lines from top/bottom.  Set to 0 on systems where I
 ;; use ansi-term or multi-term a lot.
-(setq scroll-margin 2)
+(setq scroll-margin 0)
 ;; Keeps the cursor in the same relative row during pgups and downs.
 (setq scroll-preserve-screen-position t)
 
@@ -497,6 +497,9 @@
       time-stamp-line-limit 10     ; Check first 10 buffer lines for stamp.
       time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ; Date format.
 (add-hook 'write-file-hooks 'time-stamp) ; Update when saving.
+
+;; Follow the compilation buffer scroll instead of remaining at the top line.
+(setq compilation-scroll-output t)
 
 ;; I always compile my .emacs, saving about two seconds startup time.  But that
 ;; only helps if the .emacs.elc is newer than the .emacs.  So, compile .emacs
@@ -1080,14 +1083,16 @@ Display the results in a hyperlinked *compilation* buffer."
    (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
    (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
    (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)
-   (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)))
+   (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
+   (define-key haskell-mode-map (kbd "C-c C-o") 'haskell-compile)))
 (eval-after-load
  'haskell-cabal
  '(progn
    (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
    (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
    (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-   (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
+   (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
+   (define-key haskell-cabal-mode-map (kbd "C-c C-o") 'haskell-compile)))
 ;; haskell-mode-hook customizations.
 (add-hook 'haskell-mode-hook
           '(lambda ()
@@ -1098,6 +1103,8 @@ Display the results in a hyperlinked *compilation* buffer."
             (flyspell-prog-mode)
             ;; Highlight trailing whitespace.
             (setq show-trailing-whitespace t)
+            ;; Enables auto-transposing ASCII->Unicode characters.
+            (turn-on-haskell-unicode-input-method)
             ;; Enable Greek letters and math symbols.
             ;; (pretty-greek)
             ;; flymake (GHC is a bit slow, so disable this on old machines).

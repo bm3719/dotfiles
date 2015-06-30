@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-06-21 21:07:36 (bm3719)>
+;;;; Time-stamp: <2015-06-30 15:17:45 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1048,6 +1048,16 @@ Display the results in a hyperlinked *compilation* buffer."
   (define-key clojure-mode-map
       (kbd "<backtab>") 'auto-complete))
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
+;; Since I mainly use a frame with 2 windows in it, make the CIDER REPL buffer
+;; always appear on the other window.  This isn't perfect though, since it only
+;; works when there's two windows and only when connecting from user/dev.clj.
+(add-to-list 'display-buffer-alist
+             `(,(rx bos "*cider-repl dev*" eos)
+                (display-buffer-use-some-window
+                 display-buffer-in-side-window)
+                (reusable-frames . visible)
+                (side . right)
+                (window-width . 0.5)))
 
 ;; haskell-mode: Using melpa version.
 ;; https://github.com/haskell/haskell-mode/

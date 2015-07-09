@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-06-30 15:17:45 (bmiller)>
+;;;; Time-stamp: <2015-07-09 13:45:10 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -991,6 +991,7 @@
   (when (not (package-installed-p p))
     (package-install p)))
 (add-hook 'clojure-mode-hook 'paredit-mode)
+(define-key clojure-mode-map (kbd "C-w") 'paredit-backward-kill-word)
 ;; CIDER
 ;; Work-around for a bug with eldoc integration in 0.8.2.  Remove when next
 ;; version comes out.
@@ -999,6 +1000,7 @@
   nil)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
+(define-key cider-repl-mode-map (kbd "C-w") 'paredit-backward-kill-word)
 (setq cider-repl-pop-to-buffer-on-connect t)
 (defun cider-reset ()
   "Sends (refresh) to the remote CIDER REPL buffer.  Only works

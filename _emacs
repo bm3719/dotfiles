@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-09 13:45:10 (bmiller)>
+;;;; Time-stamp: <2015-07-09 23:51:12 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -991,7 +991,6 @@
   (when (not (package-installed-p p))
     (package-install p)))
 (add-hook 'clojure-mode-hook 'paredit-mode)
-(define-key clojure-mode-map (kbd "C-w") 'paredit-backward-kill-word)
 ;; CIDER
 ;; Work-around for a bug with eldoc integration in 0.8.2.  Remove when next
 ;; version comes out.
@@ -1000,7 +999,6 @@
   nil)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
-(define-key cider-repl-mode-map (kbd "C-w") 'paredit-backward-kill-word)
 (setq cider-repl-pop-to-buffer-on-connect t)
 (defun cider-reset ()
   "Sends (refresh) to the remote CIDER REPL buffer.  Only works
@@ -1010,7 +1008,6 @@ in M-x cider buffers connected to localhost."
   (goto-char (point-max))
   (insert "(refresh)")
   (cider-repl-return))
-;; (define-key cider-mode-map "\C-c\C-o" 'cider-reset)
 ;; kibit
 ;; https://github.com/jonase/kibit
 (require 'compile)
@@ -1047,9 +1044,14 @@ Display the results in a hyperlinked *compilation* buffer."
 (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (defun bcm-clojure-hook ()
   (auto-complete-mode 1)
-  (define-key clojure-mode-map
-      (kbd "<backtab>") 'auto-complete))
+  (define-key clojure-mode-map (kbd "<backtab>") 'auto-complete)
+  ;; (define-key cider-mode-map "\C-c\C-o" 'cider-reset)
+  (define-key clojure-mode-map (kbd "C-w") 'paredit-backward-kill-word))
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
+(add-hook 'cider-repl-mode-hook
+          '(lambda ()
+            (define-key cider-repl-mode-map
+             (kbd "C-w") 'paredit-backward-kill-word)))
 ;; Since I mainly use a frame with 2 windows in it, make the CIDER REPL buffer
 ;; always appear on the other window.  This isn't perfect though, since it only
 ;; works when there's two windows and only when connecting from user/dev.clj.

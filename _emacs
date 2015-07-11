@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-09 23:51:12 (bm3719)>
+;;;; Time-stamp: <2015-07-11 12:49:05 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1437,6 +1437,9 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; Note: On FreeBSD, this currently requires using the ports version due to
 ;; Makefile parsing errors.
 (require 'magit)
+;; Official fill-column setting for commit messages.
+(add-hook 'git-commit-mode-hook
+          '(lambda () (set-fill-column 72)))
 
 ;; lojban-mode: Requires lojban.el.
 ;; http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el

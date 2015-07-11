@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-11 12:49:05 (bm3719)>
+;;;; Time-stamp: <2015-07-11 12:51:35 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1417,7 +1417,6 @@ Display the results in a hyperlinked *compilation* buffer."
 (global-set-key (kbd "<kp-add>") 'emms-next)
 (global-set-key (kbd "<insert>") 'emms-pause)
 (global-set-key (kbd "<kp-insert>") 'emms-pause)
-(global-set-key (kbd "<f3>") 'emms)
 (global-set-key (kbd "<kp-right>") 'emms-seek-forward)
 (global-set-key (kbd "<kp-left>") 'emms-seek-backward)
 
@@ -1440,6 +1439,7 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; Official fill-column setting for commit messages.
 (add-hook 'git-commit-mode-hook
           '(lambda () (set-fill-column 72)))
+(global-set-key (kbd "<f3>") 'magit-status)
 
 ;; lojban-mode: Requires lojban.el.
 ;; http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el

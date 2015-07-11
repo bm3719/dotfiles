@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-11 12:51:35 (bm3719)>
+;;;; Time-stamp: <2015-07-11 17:44:47 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -13,8 +13,9 @@
 ;;;; groovy-mode, auctex, web-mode, flymake-cursor, js2-mode, flymake-jshint,
 ;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
 ;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
-;;;; wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes), lojban-mode (+
-;;;; lojban.el), malyon, redo+.el, htmlize.el, google-maps.el, powerline.
+;;;; wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes), git-gutter,
+;;;; lojban-mode (+ lojban.el), malyon, redo+.el, htmlize.el, google-maps.el,
+;;;; powerline.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
 ;;;; Global, python-doc-html, pyflakes, Maxima, mutt, w3m, xpp (*nix only),
@@ -1441,6 +1442,13 @@ Display the results in a hyperlinked *compilation* buffer."
           '(lambda () (set-fill-column 72)))
 (global-set-key (kbd "<f3>") 'magit-status)
 
+;; git-gutter
+;; https://github.com/syohex/emacs-git-gutter
+(require 'git-gutter)
+(global-git-gutter-mode +1)
+(global-set-key (kbd "C-x C-g") 'git-gutter:toggle)
+(global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
+
 ;; lojban-mode: Requires lojban.el.
 ;; http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el
 ;; http://www.emacswiki.org/emacs/download/lojban.el
@@ -1510,7 +1518,9 @@ Display the results in a hyperlinked *compilation* buffer."
  ;; More haskell-mode settings.
  '(haskell-process-suggest-remove-import-lines t)
  '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t))
+ '(haskell-process-log t)
+ ;; Live updating for git-gutter.
+ '(git-gutter:update-interval 2))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

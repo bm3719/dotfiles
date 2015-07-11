@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-11 17:44:47 (bm3719)>
+;;;; Time-stamp: <2015-07-11 18:43:06 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1434,8 +1434,7 @@ Display the results in a hyperlinked *compilation* buffer."
 
 ;; Magit
 ;; https://github.com/magit/magit
-;; Note: On FreeBSD, this currently requires using the ports version due to
-;; Makefile parsing errors.
+;; Note: Using an older version (95ff8d7) until I update all machines to 24.4.
 (require 'magit)
 ;; Official fill-column setting for commit messages.
 (add-hook 'git-commit-mode-hook

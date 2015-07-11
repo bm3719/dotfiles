@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2014-10-27 20:48:54 (bm3719)>
+# Time-stamp: <2015-07-11 17:12:41 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -76,7 +76,7 @@ zmodload -a zsh/zprof zprof
 zmodload -ap zsh/mapfile mapfile
 
 # Useful in Emacs shell/TRAMP.
-[ $TERM = "dumb" ] && unsetopt zle 
+[ $TERM = "dumb" ] && unsetopt zle
 
 # Prompt
 autoload colors zsh/terminfo
@@ -108,6 +108,7 @@ else
 fi
 export EDITOR='emacsclient -n'
 export SVN_EDITOR='vim'
+export GIT_EDITOR='vim'
 export GREP_COLOR='01;32'              # Set grep color to green (default red).
 export DARCS_EMAIL=mutt                # Mail client used with 'darcs send'.
 # Set Lynx start page to bookmarks file.
@@ -301,9 +302,9 @@ function svn_get_rev_nr {
 function svn_dirty_choose {
     if [ $(in_svn) ]; then
         s=$(svn status|grep -E '^\s*[ACDIM!?L]' 2>/dev/null)
-        if [ $s ]; then 
+        if [ $s ]; then
             echo $1
-        else 
+        else
             echo $2
         fi
     fi
@@ -385,7 +386,7 @@ git_prompt_status() {
 }
 # Compare the provided version of git to the version installed and on path.
 # Prints 1 if input version <= installed version
-# Prints -1 otherwise 
+# Prints -1 otherwise
 function git_compare_version() {
   local INPUT_GIT_VERSION=$1;
   local INSTALLED_GIT_VERSION
@@ -423,4 +424,3 @@ ZSH_THEME_SVN_PROMPT_PREFIX="%{$fg[yellow]%}("
 ZSH_THEME_SVN_PROMPT_SUFFIX="%{$fg[yellow]%})%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_DIRTY="%{$fg[red]%}⚡%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_CLEAN="%{$fg[green]%}○%{$reset_color%}"
-

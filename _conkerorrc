@@ -1,4 +1,4 @@
-// -*- mode: espresso; -*-
+// -*- mode: js2; -*-
 /*global theme_load_paths, theme_load, homepage:true,
    editor_shell_command:true, session_pref, define_key, default_global_keymap,
    define_webjump, require, download_buffer_automatic_open_target:true,

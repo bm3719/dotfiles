@@ -1,23 +1,22 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-11 18:43:06 (bm3719)>
+;;;; Time-stamp: <2015-07-12 14:38:36 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
-;;;; paredit, SLIME, marmalade via package.el (clojure-mode, CIDER, ac-cider),
-;;;; rainbow-delimiters, haskell-mode, hi2, python-mode, helm, ruby-mode,
-;;;; groovy-mode, auctex, web-mode, flymake-cursor, js2-mode, flymake-jshint,
-;;;; markdown-mode, cedet, gtags, elscreen, elscreen-w3m (+ flim, apel),
-;;;; emacs-w3m (development branch), multi-term, lusty-explorer, emms,
-;;;; wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes), git-gutter,
-;;;; lojban-mode (+ lojban.el), malyon, redo+.el, htmlize.el, google-maps.el,
-;;;; powerline.
+;;;; paredit, SLIME, package.el (clojure-mode, CIDER, ac-cider, haskell-mode),
+;;;; rainbow-delimiters, hi2, python-mode, helm, ruby-mode, auctex, web-mode,
+;;;; flymake-cursor, js2-mode, flymake-jshint, markdown-mode, cedet, gtags,
+;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
+;;;; emms, wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes),
+;;;; git-gutter, lojban-mode (+ lojban.el), malyon, redo+.el, htmlize.el,
+;;;; google-maps.el, powerline.
 ;;;;
-;;;; External applications used: Gauche, aspell, SBCL, Clojure, GHC, GNU
+;;;; External applications used: Gauche, aspell, SBCL, Leiningen, GHC, GNU
 ;;;; Global, python-doc-html, pyflakes, Maxima, mutt, w3m, xpp (*nix only),
 ;;;; Ghostscript/GSView (Windows only), Consolas font (Windows only).
 
@@ -913,6 +912,8 @@
 (slime-asdf-init)            ; Hooks slime-asdf-on-connect.
 ;; Spell-check comments.
 (add-hook 'slime-mode-hook 'flyspell-prog-mode)
+(add-hook 'slime-mode-hook 'paredit-mode)
+(add-hook 'slime-repl-mode-hook 'paredit-mode)
 ;; Enable pretty-symbols for Greek letters.
 ;; (add-hook 'slime-mode-hook 'pretty-greek)
 
@@ -1192,27 +1193,6 @@ Display the results in a hyperlinked *compilation* buffer."
            (inf-ruby-keys)
            (flyspell-prog-mode)))
 
-;; groovy-mode
-;; https://raw.githubusercontent.com/nealford/emacs/master/groovy-mode.el
-(when *osx-system*
-  (setenv "GROOVY_HOME" "/usr/local/opt/groovy/libexec")
-  (setenv "GRADLE_HOME" "/usr/local/Cellar/gradle/1.11/libexec")
-  (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home")
-  (setenv "PATH" (concat (getenv "PATH")
-                         ":" (getenv "JAVA_HOME") "/bin"
-                         ":" (getenv "GROOVY_HOME") "/bin"
-                         ":" (getenv "GRADLE_HOME") "/bin")))
-(autoload 'groovy-mode "groovy-mode" "Major mode for editing Groovy code." t)
-(add-to-list 'auto-mode-alist '("\.groovy$" . groovy-mode))
-(add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))
-(add-to-list 'interpreter-mode-alist '("groovy" . groovy-mode))
-(autoload 'groovy-mode "groovy-mode" "Groovy mode." t)
-(defconst groovy-block-mid-re "Need something here or it blows up.")
-;; Add auto-indenting on newline.
-(add-hook 'groovy-mode-hook
-          (lambda ()
-            (local-set-key "\C-m" 'reindent-then-newline-and-indent)))
-
 ;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
 ;; FreeBSD ports, Linux apt-get version.
@@ -1279,7 +1259,8 @@ Display the results in a hyperlinked *compilation* buffer."
 (add-to-list 'auto-mode-alist '("\\.gp$" . gnuplot-mode))
 
 ;; markdown-mode
-;; git://jblevins.org/git/markdown-mode.git
+;; https://github.com/jrblevin/markdown-mode
+;; Note: Install textproc/markdown to integrate compilation commands.
 (autoload 'markdown-mode "markdown-mode"
           "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
@@ -1329,7 +1310,7 @@ Display the results in a hyperlinked *compilation* buffer."
   (setq c-mode-hook '(lambda () (gtags-mode 1))))
 
 ;; elscreen
-;; https://raw.githubusercontent.com/shosti/elscreen/master/elscreen.el
+;; https://github.com/knu/elscreen
 (require 'elscreen)
 (elscreen-start)
 ;; F7 creates a new elscreen, F8 kills it.
@@ -1422,7 +1403,7 @@ Display the results in a hyperlinked *compilation* buffer."
 (global-set-key (kbd "<kp-left>") 'emms-seek-backward)
 
 ;; Darcsum: A pcl-cvs like interface for managing darcs patches.
-;; http://chneukirchen.org/repos/darcsum/
+;; http://hub.darcs.net/simon/darcsum
 (require 'darcsum)
 ;(autoload 'darcs-mode "~/.emacs.d/darcsum/darcsum.el"
 ;  "Minor mode for dealing with a darcs repository." t)

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-12 14:38:36 (bm3719)>
+;;;; Time-stamp: <2015-07-13 10:58:03 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1017,15 +1017,15 @@ in M-x cider buffers connected to localhost."
              '(kibit "At \\([^:]+\\):\\([[:digit:]]+\\):" 1 2 nil 0))
 (add-to-list 'compilation-error-regexp-alist 'kibit)
 (defun kibit ()
-  "Run kibit on the current project.
-Display the results in a hyperlinked *compilation* buffer."
+  "Run kibit on the current project.  Display the results in a
+hyperlinked *compilation* buffer."
   (interactive)
   (compile "lein kibit")
   ;; This will clobber the custom function set above.
   (setq compilation-finish-function '()))
 (defun kibit-current-file ()
-  "Run kibit on the current file.
-Display the results in a hyperlinked *compilation* buffer."
+  "Run kibit on the current file.  Display the results in a
+hyperlinked *compilation* buffer."
   (interactive)
   (compile (concat "lein kibit " buffer-file-name)))
 ;; rainbow-delimiters.el

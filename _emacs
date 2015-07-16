@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-13 10:58:03 (bmiller)>
+;;;; Time-stamp: <2015-07-16 12:32:29 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -14,7 +14,7 @@
 ;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
 ;;;; emms, wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes),
 ;;;; git-gutter, lojban-mode (+ lojban.el), malyon, redo+.el, htmlize.el,
-;;;; google-maps.el, powerline.
+;;;; google-maps.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: Gauche, aspell, SBCL, Leiningen, GHC, GNU
 ;;;; Global, python-doc-html, pyflakes, Maxima, mutt, w3m, xpp (*nix only),
@@ -1477,6 +1477,21 @@ hyperlinked *compilation* buffer."
 ;; Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.
 (when *freebsd-system*
   (setq lpr-command "xpp"))
+
+;; diminish.el: mode-line shortening
+;; https://www.eskimo.com/~seldon/diminish.el
+(when (require 'diminish nil 'noerror)
+  (eval-after-load "git-gutter"
+                   '(diminish 'git-gutter-mode "Git↓"))
+  (eval-after-load "Paredit"
+                   '(diminish 'paredit-mode "(ᴩ)")))
+;; Non-diminish major mode mode-line shortening.
+(add-hook 'haskell-mode-hook
+          (lambda () (setq mode-name "λ≫")))
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (setq mode-name "e-λ")))
+(add-hook 'clojure-mode-hook
+          (lambda () (setq mode-name "cλj")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Final init

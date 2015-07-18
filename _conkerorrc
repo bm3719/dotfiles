@@ -166,8 +166,6 @@ define_webjump("ports", "http://www.freebsd.org/cgi/ports.cgi?query=%s&stype=all
 define_webjump("freshports", "http://www.freshports.org/search.php?query=%s&search=go&num=10&stype=name&method=match&deleted=excludedeleted&start=1&casesensitivity=caseinsensitive");
 define_webjump("fp", "http://www.freshports.org/search.php?query=%s&search=go&num=10&stype=name&method=match&deleted=excludedeleted&start=1&casesensitivity=caseinsensitive");
 define_webjump("d", "http://dictionary.reference.com/search?q=%s");
-define_webjump("blekko", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
-define_webjump("b", "http://blekko.com/ws/%s", $alternative = "http://blekko.com/");
 define_webjump("w", "http://en.wikipedia.org/wiki/%s");
 require("page-modes/wikipedia.js");
 

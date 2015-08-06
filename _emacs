@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-07-16 12:32:29 (bmiller)>
+;;;; Time-stamp: <2015-08-06 15:41:01 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1120,7 +1120,7 @@ hyperlinked *compilation* buffer."
             ;; Highlight trailing whitespace.
             (setq show-trailing-whitespace t)
             ;; Enables auto-transposing ASCII->Unicode characters.
-            (turn-on-haskell-unicode-input-method)
+            ;; (turn-on-haskell-unicode-input-method)
             ;; Enable Greek letters and math symbols.
             ;; (pretty-greek)
             ;; flymake (GHC is a bit slow, so disable this on old machines).
@@ -1141,6 +1141,8 @@ hyperlinked *compilation* buffer."
 ;; Get rid of file dialogs in GUI mode.  This only shows up for me in GHCI
 ;; errors, so putting it here.
 (setq use-dialog-box nil)
+;; Use standard ASCII for data in files, but display Unicode equivalents.
+(setq haskell-font-lock-symbols t)
 
 ;; python-mode: Replaces the built-in python.el, though I'm no longer using its
 ;; integrated iPython support.

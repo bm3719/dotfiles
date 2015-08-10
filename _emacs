@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-08-10 16:02:34 (bmiller)>
+;;;; Time-stamp: <2015-08-10 16:07:03 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1076,10 +1076,6 @@ hyperlinked *compilation* buffer."
 (setq nrepl-log-messages 1)
 
 ;; haskell-mode: From MELPA
-;; hi2: haskell-indentation, 2nd try.
-;; https://github.com/nilcons/hi2
-(require 'hi2)
-(add-hook 'haskell-mode-hook 'turn-on-hi2)
 ;; Append haskell extensions to auto-mode association list.
 (setq auto-mode-alist
   (append auto-mode-alist
@@ -1116,17 +1112,17 @@ hyperlinked *compilation* buffer."
             (turn-on-haskell-decl-scan)
             (turn-on-haskell-doc-mode)
             (turn-on-font-lock)
-            ;; Spell-check comments.
             (flyspell-prog-mode)
-            ;; Highlight trailing whitespace.
             (setq show-trailing-whitespace t)))
 ;; literate-haskell-mode hook customization.
 (add-hook 'literate-haskell-mode
           '(lambda ()
             (flyspell-mode 1)
-            (pretty-greek)
-            (haskell-unicode)
-            (flymake-mode 1)))
+            (haskell-unicode)))
+;; hi2: haskell-indentation, 2nd try.
+;; https://github.com/nilcons/hi2
+(require 'hi2)
+(add-hook 'haskell-mode-hook 'turn-on-hi2)
 ;; Write literate Haskell in LaTeX style (default is Bird style).  This
 ;; requires code blocks to be between \begin{code} and \end{code}.
 ;; http://www.haskell.org/haskellwiki/Literate_programming

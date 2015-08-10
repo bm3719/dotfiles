@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-08-06 15:41:01 (bmiller)>
+;;;; Time-stamp: <2015-08-10 16:02:34 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -846,7 +846,34 @@
         (let* ((my-lisp-dir "~/.emacs.d/")
               (default-directory my-lisp-dir))
            (add-to-list 'load-path my-lisp-dir)
-           (normal-top-level-add-subdirs-to-load-path)))
+          (normal-top-level-add-subdirs-to-load-path)))
+
+;; package.el (ELPA)
+(require 'package)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/"))
+(when (boundp 'package-pinned-packages)
+  (setq package-pinned-packages
+        '((clojure-mode . "melpa-stable")
+          (cider . "melpa-stable")
+          (ac-cider . "melpa-stable")
+          (haskell-mode . "melpa-stable"))))
+(package-initialize t)
+(defvar my-packages '(clojure-mode
+                      cider
+                      ac-cider
+                      haskell-mode
+                      elscreen
+                      auctex
+                      apel))
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+
 
 ;; pabbrev: Add this to the mode-hook for any major modes I want this
 ;; lightweight completion auto-activated.
@@ -973,25 +1000,6 @@
     (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
 
 ;; clojure-mode and CIDER (via Marmalade).
-(require 'package)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; (add-to-list 'package-archives
-;;              '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://stable.melpa.org/packages/"))
-(when (boundp 'package-pinned-packages)
-  (setq package-pinned-packages
-        '((clojure-mode . "melpa-stable")
-          (cider . "melpa-stable")
-          (ac-cider . "melpa-stable"))))
-(package-initialize t)
-(defvar my-packages '(clojure-mode
-                      cider
-                      ac-cider))
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
 (add-hook 'clojure-mode-hook 'paredit-mode)
 ;; CIDER
 ;; Work-around for a bug with eldoc integration in 0.8.2.  Remove when next
@@ -1064,17 +1072,10 @@ hyperlinked *compilation* buffer."
                 (reusable-frames . visible)
                 (side . right)
                 (window-width . 0.5)))
+;; Fix missing *nrepl-messages* buffer.
+(setq nrepl-log-messages 1)
 
-;; haskell-mode: Using melpa version.
-;; https://github.com/haskell/haskell-mode/
-(when (boundp 'package-pinned-packages)
-  (setq package-pinned-packages
-        '((haskell-mode . "melpa-stable"))))
-(package-initialize t)
-(defvar my-packages '(haskell-mode))
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+;; haskell-mode: From MELPA
 ;; hi2: haskell-indentation, 2nd try.
 ;; https://github.com/nilcons/hi2
 (require 'hi2)
@@ -1118,15 +1119,7 @@ hyperlinked *compilation* buffer."
             ;; Spell-check comments.
             (flyspell-prog-mode)
             ;; Highlight trailing whitespace.
-            (setq show-trailing-whitespace t)
-            ;; Enables auto-transposing ASCII->Unicode characters.
-            ;; (turn-on-haskell-unicode-input-method)
-            ;; Enable Greek letters and math symbols.
-            ;; (pretty-greek)
-            ;; flymake (GHC is a bit slow, so disable this on old machines).
-            ;; (set (make-local-variable 'multiline-flymake-mode) t)
-            ;; (flymake-mode 1)
-            ))
+            (setq show-trailing-whitespace t)))
 ;; literate-haskell-mode hook customization.
 (add-hook 'literate-haskell-mode
           '(lambda ()

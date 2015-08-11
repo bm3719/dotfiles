@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-08-10 20:43:34 (bm3719)>
+;;;; Time-stamp: <2015-08-11 01:21:04 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1094,7 +1094,9 @@ hyperlinked *compilation* buffer."
    (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
    (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)
    (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
-   (define-key haskell-mode-map (kbd "C-c C-o") 'haskell-compile)))
+   (define-key haskell-mode-map (kbd "C-c C-o") 'haskell-compile)
+   ;; An alternative to the below is to use hasktags.
+   (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def)))
 (eval-after-load
  'haskell-cabal
  '(progn

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-08-10 16:07:03 (bmiller)>
+;;;; Time-stamp: <2015-08-10 20:43:34 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -866,10 +866,7 @@
 (defvar my-packages '(clojure-mode
                       cider
                       ac-cider
-                      haskell-mode
-                      elscreen
-                      auctex
-                      apel))
+                      haskell-mode))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))

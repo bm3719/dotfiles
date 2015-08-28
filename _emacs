@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-08-11 01:21:04 (bm3719)>
+;;;; Time-stamp: <2015-08-28 08:22:10 (bmiller)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1185,7 +1185,8 @@ hyperlinked *compilation* buffer."
 
 ;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
-;; FreeBSD ports, Linux apt-get version.
+;; FreeBSD ports, Linux apt-get version, OSx ELPA version.
+;; Note: On OSX, install the BasicTeX package, then add its install location to $PATH.
 (when (not *nt-system*)
   (load "auctex.el" nil t t)
   (load "preview-latex.el" nil t t)

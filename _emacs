@@ -1,9 +1,9 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-08-28 08:22:10 (bmiller)>
+;;;; Time-stamp: <2015-10-12 16:56:09 (bm3719)>
 ;;;;
-;;;; This init was created for GNU Emacs 24.3.1 for FreeBSD, GNU/Linux, OSX,
+;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
@@ -999,11 +999,7 @@
 ;; clojure-mode and CIDER (via Marmalade).
 (add-hook 'clojure-mode-hook 'paredit-mode)
 ;; CIDER
-;; Work-around for a bug with eldoc integration in 0.8.2.  Remove when next
-;; version comes out.
-(remove-hook 'cider-mode-hook #'eldoc-mode)
-(defun eldoc-print-current-symbol-info ()
-  nil)
+(require 'cider)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (setq cider-repl-pop-to-buffer-on-connect t)
@@ -1270,7 +1266,7 @@ hyperlinked *compilation* buffer."
 (when *freebsd-system*
   (setq load-path (cons "/usr/local/share/maxima/5.31.3/emacs" load-path)))
 (when *linux-system*
-  (setq load-path (cons "/usr/share/maxima/5.20.1/emacs" load-path)))
+  (setq load-path (cons "/usr/share/maxima/5.31.3/emacs" load-path)))
 (when *nt-system*
   (setq load-path
         (cons "C:\\bin\\utils\\maxima\\share\\maxima\\5.20.1\\emacs"
@@ -1516,4 +1512,4 @@ hyperlinked *compilation* buffer."
  )
 
 ;; Replace echo area startup message
-(run-with-timer 1 nil #'yow)
+;(run-with-timer 1 nil #'yow)

@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2015-07-23 14:39:49 (bmiller)>
+# Time-stamp: <2015-07-23 21:50:07 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -54,7 +54,7 @@ compinit
 umask 027               # u=rw,g=r,o=
 
 # $PATH
-PATH=$HOME/bin:$HOME/.cabal/bin:/sbin:/usr/sbin:/bin:/usr/bin:$PATH
+PATH=$HOME/.cabal/bin:$HOME/bin:/sbin:/usr/sbin:/bin:/usr/bin:$PATH
 PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec:$HOME/.local/bin
 PATH=$PATH:$HOME/node_modules/.bin
 PATH=$PATH:.

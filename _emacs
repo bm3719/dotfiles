@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2015-10-12 16:56:09 (bm3719)>
+;;;; Time-stamp: <2016-03-29 20:37:18 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -131,7 +131,6 @@
 (global-set-key "\C-r" 'isearch-backward)
 (global-set-key "\C-c\C-r" 'revert-buffer)
 (global-set-key "\C-x\C-i" 'indent-region)
-(global-set-key "\C-c\C-i" 'indent-region)
 (global-set-key "\C-ce" 'fixup-whitespace)
 (global-set-key "\C-x\C-u" 'undo)
 (global-set-key "\C-cg" 'replace-string)

@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2015-07-23 21:50:07 (bm3719)>
+# Time-stamp: <2016-04-06 15:36:29 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -25,6 +25,9 @@ setopt hist_expire_dups_first
 # pushd: Creates directory stacks that you can popd back to with cd -n, where n
 # is an integer.
 setopt auto_pushd
+
+# Set a universal term type.
+export TERM=xterm-256color
 
 # Detect OS type.  Currently only using for the difference in `ls' flags.
 platform='unknown'

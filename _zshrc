@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2016-04-06 15:36:29 (bm3719)>
+# Time-stamp: <2017-01-03 13:36:09 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -27,7 +27,7 @@ setopt hist_expire_dups_first
 setopt auto_pushd
 
 # Set a universal term type.
-export TERM=xterm-256color
+#export TERM=xterm-256color
 
 # Detect OS type.  Currently only using for the difference in `ls' flags.
 platform='unknown'
@@ -57,7 +57,7 @@ compinit
 umask 027               # u=rw,g=r,o=
 
 # $PATH
-PATH=$HOME/.cabal/bin:$HOME/bin:/sbin:/usr/sbin:/bin:/usr/bin:$PATH
+PATH=$HOME/bin:/sbin:/usr/sbin:/bin:/usr/bin:$PATH
 PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec:$HOME/.local/bin
 PATH=$PATH:$HOME/node_modules/.bin
 PATH=$PATH:.
@@ -65,11 +65,6 @@ PATH=$PATH:.
 if [ -d /usr/games ]
 then
     PATH=$PATH:/usr/games
-fi
-# FreeBSD no longer includes this directory.  Not even sure who does, actually.
-if [ -d /usr/X11R6/bin ]
-then
-    PATH=$PATH:/usr/X11R6/bin
 fi
 
 # Autoload zsh modules when they are referenced.
@@ -120,24 +115,18 @@ export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 # Java ecology stuff
-export JAVA_HOME=/usr/local/openjdk7
-export CLASSPATH=.:$HOME/lib/classes:$HOME/lib/archive/'*'
-export CLASSPATH=$CLASSPATH:/usr/local/share/java/classes/jline.jar
-export CLASSPATH=$CLASSPATH:$HOME/src/scala/scala-2.9.2/lib
+export JAVA_HOME=/usr/local/openjdk8
+export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar
 export ANT_HOME=/usr/local/share/java/apache-ant
 # Python-related stuff.
-if [ -d /usr/local/share/doc/python2.6 ]
+if [ -d /usr/local/share/doc/python2.7 ]
 then
-    export PYTHONDOCS=/usr/local/share/doc/python2.6
-elif [ -d /usr/share/doc/python2.5 ]
+    export PYTHONDOCS=/usr/local/share/doc/python2.7
+elif [ -d /usr/share/doc/python2.6 ]
 then
-    export PYTHONDOCS=/usr/share/doc/python2.5
+    export PYTHONDOCS=/usr/share/doc/python2.6
 else
     export PYTHONDOCS=/usr/share/doc/python/html
-fi
-if [ -d $HOME/src/scala/scala-2.9.2 ]
-then
-    export SCALA_HOME=$HOME/src/scala/scala-2.9.2
 fi
 # Disable newer JVM options for Leiningen 2.2.x.  Remove this later after
 # upgrading to JVM 1.7.x.

@@ -23,17 +23,10 @@ theme_load_paths.push("/home/bm3719/.conkeror.mozdev.org");
 //theme_load_paths.push("C:\\bm3719\\bin\\conkeror\\style");
 theme_load("blackened");
 
-// External editor: Setting this sends editor shell commands to the Emacs
-// server session.  Note that this feature isn't yet supported on Windows.
-// Make use of this via C-i.
-//editor_shell_command = "gnuclient-emacs";
-editor_shell_command = "emacsclient";
-
 // Start page
-let (home = get_home_directory()) {
-    home.append("lynx_bookmarks.html");
-    homepage = home.path;
-}
+home = get_home_directory();
+home.append("lynx_bookmarks.html");
+homepage = home.path;
 
 // Fix the missing modifier key in later versions of xulrunner.
 modifiers.M = new modifier(
@@ -67,6 +60,7 @@ define_key(default_global_keymap, "C-x left", "buffer-previous");
 
 // Tabs: New tabs version.
 require("new-tabs.js");
+
 
 // Downloads: Open downloads display in a new buffer instead of a new frame and
 // bury it.
@@ -174,3 +168,7 @@ function my_zoom_set (buffer) {
     browser_zoom_set(buffer, false, 120);
 }
 add_hook('create_buffer_late_hook', my_zoom_set);
+
+// Confirm that full RC file was loaded.  Look for this message if
+// running Conkeror from the console
+dumpln("RC FILE LOAD SUCCESSFUL");

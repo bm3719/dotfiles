@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-01-15 01:30:26 (bm3719)>
+;;;; Time-stamp: <2017-01-15 01:35:14 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -66,7 +66,7 @@
 
 ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
 ;; what's going on.
-;(setq message-log-max nil)
+(setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffers of a .emacs file).
 (when (not (eq nil (get-buffer "*Messages*")))

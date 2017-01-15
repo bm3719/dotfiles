@@ -1,24 +1,25 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2016-03-29 20:37:18 (bm3719)>
+;;;; Time-stamp: <2017-01-15 01:30:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
-;;;; paredit, SLIME, package.el (clojure-mode, CIDER, ac-cider, haskell-mode),
-;;;; rainbow-delimiters, hi2, python-mode, helm, ruby-mode, auctex, web-mode,
-;;;; flymake-cursor, js2-mode, flymake-jshint, markdown-mode, cedet, gtags,
-;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
-;;;; emms, wombat-custom-theme.el, darcsum, psvn, magit (+ git-modes),
-;;;; git-gutter, lojban-mode (+ lojban.el), malyon, redo+.el, htmlize.el,
-;;;; google-maps.el, powerline, diminish.el.
+;;;; paredit, SLIME, package.el (clojure-mode, CIDER, ac-cider,
+;;;; rainbow-delimiters, intero, geiser, python-mode, ruby-mode, auctex,
+;;;; web-mode, flymake-cursor, js2-mode, flymake-jshint, markdown-mode, cedet,
+;;;; gtags, elscreen, emacs-w3m (development branch), multi-term,
+;;;; lusty-explorer, emms, wombat-custom-theme.el, magit (+ git-modes),
+;;;; git-gutter, org-present, lojban-mode (+ lojban.el), redo+.el, htmlize.el,
+;;;; powerline, diminish.el.
 ;;;;
-;;;; External applications used: Gauche, aspell, SBCL, Leiningen, GHC, GNU
-;;;; Global, python-doc-html, pyflakes, Maxima, mutt, w3m, xpp (*nix only),
-;;;; Ghostscript/GSView (Windows only), Consolas font (Windows only).
+;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
+;;;; racket-minimal (+ drracket via raco), GNU Global, python-doc-html,
+;;;; pyflakes, Maxima, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows
+;;;; only), Consolas font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -61,20 +62,11 @@
 (setq visible-bell t)              ; Make bell visible, not aural.
 
 ;; Add the directory containing .el files in into the default load path.
-(setq load-path (cons "~/.emacs.d" load-path))
-;; Disable the warning added in 24.4 about this.  Probably should follow its
-;; advice later once I standardize on 24.4 though.
-(defadvice display-warning
-    (around no-warn-.emacs.d-in-load-path (type message &rest unused) activate)
-  "Ignore the warning about the `.emacs.d' directory being in `load-path'."
-  (unless (and (eq type 'initialization)
-               (string-prefix-p "Your `load-path' seems to contain\nyour `.emacs.d' directory"
-                                message t))
-    ad-do-it))
+(setq load-path (cons "~/.emacs.d/lisp" load-path))
 
 ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
 ;; what's going on.
-(setq message-log-max nil)
+;(setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffers of a .emacs file).
 (when (not (eq nil (get-buffer "*Messages*")))
@@ -543,17 +535,8 @@
 ;; Color themes are now integrated into Emacs 24.
 ;; Define where to find themes for M-x load-theme and load wombat-custom.
 (when (and (>= emacs-major-version 24) window-system)
- (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+ (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/themes")
  (load-theme 'wombat-custom t nil))
-
-;; scheme-mode
-;; Bind M-x run-scheme to Gauche.
-;; TODO: Change to use CCL on Windows.
-(when (or *freebsd-system* *linux-system* *osx-system*)
-  (defvar scheme-program-name "gosh"
-    "*Program invoked by the run-scheme command"))
-;; Spell-check comments.
-(add-hook 'scheme-mode-hook 'flyspell-prog-mode)
 
 ;; emacs-lisp-mode
 ;; Spell-check comments.
@@ -840,15 +823,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons
 
-;; Add all ~/.emacs.d subfolders to load path.
+;; Add all ~/.emacs.d/lisp subfolders to load path.
 (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-        (let* ((my-lisp-dir "~/.emacs.d/")
-              (default-directory my-lisp-dir))
-           (add-to-list 'load-path my-lisp-dir)
-          (normal-top-level-add-subdirs-to-load-path)))
+    (let* ((my-lisp-dir "~/.emacs.d/lisp")
+           (default-directory my-lisp-dir))
+      (add-to-list 'load-path my-lisp-dir)
+      (normal-top-level-add-subdirs-to-load-path)))
 
 ;; package.el (ELPA)
 (require 'package)
+(setq package-enable-at-startup nil)
+(package-initialize)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 ;; (add-to-list 'package-archives
@@ -860,16 +845,14 @@
         '((clojure-mode . "melpa-stable")
           (cider . "melpa-stable")
           (ac-cider . "melpa-stable")
-          (haskell-mode . "melpa-stable"))))
-(package-initialize t)
+          (intero . "melpa-stable"))))
 (defvar my-packages '(clojure-mode
                       cider
                       ac-cider
-                      haskell-mode))
+                      intero))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
-
 
 ;; pabbrev: Add this to the mode-hook for any major modes I want this
 ;; lightweight completion auto-activated.
@@ -881,6 +864,7 @@
 ;; pretty-symbols.el: Converts various mathematical symbols and Greek letters
 ;; to their Unicode versions.  Useful for Lisp-variants, ML-variants, and
 ;; Haskell.
+;; TODO: Replace this with a mapping for the built-in prettify-symbols-mode.
 (require 'pretty-symbols)
 
 ;; volatile-highlights.el
@@ -895,6 +879,7 @@
 (add-hook 'ielm-mode-hook #'enable-paredit-mode)
 (add-hook 'lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+(add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
 
 ;; SLIME
 ;; http://common-lisp.net/project/slime/
@@ -1067,65 +1052,13 @@ hyperlinked *compilation* buffer."
 ;; Fix missing *nrepl-messages* buffer.
 (setq nrepl-log-messages 1)
 
-;; haskell-mode: From MELPA
-;; Append haskell extensions to auto-mode association list.
-(setq auto-mode-alist
-  (append auto-mode-alist
-    '(("\\.[hg]s$" . haskell-mode)
-      ("\\.hi$" . haskell-mode)
-      ("\\.l[hg]s$" . literate-haskell-mode))))
-(autoload 'haskell-mode "haskell-mode"
-   "Major mode for editing Haskell scripts." t)
-(autoload 'literate-haskell-mode "haskell-mode"
-   "Major mode for editing literate Haskell scripts." t)
-;; Some mode keybindings that don't interfere with ghc-mode and HaRe.
-(eval-after-load
- 'haskell-mode
- '(progn
-   (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
-   (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-   (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
-   (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
-   (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
-   (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)
-   (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
-   (define-key haskell-mode-map (kbd "C-c C-o") 'haskell-compile)
-   ;; An alternative to the below is to use hasktags.
-   (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def)))
-(eval-after-load
- 'haskell-cabal
- '(progn
-   (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-   (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-   (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-   (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
-   (define-key haskell-cabal-mode-map (kbd "C-c C-o") 'haskell-compile)))
-;; haskell-mode-hook customizations.
-(add-hook 'haskell-mode-hook
-          '(lambda ()
-            (turn-on-haskell-decl-scan)
-            (turn-on-haskell-doc-mode)
-            (turn-on-font-lock)
-            (flyspell-prog-mode)
-            (setq show-trailing-whitespace t)))
-;; literate-haskell-mode hook customization.
-(add-hook 'literate-haskell-mode
-          '(lambda ()
-            (flyspell-mode 1)
-            (haskell-unicode)))
-;; hi2: haskell-indentation, 2nd try.
-;; https://github.com/nilcons/hi2
-(require 'hi2)
-(add-hook 'haskell-mode-hook 'turn-on-hi2)
-;; Write literate Haskell in LaTeX style (default is Bird style).  This
-;; requires code blocks to be between \begin{code} and \end{code}.
-;; http://www.haskell.org/haskellwiki/Literate_programming
-;; (setq haskell-literate-default 'latex)
-;; Get rid of file dialogs in GUI mode.  This only shows up for me in GHCI
-;; errors, so putting it here.
-(setq use-dialog-box nil)
-;; Use standard ASCII for data in files, but display Unicode equivalents.
-(setq haskell-font-lock-symbols t)
+;; intero: A complete developer environment for Haskell.
+;; https://commercialhaskell.github.io/intero/
+(add-hook 'haskell-mode-hook 'intero-mode)
+
+;; geiser
+;; http://www.nongnu.org/geiser/
+(load-file "~/.emacs.d/lisp/geiser/elisp/geiser.el")
 
 ;; python-mode: Replaces the built-in python.el, though I'm no longer using its
 ;; integrated iPython support.
@@ -1159,10 +1092,6 @@ hyperlinked *compilation* buffer."
 (when (load "flymake" t)
   (push '("\\.py\\'" flymake-pyflakes-init)
         flymake-allowed-file-name-masks))
-
-;; helm: An incremental completion and selection narrowing framework.
-;; https://github.com/emacs-helm/helm
-(require 'helm-config)
 
 ;; ruby-mode
 ;; http://www.emacswiki.org/emacs/RubyMode
@@ -1263,9 +1192,9 @@ hyperlinked *compilation* buffer."
 ;; NOTE: Gnuplot on Windows not setup yet.
 (setq auto-mode-alist (cons '("\\.max" . maxima-mode) auto-mode-alist))
 (when *freebsd-system*
-  (setq load-path (cons "/usr/local/share/maxima/5.31.3/emacs" load-path)))
+  (setq load-path (cons "/usr/local/share/maxima/5.38.1/emacs" load-path)))
 (when *linux-system*
-  (setq load-path (cons "/usr/share/maxima/5.31.3/emacs" load-path)))
+  (setq load-path (cons "/usr/share/maxima/5.38.1/emacs" load-path)))
 (when *nt-system*
   (setq load-path
         (cons "C:\\bin\\utils\\maxima\\share\\maxima\\5.20.1\\emacs"
@@ -1362,7 +1291,7 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "C-c T") 'multi-term)
 
 ;; lusty-explorer
-;; http://www.emacswiki.org/emacs/download/lusty-explorer.el
+;; https://github.com/sjbach/lusty-emacs
 (require 'lusty-explorer)
 (global-set-key (kbd "C-x C-f") 'lusty-file-explorer)
 (global-set-key (kbd "C-x b") 'lusty-buffer-explorer)
@@ -1388,17 +1317,6 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "<kp-right>") 'emms-seek-forward)
 (global-set-key (kbd "<kp-left>") 'emms-seek-backward)
 
-;; Darcsum: A pcl-cvs like interface for managing darcs patches.
-;; http://hub.darcs.net/simon/darcsum
-(require 'darcsum)
-;(autoload 'darcs-mode "~/.emacs.d/darcsum/darcsum.el"
-;  "Minor mode for dealing with a darcs repository." t)
-
-;; psvn.el: SVN VC
-;; http://www.xsteve.at/prg/vc_svn/
-;; M-x svn-examine DIR, M-x svn-status DIR
-(require 'psvn)
-
 ;; Magit
 ;; https://github.com/magit/magit
 ;; Note: Using an older version (95ff8d7) until I update all machines to 24.4.
@@ -1415,15 +1333,24 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "C-x C-g") 'git-gutter:toggle)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
+;; org-present.el
+;; https://github.com/rlister/org-present
+;; Note: Use arrow keys to navigate, C-c C-q to quit.
+(autoload 'org-present "org-present" nil t)
+(add-hook 'org-present-mode-hook
+          (lambda ()
+            (org-present-big)
+            (org-display-inline-images)))
+(add-hook 'org-present-mode-quit-hook
+          (lambda ()
+            (org-present-small)
+            (org-remove-inline-images)))
+
 ;; lojban-mode: Requires lojban.el.
 ;; http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el
 ;; http://www.emacswiki.org/emacs/download/lojban.el
 (autoload 'lojban-parse-region "lojban" nil t)
 (autoload 'lojban-mode "lojban-mode" nil t)
-
-;; malyon: Z-machine interpreter.
-;; http://www.ifarchive.org/if-archive/infocom/interpreters/emacs/malyon.el
-(require 'malyon)
 
 ;; redo+.el: An extended version of XEmacs' redo package.
 ;; http://www.emacswiki.org/emacs/download/redo%2b.el
@@ -1437,10 +1364,6 @@ hyperlinked *compilation* buffer."
 ;; http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el.cgi
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
-
-;; google-maps.el: Displays interactive Google Maps within Emacs.
-;; https://github.com/jd/google-maps.el
-(require 'google-maps)
 
 ;; powerline.el: Mode line replacement.  Using a fork that fixes some display
 ;; issues.  https://github.com/milkypostman/powerline.git
@@ -1483,25 +1406,22 @@ hyperlinked *compilation* buffer."
 ;;; Final init
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(git-gutter:update-interval 2)
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t)
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-type (quote cabal-repl))
+ '(package-selected-packages (quote (intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
- '(which-function-mode nil)
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-idle-scheduler-verbose-flag nil)
  '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing))
- ;; cabal-repl: REPL integration that ensures projects stay sandboxed instead of
- ;; polluting the global database.
- '(haskell-process-type 'cabal-repl)
- ;; More haskell-mode settings.
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- ;; Live updating for git-gutter.
- '(git-gutter:update-interval 2))
+ '(which-function-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

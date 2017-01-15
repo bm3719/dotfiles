@@ -18,7 +18,7 @@ URxvt*scrollColor:	gray40
 URxvt*borderColor:	gray10
 URxvt*troughColor:      gray20
 URxvt*saveLines:        10000
-URxvt*font:             xft:dejavu sans mono:pixelsize=15
+URxvt*font:             xft:dejavu sans mono:pixelsize=20
 !urxvt*font:             -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
 !URxvt*font:		 -misc-fixed-medium-r-*-*-*-140-*-*-*-*-*-*
 URxvt*color0:           #000000
@@ -46,4 +46,3 @@ xterm*termName:         xterm
 xterm*loginShell:       true
 xterm*background:       #000000
 xterm*foreground:       #A8A8A8
-

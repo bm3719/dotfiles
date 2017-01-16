@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-01-15 01:35:14 (bm3719)>
+;;;; Time-stamp: <2017-01-15 23:39:23 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -12,7 +12,7 @@
 ;;;; rainbow-delimiters, intero, geiser, python-mode, ruby-mode, auctex,
 ;;;; web-mode, flymake-cursor, js2-mode, flymake-jshint, markdown-mode, cedet,
 ;;;; gtags, elscreen, emacs-w3m (development branch), multi-term,
-;;;; lusty-explorer, emms, wombat-custom-theme.el, magit (+ git-modes),
+;;;; lusty-explorer, emms, wombat-custom-theme.el, with-editor, magit,
 ;;;; git-gutter, org-present, lojban-mode (+ lojban.el), redo+.el, htmlize.el,
 ;;;; powerline, diminish.el.
 ;;;;
@@ -1317,9 +1317,13 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "<kp-right>") 'emms-seek-forward)
 (global-set-key (kbd "<kp-left>") 'emms-seek-backward)
 
-;; Magit
-;; https://github.com/magit/magit
-;; Note: Using an older version (95ff8d7) until I update all machines to 24.4.
+;; with-editor: Allows use of emacsclient as the $EDITOR of child processes.
+;; https://github.com/magit/with-editor
+(require 'with-editor)
+
+;; Magit: https://github.com/magit/magit
+;; Note: Requires dash (installed via ELPA) and with-editor.
+;; Note: Use commit 95ff8d7 on old installations of <24.4.  Include package git-modes for those setups.
 (require 'magit)
 ;; Official fill-column setting for commit messages.
 (add-hook 'git-commit-mode-hook

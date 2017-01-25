@@ -1,6 +1,6 @@
-1-- xmonad.hs - bm3719
+-- xmonad.hs - bm3719
 --
--- Time-stamp: <2017-01-14 18:53:55 (bm3719)>
+-- Time-stamp: <2017-01-25 17:25:09 (bm3719)>
 -- DESC: Since the default xmonad config is pretty good, there's only minimal
 -- customization here.
 -- NOTE: Requires xmonad-contrib for ThreeCoumns and NoBorders.

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-01-29 13:51:08 (bm3719)>
+;;;; Time-stamp: <2017-01-29 15:01:09 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -55,7 +55,7 @@
 
 ;; Remove wasted pixels left of col1.
 (when (fboundp 'set-fringe-mode)   ; Added in >22.
-  (set-fringe-mode 2))           ; Space in pixels.
+  (set-fringe-mode 2))             ; Space in pixels.
 
 (global-font-lock-mode 1)          ; Turn on font lock mode everywhere.
 (blink-cursor-mode nil)            ; Disable cursor blinking.
@@ -346,13 +346,6 @@
     ad-do-it
     (move-to-column col)))
 
-;; M-dn and M-up do nothing.  Let's make them do something, like M-left and
-;; M-right do.
-(global-set-key [M-down]
-                '(lambda () (interactive) (progn (forward-line 4) (recenter))))
-(global-set-key [M-up]
-                '(lambda () (interactive) (progn (forward-line -4) (recenter))))
-
 ;; Change C-x C-b behavior so it uses bs; shows only interesting buffers.
 (global-set-key "\C-x\C-b" 'bs-show)
 
@@ -388,8 +381,7 @@
              (backward-char 1))
       (unless (= (point) bol)
         (forward-char 1) (skip-chars-backward " \t\n")))))
-;; But what about the normal use for home and end?  We can still have them!
-;; Just prefixed with control.
+;; Normal home/end prefixed with control.
 (global-set-key [\C-home] 'beginning-of-buffer)
 (global-set-key [\C-end] 'end-of-buffer)
 
@@ -1386,9 +1378,8 @@ hyperlinked *compilation* buffer."
 
 ;; Magit: https://github.com/magit/magit
 ;; Note: Requires dash (installed via ELPA) and with-editor.
-;; Note: Use commit 95ff8d7 on old installations of <24.4.  Include package git-modes for those setups.
 (require 'magit)
-;; Official fill-column setting for commit messages.
+;; Idiomatic fill-column setting for commit messages.
 (add-hook 'git-commit-mode-hook
           '(lambda () (set-fill-column 72)))
 (global-set-key (kbd "<f3>") 'magit-status)
@@ -1497,5 +1488,5 @@ hyperlinked *compilation* buffer."
  ;; If there is more than one, they won't work right.
  )
 
-;; Replace echo area startup message.  This is the final remaining yow line.
+;; Replace echo area startup message.
 (run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))

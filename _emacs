@@ -1,17 +1,17 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-01-29 13:22:07 (bm3719)>
+;;;; Time-stamp: <2017-01-29 13:51:08 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; External addons used: pabbrev, pretty-symbols.el, volatile-highlights.el,
-;;;; paredit, SLIME, package.el (clojure-mode, CIDER, ac-cider,
-;;;; rainbow-delimiters, intero, geiser, python-mode, ruby-mode, auctex,
-;;;; web-mode, flymake-cursor, js2-mode, flymake-jshint, markdown-mode, cedet,
-;;;; gtags, aggressive-indent-mode, elscreen, emacs-w3m (development branch),
+;;;; External addons used: pabbrev, volatile-highlights.el, paredit, SLIME,
+;;;; package.el (clojure-mode, CIDER, ac-cider, rainbow-delimiters, intero,
+;;;; geiser, python-mode, ruby-mode, auctex, web-mode, flymake-cursor,
+;;;; js2-mode, flymake-jshint, markdown-mode, cedet, gtags,
+;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
 ;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
 ;;;; magit, git-gutter, org-present, lojban-mode (+ lojban.el), redo+.el,
 ;;;; htmlize.el, powerline, diminish.el.
@@ -544,6 +544,67 @@
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
+;; prettify-symbols-mode
+;; Build a symbols-alist for Haskell (which is all I'm using this for
+;; currently). I might split these off into a different file if I create more
+;; for other languages.
+(defvar haskell-prettify-symbols-alist
+  '(;; Double-struck letters
+    ("|A|" . ?𝔸) ("|B|" . ?𝔹) ("|C|" . ?ℂ) ("|D|" . ?𝔻) ("|E|" . ?𝔼)
+    ("|F|" . ?𝔽) ("|G|" . ?𝔾) ("|H|" . ?ℍ) ("|I|" . ?𝕀) ("|J|" . ?𝕁)
+    ("|K|" . ?𝕂) ("|L|" . ?𝕃) ("|M|" . ?𝕄) ("|N|" . ?ℕ) ("|O|" . ?𝕆)
+    ("|P|" . ?ℙ) ("|Q|" . ?ℚ) ("|R|" . ?ℝ) ("|S|" . ?𝕊) ("|T|" . ?𝕋)
+    ("|U|" . ?𝕌) ("|V|" . ?𝕍) ("|W|" . ?𝕎) ("|X|" . ?𝕏) ("|Y|" . ?𝕐)
+    ("|Z|" . ?ℤ) ("|gamma|" . ?ℽ) ("|Gamma|" . ?ℾ) ("|pi|" . ?ℼ) ("|Pi|" . ?ℿ)
+    ;; Types
+    ("::" . ?∷)
+    ;; Quantifiers
+    ("forall" . ?∀) ("exists" . ?∃)
+    ;; Arrows
+    ("->" . ?→) ("-->" . ?⟶) ("<-" . ?←) ("<--" . ?⟵) ("<->" . ?↔)
+    ("<-->" . ?⟷)
+    ;; Double arrows
+    ("=>" . ?⇒) ("==>" . ?⟹) ("<==" . ?⟸) ("<=>" . ?⇔) ("<==>" . ?⟺)
+    ;; Bar arrows
+    ("|->" . ?↦) ("|-->" . ?⟼) ("<-|" . ?↤) ("<--|" . ?⟻)
+    ;; Double bar arrows
+    ("|=>" . ?⤇) ("|==>" . ?⟾) ("<=|" . ?⤆) ("<==|" . ?⟽)
+    ;; Squiggle arrows
+    ("~>" . ?⇝) ("<~" . ?⇜)
+    ;; Tail arrows
+    (">->" . ?↣) ("<-<" . ?↢) ("->>" . ?↠) ("<<-" . ?↞)
+    ;; Two-headed tail arrows
+    (">->>" . ?⤖) ("<<-<" . ?⬻)
+    ;; Open-headed arrows
+    ("<|-" . ?⇽) ("-|>" . ?⇾) ("<|-|>" . ?⇿)
+    ;; Arrows with stroke
+    ("<-/-" . ?↚) ("-/->" . ?↛)
+    ;; Arrows with vertical stroke
+    ("<-|-" . ?⇷) ("-|->" . ?⇸) ("<-|->" . ?⇹)
+    ;; Arrows with double vertical stroke
+    ("<-||-" . ?⇺) ("-||->" . ?⇻) ("<-||->" . ?⇼)
+    ;; Circle arrows
+    ("-o->" . ?⇴) ("<-o-" . ?⬰)
+    ;; Boolean operators
+    ("not" . ?¬) ("&&" . ?∧) ("||" . ?∨)
+    ;; Relational operators
+    ("==" . ?≡) ("/=" . ?≠) ("<=" . ?≤) (">=" . ?≥) ("/<" . ?≮) ("/>" . ?≯)
+    ;; Containers / Collections
+    ("++" . ?⧺) ("+++" . ?⧻) ("|||" . ?⫴) ("empty" . ?∅) ("elem" . ?∈)
+    ("notElem" . ?∉) ("member" . ?∈) ("notMember" . ?∉) ("union" . ?∪)
+    ("intersection" . ?∩) ("isSubsetOf" . ?⊆) ("isProperSubsetOf" . ?⊂)
+    ;; Other
+    ("<<" . ?≪) (">>" . ?≫) ("<<<" . ?⋘) (">>>" . ?⋙) ("<|" . ?⊲) ("|>" . ?⊳)
+    ("><" . ?⋈) ("mempty" . ?∅) ("mappend" . ?⊕) ("<*>" . ?⊛) ("undefined" . ?⊥)
+    (":=" . ?≔) ("=:" . ?≕) ("=def" . ?≝) ("=?" . ?≟) ("..." . ?…)))
+
+(defun bcm-haskell-prettify-enable ()
+  "Enable prettification for Haskell symbols."
+  (prettify-symbols-mode -1)
+  (setq-local prettify-symbols-alist (append prettify-symbols-alist
+                                             haskell-prettify-symbols-alist))
+  (prettify-symbols-mode))
+
 ;; c-mode
 ;; Resize the compilation window so that it doesn't take up half the frame.
 (setq compilation-window-height 16)
@@ -860,12 +921,6 @@
 ;; Disable minibuffer message when expansion occurs.
 (setq pabbrev-idle-timer-verbose nil)
 
-;; pretty-symbols.el: Converts various mathematical symbols and Greek letters
-;; to their Unicode versions.  Useful for Lisp-variants, ML-variants, and
-;; Haskell.
-;; TODO: Replace this with a mapping for the built-in prettify-symbols-mode.
-(require 'pretty-symbols)
-
 ;; volatile-highlights.el
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -921,8 +976,6 @@
 (add-hook 'slime-mode-hook 'flyspell-prog-mode)
 (add-hook 'slime-mode-hook 'paredit-mode)
 (add-hook 'slime-repl-mode-hook 'paredit-mode)
-;; Enable pretty-symbols for Greek letters.
-;; (add-hook 'slime-mode-hook 'pretty-greek)
 
 ;; Translates from Emacs buffer to filename on remote machine.
 (setf slime-translate-to-lisp-filename-function
@@ -1054,6 +1107,9 @@ hyperlinked *compilation* buffer."
 ;; intero: A complete developer environment for Haskell.
 ;; https://commercialhaskell.github.io/intero/
 (add-hook 'haskell-mode-hook 'intero-mode)
+;; Enable prettify-symbols-mode symbols-alists in buffers.
+(add-hook 'haskell-mode-hook 'bcm-haskell-prettify-enable)
+(add-hook 'intero-repl-mode-hook 'bcm-haskell-prettify-enable)
 
 ;; geiser
 ;; http://www.nongnu.org/geiser/

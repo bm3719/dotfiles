@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-01-15 23:39:23 (bm3719)>
+;;;; Time-stamp: <2017-01-29 13:22:07 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -11,10 +11,10 @@
 ;;;; paredit, SLIME, package.el (clojure-mode, CIDER, ac-cider,
 ;;;; rainbow-delimiters, intero, geiser, python-mode, ruby-mode, auctex,
 ;;;; web-mode, flymake-cursor, js2-mode, flymake-jshint, markdown-mode, cedet,
-;;;; gtags, elscreen, emacs-w3m (development branch), multi-term,
-;;;; lusty-explorer, emms, wombat-custom-theme.el, with-editor, magit,
-;;;; git-gutter, org-present, lojban-mode (+ lojban.el), redo+.el, htmlize.el,
-;;;; powerline, diminish.el.
+;;;; gtags, aggressive-indent-mode, elscreen, emacs-w3m (development branch),
+;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
+;;;; magit, git-gutter, org-present, lojban-mode (+ lojban.el), redo+.el,
+;;;; htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
 ;;;; racket-minimal (+ drracket via raco), GNU Global, python-doc-html,
@@ -28,7 +28,7 @@
 ;; needed for the rest of this stuff to load, though disabling it in .Xdefaults
 ;; is even better.
 (when window-system
-    (tool-bar-mode -1))
+  (tool-bar-mode -1))
 
 ;; Store boolean values for various system-specific settings.
 (defvar *freebsd-system* (string-match "freebsd" system-configuration))
@@ -38,10 +38,10 @@
 
 ;; Font face: Requires appropriate fonts to be installed.
 (if *nt-system*
-  (set-default-font
-   "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
-  (when window-system
-    (set-face-attribute 'default nil :font "dejavu sans mono-12")))
+    (set-default-font
+     "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
+    (when window-system
+      (set-face-attribute 'default nil :font "dejavu sans mono-12")))
 
 (setq inhibit-startup-message t)   ; Disable splash screen.
 (when window-system
@@ -55,7 +55,7 @@
 
 ;; Remove wasted pixels left of col1.
 (when (fboundp 'set-fringe-mode)   ; Added in >22.
-    (set-fringe-mode 2))           ; Space in pixels.
+  (set-fringe-mode 2))           ; Space in pixels.
 
 (global-font-lock-mode 1)          ; Turn on font lock mode everywhere.
 (blink-cursor-mode nil)            ; Disable cursor blinking.
@@ -70,7 +70,7 @@
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffers of a .emacs file).
 (when (not (eq nil (get-buffer "*Messages*")))
-      (kill-buffer "*Messages*"))
+  (kill-buffer "*Messages*"))
 
 ;; Provide a useful error trace if loading this .emacs fails.
 (setq debug-on-error t)
@@ -222,8 +222,8 @@
   ;; Set-cursor-color is somewhat costly, so we only call it when needed.
   (let ((color (if buffer-read-only "red" "DarkSlateGray")))
     (unless (and
-      (string= color bcm-set-cursor-color-color)
-      (string= (buffer-name) bcm-set-cursor-color-buffer))
+             (string= color bcm-set-cursor-color-color)
+             (string= (buffer-name) bcm-set-cursor-color-buffer))
       (set-cursor-color (setq bcm-set-cursor-color-color color))
       (setq bcm-set-cursor-color-buffer (buffer-name)))))
 (add-hook 'post-command-hook 'bcm-set-cursor-color-according-to-mode)
@@ -296,7 +296,7 @@
   (interactive)
   (beginning-of-buffer)
   (while (search-forward "\r" nil t)
-    (replace-match "" nil t)))
+         (replace-match "" nil t)))
 
 ;; Insert a date string in the format I most commonly use in textfiles.
 (defun bcm-date ()
@@ -349,9 +349,9 @@
 ;; M-dn and M-up do nothing.  Let's make them do something, like M-left and
 ;; M-right do.
 (global-set-key [M-down]
-  '(lambda () (interactive) (progn (forward-line 4) (recenter))))
+                '(lambda () (interactive) (progn (forward-line 4) (recenter))))
 (global-set-key [M-up]
-  '(lambda () (interactive) (progn (forward-line -4) (recenter))))
+                '(lambda () (interactive) (progn (forward-line -4) (recenter))))
 
 ;; Change C-x C-b behavior so it uses bs; shows only interesting buffers.
 (global-set-key "\C-x\C-b" 'bs-show)
@@ -385,7 +385,7 @@
       (while (and (/= bol (point))
                   (eq font-lock-comment-face
                       (get-text-property (point) 'face)))
-        (backward-char 1))
+             (backward-char 1))
       (unless (= (point) bol)
         (forward-char 1) (skip-chars-backward " \t\n")))))
 ;; But what about the normal use for home and end?  We can still have them!
@@ -456,16 +456,15 @@
 
 ;; Completion ignores filenames ending in any string in this list.
 (setq completion-ignored-extensions
-  '(".o" ".elc" ".class" "java~" ".ps" ".abs" ".mx" ".~jv" ".bak" ))
+      '(".o" ".elc" ".class" "java~" ".ps" ".abs" ".mx" ".~jv" ".bak" ))
 
 ;; Startup message with Emacs version.  Modified from original at:
 ;; http://www.emacswiki.org/emacs/DotEmacsChallenge
 (defun bcm-emacs-reloaded ()
   "Display animated startup message."
-  (animate-string (concat ";; Initialization successful.  Welcome to "
-      (substring (emacs-version) 0 16)
-      ".")
-    0 0)
+  (animate-string
+   (concat ";; Initialization successful.  Welcome to "
+           (substring (emacs-version) 0 16) ".") 0 0)
   (newline-and-indent)  (newline-and-indent))
 (add-hook 'after-init-hook 'bcm-emacs-reloaded)
 
@@ -527,7 +526,7 @@
   (interactive)
   (save-excursion
    (shell-command-on-region (mark) (point) "python -m json.tool" (buffer-name)
-   t)))
+                            t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes
@@ -535,8 +534,8 @@
 ;; Color themes are now integrated into Emacs 24.
 ;; Define where to find themes for M-x load-theme and load wombat-custom.
 (when (and (>= emacs-major-version 24) window-system)
- (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/themes")
- (load-theme 'wombat-custom t nil))
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/themes")
+  (load-theme 'wombat-custom t nil))
 
 ;; emacs-lisp-mode
 ;; Spell-check comments.
@@ -555,7 +554,7 @@
 (setq compilation-finish-function
       (lambda (buf str)
         (if (or (string-match "exited abnormally" str)
-                 (string-match (buffer-name buf) "*grep*"))
+                (string-match (buffer-name buf) "*grep*"))
             ;; There were errors.
             (message "Compilation errors, press C-x ` to visit.")
             ;; No errors; make the compilation window go away in 2 seconds.
@@ -564,7 +563,7 @@
 ;; Use c-mode for flex files (cc-mode is probably better for this though).
 (setq auto-mode-alist
       (append '(("\\.l$" . c-mode))
-                auto-mode-alist))
+              auto-mode-alist))
 ;; Change default indent style from "gnu".  I actually use 1TBS, but BSD style
 ;; auto-indents properly.
 (setq c-default-style "bsd"
@@ -689,10 +688,10 @@
                             "DONE(d!/!)"
                             "CANCELED(c!)")))
  org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("STARTED" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("CANCELED" :foreground "light sky blue" :weight bold))))
+ (quote (("TODO" :foreground "red" :weight bold)
+         ("STARTED" :foreground "blue" :weight bold)
+         ("DONE" :foreground "forest green" :weight bold)
+         ("CANCELED" :foreground "light sky blue" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
 ;; remember-mode: Now included in Emacs 23.
@@ -718,9 +717,9 @@
 ;; calendar
 ;; Add calendar control-navigation.
 (add-hook 'calendar-load-hook
-  '(lambda ()
-    (define-key calendar-mode-map "\C-x>" 'scroll-calendar-right)
-    (define-key calendar-mode-map "\C-x<" 'scroll-calendar-left)))
+          '(lambda ()
+            (define-key calendar-mode-map "\C-x>" 'scroll-calendar-right)
+            (define-key calendar-mode-map "\C-x<" 'scroll-calendar-left)))
 ;; Change some self-explanatory calendar settings.
 (setq
  mark-holidays-in-calendar t
@@ -927,11 +926,11 @@
 
 ;; Translates from Emacs buffer to filename on remote machine.
 (setf slime-translate-to-lisp-filename-function
-  (lambda (file-name)
-    (subseq file-name (length "/ssh:[userid]:")))
-  slime-translate-from-lisp-filename-function
-    (lambda (file-name)
-    (concat "/[userid]:" file-name)))
+      (lambda (file-name)
+        (subseq file-name (length "/ssh:[userid]:")))
+      slime-translate-from-lisp-filename-function
+      (lambda (file-name)
+        (concat "/[userid]:" file-name)))
 
 ;; Fontify *slime-description* buffer.
 (defun slime-description-fontify ()
@@ -959,16 +958,16 @@
     (forward-line 1)
     (if (re-search-forward slime-apropos-anchor-regexp nil t)
         (goto-char (match-beginning 0))
-      (goto-char pt)
-      (error "anchor not found"))))
+        (goto-char pt)
+        (error "anchor not found"))))
 (defun slime-apropos-prev-anchor ()
   "Navigate to previous SLIME apropos anchor."
   (interactive)
   (let ((p (point)))
     (if (re-search-backward slime-apropos-anchor-regexp nil t)
         (goto-char (match-beginning 0))
-      (goto-char p)
-      (error "anchor not found"))))
+        (goto-char p)
+        (error "anchor not found"))))
 (defvar slime-apropos-minor-mode-map (make-sparse-keymap))
 (define-key slime-apropos-minor-mode-map "\C-m" 'slime-describe-symbol)
 (define-key slime-apropos-minor-mode-map "l" 'slime-describe-symbol)
@@ -1024,7 +1023,7 @@ hyperlinked *compilation* buffer."
 (add-hook 'cider-mode-hook 'ac-cider-setup)
 (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
 (eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'cider-mode))
+                 '(add-to-list 'ac-modes 'cider-mode))
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
@@ -1101,11 +1100,11 @@ hyperlinked *compilation* buffer."
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
 (autoload 'run-ruby "inf-ruby" "Run an inferior Ruby process")
 (autoload 'inf-ruby-keys "inf-ruby"
-  "Set local key defs for inf-ruby in ruby-mode")
+          "Set local key defs for inf-ruby in ruby-mode")
 (add-hook 'ruby-mode-hook
-         '(lambda ()
-           (inf-ruby-keys)
-           (flyspell-prog-mode)))
+          '(lambda ()
+            (inf-ruby-keys)
+            (flyspell-prog-mode)))
 
 ;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
@@ -1117,7 +1116,7 @@ hyperlinked *compilation* buffer."
   (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   ;; Enable this when working with multi-file document structures.
-  ;(setq-default TeX-master nil)
+  ;; (setq-default TeX-master nil)
   ;; Enable document parsing.
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -1223,6 +1222,14 @@ hyperlinked *compilation* buffer."
   (setq load-path (cons "/usr/local/share/gtags" load-path))
   (autoload 'gtags-mode "gtags" "" t)
   (setq c-mode-hook '(lambda () (gtags-mode 1))))
+
+;; aggressive-indent-mode: On-the-fly indenting.
+;; https://github.com/Malabarba/aggressive-indent-mode
+(require 'aggressive-indent)
+(global-aggressive-indent-mode 1)
+;; Uncomment this if I'm working with certain HTML files.
+;; (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
+
 
 ;; elscreen
 ;; https://github.com/knu/elscreen
@@ -1434,5 +1441,5 @@ hyperlinked *compilation* buffer."
  ;; If there is more than one, they won't work right.
  )
 
-;; Replace echo area startup message
-;(run-with-timer 1 nil #'yow)
+;; Replace echo area startup message.  This is the final remaining yow line.
+(run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-01-29 17:21:14 (bm3719)>
+;;;; Time-stamp: <2017-02-12 02:04:45 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -9,12 +9,11 @@
 ;;;;
 ;;;; External addons used: pabbrev, volatile-highlights.el, paredit, SLIME,
 ;;;; package.el (clojure-mode, CIDER, ac-cider, rainbow-delimiters, intero,
-;;;; geiser, python-mode, ruby-mode, auctex, web-mode, flymake-cursor,
-;;;; js2-mode, flymake-jshint, markdown-mode, cedet, gtags,
-;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
-;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
-;;;; magit, git-gutter, org-present, lojban-mode (+ lojban.el), redo+.el,
-;;;; htmlize.el, powerline, diminish.el.
+;;;; geiser, python-mode, auctex, web-mode, flymake-cursor, js2-mode,
+;;;; flymake-jshint, markdown-mode, cedet, gtags, aggressive-indent-mode,
+;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
+;;;; emms, wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
+;;;; lojban-mode (+ lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
 ;;;; racket-minimal (+ drracket via raco), GNU Global, python-doc-html,
@@ -1140,20 +1139,6 @@ hyperlinked *compilation* buffer."
   (push '("\\.py\\'" flymake-pyflakes-init)
         flymake-allowed-file-name-masks))
 
-;; ruby-mode
-;; http://www.emacswiki.org/emacs/RubyMode
-(autoload 'ruby-mode "ruby-mode" "Major mode for ruby files" t)
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
-(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
-(autoload 'run-ruby "inf-ruby" "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-          "Set local key defs for inf-ruby in ruby-mode")
-(add-hook 'ruby-mode-hook
-          '(lambda ()
-            (inf-ruby-keys)
-            (flyspell-prog-mode)))
-
 ;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
 ;; FreeBSD ports, Linux apt-get version, OSx ELPA version.
@@ -1276,8 +1261,7 @@ hyperlinked *compilation* buffer."
 (require 'aggressive-indent)
 (global-aggressive-indent-mode 1)
 ;; Uncomment this if I'm working with certain HTML files.
-;; (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
-
+(add-to-list 'aggressive-indent-excluded-modes 'web-mode)
 
 ;; elscreen
 ;; https://github.com/knu/elscreen

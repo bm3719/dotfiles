@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2017-01-15 01:00:32 (bm3719)>
+# Time-stamp: <2017-02-12 11:16:54 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -109,7 +109,6 @@ export EDITOR='emacsclient -n'
 export SVN_EDITOR='vim'
 export GIT_EDITOR='vim'
 export GREP_COLOR='01;32'              # Set grep color to green (default red).
-export DARCS_EMAIL=mutt                # Mail client used with 'darcs send'.
 # Set Lynx start page to bookmarks file.
 export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
 # Regionalization used by w3m.
@@ -184,8 +183,7 @@ then
 fi
 alias bc="bc -ql"
 alias ttt="telnet yay.tim.org 5440"
-alias dwnl="darcs whatsnew -l"
-# Aliases for x11 fwding.
+# Aliases for X11 forwarding.
 alias rurxvt="urxvt -sl 10000 -ls -geometry 120x48"
 # Disk Hogs Summary - disk usage by directory beneath this, sorted by
 # size. (Directories that contain less than 100k are silently removed.)

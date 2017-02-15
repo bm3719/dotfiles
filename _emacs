@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-02-12 02:04:45 (bm3719)>
+;;;; Time-stamp: <2017-02-14 22:56:42 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -669,8 +669,9 @@
 (setq prolog-system 'swi)
 (setq prolog-program-switches
       '((sicstus ("-i")) (swi ("-L0" "-G0" "-T0" "-A0")) (t nil)))
-;; Since .pl is more commonly used as an extension for Perl, I use .plg.
-(add-to-list 'auto-mode-alist '("\\.plg$" . prolog-mode))
+;; Since .pl is more commonly used as an extension for Perl, I use .pro.  Note
+;; that .pro is by default assigned to IDL files.
+(add-to-list 'auto-mode-alist '("\\.pro$" . prolog-mode))
 ;; Add auto-mode for Mercury source, which is close enough to Prolog to benefit
 ;; from syntax highlighting.  This overrides the default ObjC auto-mode for .m.
 (setq auto-mode-alist (cons '("\\.m$" . prolog-mode) auto-mode-alist))

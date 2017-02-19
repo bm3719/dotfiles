@@ -1,14 +1,14 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-02-18 11:07:17 (bm3719)>
+;;;; Time-stamp: <2017-02-18 19:07:35 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, volatile-highlights.el, paredit, SLIME,
-;;;; package.el (clojure-mode, CIDER, ac-cider, rainbow-delimiters, intero,
+;;;; package.el (clojure-mode, CIDER, ac-cider, intero), rainbow-delimiters,
 ;;;; geiser, python-mode, auctex, web-mode, flymake-cursor, js2-mode,
 ;;;; flymake-jshint, markdown-mode, cedet, gtags, aggressive-indent-mode,
 ;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
@@ -747,12 +747,9 @@
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
 ;; remember-mode: Now included in Emacs 23.
-(setq remember-annotation-functions '(org-remember-annotation))
-(setq remember-handler-functions '(org-remember-handler))
-(add-hook 'remember-mode-hook 'org-remember-apply-template)
 ;; Setup for C-c r note taking.
 (setq remember-data-file "~/notes.org")
-(global-set-key (kbd "\C-cr") 'org-remember)
+(global-set-key (kbd "\C-cr") 'remember)
 
 ;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.

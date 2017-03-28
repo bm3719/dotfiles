@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-02-18 19:07:35 (bm3719)>
+;;;; Time-stamp: <2017-03-28 01:46:25 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 24.5.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -242,8 +242,13 @@
 
 ;; SavePlace: This puts the cursor in the last place you edited a particular
 ;; file.  A very useful default vim feature.
-(require 'saveplace)
-(setq-default save-place t)
+(save-place-mode 1)
+;; TODO: Remove this old setup when all machines are off 24.x.
+;; (require 'saveplace)
+;; (setq-default save-place t)
+;; ;; Keep this out of $HOME.
+;; (setq save-place-file
+;;       (locate-user-emacs-file "places" "~/.emacs.d/places"))
 
 ;; I use sentences.  Like this.
 (setq sentence-end-double-space t)

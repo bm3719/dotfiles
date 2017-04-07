@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2017-02-22 00:53:24 (bm3719)>
+# Time-stamp: <2017-04-07 17:14:51 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -80,7 +80,7 @@ zmodload -ap zsh/mapfile mapfile
 # Prompt
 autoload colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
-  colors
+    colors
 fi
 # for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 #   eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
@@ -115,7 +115,9 @@ export GREP_COLOR='01;32'              # Set grep color to green (default red).
 export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
 # Regionalization used by w3m.
 export LC_ALL=en_US.UTF-8
+# General locale.
 export LANG=en_US.UTF-8
+export CHARSET=UTF-8
 # Java ecology stuff
 export JAVA_HOME=/usr/local/openjdk8
 export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar

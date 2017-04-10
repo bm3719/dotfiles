@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-04-07 09:00:03 (bm3719)>
+;;;; Time-stamp: <2017-04-09 22:43:37 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1373,6 +1373,9 @@ hyperlinked *compilation* buffer."
 ;; https://github.com/rlister/org-present
 ;; Note: Use arrow keys to navigate, C-c C-q to quit.
 (autoload 'org-present "org-present" nil t)
+;; Reduce the huge upscaling of text.  This amount is more reasonable for the
+;; laptop I present on.
+(setq org-present-text-scale 2)
 (add-hook 'org-present-mode-hook
           (lambda ()
             (org-present-big)

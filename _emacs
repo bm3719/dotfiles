@@ -1,18 +1,19 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-04-09 22:43:37 (bm3719)>
+;;;; Time-stamp: <2017-04-13 01:05:31 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, volatile-highlights.el, paredit, SLIME,
-;;;; package.el (clojure-mode, CIDER, ac-cider, intero), rainbow-delimiters,
-;;;; geiser, python-mode, auctex, web-mode, flymake-cursor, js2-mode,
-;;;; flymake-jshint, markdown-mode, cedet, gtags, aggressive-indent-mode,
-;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
-;;;; emms, wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
+;;;; package.el (clojure-mode, CIDER, ac-cider, intero, json-mode),
+;;;; rainbow-delimiters, geiser, python-mode, auctex, web-mode, rainbow-mode,
+;;;; flymake-cursor, js2-mode, flymake-jshint, markdown-mode, cedet, gtags,
+;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
+;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
+;;;; magit, git-gutter, org-present, org-bullets, xterm-color.el, wttrin.el,
 ;;;; lojban-mode (+ lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
@@ -516,14 +517,6 @@
 ;; This is so commonly used, binding to F4.
 (global-set-key (kbd "<f4>") 'bcm-indent)
 
-;; Convenience function for formatting JSON.  Requires Python.
-(defun bcm-json-format ()
-  "Format a region of JSON."
-  (interactive)
-  (save-excursion
-   (shell-command-on-region (mark) (point) "python -m json.tool" (buffer-name)
-                            t)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes
 
@@ -898,11 +891,13 @@
         '((clojure-mode . "melpa-stable")
           (cider . "melpa-stable")
           (ac-cider . "melpa-stable")
-          (intero . "melpa-stable"))))
+          (intero . "melpa-stable")
+          (json-mode . "mepla-stable"))))
 (defvar my-packages '(clojure-mode
                       cider
                       ac-cider
-                      intero))
+                      intero
+                      json-mode))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
@@ -1025,7 +1020,7 @@
   (when (get-buffer "*SLIME Apropos*")
     (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
 
-;; clojure-mode and CIDER (via Marmalade).
+;; clojure-mode and CIDER (via mepla-stable).
 (add-hook 'clojure-mode-hook 'paredit-mode)
 ;; CIDER
 (require 'cider)
@@ -1180,6 +1175,12 @@ hyperlinked *compilation* buffer."
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
 
+;; rainbow-mode: Adds color hinting for colors in hex, RBG, and named.
+;; https://julien.danjou.info/projects/emacs-packages
+(require 'rainbow-mode)
+(add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
+(add-hook 'html-mode-hook (lambda () (rainbow-mode 1)))
+
 ;; flymake-cursor
 ;; http://www.emacswiki.org/emacs/download/flymake-cursor.el
 (require 'flymake-cursor)
@@ -1188,7 +1189,10 @@ hyperlinked *compilation* buffer."
 ;; https://github.com/mooz/js2-mode
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.json\\'" . js2-mode))
+
+;; json-mode (via melpa-stable).  Includes json-reformat and json-snatcher.
+;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
+(add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
 
 ;; flymake-jshint
 ;; https://github.com/daleharvey/jshint-mode/blob/master/flymake-jshint.el
@@ -1373,8 +1377,8 @@ hyperlinked *compilation* buffer."
 ;; https://github.com/rlister/org-present
 ;; Note: Use arrow keys to navigate, C-c C-q to quit.
 (autoload 'org-present "org-present" nil t)
-;; Reduce the huge upscaling of text.  This amount is more reasonable for the
-;; laptop I present on.
+;; Reduce the huge upscaling of text.  This amount is more reasonable for my
+;; laptop, but reconsider it for larger displays.
 (setq org-present-text-scale 2)
 (add-hook 'org-present-mode-hook
           (lambda ()
@@ -1384,6 +1388,22 @@ hyperlinked *compilation* buffer."
           (lambda ()
             (org-present-small)
             (org-remove-inline-images)))
+
+;; org-bullets: Replace asterisks with Unicode bullets.
+;; https://github.com/sabof/org-bullets
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;; xterm-color.el
+;; https://github.com/atomontage/xterm-color
+(require 'xterm-color)
+
+;; wttrin.el: Get a weather report.
+;; https://github.com/bcbcarl/emacs-wttrin
+;; Note: Requires xterm-color.
+(require 'wttrin)
+(setq wttrin-default-cities '("Fairfax" "Centreville"))
+(setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
 
 ;; lojban-mode: Requires lojban.el.
 ;; http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el
@@ -1454,7 +1474,9 @@ hyperlinked *compilation* buffer."
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
  '(haskell-process-type (quote cabal-repl))
- '(package-selected-packages (quote (intero haskell-mode ac-cider cider clojure-mode)))
+ '(package-selected-packages
+   (quote
+    (json-mode intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))

@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2017-04-09 16:29:00 (bm3719)>
+# Time-stamp: <2017-04-14 20:24:19 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -109,8 +109,8 @@ else
     alias less=more
 fi
 export EDITOR='emacsclient -n'
-export SVN_EDITOR='vim'
-export GIT_EDITOR='vim'
+export SVN_EDITOR='emacsclient'
+export GIT_EDITOR='emacsclient'
 export GREP_COLOR='01;32'              # Set grep color to green (default red).
 # Set Lynx start page to bookmarks file.
 export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-04-13 01:05:31 (bm3719)>
+;;;; Time-stamp: <2017-04-19 00:40:33 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -9,8 +9,8 @@
 ;;;;
 ;;;; External addons used: pabbrev, volatile-highlights.el, paredit, SLIME,
 ;;;; package.el (clojure-mode, CIDER, ac-cider, intero, json-mode),
-;;;; rainbow-delimiters, geiser, python-mode, auctex, web-mode, rainbow-mode,
-;;;; flymake-cursor, js2-mode, flymake-jshint, markdown-mode, cedet, gtags,
+;;;; rainbow-delimiters, geiser, python-mode, AUCTeX, web-mode, rainbow-mode,
+;;;; flymake-cursor, js2-mode, flymake-jshint, markdown-mode, CEDET, gtags,
 ;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
 ;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
 ;;;; magit, git-gutter, org-present, org-bullets, xterm-color.el, wttrin.el,
@@ -41,7 +41,7 @@
     (set-default-font
      "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
     (when window-system
-      (set-face-attribute 'default nil :font "dejavu sans mono-12")))
+      (set-face-attribute 'default nil :font "dejavu sans mono-14")))
 
 (setq inhibit-startup-message t)   ; Disable splash screen.
 (when window-system
@@ -68,7 +68,7 @@
 ;; what's going on.
 (setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
-;; eval-buffers of a .emacs file).
+;; eval-buffer of a .emacs file).
 (when (not (eq nil (get-buffer "*Messages*")))
   (kill-buffer "*Messages*"))
 
@@ -80,7 +80,7 @@
 (setq make-backup-files t           ; Do make backups.
       backup-by-copying t           ; Don't clobber symlinks.
       backup-directory-alist
-      '(("." . "~/.emacs.d/saves")) ; Don't litter my fs tree.
+      '(("." . "~/.emacs.d/saves")) ; Don't litter my FS tree.
       delete-old-versions t         ; Get rid of old versions of files.
       kept-new-versions 4
       kept-old-versions 2
@@ -111,19 +111,18 @@
   (progn (delete-trailing-whitespace)
          (save-buffer)))
 
-;; General convenience remappings.
-(global-set-key "\C-w" 'backward-kill-word)
+;; Global key (re-)mappings.
+(global-set-key "\C-w" 'backward-kill-word)    ; Match the shell's C-w.
 (global-set-key "\C-xw" 'kill-region)
 (global-set-key "\C-xs" 'bcm-delete-ws-save)
 (global-set-key "\C-m" 'newline-and-indent)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\M-G" 'goto-char)
-(global-set-key "\M-?" 'help-for-help)
 (global-set-key "\C-x\C-k" 'kill-this-buffer)  ; Bypasses the C-x k prompt.
 (global-set-key "\C-r" 'isearch-backward)
-(global-set-key "\C-c\C-r" 'revert-buffer)
+(global-set-key "\C-x\C-v" 'revert-buffer)
 (global-set-key "\C-x\C-i" 'indent-region)
-(global-set-key "\C-ce" 'fixup-whitespace)
+(global-set-key "\C-c\M-e" 'fixup-whitespace)
 (global-set-key "\C-x\C-u" 'undo)
 (global-set-key "\C-cg" 'replace-string)
 (global-set-key "\C-c;" 'comment-region)
@@ -178,7 +177,7 @@
 (global-set-key "\M-p" 'bcm-unfill-paragraph)
 
 ;; Heretical tab settings.  Emacs is smart enough to auto-disable this when
-;; editing makefiles.
+;; editing Make files.
 (setq-default indent-tabs-mode nil)
 ;; Using a tab-stop-list will preserve 8-space tabs for documents that have
 ;; them, but make my own tabs 2 spaces.
@@ -303,7 +302,7 @@
   (while (search-forward "\r" nil t)
          (replace-match "" nil t)))
 
-;; Insert a date string in the format I most commonly use in textfiles.
+;; Insert a date string in the format I most commonly use in text files.
 (defun bcm-date ()
   "Insert an ISO 8601 formatted date string."
   (interactive)
@@ -527,10 +526,10 @@
   (load-theme 'wombat-custom t nil))
 
 ;; emacs-lisp-mode
-;; Spell-check comments.
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+;; ielm
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
 ;; prettify-symbols-mode
@@ -682,9 +681,9 @@
 (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
 
 ;; nxml-mode
-;; Included in Emacs 23.  Using nXhtml for .xhtml files.
+;; Using nXhtml for .xhtml files instead of XHTML (an sgml-mode mode).
 (setq auto-mode-alist
-      (cons '("\\.\\(xml\\|xsl\\|rng\\)\\'" . nxml-mode)
+      (cons '("\\.\\(xml\\|xsl\\|rng\\|xhtml\\)\\'" . nxml-mode)
             auto-mode-alist))
 
 ;; conf-mode
@@ -721,13 +720,13 @@
             ("english" ,@default))))
   (add-to-list 'exec-path "/usr/local/bin"))
 
-;; org-mode: Now included with >22.1.
+;; org-mode
 ;; Initiate org-mode when opening .org files.
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-;; C-c l stores links, C-c C-l calls them.
-(define-key global-map "\C-cl" 'org-store-link)
+;; Stores links.  In an org-mode file, C-c C-l calls them and creates links.
+(define-key global-map "\C-x\M-l" 'org-store-link)
 ;; org-agenda displays this week's scheduled items.
-(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-x\M-a" 'org-agenda)
 ;; Change default TODO keywords and coloring.
 (setq
  org-src-fontify-natively t
@@ -744,10 +743,10 @@
          ("CANCELED" :foreground "light sky blue" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-;; remember-mode: Now included in Emacs 23.
-;; Setup for C-c r note taking.
+;; remember-mode
+;; Setup for C-c M-r note taking.
 (setq remember-data-file "~/notes.org")
-(global-set-key (kbd "\C-cr") 'remember)
+(global-set-key (kbd "\C-x\M-r") 'remember)
 
 ;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.
@@ -876,7 +875,7 @@
       (add-to-list 'load-path my-lisp-dir)
       (normal-top-level-add-subdirs-to-load-path)))
 
-;; package.el (ELPA)
+;; package.el
 (require 'package)
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -1081,7 +1080,7 @@ hyperlinked *compilation* buffer."
              (kbd "C-w") 'paredit-backward-kill-word)))
 ;; Since I mainly use a frame with 2 windows in it, make the CIDER REPL buffer
 ;; always appear on the other window.  This isn't perfect though, since it only
-;; works when there's two windows and only when connecting from user/dev.clj.
+;; works when there's two windows and only when connecting from dev/user.clj.
 (add-to-list 'display-buffer-alist
              `(,(rx bos "*cider-repl dev*" eos)
                 (display-buffer-use-some-window
@@ -1102,6 +1101,8 @@ hyperlinked *compilation* buffer."
 ;; geiser
 ;; http://www.nongnu.org/geiser/
 (load-file "~/.emacs.d/lisp/geiser/elisp/geiser.el")
+(setq geiser-default-implementation 'racket)
+(setq scheme-program-name "racket")
 
 ;; python-mode: Replaces the built-in python.el, though I'm no longer using its
 ;; integrated iPython support.
@@ -1138,7 +1139,7 @@ hyperlinked *compilation* buffer."
 
 ;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
-;; FreeBSD ports, Linux apt-get version, OSx ELPA version.
+;; FreeBSD ports, Linux apt-get version, OSx brew version.
 ;; Note: On OSX, install the BasicTeX package, then add its install location to $PATH.
 (when (not *nt-system*)
   (load "auctex.el" nil t t)

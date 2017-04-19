@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-04-19 00:40:33 (bm3719)>
+;;;; Time-stamp: <2017-04-19 01:36:52 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -13,8 +13,8 @@
 ;;;; flymake-cursor, js2-mode, flymake-jshint, markdown-mode, CEDET, gtags,
 ;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
 ;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
-;;;; magit, git-gutter, org-present, org-bullets, xterm-color.el, wttrin.el,
-;;;; lojban-mode (+ lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
+;;;; magit, git-gutter, org-present, xterm-color.el, wttrin.el, lojban-mode (+
+;;;; lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
 ;;;; racket-minimal (+ drracket via raco), GNU Global, python-doc-html,
@@ -131,6 +131,7 @@
 (global-set-key "\M-z" 'zap-up-to-char)        ; Mimic vim delete to char.
 (global-set-key "\M-o" 'other-window)
 (global-set-key "\C-x\M-a" 'align-regexp)
+(global-set-key [F9] 'insert-char)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
 ;; intending to do a find-file.
 (global-set-key "\C-xf" 'find-file)
@@ -138,8 +139,7 @@
 (global-set-key "\C-x\C-s" 'bcm-delete-ws-save)
 
 ;; For quick macro running
-(global-set-key [f9] 'start-kbd-macro)
-(global-set-key [f10] 'edit-kdb-macro)
+(global-set-key [f10] 'start-kbd-macro)
 (global-set-key [f11] 'end-kbd-macro)
 (global-set-key [f12] 'call-last-kbd-macro)
 
@@ -1389,11 +1389,6 @@ hyperlinked *compilation* buffer."
           (lambda ()
             (org-present-small)
             (org-remove-inline-images)))
-
-;; org-bullets: Replace asterisks with Unicode bullets.
-;; https://github.com/sabof/org-bullets
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 ;; xterm-color.el
 ;; https://github.com/atomontage/xterm-color

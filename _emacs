@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-04-19 01:36:52 (bm3719)>
+;;;; Time-stamp: <2017-04-20 02:40:12 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -743,10 +743,10 @@
          ("CANCELED" :foreground "light sky blue" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-;; remember-mode
-;; Setup for C-c M-r note taking.
-(setq remember-data-file "~/notes.org")
-(global-set-key (kbd "\C-x\M-r") 'remember)
+;; org-capture.el
+;; Setup for C-c r note taking.
+(setq org-default-notes-file "~/notes.org")
+(global-set-key (kbd "\C-cr") 'org-capture)
 
 ;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.

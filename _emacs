@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-04-20 02:40:12 (bm3719)>
+;;;; Time-stamp: <2017-05-06 12:19:55 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -13,8 +13,8 @@
 ;;;; flymake-cursor, js2-mode, flymake-jshint, markdown-mode, CEDET, gtags,
 ;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
 ;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
-;;;; magit, git-gutter, org-present, xterm-color.el, wttrin.el, lojban-mode (+
-;;;; lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
+;;;; magit, git-gutter, org-present, Beacon, xterm-color.el, wttrin.el,
+;;;; lojban-mode (+ lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
 ;;;; racket-minimal (+ drracket via raco), GNU Global, python-doc-html,
@@ -1175,6 +1175,7 @@ hyperlinked *compilation* buffer."
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
+(add-hook 'web-mode-hook 'flyspell-mode)
 
 ;; rainbow-mode: Adds color hinting for colors in hex, RBG, and named.
 ;; https://julien.danjou.info/projects/emacs-packages
@@ -1390,7 +1391,12 @@ hyperlinked *compilation* buffer."
             (org-present-small)
             (org-remove-inline-images)))
 
-;; xterm-color.el
+;; Beacon: Global minor-mode to highlight cursor location on navigation.
+;; https://github.com/Malabarba/beacon
+(require 'beacon)
+(beacon-mode 1)
+
+;; xterm-color.el: A dependency for wttrin.el.
 ;; https://github.com/atomontage/xterm-color
 (require 'xterm-color)
 

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-05-06 12:19:55 (bm3719)>
+;;;; Time-stamp: <2017-05-10 10:57:36 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -724,9 +724,9 @@
 ;; Initiate org-mode when opening .org files.
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 ;; Stores links.  In an org-mode file, C-c C-l calls them and creates links.
-(define-key global-map "\C-x\M-l" 'org-store-link)
+(global-set-key "\C-x\M-l" 'org-store-link)
 ;; org-agenda displays this week's scheduled items.
-(define-key global-map "\C-x\M-a" 'org-agenda)
+(global-set-key "\C-x\M-a" 'org-agenda)
 ;; Change default TODO keywords and coloring.
 (setq
  org-src-fontify-natively t
@@ -1243,16 +1243,14 @@ hyperlinked *compilation* buffer."
 (autoload 'maxima-mode "maxima" "Maxima editing mode" t)
 
 ;; Mutt client integration.
-;; This associates file whose name contains "/mutt" to be in mail-mode and the
-;; "It's All Text" FF add-on (Windows only).
-(add-to-list 'auto-mode-alist
-             '("/mutt-\\|itsalltext.*mail\\.google" . mail-mode))
+;; This associates file whose name contains "/mutt" to be in mail-mode.
+(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
 (add-hook 'mail-mode-hook 'turn-on-auto-fill)
 ;; Use C-c C-c to complete mutt message buffers without prompting for saving.
 (add-hook
  'mail-mode-hook
  (lambda ()
-   (define-key mail-mode-map [(control c) (control c)]
+   (define-key mail-mode-map "\C-c\C-c"
      (lambda ()
        (interactive)
        (save-buffer)
@@ -1268,7 +1266,7 @@ hyperlinked *compilation* buffer."
 ;; https://github.com/Malabarba/aggressive-indent-mode
 (require 'aggressive-indent)
 (global-aggressive-indent-mode 1)
-;; Uncomment this if I'm working with certain HTML files.
+;; Add any modes I want to exclude from this minor mode.
 (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
 
 ;; elscreen

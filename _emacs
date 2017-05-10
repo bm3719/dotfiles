@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-05-10 18:43:56 (bm3719)>
+;;;; Time-stamp: <2017-05-10 18:47:57 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -10,7 +10,7 @@
 ;;;; External addons used: pabbrev, volatile-highlights.el, paredit, SLIME,
 ;;;; package.el (clojure-mode, CIDER, ac-cider, intero, json-mode),
 ;;;; rainbow-delimiters, geiser, python-mode, AUCTeX, web-mode, rainbow-mode,
-;;;; flymake-cursor, js2-mode, flymake-jshint, markdown-mode, CEDET, gtags,
+;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags,
 ;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
 ;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
 ;;;; magit, git-gutter, org-present, Beacon, xterm-color.el, wttrin.el,
@@ -1190,12 +1190,6 @@ hyperlinked *compilation* buffer."
 ;; Includes json-reformat and json-snatcher.
 ;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
-
-;;; flymake-jshint
-;; https://github.com/daleharvey/jshint-mode/blob/master/flymake-jshint.el
-(require 'flymake-jshint)
-;; Leaving this off by default, due to bugs.
-;; (add-hook 'js2-mode-hook (lambda () (flymake-jshint)))
 
 ;;; gnuplot-mode
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-05-10 18:47:57 (bm3719)>
+;;;; Time-stamp: <2017-05-10 18:52:55 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -262,7 +262,7 @@
   "Kill chars backward until encountering the end of a line."
   (interactive "p")
   (kill-line 0))
-(global-set-key (kbd "C-x C-k") 'bcm-backward-kill-line)
+(global-set-key (kbd "M-C-k") 'bcm-backward-kill-line)
 
 ;; Copy a line without killing it.
 (defun bcm-copy-line (&optional arg)

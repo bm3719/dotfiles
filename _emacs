@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-05-10 10:57:36 (bm3719)>
+;;;; Time-stamp: <2017-05-10 18:43:56 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -112,55 +112,55 @@
          (save-buffer)))
 
 ;; Global key (re-)mappings.
-(global-set-key "\C-w" 'backward-kill-word)    ; Match the shell's C-w.
-(global-set-key "\C-xw" 'kill-region)
-(global-set-key "\C-xs" 'bcm-delete-ws-save)
-(global-set-key "\C-m" 'newline-and-indent)
-(global-set-key "\M-g" 'goto-line)
-(global-set-key "\M-G" 'goto-char)
-(global-set-key "\C-x\C-k" 'kill-this-buffer)  ; Bypasses the C-x k prompt.
-(global-set-key "\C-r" 'isearch-backward)
-(global-set-key "\C-x\C-v" 'revert-buffer)
-(global-set-key "\C-x\C-i" 'indent-region)
-(global-set-key "\C-c\M-e" 'fixup-whitespace)
-(global-set-key "\C-x\C-u" 'undo)
-(global-set-key "\C-cg" 'replace-string)
-(global-set-key "\C-c;" 'comment-region)
-(global-set-key "\C-c'" 'uncomment-region)
-(global-set-key "\M-/" 'hippie-expand)         ; Superior to dabbrev-expand.
-(global-set-key "\M-z" 'zap-up-to-char)        ; Mimic vim delete to char.
-(global-set-key "\M-o" 'other-window)
-(global-set-key "\C-x\M-a" 'align-regexp)
-(global-set-key [F9] 'insert-char)
+(global-set-key (kbd "C-w") 'backward-kill-word)   ; Match the shell's C-w.
+(global-set-key (kbd "C-x w") 'kill-region)
+(global-set-key (kbd "C-x s") 'bcm-delete-ws-save)
+(global-set-key (kbd "C-m") 'newline-and-indent)
+(global-set-key (kbd "M-g") 'goto-line)
+(global-set-key (kbd "M-G") 'goto-char)
+(global-set-key (kbd "C-x C-k") 'kill-this-buffer) ; Bypasses the C-x k prompt.
+(global-set-key (kbd "C-x C-v") 'revert-buffer)
+(global-set-key (kbd "C-x TAB") 'indent-region)
+(global-set-key (kbd "C-c M-e") 'fixup-whitespace)
+(global-set-key (kbd "C-x C-u") 'undo)
+(global-set-key (kbd "C-c g") 'replace-string)
+(global-set-key (kbd "C-c ;") 'comment-region)
+(global-set-key (kbd "C-c '") 'uncomment-region)
+(global-set-key (kbd "M-/") 'hippie-expand)        ; Instead of dabbrev-expand.
+(global-set-key (kbd "M-z") 'zap-up-to-char)       ; Mimic Vim delete to char.
+(global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "C-x M-a") 'align-regexp)
+(global-set-key (kbd "<f9>") 'insert-char)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
 ;; intending to do a find-file.
-(global-set-key "\C-xf" 'find-file)
-(global-set-key "\C-x\M-f" 'set-fill-column)
-(global-set-key "\C-x\C-s" 'bcm-delete-ws-save)
+(global-set-key (kbd "C-x f") 'find-file)
+(global-set-key (kbd "C-x M-f") 'set-fill-column)
+(global-set-key (kbd "C-x C-s") 'bcm-delete-ws-save)
 
-;; For quick macro running
-(global-set-key [f10] 'start-kbd-macro)
-(global-set-key [f11] 'end-kbd-macro)
-(global-set-key [f12] 'call-last-kbd-macro)
+;; For quick macro running.
+(global-set-key (kbd "<f10>") 'start-kbd-macro)
+(global-set-key (kbd "<f11>") 'end-kbd-macro)
+(global-set-key (kbd "<f12>") 'call-last-kbd-macro)
 
-;; Cycle through buffers with Ctrl-Tab.
+;; Cycle through buffers.
 (global-set-key (kbd "<C-tab>") 'bury-buffer)
 
 ;; M-x compile and M-x grep mnemonics.
-(global-set-key [f5] 'compile)
-(global-set-key "\C-cn" 'next-error)
-(global-set-key "\C-cp" 'previous-error)
+(global-set-key (kbd "<f5>") 'compile)
+(global-set-key (kbd "C-c n") 'next-error)
+(global-set-key (kbd "C-c p") 'previous-error)
 
 ;; My KVM switch uses scroll lock, and Emacs complains about it.
-(global-set-key [Scroll_Lock] 'ignore)
-;; Silence drag-mouse-9 complaints
-(global-set-key [mouse-9] 'ignore)
-(global-set-key [double-mouse-9] 'ignore)
-(global-set-key [drag-mouse-9] 'ignore)
+(global-set-key (kbd "<Scroll_Lock>") 'ignore)
+;; Silence *-mouse-9 complaints.
+(global-set-key (kbd "<mouse-9>") 'ignore)
+(global-set-key (kbd "<double-mouse-9>") 'ignore)
+(global-set-key (kbd "<drag-mouse-9>") 'ignore)
 
-;; Disable C-z on X11 sessions.
+;; Disable suspend-frame on Xorg sessions.
 (when window-system
-  (global-unset-key "\C-z"))
+  (global-unset-key (kbd "C-z"))
+  (global-unset-key (kbd "C-x C-z")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; General Text Editing
@@ -174,7 +174,7 @@
   (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
-(global-set-key "\M-p" 'bcm-unfill-paragraph)
+(global-set-key (kbd "M-p") 'bcm-unfill-paragraph)
 
 ;; Heretical tab settings.  Emacs is smart enough to auto-disable this when
 ;; editing Make files.
@@ -241,14 +241,8 @@
 (setq mouse-yank-at-point t)
 
 ;; SavePlace: This puts the cursor in the last place you edited a particular
-;; file.  A very useful default vim feature.
+;; file.  A very useful default Vim feature.
 (save-place-mode 1)
-;; TODO: Remove this old setup when all machines are off 24.x.
-;; (require 'saveplace)
-;; (setq-default save-place t)
-;; ;; Keep this out of $HOME.
-;; (setq save-place-file
-;;       (locate-user-emacs-file "places" "~/.emacs.d/places"))
 
 ;; I use sentences.  Like this.
 (setq sentence-end-double-space t)
@@ -268,7 +262,7 @@
   "Kill chars backward until encountering the end of a line."
   (interactive "p")
   (kill-line 0))
-(global-set-key "\M-\C-k" 'bcm-backward-kill-line)
+(global-set-key (kbd "C-x C-k") 'bcm-backward-kill-line)
 
 ;; Copy a line without killing it.
 (defun bcm-copy-line (&optional arg)
@@ -279,7 +273,7 @@
   (toggle-read-only 0))
 ;; Replace error message on read-only kill with an echo area message.
 (setq-default kill-read-only-ok t)
-;; (global-set-key "\C-c\C-k" 'bcm-copy-line)
+(global-set-key (kbd "C-x M-w") 'bcm-copy-line)
 
 ;; For composing in Emacs then pasting into a word processor, this un-fills all
 ;; the paragraphs (i.e. turns each paragraph into one very long line) and
@@ -319,7 +313,7 @@
 ;; Shift-arrow keys to move between windows.
 (windmove-default-keybindings)
 
-;; Scrolling
+;;; Scrolling
 ;; Fix the whole huge-jumps-scrolling-between-windows nastiness.
 (setq scroll-conservatively 4)
 ;; Don't hscroll unless needed.
@@ -330,7 +324,7 @@
 ;; Keeps the cursor in the same relative row during pgups and downs.
 (setq scroll-preserve-screen-position t)
 
-;; Mouse wheel scrolling
+;;; Mouse wheel scrolling
 ;; Scroll in 1-line increments for the buffer under pointer.
 (setq mouse-wheel-follow-mouse t)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
@@ -351,14 +345,14 @@
     (move-to-column col)))
 
 ;; Change C-x C-b behavior so it uses bs; shows only interesting buffers.
-(global-set-key "\C-x\C-b" 'bs-show)
+(global-set-key (kbd "C-x C-b") 'bs-show)
 
 ;; The first invocation of Home/End moves to the beginning of the *text* line.
 ;; A second invocation moves the cursor to beginning of the *absolute* line.
 ;; Most of the time this won't matter even be noticeable, but when it does (in
 ;; comments, for example) it will quite convenient.  By sw77@cornell.edu.
-(global-set-key [home] 'bcm-my-smart-home)
-(global-set-key [end] 'bcm-my-smart-end)
+(global-set-key (kbd "<home>") 'bcm-my-smart-home)
+(global-set-key (kbd "<end>") 'bcm-my-smart-end)
 (defun bcm-my-smart-home ()
   "Odd home to beginning of line, even home to beginning of text/code."
   (interactive)
@@ -386,11 +380,11 @@
       (unless (= (point) bol)
         (forward-char 1) (skip-chars-backward " \t\n")))))
 ;; Normal home/end prefixed with control.
-(global-set-key [\C-home] 'beginning-of-buffer)
-(global-set-key [\C-end] 'end-of-buffer)
+(global-set-key (kbd "C-<home>") 'beginning-of-buffer)
+(global-set-key (kbd "C-<end>") 'end-of-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Miscellaneous Customizations
+;;; Miscellaneous Customization
 
 ;; This sets garbage collection to hundred times of the default; supposedly
 ;; significantly speeds up startup time.  Disable this if RAM is limited.
@@ -423,10 +417,9 @@
   (setq shell-file-name "/bin/zsh")
   (setq tex-shell-file-name "/bin/zsh"))
 
-;; Answer 'y' or <CR> for yes and 'n' for no at minibar prompts.
+;; Answer 'y' or RET for yes and 'n' for no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
-(define-key query-replace-map [return] 'act)
-(define-key query-replace-map [?\C-m] 'act)
+(define-key query-replace-map (kbd "RET") 'act)
 
 ;; Always use the echo area instead of dialog boxes in console mode.
 (when (not window-system)
@@ -472,11 +465,11 @@
                          (* (if (> n 0) 1 -1) 10))))
 ;; Add some zoom keybindings.
 (global-set-key (kbd "C-+") '(lambda () (interactive) (bcm-zoom 1)))
-(global-set-key [C-kp-add] '(lambda () (interactive) (bcm-zoom 1)))
+(global-set-key (kbd "C-<kp-add>") '(lambda () (interactive) (bcm-zoom 1)))
 (global-set-key (kbd "C--") '(lambda () (interactive) (bcm-zoom -1)))
-(global-set-key [C-kp-subtract] '(lambda () (interactive) (bcm-zoom -1)))
+(global-set-key (kbd "C-<kb-subtract>") '(lambda () (interactive) (bcm-zoom -1)))
 
-;; time-stamps
+;;; Time-stamp support
 ;; When there is a "Time-stamp: <>" in the first 10 lines of the file,
 ;; Emacs will write time-stamp information there when saving.
 (setq time-stamp-active t          ; Do enable time-stamps.
@@ -519,20 +512,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes
 
-;; Color themes are now integrated into Emacs 24.
+;;; Color themes
 ;; Define where to find themes for M-x load-theme and load wombat-custom.
 (when (and (>= emacs-major-version 24) window-system)
   (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/themes")
   (load-theme 'wombat-custom t nil))
 
-;; emacs-lisp-mode
+;;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-;; ielm
+;;; IELM
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
-;; prettify-symbols-mode
+;;; prettify-symbols-mode
 ;; Build a symbols-alist for Haskell (which is all I'm using this for
 ;; currently). I might split these off into a different file if I create more
 ;; for other languages.
@@ -585,7 +578,6 @@
     ("<<" . ?≪) (">>" . ?≫) ("<<<" . ?⋘) (">>>" . ?⋙) ("<|" . ?⊲) ("|>" . ?⊳)
     ("><" . ?⋈) ("mempty" . ?∅) ("mappend" . ?⊕) ("<*>" . ?⊛) ("undefined" . ?⊥)
     (":=" . ?≔) ("=:" . ?≕) ("=def" . ?≝) ("=?" . ?≟) ("..." . ?…)))
-
 (defun bcm-haskell-prettify-enable ()
   "Enable prettification for Haskell symbols."
   (prettify-symbols-mode -1)
@@ -593,7 +585,7 @@
                                              haskell-prettify-symbols-alist))
   (prettify-symbols-mode))
 
-;; c-mode
+;;; c-mode
 ;; Resize the compilation window so that it doesn't take up half the frame.
 (setq compilation-window-height 16)
 ;; Always scroll the compilation window.
@@ -620,7 +612,7 @@
 ;; Spell-check comments.
 (add-hook 'c-mode-hook 'flyspell-prog-mode)
 
-;; java-mode
+;;; java-mode
 ;; This mode doesn't properly indent Java out of the box.  This combined with
 ;; the C settings above fixes that.
 (add-hook 'java-mode-hook
@@ -629,9 +621,10 @@
             (setq c-comment-start-regexp "(@|/(/|[*][*]?))")
             (modify-syntax-entry ?@ "< b" java-mode-syntax-table)))
 
-;; sql-mode
-;; This adds a connection for my local l1j-en test database on MySQL, with the
-;; ability to add others later by appending to sql-connection-alist.
+;;; sql-mode
+;; This adds a connection for my local (and only locally-accessible) l1j-en
+;; test database on MySQL, with the ability to add others later by appending to
+;; sql-connection-alist.
 (setq sql-connection-alist
       '((pool-a
          (sql-product 'mysql)
@@ -655,12 +648,12 @@
 ;; Add an auto-mode for the HiveQL extension I use.
 (add-to-list 'auto-mode-alist '("\\.hql$" . sql-mode))
 
-;; flymake
+;;; flymake
 ;; See flymake-cursor entry for minibuffer fix.
-(global-set-key "\C-c[" 'flymake-goto-prev-error)
-(global-set-key "\C-c]" 'flymake-goto-next-error)
+(global-set-key (kbd "C-c [") 'flymake-goto-prev-error)
+(global-set-key (kbd "C-c ]") 'flymake-goto-next-error)
 
-;; prolog-mode
+;;; prolog-mode
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
 (setq prolog-system 'swi)
@@ -672,7 +665,7 @@
 ;; from syntax highlighting.  This overrides the default ObjC auto-mode for .m.
 (setq auto-mode-alist (cons '("\\.m$" . prolog-mode) auto-mode-alist))
 
-;; cperl-mode
+;;; cperl-mode
 ;; Always use cperl-mode instead of perl-mode.
 (defalias 'perl-mode 'cperl-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.pl$" . cperl-mode))
@@ -680,22 +673,22 @@
 (add-to-list 'auto-mode-alist '("\\.pm$" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
 
-;; nxml-mode
+;;; nxml-mode
 ;; Using nXhtml for .xhtml files instead of XHTML (an sgml-mode mode).
 (setq auto-mode-alist
       (cons '("\\.\\(xml\\|xsl\\|rng\\|xhtml\\)\\'" . nxml-mode)
             auto-mode-alist))
 
-;; conf-mode
+;;; conf-mode
 ;; Ignore single quote highlighting in .properties files.
 (add-hook 'conf-javaprop-mode-hook
           '(lambda () (conf-quote-normal nil)))
 
-;; shell-mode
+;;; shell-mode
 ;; Use ANSI colors within shell-mode.
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
-;; flyspell
+;;; flyspell
 ;; Turn on flyspell mode for text editing.
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
@@ -720,13 +713,13 @@
             ("english" ,@default))))
   (add-to-list 'exec-path "/usr/local/bin"))
 
-;; org-mode
+;;; org-mode
 ;; Initiate org-mode when opening .org files.
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 ;; Stores links.  In an org-mode file, C-c C-l calls them and creates links.
-(global-set-key "\C-x\M-l" 'org-store-link)
+(global-set-key (kbd "C-x M-l") 'org-store-link)
 ;; org-agenda displays this week's scheduled items.
-(global-set-key "\C-x\M-a" 'org-agenda)
+(global-set-key (kbd "C-x M-a") 'org-agenda)
 ;; Change default TODO keywords and coloring.
 (setq
  org-src-fontify-natively t
@@ -743,29 +736,29 @@
          ("CANCELED" :foreground "light sky blue" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-;; org-capture.el
-;; Setup for C-c r note taking.
+;;; org-capture.el: On-the-fly note taking.
 (setq org-default-notes-file "~/notes.org")
-(global-set-key (kbd "\C-cr") 'org-capture)
+;; Global keybinding for idea capture.
+(global-set-key (kbd "C-c r") 'org-capture)
 
-;; add-log
+;;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.
 (setq user-mail-address "bm3719@gmail.com")  ; Default: user@host
 (setq change-log-default-name "CHANGELOG")   ; Default: ChangeLog
 
-;; savehist-mode
-;; Mode requires customizations set prior to enabling.
+;;; savehist-mode
+;; Mode requires customization set prior to enabling.
 (setq savehist-additional-variables
       '(search-ring regexp-search-ring)    ; Save search entries.
       savehist-file "~/.emacs.d/savehist") ; Keep this out of ~.
 (savehist-mode t)                          ; Turn savehist-mode on.
 
-;; calendar
+;;; calendar
 ;; Add calendar control-navigation.
 (add-hook 'calendar-load-hook
           '(lambda ()
-            (define-key calendar-mode-map "\C-x>" 'scroll-calendar-right)
-            (define-key calendar-mode-map "\C-x<" 'scroll-calendar-left)))
+            (define-key calendar-mode-map (kbd "C-x >") 'scroll-calendar-right)
+            (define-key calendar-mode-map (kbd "C-x <") 'scroll-calendar-left)))
 ;; Change some self-explanatory calendar settings.
 (setq
  mark-holidays-in-calendar t
@@ -774,21 +767,22 @@
  all-hebrew-calendar-holidays nil
  display-time-24hr-format t)
 
-;; diary
+;;; diary
 (setq diary-file "~/.emacs.d/.diary")    ; Might as well keep this out of ~.
 (setq mark-diary-entries-in-calendar t)  ; Add entries to calendar.
 
-;; tetris
+;;; tetris
 (setq tetris-score-file "~/.emacs.d/tetris-scores") ; Moved from ~.
 
-;; rmail
+;;; rmail
 (setq mail-archive-file-name "~/Mail/sent")  ; Reuse the gnus mail dir.
 (defconst user-mail-address "bm3719@gmail.com")
 
+;;; woman
 ;; Alias man to woman, since the latter offers completion.
 (defalias 'man 'woman)
 
-;; Emacs bookmarks
+;;; Emacs bookmarks
 ;; NOTE: C-x r m: create new bookmark, C-x r b: navigate to bookmark, C-x r l:
 ;;       list bookmarks.
 (setq
@@ -834,17 +828,17 @@
      (turn-on-font-lock)))) "Mode for arff-files.")
 
 ;; Use file<pathname> instead of file<n> to uniquify buffer names.
-;; Note: Will be enabled by default in 24.4.
+;; Note: Enabled by default in >=24.4.
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
-;; server-mode: This starts up a server automatically, allowing emacsclient to
-;; connect to a single Emacs instance.  If a server already exists, it is
-;; killed.
+;;; server-mode
+;; This starts up a server automatically, allowing emacsclient to connect to a
+;; single Emacs instance.  If a server already exists, it is killed.
 (server-force-delete)
 (server-start)
 
-;; comint-mode
+;;; comint-mode
 ;; Various comint settings.
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output nil
@@ -854,13 +848,13 @@
       comint-buffer-maximum-size 100000
       comint-input-ring-size 5000)
 
-;; TRAMP
+;;; TRAMP
 (when *nt-system*
   (setq shell-file-name "bash")
   (setq explicit-shell-file-name shell-file-name))
 (setq tramp-default-method "scp")
 
-;; icomplete.el
+;;; icomplete.el
 ;; Disable icomplete, since I prefer using lusty-explorer for this and don't
 ;; want both enabled.
 (icomplete-mode 0)
@@ -875,7 +869,7 @@
       (add-to-list 'load-path my-lisp-dir)
       (normal-top-level-add-subdirs-to-load-path)))
 
-;; package.el
+;;; package.el
 (require 'package)
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -901,18 +895,19 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
-;; pabbrev: Add this to the mode-hook for any major modes I want this
-;; lightweight completion auto-activated.
+;;; pabbrev:
+;; Add this to the mode-hook for any major modes I want this lightweight
+;; completion auto-activated.
 ;; http://homepages.cs.ncl.ac.uk/phillip.lord/download/emacs/pabbrev.el
 (require 'pabbrev)
 ;; Disable minibuffer message when expansion occurs.
 (setq pabbrev-idle-timer-verbose nil)
 
-;; volatile-highlights.el
+;;; volatile-highlights.el
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 
-;; paredit
+;;; paredit
 ;; http://mumble.net/~campbell/emacs/paredit.el
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
@@ -922,7 +917,7 @@
 (add-hook 'scheme-mode-hook #'enable-paredit-mode)
 (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
 
-;; SLIME
+;;; SLIME
 ;; http://common-lisp.net/project/slime/
 (when (or *freebsd-system* *osx-system*) ; FreeBSD CVS version.
   (setq inferior-lisp-program "/usr/local/bin/sbcl"
@@ -942,10 +937,14 @@
 (require 'slime)
 
 ;; Startup SLIME when a Lisp file is open.
-(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
-(add-hook 'inferior-lisp-mode-hook (lambda ()
-                                     (inferior-slime-mode t)))
-(global-set-key "\C-cs" 'slime-selector)
+(add-hook 'lisp-mode-hook
+          (lambda ()
+            (slime-mode t)
+            (local-set-key (kbd "C-c s") 'slime-selector)))
+(add-hook 'inferior-lisp-mode-hook
+          (lambda ()
+            (inferior-slime-mode t)
+            (local-set-key (kbd "C-c s") 'slime-selector)))
 
 ;; SLIME contribs.
 (slime-setup '(slime-autodoc       ; Show information about symbols near point.
@@ -953,7 +952,7 @@
                slime-banner        ; Persistent header line, startup animation.
                slime-asdf          ; ASDF support.
                slime-indentation)) ; Customizable indentation.
-;; Indentation customizations.
+;; Indentation customization.
 (setq lisp-lambda-list-keyword-parameter-alignment t)
 (setq lisp-lambda-list-keyword-alignment t)
 ;; SLIME contribs init.
@@ -1009,19 +1008,20 @@
         (goto-char p)
         (error "anchor not found"))))
 (defvar slime-apropos-minor-mode-map (make-sparse-keymap))
-(define-key slime-apropos-minor-mode-map "\C-m" 'slime-describe-symbol)
-(define-key slime-apropos-minor-mode-map "l" 'slime-describe-symbol)
-(define-key slime-apropos-minor-mode-map "j" 'slime-apropos-next-anchor)
-(define-key slime-apropos-minor-mode-map "k" 'slime-apropos-prev-anchor)
+(define-key slime-apropos-minor-mode-map (kbd "RET") 'slime-describe-symbol)
+(define-key slime-apropos-minor-mode-map (kbd "l") 'slime-describe-symbol)
+(define-key slime-apropos-minor-mode-map (kbd "j") 'slime-apropos-next-anchor)
+(define-key slime-apropos-minor-mode-map (kbd "k") 'slime-apropos-prev-anchor)
 (define-minor-mode slime-apropos-minor-mode "")
 (defadvice slime-show-apropos (after slime-apropos-minor-mode activate)
   ""
   (when (get-buffer "*SLIME Apropos*")
     (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
 
-;; clojure-mode and CIDER (via mepla-stable).
+;;; clojure-mode and CIDER (via mepla-stable).
 (add-hook 'clojure-mode-hook 'paredit-mode)
-;; CIDER
+
+;;; CIDER
 (require 'cider)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
@@ -1034,7 +1034,8 @@ in M-x cider buffers connected to localhost."
   (goto-char (point-max))
   (insert "(refresh)")
   (cider-repl-return))
-;; kibit
+
+;;; kibit
 ;; https://github.com/jonase/kibit
 (require 'compile)
 (add-to-list 'compilation-error-regexp-alist-alist
@@ -1052,11 +1053,13 @@ hyperlinked *compilation* buffer."
 hyperlinked *compilation* buffer."
   (interactive)
   (compile (concat "lein kibit " buffer-file-name)))
-;; rainbow-delimiters.el
+
+;;; rainbow-delimiters.el
 ;; https://github.com/jlr/rainbow-delimiters
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-;; ac-cider: In-buffer completion for Clojure projects.
+
+;;; ac-cider: In-buffer completion for Clojure projects.
 ;; https://github.com/clojure-emacs/ac-cider
 (require 'ac-cider)
 (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
@@ -1068,44 +1071,35 @@ hyperlinked *compilation* buffer."
   (setq completion-at-point-functions '(auto-complete)))
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
+
 (defun bcm-clojure-hook ()
   (auto-complete-mode 1)
-  (define-key clojure-mode-map (kbd "<backtab>") 'auto-complete)
-  ;; (define-key cider-mode-map "\C-c\C-o" 'cider-reset)
+  (define-key clojure-mode-map (kbd "<S-TAB>") 'auto-complete)
+  ;; (define-key cider-mode-map (kbd "C-c C-o") 'cider-reset)
   (define-key clojure-mode-map (kbd "C-w") 'paredit-backward-kill-word))
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
 (add-hook 'cider-repl-mode-hook
           '(lambda ()
             (define-key cider-repl-mode-map
              (kbd "C-w") 'paredit-backward-kill-word)))
-;; Since I mainly use a frame with 2 windows in it, make the CIDER REPL buffer
-;; always appear on the other window.  This isn't perfect though, since it only
-;; works when there's two windows and only when connecting from dev/user.clj.
-(add-to-list 'display-buffer-alist
-             `(,(rx bos "*cider-repl dev*" eos)
-                (display-buffer-use-some-window
-                 display-buffer-in-side-window)
-                (reusable-frames . visible)
-                (side . right)
-                (window-width . 0.5)))
 ;; Fix missing *nrepl-messages* buffer.
 (setq nrepl-log-messages 1)
 
-;; intero: A complete developer environment for Haskell.
+;;; intero: A complete developer environment for Haskell.
 ;; https://commercialhaskell.github.io/intero/
 (add-hook 'haskell-mode-hook 'intero-mode)
 ;; Enable prettify-symbols-mode symbols-alists in buffers.
 (add-hook 'haskell-mode-hook 'bcm-haskell-prettify-enable)
 (add-hook 'intero-repl-mode-hook 'bcm-haskell-prettify-enable)
 
-;; geiser
+;;; geiser
 ;; http://www.nongnu.org/geiser/
 (load-file "~/.emacs.d/lisp/geiser/elisp/geiser.el")
 (setq geiser-default-implementation 'racket)
 (setq scheme-program-name "racket")
 
-;; python-mode: Replaces the built-in python.el, though I'm no longer using its
-;; integrated iPython support.
+;;; python-mode: Replaces the built-in python.el, though I'm no longer using
+;;; its integrated iPython support.
 ;; http://launchpad.net/python-mode/
 (autoload 'python-mode "python-mode" "Python Mode." t)
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
@@ -1121,7 +1115,7 @@ hyperlinked *compilation* buffer."
             (pabbrev-mode)
             (flyspell-prog-mode)
             (flymake-mode)
-            (local-set-key "\C-cL" 'py-execute-buffer)))
+            (local-set-key (kbd "C-c L") 'py-execute-buffer)))
 ;; Replaced pylint with pyflakes, as it's super fast.  However, it doesn't
 ;; catch a lot of style problems, so it's still a good idea to pylint it later.
 ;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
@@ -1137,7 +1131,7 @@ hyperlinked *compilation* buffer."
   (push '("\\.py\\'" flymake-pyflakes-init)
         flymake-allowed-file-name-masks))
 
-;; AUCTeX
+;;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
 ;; FreeBSD ports, Linux apt-get version, OSx brew version.
 ;; Note: On OSX, install the BasicTeX package, then add its install location to $PATH.
@@ -1159,8 +1153,8 @@ hyperlinked *compilation* buffer."
           LaTeX-section-section
           LaTeX-section-label)))
 
-;; web-mode: An autonomous major-mode for editing web templates (HTML documents
-;; embedding parts (CSS/JavaScript) and blocks (client/server side).
+;;; web-mode: An autonomous major-mode for editing web templates (HTML
+;;; documents embedding parts (CSS/JavaScript) and blocks (client/server side).
 ;; https://github.com/fxbois/web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
@@ -1177,32 +1171,33 @@ hyperlinked *compilation* buffer."
 (setq web-mode-code-indent-offset 2)
 (add-hook 'web-mode-hook 'flyspell-mode)
 
-;; rainbow-mode: Adds color hinting for colors in hex, RBG, and named.
+;;; rainbow-mode: Adds color hinting for colors in hex, RBG, and named.
 ;; https://julien.danjou.info/projects/emacs-packages
 (require 'rainbow-mode)
 (add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
 (add-hook 'html-mode-hook (lambda () (rainbow-mode 1)))
 
-;; flymake-cursor
+;;; flymake-cursor
 ;; http://www.emacswiki.org/emacs/download/flymake-cursor.el
 (require 'flymake-cursor)
 
-;; js2-mode
+;;; js2-mode
 ;; https://github.com/mooz/js2-mode
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-;; json-mode (via melpa-stable).  Includes json-reformat and json-snatcher.
+;;; json-mode (via melpa-stable).
+;; Includes json-reformat and json-snatcher.
 ;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
 
-;; flymake-jshint
+;;; flymake-jshint
 ;; https://github.com/daleharvey/jshint-mode/blob/master/flymake-jshint.el
 (require 'flymake-jshint)
 ;; Leaving this off by default, due to bugs.
 ;; (add-hook 'js2-mode-hook (lambda () (flymake-jshint)))
 
-;; gnuplot-mode
+;;; gnuplot-mode
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el
 (require 'gnuplot-mode)
 (add-hook 'gnuplot-mode-hook
@@ -1213,7 +1208,7 @@ hyperlinked *compilation* buffer."
 ;; .gp is my personally-designated Gnuplot extension.
 (add-to-list 'auto-mode-alist '("\\.gp$" . gnuplot-mode))
 
-;; markdown-mode
+;;; markdown-mode
 ;; https://github.com/jrblevin/markdown-mode
 ;; Note: Install textproc/markdown to integrate compilation commands.
 (autoload 'markdown-mode "markdown-mode"
@@ -1221,15 +1216,14 @@ hyperlinked *compilation* buffer."
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-;; CEDET
+;;; CEDET
 ;; Included in Emacs >=23.2.
 (setq semantic-load-turn-useful-things-on t)
 ;; Keep semantic.cache files from littering my FS.
 (setq semanticdb-default-save-directory "~/.emacs.d/saves/semantic.cache")
 (require 'cedet)
 
-;; Maxima support
-;; NOTE: Gnuplot on Windows not setup yet.
+;;; Maxima support
 (setq auto-mode-alist (cons '("\\.max" . maxima-mode) auto-mode-alist))
 (when *freebsd-system*
   (setq load-path (cons "/usr/local/share/maxima/5.38.1/emacs" load-path)))
@@ -1242,7 +1236,7 @@ hyperlinked *compilation* buffer."
 (autoload 'maxima "maxima" "Running Maxima interactively" t)
 (autoload 'maxima-mode "maxima" "Maxima editing mode" t)
 
-;; Mutt client integration.
+;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
 (add-hook 'mail-mode-hook 'turn-on-auto-fill)
@@ -1250,26 +1244,27 @@ hyperlinked *compilation* buffer."
 (add-hook
  'mail-mode-hook
  (lambda ()
-   (define-key mail-mode-map "\C-c\C-c"
+   (define-key mail-mode-map (kbd "C-c C-c")
      (lambda ()
        (interactive)
        (save-buffer)
        (server-edit)))))
 
-;; gtags: Requires an install of GNU Global.  Currently only using for c-mode.
+;;; gtags
+;; Requires an install of GNU Global.  Currently only using for c-mode.
 (when *freebsd-system*
   (setq load-path (cons "/usr/local/share/gtags" load-path))
   (autoload 'gtags-mode "gtags" "" t)
   (setq c-mode-hook '(lambda () (gtags-mode 1))))
 
-;; aggressive-indent-mode: On-the-fly indenting.
+;;; aggressive-indent-mode: On-the-fly indenting.
 ;; https://github.com/Malabarba/aggressive-indent-mode
 (require 'aggressive-indent)
 (global-aggressive-indent-mode 1)
 ;; Add any modes I want to exclude from this minor mode.
 (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
 
-;; elscreen
+;;; elscreen
 ;; https://github.com/knu/elscreen
 (require 'elscreen)
 (elscreen-start)
@@ -1277,7 +1272,7 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "<f7>") 'elscreen-create)
 (global-set-key (kbd "<f8>") 'elscreen-kill)
 
-;; emacs-w3m
+;;; emacs-w3m
 ;; http://emacs-w3m.namazu.org/
 ;; FreeBSD: ports w3m-m17n; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
 ;; NOTE: I also modify the local copies of w3m.el and w3m-search.el.  See
@@ -1287,7 +1282,7 @@ hyperlinked *compilation* buffer."
 (setq browse-url-browser-function 'w3m-browse-url)
 (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 ;; Optional keyboard short-cut.
-(global-set-key "\C-x\M-m" 'browse-url-at-point)
+(global-set-key (kbd "C-x M-m") 'browse-url-at-point)
 ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
 (setq w3m-use-tab t)
 (setq w3m-use-cookies t)
@@ -1312,7 +1307,7 @@ hyperlinked *compilation* buffer."
     (when (assoc engine w3m-search-engine-alist)
       (setq w3m-search-default-engine engine))))
 
-;; multi-term
+;;; multi-term
 ;; http://www.emacswiki.org/emacs/download/multi-term.el
 (autoload 'multi-term "multi-term" nil t)
 (autoload 'multi-term-next "multi-term" nil t)
@@ -1327,13 +1322,13 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "C-c t") 'multi-term-next)
 (global-set-key (kbd "C-c T") 'multi-term)
 
-;; lusty-explorer
+;;; lusty-explorer
 ;; https://github.com/sjbach/lusty-emacs
 (require 'lusty-explorer)
 (global-set-key (kbd "C-x C-f") 'lusty-file-explorer)
 (global-set-key (kbd "C-x b") 'lusty-buffer-explorer)
 
-;; EMMS
+;;; EMMS
 ;; http://www.gnu.org/software/emms/
 ;; Currently using mplayer backend - seems superior to mpg321, which doesn't
 ;; support seeking.
@@ -1354,26 +1349,26 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "<kp-right>") 'emms-seek-forward)
 (global-set-key (kbd "<kp-left>") 'emms-seek-backward)
 
-;; with-editor: Allows use of emacsclient as the $EDITOR of child processes.
+;;; with-editor: Allows use of emacsclient as the $EDITOR of child processes.
 ;; https://github.com/magit/with-editor
 (require 'with-editor)
 
-;; Magit: https://github.com/magit/magit
-;; Note: Requires dash (installed via ELPA) and with-editor.
+;;; Magit: Requires dash (installed via ELPA) and with-editor.
+;; https://github.com/magit/magit
 (require 'magit)
 ;; Idiomatic fill-column setting for commit messages.
 (add-hook 'git-commit-mode-hook
           '(lambda () (set-fill-column 72)))
 (global-set-key (kbd "<f3>") 'magit-status)
 
-;; git-gutter
+;;; git-gutter
 ;; https://github.com/syohex/emacs-git-gutter
 (require 'git-gutter)
 (global-git-gutter-mode +1)
 (global-set-key (kbd "C-x C-g") 'git-gutter:toggle)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
-;; org-present.el
+;;; org-present.el
 ;; https://github.com/rlister/org-present
 ;; Note: Use arrow keys to navigate, C-c C-q to quit.
 (autoload 'org-present "org-present" nil t)
@@ -1389,48 +1384,54 @@ hyperlinked *compilation* buffer."
             (org-present-small)
             (org-remove-inline-images)))
 
-;; Beacon: Global minor-mode to highlight cursor location on navigation.
+;;; Beacon: Global minor-mode to highlight cursor location on navigation.
 ;; https://github.com/Malabarba/beacon
 (require 'beacon)
 (beacon-mode 1)
 
-;; xterm-color.el: A dependency for wttrin.el.
+;;; xterm-color.el: A dependency for wttrin.el.
 ;; https://github.com/atomontage/xterm-color
 (require 'xterm-color)
 
-;; wttrin.el: Get a weather report.
+;;; wttrin.el: Get a weather report.
 ;; https://github.com/bcbcarl/emacs-wttrin
 ;; Note: Requires xterm-color.
 (require 'wttrin)
 (setq wttrin-default-cities '("Fairfax" "Centreville"))
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
 
-;; lojban-mode: Requires lojban.el.
+;;; lojban-mode: Requires lojban.el.
 ;; http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el
 ;; http://www.emacswiki.org/emacs/download/lojban.el
-(autoload 'lojban-parse-region "lojban" nil t)
 (autoload 'lojban-mode "lojban-mode" nil t)
+;; To parse regions, ensure the jbofihe binary is on $PATH.
+;; https://github.com/lojban/jbofihe
+(autoload 'lojban-parse-region "lojban" nil t)
 
-;; redo+.el: An extended version of XEmacs' redo package.
+;;; redo+.el: An extended version of XEmacs' redo package.
 ;; http://www.emacswiki.org/emacs/download/redo%2b.el
 ;; TODO: Consider replacing this with undo-tree-mode.  I'm sticking with this
 ;; for now since it's considerably more intuitive and the need for undo-trees
 ;; hasn't ever yet come up.
 (require 'redo+)
-(global-set-key "\C-x\M-_" 'redo)
+(global-set-key (kbd "C-x M-_") 'redo)
 
-;; htmlize.el: Converts buffer to HTML.
+;;; htmlize.el: Converts buffer to HTML.
 ;; http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el.cgi
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
 
-;; powerline.el: Mode line replacement.  Using a fork that fixes some display
-;; issues.  https://github.com/milkypostman/powerline.git
+;;; powerline.el: Mode line replacement.  Using a fork that fixes some display
+;;; issues.
+;; https://github.com/milkypostman/powerline.git
 (when window-system
   (require 'powerline)
   (powerline-default-theme))
 
-;; Printing
+;;; Printing
+;; Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.
+(when *freebsd-system*
+  (setq lpr-command "xpp"))
 ;; Requires install of Ghostscript and GSView native ports on Windows.
 (when *nt-system*
   (progn
@@ -1442,11 +1443,8 @@ hyperlinked *compilation* buffer."
     (setq ps-lpr-switches '("-query"))   ; Show printer dialog.
     (setq ps-right-header
           '("/pagenumberstring load" ps-time-stamp-mon-dd-yyyy))))
-;; Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.
-(when *freebsd-system*
-  (setq lpr-command "xpp"))
 
-;; diminish.el: mode-line shortening
+;;; diminish.el: mode-line shortening
 ;; https://www.eskimo.com/~seldon/diminish.el
 (when (require 'diminish nil 'noerror)
   (eval-after-load "git-gutter"

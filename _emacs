@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-05-10 18:52:55 (bm3719)>
+;;;; Time-stamp: <2017-05-16 10:07:17 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1074,7 +1074,7 @@ hyperlinked *compilation* buffer."
 
 (defun bcm-clojure-hook ()
   (auto-complete-mode 1)
-  (define-key clojure-mode-map (kbd "<S-TAB>") 'auto-complete)
+  (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
   ;; (define-key cider-mode-map (kbd "C-c C-o") 'cider-reset)
   (define-key clojure-mode-map (kbd "C-w") 'paredit-backward-kill-word))
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
@@ -1441,10 +1441,9 @@ hyperlinked *compilation* buffer."
 ;;; diminish.el: mode-line shortening
 ;; https://www.eskimo.com/~seldon/diminish.el
 (when (require 'diminish nil 'noerror)
-  (eval-after-load "git-gutter"
-                   '(diminish 'git-gutter-mode "Git↓"))
-  (eval-after-load "Paredit"
-                   '(diminish 'paredit-mode "(ᴩ)")))
+  (eval-after-load "git-gutter" '(diminish 'git-gutter-mode "Git↓"))
+  (eval-after-load "Paredit" '(diminish 'paredit-mode "(ᴩ)"))
+  (eval-after-load "Beacon" '(diminish 'beacon-mode "β")))
 ;; Non-diminish major mode mode-line shortening.
 (add-hook 'haskell-mode-hook
           (lambda () (setq mode-name "λ≫")))

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-05-16 10:07:17 (bm3719)>
+;;;; Time-stamp: <2017-09-11 10:07:45 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -13,8 +13,8 @@
 ;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags,
 ;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
 ;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
-;;;; magit, git-gutter, org-present, Beacon, xterm-color.el, wttrin.el,
-;;;; lojban-mode (+ lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
+;;;; magit, git-gutter, org-present, xterm-color.el, wttrin.el, lojban-mode (+
+;;;; lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
 ;;;; racket-minimal (+ drracket via raco), GNU Global, python-doc-html,
@@ -1378,11 +1378,6 @@ hyperlinked *compilation* buffer."
             (org-present-small)
             (org-remove-inline-images)))
 
-;;; Beacon: Global minor-mode to highlight cursor location on navigation.
-;; https://github.com/Malabarba/beacon
-(require 'beacon)
-(beacon-mode 1)
-
 ;;; xterm-color.el: A dependency for wttrin.el.
 ;; https://github.com/atomontage/xterm-color
 (require 'xterm-color)
@@ -1442,8 +1437,7 @@ hyperlinked *compilation* buffer."
 ;; https://www.eskimo.com/~seldon/diminish.el
 (when (require 'diminish nil 'noerror)
   (eval-after-load "git-gutter" '(diminish 'git-gutter-mode "Git↓"))
-  (eval-after-load "Paredit" '(diminish 'paredit-mode "(ᴩ)"))
-  (eval-after-load "Beacon" '(diminish 'beacon-mode "β")))
+  (eval-after-load "Paredit" '(diminish 'paredit-mode "(ᴩ)")))
 ;; Non-diminish major mode mode-line shortening.
 (add-hook 'haskell-mode-hook
           (lambda () (setq mode-name "λ≫")))
@@ -1484,3 +1478,7 @@ hyperlinked *compilation* buffer."
 
 ;; Replace echo area startup message.
 (run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))
+
+(global-set-key (kbd "C-M-l") (lambda ()
+                                (interactive)
+                                (insert-char ?λ)))

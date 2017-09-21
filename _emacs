@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-09-11 10:07:45 (bm3719)>
+;;;; Time-stamp: <2017-09-21 00:10:16 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1257,6 +1257,7 @@ hyperlinked *compilation* buffer."
 (global-aggressive-indent-mode 1)
 ;; Add any modes I want to exclude from this minor mode.
 (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
+(add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
 
 ;;; elscreen
 ;; https://github.com/knu/elscreen

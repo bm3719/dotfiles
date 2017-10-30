@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-09-21 00:10:16 (bm3719)>
+;;;; Time-stamp: <2017-10-30 11:42:49 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1034,6 +1034,8 @@ in M-x cider buffers connected to localhost."
   (goto-char (point-max))
   (insert "(refresh)")
   (cider-repl-return))
+;; Have org-babel use CIDER.
+(setq org-babel-clojure-backend 'cider)
 
 ;;; kibit
 ;; https://github.com/jonase/kibit

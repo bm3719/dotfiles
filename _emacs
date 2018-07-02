@@ -1,14 +1,14 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2018-07-02 10:18:10 (bm3719)>
+;;;; Time-stamp: <2018-07-02 11:27:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
 ;;;; External addons used: pabbrev, volatile-highlights.el, paredit, SLIME,
-;;;; package.el (clojure-mode, CIDER, ac-cider, intero, json-mode),
+;;;; package.el (clojure-mode, CIDER, ac-cider, projectile, intero, json-mode),
 ;;;; rainbow-delimiters, geiser, python-mode, AUCTeX, web-mode, rainbow-mode,
 ;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags,
 ;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
@@ -896,13 +896,13 @@
         '((clojure-mode . "melpa-stable")
           (cider . "melpa-stable")
           (ac-cider . "melpa-stable")
-          ;; (projectile . "melpa-stable")
+          (projectile . "melpa-stable")
           (intero . "melpa-stable")
           (json-mode . "mepla-stable"))))
 (defvar my-packages '(clojure-mode
                       cider
                       ac-cider
-                      ;; projectile
+                      projectile
                       intero
                       json-mode))
 (dolist (p my-packages)
@@ -1481,7 +1481,7 @@ hyperlinked *compilation* buffer."
  '(haskell-process-type (quote cabal-repl))
  '(package-selected-packages
    (quote
-    (json-mode intero haskell-mode ac-cider cider clojure-mode)))
+    (projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))

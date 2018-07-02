@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2017-10-30 11:42:49 (bm3719)>
+;;;; Time-stamp: <2018-07-02 10:18:10 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -66,7 +66,7 @@
 
 ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
 ;; what's going on.
-(setq message-log-max nil)
+;;(setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffer of a .emacs file).
 (when (not (eq nil (get-buffer "*Messages*")))
@@ -306,6 +306,11 @@
   "Insert an ISO 8601 formatted datetime string, with time in UTC."
   (interactive)
   (insert (format-time-string "%Y-%m-%dT%H:%M:%SZ" nil 1)))
+
+;; I type a lot of λs.
+(global-set-key (kbd "C-M-l") (lambda ()
+                                (interactive)
+                                (insert-char ?λ)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation
@@ -859,6 +864,13 @@
 ;; want both enabled.
 (icomplete-mode 0)
 
+;;; CEDET
+;; Included in Emacs >=23.2.
+(setq semantic-load-turn-useful-things-on t)
+;; Keep semantic.cache files from littering my FS.
+(setq semanticdb-default-save-directory "~/.emacs.d/saves/semantic.cache")
+(require 'cedet)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons
 
@@ -884,11 +896,13 @@
         '((clojure-mode . "melpa-stable")
           (cider . "melpa-stable")
           (ac-cider . "melpa-stable")
+          ;; (projectile . "melpa-stable")
           (intero . "melpa-stable")
           (json-mode . "mepla-stable"))))
 (defvar my-packages '(clojure-mode
                       cider
                       ac-cider
+                      ;; projectile
                       intero
                       json-mode))
 (dolist (p my-packages)
@@ -898,12 +912,13 @@
 ;;; pabbrev:
 ;; Add this to the mode-hook for any major modes I want this lightweight
 ;; completion auto-activated.
-;; http://homepages.cs.ncl.ac.uk/phillip.lord/download/emacs/pabbrev.el
+;; https://github.com/phillord/pabbrev
 (require 'pabbrev)
 ;; Disable minibuffer message when expansion occurs.
 (setq pabbrev-idle-timer-verbose nil)
 
 ;;; volatile-highlights.el
+;; https://github.com/k-talo/volatile-highlights.el
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 
@@ -1174,7 +1189,7 @@ hyperlinked *compilation* buffer."
 (add-hook 'web-mode-hook 'flyspell-mode)
 
 ;;; rainbow-mode: Adds color hinting for colors in hex, RBG, and named.
-;; https://julien.danjou.info/projects/emacs-packages
+;; https://github.com/emacsmirror/rainbow-mode
 (require 'rainbow-mode)
 (add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
 (add-hook 'html-mode-hook (lambda () (rainbow-mode 1)))
@@ -1211,13 +1226,6 @@ hyperlinked *compilation* buffer."
           "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-;;; CEDET
-;; Included in Emacs >=23.2.
-(setq semantic-load-turn-useful-things-on t)
-;; Keep semantic.cache files from littering my FS.
-(setq semanticdb-default-save-directory "~/.emacs.d/saves/semantic.cache")
-(require 'cedet)
 
 ;;; Maxima support
 (setq auto-mode-alist (cons '("\\.max" . maxima-mode) auto-mode-alist))
@@ -1350,7 +1358,16 @@ hyperlinked *compilation* buffer."
 ;; https://github.com/magit/with-editor
 (require 'with-editor)
 
-;;; Magit: Requires dash (installed via ELPA) and with-editor.
+;;; magit-popup: A switch/option setting interface, used by Magit.
+;; https://github.com/magit/magit-popup
+(require 'magit-popup)
+
+;;; ghub: An interface for GitHub's REST and GraphQL APIs.  Used by Magit.
+;; https://github.com/magit/ghub
+(require 'ghub)
+
+;;; Magit: Requires dash (installed via ELPA), with-editor, magit-popup, and
+;;; ghub.
 ;; https://github.com/magit/magit
 (require 'magit)
 ;; Idiomatic fill-column setting for commit messages.
@@ -1409,7 +1426,7 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "C-x M-_") 'redo)
 
 ;;; htmlize.el: Converts buffer to HTML.
-;; http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el.cgi
+;; https://github.com/hniksic/emacs-htmlize
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
 
@@ -1481,7 +1498,3 @@ hyperlinked *compilation* buffer."
 
 ;; Replace echo area startup message.
 (run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))
-
-(global-set-key (kbd "C-M-l") (lambda ()
-                                (interactive)
-                                (insert-char ?λ)))

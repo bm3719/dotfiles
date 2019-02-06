@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2018-08-27 06:08:23 (bm3719)>
+# Time-stamp: <2018-12-10 13:11:31 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -37,6 +37,8 @@ if [[ "$unamestr" == 'Linux' ]]; then
     platform='linux'
 elif [[ "$unamestr" == 'FreeBSD' ]]; then
     platform='freebsd'
+elif [[ "$unamestr" == 'OpenBSD' ]]; then
+    platform='openbsd'
 fi
 
 bindkey -e              # Emacs keybindings.
@@ -59,10 +61,10 @@ umask 027               # u=rw,g=r,o=
 
 # $PATH
 export PATH=$HOME/bin:/sbin:/usr/sbin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/libexec:$HOME/node_modules/.bin:$HOME/.racket/6.7/bin:$PATH:.
-# Append /usr/games to $PATH if it exists.
-if [ -d /usr/games ]
-then
-    PATH=$PATH:/usr/games
+
+# $PKG_PATH, only used on OpenBSD.
+if [[ $platform == 'openbsd' ]]; then
+    export PKG_PATH=ftp://ftp4.usa.openbsd.org/pub/OpenBSD/6.4/packages/amd64
 fi
 
 # Autoload zsh modules when they are referenced.

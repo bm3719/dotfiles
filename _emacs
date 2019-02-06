@@ -1,14 +1,14 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2018-07-02 11:27:26 (bm3719)>
+;;;; Time-stamp: <2019-02-06 12:47:54 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; External addons used: pabbrev, volatile-highlights.el, paredit, SLIME,
-;;;; package.el (clojure-mode, CIDER, ac-cider, projectile, intero, json-mode),
+;;;; External addons used: pabbrev, volatile-highlights.el, paredit, package.el
+;;;; (clojure-mode, CIDER, ac-cider, projectile, intero, json-mode),
 ;;;; rainbow-delimiters, geiser, python-mode, AUCTeX, web-mode, rainbow-mode,
 ;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags,
 ;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
@@ -18,8 +18,8 @@
 ;;;;
 ;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
 ;;;; racket-minimal (+ drracket via raco), GNU Global, python-doc-html,
-;;;; pyflakes, Maxima, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows
-;;;; only), Consolas font (Windows only).
+;;;; pyflakes, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
+;;;; Consolas font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -66,7 +66,7 @@
 
 ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
 ;; what's going on.
-;;(setq message-log-max nil)
+(setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffer of a .emacs file).
 (when (not (eq nil (get-buffer "*Messages*")))
@@ -932,108 +932,7 @@
 (add-hook 'scheme-mode-hook #'enable-paredit-mode)
 (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
 
-;;; SLIME
-;; http://common-lisp.net/project/slime/
-(when (or *freebsd-system* *osx-system*) ; FreeBSD CVS version.
-  (setq inferior-lisp-program "/usr/local/bin/sbcl"
-        common-lisp-hyperspec-root
-        "file:///usr/local/share/doc/clisp-hyperspec/HyperSpec/"))
-(when *linux-system*   ; Linux CVS version (only using with remote SBCL).
-  (setq inferior-lisp-program "/usr/bin/sbcl"
-        common-lisp-hyperspec-root "file:///home/bm3719/doc/HyperSpec/"))
-(when *nt-system*      ; Windows CVS version.
-  (setq inferior-lisp-program "sbcl.exe"
-        common-lisp-hyperspec-root "file:///C:/bm3719/doc/HyperSpec/"))
-;; Common SLIME setup.
-(setq lisp-indent-function 'common-lisp-indent-function
-      slime-complete-symbol-function 'slime-fuzzy-complete-symbol
-      slime-startup-animation t
-      slime-complete-symbol*-fancy t)
-(require 'slime)
-
-;; Startup SLIME when a Lisp file is open.
-(add-hook 'lisp-mode-hook
-          (lambda ()
-            (slime-mode t)
-            (local-set-key (kbd "C-c s") 'slime-selector)))
-(add-hook 'inferior-lisp-mode-hook
-          (lambda ()
-            (inferior-slime-mode t)
-            (local-set-key (kbd "C-c s") 'slime-selector)))
-
-;; SLIME contribs.
-(slime-setup '(slime-autodoc       ; Show information about symbols near point.
-               slime-fancy         ; Some fancy SLIME contribs.
-               slime-banner        ; Persistent header line, startup animation.
-               slime-asdf          ; ASDF support.
-               slime-indentation)) ; Customizable indentation.
-;; Indentation customization.
-(setq lisp-lambda-list-keyword-parameter-alignment t)
-(setq lisp-lambda-list-keyword-alignment t)
-;; SLIME contribs init.
-(slime-banner-init)          ; Sets banner function to slime-startup-message.
-(slime-asdf-init)            ; Hooks slime-asdf-on-connect.
-;; Spell-check comments.
-(add-hook 'slime-mode-hook 'flyspell-prog-mode)
-(add-hook 'slime-mode-hook 'paredit-mode)
-(add-hook 'slime-repl-mode-hook 'paredit-mode)
-
-;; Translates from Emacs buffer to filename on remote machine.
-(setf slime-translate-to-lisp-filename-function
-      (lambda (file-name)
-        (subseq file-name (length "/ssh:[userid]:")))
-      slime-translate-from-lisp-filename-function
-      (lambda (file-name)
-        (concat "/[userid]:" file-name)))
-
-;; Fontify *slime-description* buffer.
-(defun slime-description-fontify ()
-  "Fontify sections of SLIME Description."
-  (with-current-buffer "*slime-description*"
-    (highlight-regexp
-     (concat "^Function:\\|"
-             "^Macro-function:\\|"
-             "^Its associated name.+?) is\\|"
-             "^The .+'s arguments are:\\|"
-             "^Function documentation:$\\|"
-             "^Its.+\\(is\\|are\\):\\|"
-             "^On.+it was compiled from:$")
-     'hi-blue)))
-(defadvice slime-show-description (after slime-description-fontify activate)
-  "Fontify sections of SLIME Description."
-  (slime-description-fontify))
-
-;; Improve usability of slime-apropos: slime-apropos-minor-mode
-(defvar slime-apropos-anchor-regexp "^[^ ]")
-(defun slime-apropos-next-anchor ()
-  "Navigate to next SLIME apropos anchor."
-  (interactive)
-  (let ((pt (point)))
-    (forward-line 1)
-    (if (re-search-forward slime-apropos-anchor-regexp nil t)
-        (goto-char (match-beginning 0))
-        (goto-char pt)
-        (error "anchor not found"))))
-(defun slime-apropos-prev-anchor ()
-  "Navigate to previous SLIME apropos anchor."
-  (interactive)
-  (let ((p (point)))
-    (if (re-search-backward slime-apropos-anchor-regexp nil t)
-        (goto-char (match-beginning 0))
-        (goto-char p)
-        (error "anchor not found"))))
-(defvar slime-apropos-minor-mode-map (make-sparse-keymap))
-(define-key slime-apropos-minor-mode-map (kbd "RET") 'slime-describe-symbol)
-(define-key slime-apropos-minor-mode-map (kbd "l") 'slime-describe-symbol)
-(define-key slime-apropos-minor-mode-map (kbd "j") 'slime-apropos-next-anchor)
-(define-key slime-apropos-minor-mode-map (kbd "k") 'slime-apropos-prev-anchor)
-(define-minor-mode slime-apropos-minor-mode "")
-(defadvice slime-show-apropos (after slime-apropos-minor-mode activate)
-  ""
-  (when (get-buffer "*SLIME Apropos*")
-    (with-current-buffer "*SLIME Apropos*" (slime-apropos-minor-mode 1))))
-
-;;; clojure-mode and CIDER (via mepla-stable).
+ ;;; clojure-mode and CIDER (via mepla-stable).
 (add-hook 'clojure-mode-hook 'paredit-mode)
 
 ;;; CIDER
@@ -1226,19 +1125,6 @@ hyperlinked *compilation* buffer."
           "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-;;; Maxima support
-(setq auto-mode-alist (cons '("\\.max" . maxima-mode) auto-mode-alist))
-(when *freebsd-system*
-  (setq load-path (cons "/usr/local/share/maxima/5.38.1/emacs" load-path)))
-(when *linux-system*
-  (setq load-path (cons "/usr/share/maxima/5.38.1/emacs" load-path)))
-(when *nt-system*
-  (setq load-path
-        (cons "C:\\bin\\utils\\maxima\\share\\maxima\\5.20.1\\emacs"
-              load-path)))
-(autoload 'maxima "maxima" "Running Maxima interactively" t)
-(autoload 'maxima-mode "maxima" "Maxima editing mode" t)
 
 ;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.

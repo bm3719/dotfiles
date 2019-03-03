@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-02-06 12:47:54 (bm3719)>
+;;;; Time-stamp: <2019-03-02 23:00:14 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1101,6 +1101,7 @@ hyperlinked *compilation* buffer."
 ;; https://github.com/mooz/js2-mode
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(setq js2-basic-offset 2)
 
 ;;; json-mode (via melpa-stable).
 ;; Includes json-reformat and json-snatcher.

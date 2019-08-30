@@ -7,12 +7,12 @@
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; External addons used: volatile-highlights.el, paredit, package.el
-;;;; (clojure-mode, CIDER, ac-cider, projectile, intero, json-mode),
-;;;; rainbow-delimiters, geiser, python-mode, AUCTeX, web-mode, rainbow-mode,
-;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags, aggressive-indent,
-;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
-;;;; emms, wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
+;;;; External addons used: volatile-highlights.el, paredit, clojure-mode, 
+;;;; CIDER, ac-cider, projectile, intero, json-mode, rainbow-delimiters,
+;;;; python-mode, AUCTeX, web-mode, rainbow-mode, flymake-cursor, js2-mode,
+;;;; markdown-mode, CEDET, gtags, aggressive-indent, elscreen, emacs-w3m
+;;;; (development branch), multi-term, lusty-explorer, emms,
+;;;; wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
 ;;;; wttrin, lojban-mode (+ lojban.el), redo+.el, htmlize.el, powerline,
 ;;;; diminish.el.
 ;;;;

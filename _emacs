@@ -1298,7 +1298,6 @@ hyperlinked *compilation* buffer."
 
 ;;; wttrin.el: Get a weather report.
 ;; https://github.com/bcbcarl/emacs-wttrin
-;; Note: Requires xterm-color.
 (require 'wttrin)
 (setq wttrin-default-cities '("Slanesville"))
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))

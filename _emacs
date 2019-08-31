@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-08-31 00:09:02 (bm3719)>
+;;;; Time-stamp: <2019-08-31 00:17:01 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -904,6 +904,7 @@
           (web-mode . "melpa-stable")
           (rainbow-mode . "gnu")
           (flymake-cursor . "melpa-stable")
+          (js2-mode . "melpa-stable")
           (json-mode . "mepla-stable")
           (gnuplot . "mepla-stable")
           (markdown-mode . "melpa-stable")
@@ -929,6 +930,7 @@
                       web-mode
                       rainbow-mode
                       flymake-cursor
+                      js2-mode
                       json-mode
                       gnuplot
                       markdown-mode
@@ -1120,6 +1122,7 @@ hyperlinked *compilation* buffer."
 
 ;;; js2-mode
 ;; https://github.com/mooz/js2-mode
+;; TODO: Replace with js-mode when Emacs 27 comes out.
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js2-basic-offset 2)

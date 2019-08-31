@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-08-30 21:52:28 (bm3719)>
+;;;; Time-stamp: <2019-08-30 21:54:12 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -16,10 +16,9 @@
 ;;;; magit, git-gutter, org-present, xterm-color.el, wttrin.el, lojban-mode (+
 ;;;; lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
 ;;;;
-;;;; External applications used: aspell, aspell-en, SBCL, Leiningen, stack,
-;;;; racket-minimal (+ drracket via raco), GNU Global, python-doc-html,
-;;;; pyflakes, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
-;;;; Consolas font (Windows only).
+;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
+;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
+;;;; Ghostscript/GSView (Windows only), Consolas font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -930,7 +929,6 @@
 (add-hook 'ielm-mode-hook #'enable-paredit-mode)
 (add-hook 'lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook #'enable-paredit-mode)
-(add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
 
  ;;; clojure-mode and CIDER (via mepla-stable).
 (add-hook 'clojure-mode-hook 'paredit-mode)

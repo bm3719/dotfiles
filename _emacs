@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-03-02 23:00:14 (bm3719)>
+;;;; Time-stamp: <2019-08-30 21:52:28 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -458,7 +458,7 @@
   "Display animated startup message."
   (animate-string
    (concat ";; Initialization successful.  Welcome to "
-           (substring (emacs-version) 0 16) ".") 0 0)
+           (substring (emacs-version) 0 14) ".") 0 0)
   (newline-and-indent)  (newline-and-indent))
 (add-hook 'after-init-hook 'bcm-emacs-reloaded)
 
@@ -1007,12 +1007,6 @@ hyperlinked *compilation* buffer."
 ;; Enable prettify-symbols-mode symbols-alists in buffers.
 (add-hook 'haskell-mode-hook 'bcm-haskell-prettify-enable)
 (add-hook 'intero-repl-mode-hook 'bcm-haskell-prettify-enable)
-
-;;; geiser
-;; http://www.nongnu.org/geiser/
-(load-file "~/.emacs.d/lisp/geiser/elisp/geiser.el")
-(setq geiser-default-implementation 'racket)
-(setq scheme-program-name "racket")
 
 ;;; python-mode: Replaces the built-in python.el, though I'm no longer using
 ;;; its integrated iPython support.

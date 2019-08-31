@@ -1,20 +1,20 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-08-30 22:44:58 (bm3719)>
+;;;; Time-stamp: <2019-08-31 00:09:02 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; External addons used: pabbrev, volatile-highlights.el, paredit, package.el
+;;;; External addons used: volatile-highlights.el, paredit, package.el
 ;;;; (clojure-mode, CIDER, ac-cider, projectile, intero, json-mode),
 ;;;; rainbow-delimiters, geiser, python-mode, AUCTeX, web-mode, rainbow-mode,
-;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags,
-;;;; aggressive-indent-mode, elscreen, emacs-w3m (development branch),
-;;;; multi-term, lusty-explorer, emms, wombat-custom-theme.el, with-editor,
-;;;; magit, git-gutter, org-present, xterm-color.el, wttrin.el, lojban-mode (+
-;;;; lojban.el), redo+.el, htmlize.el, powerline, diminish.el.
+;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags, aggressive-indent,
+;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
+;;;; emms, wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
+;;;; wttrin, lojban-mode (+ lojban.el), redo+.el, htmlize.el, powerline,
+;;;; diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
@@ -893,31 +893,59 @@
 (package-initialize)
 (when (boundp 'package-pinned-packages)
   (setq package-pinned-packages
-        '((clojure-mode . "melpa-stable")
+        '((volatile-highlights . "melpa-stable")
+          (paredit . "melpa-stable")
+          (clojure-mode . "melpa-stable")
           (cider . "melpa-stable")
+          (rainbow-delimiters . "melpa-stable")
           (ac-cider . "melpa-stable")
           (projectile . "melpa-stable")
           (intero . "melpa-stable")
+          (web-mode . "melpa-stable")
+          (rainbow-mode . "gnu")
+          (flymake-cursor . "melpa-stable")
           (json-mode . "mepla-stable")
-          (magit . "melpa-stable"))))
-(defvar my-packages '(clojure-mode
+          (gnuplot . "mepla-stable")
+          (markdown-mode . "melpa-stable")
+          (multi-term . "melpa-stable")
+          (lusty-explorer . "melpa-stable")
+          (emms . "melpa-stable")
+          (magit . "melpa-stable")
+          (git-gutter . "melpa-stable")
+          (wttrin . "melpa-stable")
+          (htmlize . "melpa-stable")
+          (powerline . "melpa-stable")
+          (aggressive-indent . "melpa-stable")
+          (elscreen . "melpa-stable")
+          (diminish . "melpa-stable"))))
+(defvar my-packages '(volatile-highlights
+                      paredit
+                      clojure-mode
                       cider
+                      rainbow-delimiters
                       ac-cider
                       projectile
                       intero
+                      web-mode
+                      rainbow-mode
+                      flymake-cursor
                       json-mode
-                      magit))
+                      gnuplot
+                      markdown-mode
+                      multi-term
+                      lusty-explorer
+                      emms
+                      magit
+                      git-gutter
+                      wttrin
+                      htmlize
+                      powerline
+                      aggressive-indent
+                      elscreen
+                      diminish))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
-
-;;; pabbrev:
-;; Add this to the mode-hook for any major modes I want this lightweight
-;; completion auto-activated.
-;; https://github.com/phillord/pabbrev
-(require 'pabbrev)
-;; Disable minibuffer message when expansion occurs.
-(setq pabbrev-idle-timer-verbose nil)
 
 ;;; volatile-highlights.el
 ;; https://github.com/k-talo/volatile-highlights.el
@@ -1023,7 +1051,6 @@ hyperlinked *compilation* buffer."
             (set (make-variable-buffer-local 'beginning-of-defun-function)
                  'py-beginning-of-def-or-class)
             (setq outline-regexp "def\\|class ")
-            (pabbrev-mode)
             (flyspell-prog-mode)
             (flymake-mode)
             (local-set-key (kbd "C-c L") 'py-execute-buffer)))
@@ -1089,7 +1116,6 @@ hyperlinked *compilation* buffer."
 (add-hook 'html-mode-hook (lambda () (rainbow-mode 1)))
 
 ;;; flymake-cursor
-;; http://www.emacswiki.org/emacs/download/flymake-cursor.el
 (require 'flymake-cursor)
 
 ;;; js2-mode
@@ -1098,14 +1124,14 @@ hyperlinked *compilation* buffer."
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js2-basic-offset 2)
 
-;;; json-mode (via melpa-stable).
+;;; json-mode
 ;; Includes json-reformat and json-snatcher.
 ;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
 
 ;;; gnuplot-mode
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el
-(require 'gnuplot-mode)
+(require 'gnuplot)
 (add-hook 'gnuplot-mode-hook
           '(lambda ()
             (flyspell-prog-mode)
@@ -1143,7 +1169,7 @@ hyperlinked *compilation* buffer."
   (autoload 'gtags-mode "gtags" "" t)
   (setq c-mode-hook '(lambda () (gtags-mode 1))))
 
-;;; aggressive-indent-mode: On-the-fly indenting.
+;;; aggressive-indent: On-the-fly indenting.
 ;; https://github.com/Malabarba/aggressive-indent-mode
 (require 'aggressive-indent)
 (global-aggressive-indent-mode 1)
@@ -1161,9 +1187,9 @@ hyperlinked *compilation* buffer."
 
 ;;; emacs-w3m
 ;; http://emacs-w3m.namazu.org/
-;; FreeBSD: ports w3m-m17n; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
+;; FreeBSD: w3m; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
 ;; NOTE: I also modify the local copies of w3m.el and w3m-search.el.  See
-;;       projects.org for details.
+;;       projects-old.org for details.
 (autoload 'w3m "w3m" "Interface for w3m on Emacs." t)
 ;; Use w3m for all URLs (deprecated code to use available GUI browser).
 (setq browse-url-browser-function 'w3m-browse-url)
@@ -1267,15 +1293,11 @@ hyperlinked *compilation* buffer."
             (org-present-small)
             (org-remove-inline-images)))
 
-;;; xterm-color.el: A dependency for wttrin.el.
-;; https://github.com/atomontage/xterm-color
-(require 'xterm-color)
-
 ;;; wttrin.el: Get a weather report.
 ;; https://github.com/bcbcarl/emacs-wttrin
 ;; Note: Requires xterm-color.
 (require 'wttrin)
-(setq wttrin-default-cities '("Fairfax" "Centreville"))
+(setq wttrin-default-cities '("Slanesville"))
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
 
 ;;; lojban-mode: Requires lojban.el.
@@ -1299,9 +1321,7 @@ hyperlinked *compilation* buffer."
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
 
-;;; powerline.el: Mode line replacement.  Using a fork that fixes some display
-;;; issues.
-;; https://github.com/milkypostman/powerline.git
+;;; powerline.el: Mode line replacement.
 (when window-system
   (require 'powerline)
   (powerline-default-theme))

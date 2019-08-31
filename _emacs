@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-08-30 22:07:27 (bm3719)>
+;;;; Time-stamp: <2019-08-30 22:44:58 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -898,13 +898,15 @@
           (ac-cider . "melpa-stable")
           (projectile . "melpa-stable")
           (intero . "melpa-stable")
-          (json-mode . "mepla-stable"))))
+          (json-mode . "mepla-stable")
+          (magit . "melpa-stable"))))
 (defvar my-packages '(clojure-mode
                       cider
                       ac-cider
                       projectile
                       intero
-                      json-mode))
+                      json-mode
+                      magit))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
@@ -1234,20 +1236,7 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "<kp-right>") 'emms-seek-forward)
 (global-set-key (kbd "<kp-left>") 'emms-seek-backward)
 
-;;; with-editor: Allows use of emacsclient as the $EDITOR of child processes.
-;; https://github.com/magit/with-editor
-(require 'with-editor)
-
-;;; magit-popup: A switch/option setting interface, used by Magit.
-;; https://github.com/magit/magit-popup
-(require 'magit-popup)
-
-;;; ghub: An interface for GitHub's REST and GraphQL APIs.  Used by Magit.
-;; https://github.com/magit/ghub
-(require 'ghub)
-
-;;; Magit: Requires dash (installed via ELPA), with-editor, magit-popup, and
-;;; ghub.
+;;; Magit
 ;; https://github.com/magit/magit
 (require 'magit)
 ;; Idiomatic fill-column setting for commit messages.

@@ -1,20 +1,19 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-08-31 00:17:01 (bm3719)>
+;;;; Time-stamp: <2019-09-01 14:19:20 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; External addons used: volatile-highlights.el, paredit, clojure-mode, 
+;;;; External addons used: volatile-highlights.el, paredit, clojure-mode,
 ;;;; CIDER, ac-cider, projectile, intero, json-mode, rainbow-delimiters,
 ;;;; python-mode, AUCTeX, web-mode, rainbow-mode, flymake-cursor, js2-mode,
 ;;;; markdown-mode, CEDET, gtags, aggressive-indent, elscreen, emacs-w3m
 ;;;; (development branch), multi-term, lusty-explorer, emms,
 ;;;; wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
-;;;; wttrin, lojban-mode (+ lojban.el), redo+.el, htmlize.el, powerline,
-;;;; diminish.el.
+;;;; wttrin, lojban-mode (+ lojban.el), htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
@@ -121,7 +120,6 @@
 (global-set-key (kbd "C-x C-v") 'revert-buffer)
 (global-set-key (kbd "C-x TAB") 'indent-region)
 (global-set-key (kbd "C-c M-e") 'fixup-whitespace)
-(global-set-key (kbd "C-x C-u") 'undo)
 (global-set-key (kbd "C-c g") 'replace-string)
 (global-set-key (kbd "C-c ;") 'comment-region)
 (global-set-key (kbd "C-c '") 'uncomment-region)
@@ -1309,14 +1307,6 @@ hyperlinked *compilation* buffer."
 ;; To parse regions, ensure the jbofihe binary is on $PATH.
 ;; https://github.com/lojban/jbofihe
 (autoload 'lojban-parse-region "lojban" nil t)
-
-;;; redo+.el: An extended version of XEmacs' redo package.
-;; http://www.emacswiki.org/emacs/download/redo%2b.el
-;; TODO: Consider replacing this with undo-tree-mode.  I'm sticking with this
-;; for now since it's considerably more intuitive and the need for undo-trees
-;; hasn't ever yet come up.
-(require 'redo+)
-(global-set-key (kbd "C-x M-_") 'redo)
 
 ;;; htmlize.el: Converts buffer to HTML.
 ;; https://github.com/hniksic/emacs-htmlize

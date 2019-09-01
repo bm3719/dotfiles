@@ -1,18 +1,18 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-09-01 14:19:20 (bm3719)>
+;;;; Time-stamp: <2019-09-01 14:34:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; External addons used: volatile-highlights.el, paredit, clojure-mode,
-;;;; CIDER, ac-cider, projectile, intero, json-mode, rainbow-delimiters,
-;;;; python-mode, AUCTeX, web-mode, rainbow-mode, flymake-cursor, js2-mode,
-;;;; markdown-mode, CEDET, gtags, aggressive-indent, elscreen, emacs-w3m
-;;;; (development branch), multi-term, lusty-explorer, emms,
-;;;; wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
+;;;; External addons used: volatile-highlights.el, paredit, package.el
+;;;; (clojure-mode, CIDER, ac-cider, projectile, intero, json-mode),
+;;;; rainbow-delimiters, geiser, python-mode, AUCTeX, web-mode, rainbow-mode,
+;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags, aggressive-indent,
+;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
+;;;; emms, wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
 ;;;; wttrin, lojban-mode (+ lojban.el), htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
@@ -899,6 +899,7 @@
           (ac-cider . "melpa-stable")
           (projectile . "melpa-stable")
           (intero . "melpa-stable")
+          (auctex . "gnu")
           (web-mode . "melpa-stable")
           (rainbow-mode . "gnu")
           (flymake-cursor . "melpa-stable")
@@ -925,6 +926,7 @@
                       ac-cider
                       projectile
                       intero
+                      auctex
                       web-mode
                       rainbow-mode
                       flymake-cursor
@@ -1073,23 +1075,22 @@ hyperlinked *compilation* buffer."
 ;; http://www.gnu.org/software/auctex/
 ;; FreeBSD ports, Linux apt-get version, OSx brew version.
 ;; Note: On OSX, install the BasicTeX package, then add its install location to $PATH.
-(when (not *nt-system*)
-  (load "auctex.el" nil t t)
-  (load "preview-latex.el" nil t t)
-  (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
-  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-  ;; Enable this when working with multi-file document structures.
-  ;; (setq-default TeX-master nil)
-  ;; Enable document parsing.
-  (setq TeX-auto-save t)
-  (setq TeX-parse-self t)
-  ;; Full section options.  See Sectioning page in AUCTeX info.
-  (setq LaTeX-section-hook
-        '(LaTeX-section-heading
-          LaTeX-section-title
-          LaTeX-section-toc
-          LaTeX-section-section
-          LaTeX-section-label)))
+;; (load "auctex.el" nil t t)
+;; (load "preview-latex.el" nil t t)
+(add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+;; Enable this when working with multi-file document structures.
+;; (setq-default TeX-master nil)
+;; Enable document parsing.
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+;; Full section options.  See Sectioning page in AUCTeX info.
+(setq LaTeX-section-hook
+      '(LaTeX-section-heading
+        LaTeX-section-title
+        LaTeX-section-toc
+        LaTeX-section-section
+        LaTeX-section-label))
 
 ;;; web-mode: An autonomous major-mode for editing web templates (HTML
 ;;; documents embedding parts (CSS/JavaScript) and blocks (client/server side).
@@ -1296,6 +1297,7 @@ hyperlinked *compilation* buffer."
 
 ;;; wttrin.el: Get a weather report.
 ;; https://github.com/bcbcarl/emacs-wttrin
+;; Note: Requires xterm-color.
 (require 'wttrin)
 (setq wttrin-default-cities '("Slanesville"))
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))

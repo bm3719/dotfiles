@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-09-01 14:34:26 (bm3719)>
+;;;; Time-stamp: <2019-09-01 14:35:01 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -1075,8 +1075,6 @@ hyperlinked *compilation* buffer."
 ;; http://www.gnu.org/software/auctex/
 ;; FreeBSD ports, Linux apt-get version, OSx brew version.
 ;; Note: On OSX, install the BasicTeX package, then add its install location to $PATH.
-;; (load "auctex.el" nil t t)
-;; (load "preview-latex.el" nil t t)
 (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 ;; Enable this when working with multi-file document structures.

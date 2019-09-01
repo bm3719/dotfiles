@@ -1,19 +1,21 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-09-01 14:35:01 (bm3719)>
+;;;; Time-stamp: <2019-09-01 18:09:16 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; External addons used: volatile-highlights.el, paredit, package.el
-;;;; (clojure-mode, CIDER, ac-cider, projectile, intero, json-mode),
-;;;; rainbow-delimiters, geiser, python-mode, AUCTeX, web-mode, rainbow-mode,
-;;;; flymake-cursor, js2-mode, markdown-mode, CEDET, gtags, aggressive-indent,
-;;;; elscreen, emacs-w3m (development branch), multi-term, lusty-explorer,
-;;;; emms, wombat-custom-theme.el, with-editor, magit, git-gutter, org-present,
-;;;; wttrin, lojban-mode (+ lojban.el), htmlize.el, powerline, diminish.el.
+;;;; ELPA addons: volatile-highlights.el, paredit, clojure-mode, CIDER,
+;;;; ac-cider, projectile, intero, json-mode, rainbow-delimiters, Proof
+;;;; General, AUCTeX, web-mode, rainbow-mode, flymake-cursor, js2-mode,
+;;;; markdown-mode, CEDET, gtags, aggressive-indent, elscreen, multi-term,
+;;;; lusty-explorer, emms, with-editor, magit, git-gutter, wttrin, htmlize.el,
+;;;; powerline, diminish.el.
+;;;;
+;;;; Manually managed addons: emacs-w3m (development branch), org-present,
+;;;; python-mode, wombat-custom-theme.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
@@ -869,7 +871,7 @@
 (require 'cedet)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; External Addons
+;;; External Addons (ELPA)
 
 ;; Add all ~/.emacs.d/lisp subfolders to load path.
 (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
@@ -882,8 +884,8 @@
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; (add-to-list 'package-archives
-;;              '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-stable" . "http://stable.melpa.org/packages/"))
 (add-to-list 'package-archives
@@ -899,6 +901,7 @@
           (ac-cider . "melpa-stable")
           (projectile . "melpa-stable")
           (intero . "melpa-stable")
+          (proof-general . "melpa") ;; Switch to melpa-stable later.
           (auctex . "gnu")
           (web-mode . "melpa-stable")
           (rainbow-mode . "gnu")
@@ -926,6 +929,7 @@
                       ac-cider
                       projectile
                       intero
+                      proof-general
                       auctex
                       web-mode
                       rainbow-mode
@@ -1039,37 +1043,7 @@ hyperlinked *compilation* buffer."
 (add-hook 'haskell-mode-hook 'bcm-haskell-prettify-enable)
 (add-hook 'intero-repl-mode-hook 'bcm-haskell-prettify-enable)
 
-;;; python-mode: Replaces the built-in python.el, though I'm no longer using
-;;; its integrated iPython support.
-;; http://launchpad.net/python-mode/
-(autoload 'python-mode "python-mode" "Python Mode." t)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
-;; NOTE: python-describe-symbol requires the python-doc-html package and the
-;;       PYTHONDOCS environment variable to be set.  This isn't valid in
-;;       python-mode though, only in python.el.
-(add-hook 'python-mode-hook
-          (lambda ()
-            (set (make-variable-buffer-local 'beginning-of-defun-function)
-                 'py-beginning-of-def-or-class)
-            (setq outline-regexp "def\\|class ")
-            (flyspell-prog-mode)
-            (flymake-mode)
-            (local-set-key (kbd "C-c L") 'py-execute-buffer)))
-;; Replaced pylint with pyflakes, as it's super fast.  However, it doesn't
-;; catch a lot of style problems, so it's still a good idea to pylint it later.
-;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
-(defun flymake-pyflakes-init ()
-  "Initialize Flymake for Python, using pyflakes."
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                     'flymake-create-temp-inplace))
-         (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "pyflakes" (list local-file))))
-(when (load "flymake" t)
-  (push '("\\.py\\'" flymake-pyflakes-init)
-        flymake-allowed-file-name-masks))
+;;; Proof General
 
 ;;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
@@ -1185,41 +1159,6 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "<f7>") 'elscreen-create)
 (global-set-key (kbd "<f8>") 'elscreen-kill)
 
-;;; emacs-w3m
-;; http://emacs-w3m.namazu.org/
-;; FreeBSD: w3m; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
-;; NOTE: I also modify the local copies of w3m.el and w3m-search.el.  See
-;;       projects-old.org for details.
-(autoload 'w3m "w3m" "Interface for w3m on Emacs." t)
-;; Use w3m for all URLs (deprecated code to use available GUI browser).
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
-;; Optional keyboard short-cut.
-(global-set-key (kbd "C-x M-m") 'browse-url-at-point)
-;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
-(setq w3m-use-tab t)
-(setq w3m-use-cookies t)
-;; Activate Conkeror-style link selection (toggle with f key).
-(add-hook 'w3m-mode-hook 'w3m-lnum-mode)
-;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
-(require 'w3m-search)
-;; Add some extra search engine URIs.
-(add-to-list 'w3m-search-engine-alist
-             '("hoogle" "http://haskell.org/hoogle/?q=%s"))
-(add-to-list 'w3m-search-engine-alist
-             '("ports" "http://freebsd.org/cgi/ports.cgi/?query=%s" nil))
-(add-to-list 'w3m-search-engine-alist
-             '("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil))
-(add-to-list 'w3m-search-engine-alist
-             '("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))
-(setq w3m-search-default-engine "duckduckgo")
-;; Default to the last manually specified search engine when calling the prefix
-;; version of the function.
-(defadvice w3m-search (after change-default activate)
-  (let ((engine (nth 1 minibuffer-history)))
-    (when (assoc engine w3m-search-engine-alist)
-      (setq w3m-search-default-engine engine))))
-
 ;;; multi-term
 ;; http://www.emacswiki.org/emacs/download/multi-term.el
 (autoload 'multi-term "multi-term" nil t)
@@ -1277,36 +1216,12 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "C-x C-g") 'git-gutter:toggle)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
-;;; org-present.el
-;; https://github.com/rlister/org-present
-;; Note: Use arrow keys to navigate, C-c C-q to quit.
-(autoload 'org-present "org-present" nil t)
-;; Reduce the huge upscaling of text.  This amount is more reasonable for my
-;; laptop, but reconsider it for larger displays.
-(setq org-present-text-scale 2)
-(add-hook 'org-present-mode-hook
-          (lambda ()
-            (org-present-big)
-            (org-display-inline-images)))
-(add-hook 'org-present-mode-quit-hook
-          (lambda ()
-            (org-present-small)
-            (org-remove-inline-images)))
-
 ;;; wttrin.el: Get a weather report.
 ;; https://github.com/bcbcarl/emacs-wttrin
 ;; Note: Requires xterm-color.
 (require 'wttrin)
 (setq wttrin-default-cities '("Slanesville"))
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
-
-;;; lojban-mode: Requires lojban.el.
-;; http://www.emacswiki.org/cgi-bin/wiki/download/lojban-mode.el
-;; http://www.emacswiki.org/emacs/download/lojban.el
-(autoload 'lojban-mode "lojban-mode" nil t)
-;; To parse regions, ensure the jbofihe binary is on $PATH.
-;; https://github.com/lojban/jbofihe
-(autoload 'lojban-parse-region "lojban" nil t)
 
 ;;; htmlize.el: Converts buffer to HTML.
 ;; https://github.com/hniksic/emacs-htmlize
@@ -1348,6 +1263,92 @@ hyperlinked *compilation* buffer."
           (lambda () (setq mode-name "cλj")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; External Addons (manual)
+
+;;; emacs-w3m
+;; http://emacs-w3m.namazu.org/
+;; FreeBSD: w3m; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
+;; NOTE: I also modify the local copies of w3m.el and w3m-search.el.  See
+;;       projects-old.org for details.
+(autoload 'w3m "w3m" "Interface for w3m on Emacs." t)
+;; Use w3m for all URLs (deprecated code to use available GUI browser).
+(setq browse-url-browser-function 'w3m-browse-url)
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+;; Optional keyboard short-cut.
+(global-set-key (kbd "C-x M-m") 'browse-url-at-point)
+;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
+(setq w3m-use-tab t)
+(setq w3m-use-cookies t)
+;; Activate Conkeror-style link selection (toggle with f key).
+(add-hook 'w3m-mode-hook 'w3m-lnum-mode)
+;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
+(require 'w3m-search)
+;; Add some extra search engine URIs.
+(add-to-list 'w3m-search-engine-alist
+             '("hoogle" "http://haskell.org/hoogle/?q=%s"))
+(add-to-list 'w3m-search-engine-alist
+             '("ports" "http://freebsd.org/cgi/ports.cgi/?query=%s" nil))
+(add-to-list 'w3m-search-engine-alist
+             '("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil))
+(add-to-list 'w3m-search-engine-alist
+             '("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))
+(setq w3m-search-default-engine "duckduckgo")
+;; Default to the last manually specified search engine when calling the prefix
+;; version of the function.
+(defadvice w3m-search (after change-default activate)
+  (let ((engine (nth 1 minibuffer-history)))
+    (when (assoc engine w3m-search-engine-alist)
+      (setq w3m-search-default-engine engine))))
+
+;;; org-present.el
+;; https://github.com/rlister/org-present
+;; Note: Use arrow keys to navigate, C-c C-q to quit.
+(autoload 'org-present "org-present" nil t)
+;; Reduce the huge upscaling of text.  This amount is more reasonable for my
+;; laptop, but reconsider it for larger displays.
+(setq org-present-text-scale 2)
+(add-hook 'org-present-mode-hook
+          (lambda ()
+            (org-present-big)
+            (org-display-inline-images)))
+(add-hook 'org-present-mode-quit-hook
+          (lambda ()
+            (org-present-small)
+            (org-remove-inline-images)))
+
+;;; python-mode: Replaces the built-in python.el, though I'm no longer using
+;;; its integrated iPython support.
+;; http://launchpad.net/python-mode/
+(autoload 'python-mode "python-mode" "Python Mode." t)
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+;; NOTE: python-describe-symbol requires the python-doc-html package and the
+;;       PYTHONDOCS environment variable to be set.  This isn't valid in
+;;       python-mode though, only in python.el.
+(add-hook 'python-mode-hook
+          (lambda ()
+            (set (make-variable-buffer-local 'beginning-of-defun-function)
+                 'py-beginning-of-def-or-class)
+            (setq outline-regexp "def\\|class ")
+            (flyspell-prog-mode)
+            (flymake-mode)
+            (local-set-key (kbd "C-c L") 'py-execute-buffer)))
+;; Replaced pylint with pyflakes, as it's super fast.  However, it doesn't
+;; catch a lot of style problems, so it's still a good idea to pylint it later.
+;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
+(defun flymake-pyflakes-init ()
+  "Initialize Flymake for Python, using pyflakes."
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "pyflakes" (list local-file))))
+(when (load "flymake" t)
+  (push '("\\.py\\'" flymake-pyflakes-init)
+        flymake-allowed-file-name-masks))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Final init
 
 (custom-set-variables
@@ -1362,7 +1363,7 @@ hyperlinked *compilation* buffer."
  '(haskell-process-type (quote cabal-repl))
  '(package-selected-packages
    (quote
-    (projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
+    (proof-general projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))

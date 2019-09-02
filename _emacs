@@ -1,14 +1,14 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-09-01 18:09:16 (bm3719)>
+;;;; Time-stamp: <2019-09-01 21:59:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; ELPA addons: volatile-highlights.el, paredit, clojure-mode, CIDER,
-;;;; ac-cider, projectile, intero, json-mode, rainbow-delimiters, Proof
+;;;; ELPA addons: volatile-highlights.el, paredit, which-key, clojure-mode,
+;;;; CIDER, ac-cider, projectile, intero, json-mode, rainbow-delimiters, Proof
 ;;;; General, AUCTeX, web-mode, rainbow-mode, flymake-cursor, js2-mode,
 ;;;; markdown-mode, CEDET, gtags, aggressive-indent, elscreen, multi-term,
 ;;;; lusty-explorer, emms, with-editor, magit, git-gutter, wttrin, htmlize.el,
@@ -402,6 +402,13 @@
 
 ;; Show column number in mode line.
 (setq column-number-mode t)
+
+;; When opening a file, always follow symlinks.
+(setq vc-follow-symlinks t)
+
+;; Auto revert files on change.  When something changes a file, auto-refresh
+;; the buffer so they can't get out of sync.
+(global-auto-revert-mode t)
 
 ;; Variables to mark as safe.
 (setq safe-local-variable-values '((outline-minor-mode . t)
@@ -895,6 +902,7 @@
   (setq package-pinned-packages
         '((volatile-highlights . "melpa-stable")
           (paredit . "melpa-stable")
+          (which-key . "melpa-stable")
           (clojure-mode . "melpa-stable")
           (cider . "melpa-stable")
           (rainbow-delimiters . "melpa-stable")
@@ -923,6 +931,7 @@
           (diminish . "melpa-stable"))))
 (defvar my-packages '(volatile-highlights
                       paredit
+                      which-key
                       clojure-mode
                       cider
                       rainbow-delimiters
@@ -967,12 +976,19 @@
 (add-hook 'lisp-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook #'enable-paredit-mode)
 
+;;; which-key
+(setq which-key-popup-type 'side-window)
+(setq which-key-side-window-location 'bottom)
+(setq which-key-idle-delay 1.2) ;; Default 1.0.
+(add-hook 'org-mode-hook 'which-key-mode)
+
  ;;; clojure-mode and CIDER (via mepla-stable).
 (add-hook 'clojure-mode-hook 'paredit-mode)
 
 ;;; CIDER
 (require 'cider)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
+(add-hook 'cider-mode-hook 'which-key-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (setq cider-repl-pop-to-buffer-on-connect t)
 (defun cider-reset ()
@@ -1044,6 +1060,7 @@ hyperlinked *compilation* buffer."
 (add-hook 'intero-repl-mode-hook 'bcm-haskell-prettify-enable)
 
 ;;; Proof General
+;; TODO: Add some stuff here, maybe
 
 ;;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
@@ -1051,6 +1068,7 @@ hyperlinked *compilation* buffer."
 ;; Note: On OSX, install the BasicTeX package, then add its install location to $PATH.
 (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(add-hook 'LaTeX-mode-hook 'which-key-mode)
 ;; Enable this when working with multi-file document structures.
 ;; (setq-default TeX-master nil)
 ;; Enable document parsing.
@@ -1363,7 +1381,7 @@ hyperlinked *compilation* buffer."
  '(haskell-process-type (quote cabal-repl))
  '(package-selected-packages
    (quote
-    (proof-general projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
+    (which-key proof-general projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))

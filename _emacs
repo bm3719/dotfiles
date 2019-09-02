@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-09-01 21:59:26 (bm3719)>
+;;;; Time-stamp: <2019-09-02 00:13:30 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -9,10 +9,10 @@
 ;;;;
 ;;;; ELPA addons: volatile-highlights.el, paredit, which-key, clojure-mode,
 ;;;; CIDER, ac-cider, projectile, intero, json-mode, rainbow-delimiters, Proof
-;;;; General, AUCTeX, web-mode, rainbow-mode, flymake-cursor, js2-mode,
-;;;; markdown-mode, CEDET, gtags, aggressive-indent, elscreen, multi-term,
-;;;; lusty-explorer, emms, with-editor, magit, git-gutter, wttrin, htmlize.el,
-;;;; powerline, diminish.el.
+;;;; General, AUCTeX, web-mode, rainbow-mode, dockerfile-mode, flymake-cursor,
+;;;; js2-mode, markdown-mode, CEDET, gtags, aggressive-indent, elscreen,
+;;;; multi-term, lusty-explorer, emms, with-editor, magit, git-gutter, wttrin,
+;;;; htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; Manually managed addons: emacs-w3m (development branch), org-present,
 ;;;; python-mode, wombat-custom-theme.el.
@@ -913,6 +913,7 @@
           (auctex . "gnu")
           (web-mode . "melpa-stable")
           (rainbow-mode . "gnu")
+          (dockerfile-mode . "melpa-stable")
           (flymake-cursor . "melpa-stable")
           (js2-mode . "melpa-stable")
           (json-mode . "mepla-stable")
@@ -942,6 +943,7 @@
                       auctex
                       web-mode
                       rainbow-mode
+                      dockerfile-mode
                       flymake-cursor
                       js2-mode
                       json-mode
@@ -1105,6 +1107,10 @@ hyperlinked *compilation* buffer."
 (require 'rainbow-mode)
 (add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
 (add-hook 'html-mode-hook (lambda () (rainbow-mode 1)))
+
+;;; dockerfile-mode
+;; https://github.com/spotify/dockerfile-mode
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 
 ;;; flymake-cursor
 (require 'flymake-cursor)
@@ -1381,7 +1387,7 @@ hyperlinked *compilation* buffer."
  '(haskell-process-type (quote cabal-repl))
  '(package-selected-packages
    (quote
-    (which-key proof-general projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
+    (dockerfile-mode which-key proof-general projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))

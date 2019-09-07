@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-09-07 12:15:04 (bm3719)>
+;;;; Time-stamp: <2019-09-07 12:19:29 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -19,7 +19,7 @@
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
-;;;; Ghostscript/GSView (Windows only), Consolas font (Windows only).
+;;;; Ghostscript/GSView (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -33,7 +33,7 @@
 ;; Font face: Requires appropriate fonts to be installed.
 (if (eq system-type 'windows-nt)
     (set-default-font
-     "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
+     "-outline-Consolas-normal-r-normal-normal-17-97-96-96-c-*-iso8859-1")
   (when window-system
     (set-face-attribute 'default nil :font "dejavu sans mono-14")))
 
@@ -410,9 +410,6 @@
 (when (eq system-type 'gnu/linux)
   (setq shell-file-name "/usr/bin/zsh")
   (setq tex-shell-file-name "/usr/bin/zsh"))
-(when (eq system-type 'windows-nt)
-  (setq shell-file-name "/usr/bin/bash")
-  (setq tex-shell-file-name "/usr/bin/bash"))
 (when (eq system-type 'darwin)
   (setq shell-file-name "/bin/zsh")
   (setq tex-shell-file-name "/bin/zsh"))
@@ -849,9 +846,6 @@
       comint-input-ring-size 5000)
 
 ;;; TRAMP
-(when (eq system-type 'windows-nt)
-  (setq shell-file-name "bash")
-  (setq explicit-shell-file-name shell-file-name))
 (setq tramp-default-method "scp")
 
 ;;; icomplete.el
@@ -1180,8 +1174,6 @@ hyperlinked *compilation* buffer."
   (setq multi-term-program "/usr/local/bin/zsh"))
 (when (eq system-type 'gnu/linux)
   (setq multi-term-program "/usr/bin/zsh"))
-(when (eq system-type 'windows-nt)
-  (setq multi-term-program "/usr/bin/bash"))
 (when (eq system-type 'darwin)
   (setq multi-term-program "/bin/zsh"))
 (global-set-key (kbd "C-c t") 'multi-term-next)

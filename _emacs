@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-09-02 00:13:30 (bm3719)>
+;;;; Time-stamp: <2019-09-07 12:15:04 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -30,18 +30,12 @@
 (when window-system
   (tool-bar-mode -1))
 
-;; Store boolean values for various system-specific settings.
-(defvar *freebsd-system* (string-match "freebsd" system-configuration))
-(defvar *linux-system* (string-match "linux" system-configuration))
-(defvar *nt-system* (string-match "nt" system-configuration))
-(defvar *osx-system* (string-match "darwin" system-configuration))
-
 ;; Font face: Requires appropriate fonts to be installed.
-(if *nt-system*
+(if (eq system-type 'windows-nt)
     (set-default-font
      "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
-    (when window-system
-      (set-face-attribute 'default nil :font "dejavu sans mono-14")))
+  (when window-system
+    (set-face-attribute 'default nil :font "dejavu sans mono-14")))
 
 (setq inhibit-startup-message t)   ; Disable splash screen.
 (when window-system
@@ -96,11 +90,6 @@
 ;; Provides zap-up-to-char (M-z), different than the default zap-to-char which
 ;; includes deleting the argument character.
 (load-library "misc")
-
-;; Work-around for a bug in w32 Emacs 23.
-(when *nt-system*
-  (and (= emacs-major-version 23)
-       (defun server-ensure-safe-dir (dir) "Noop" t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Basic Key Bindings
@@ -293,7 +282,7 @@
   (interactive)
   (beginning-of-buffer)
   (while (search-forward "\r" nil t)
-         (replace-match "" nil t)))
+    (replace-match "" nil t)))
 
 ;; Insert a date string in the format I most commonly use in text files.
 (defun bcm-date ()
@@ -363,14 +352,14 @@
   (if (and (eq last-command 'bcm-my-smart-home)
            (/= (line-beginning-position) (point)))
       (beginning-of-line)
-      (beginning-of-line-text)))
+    (beginning-of-line-text)))
 (defun bcm-my-smart-end ()
   "Odd end to end of line, even end to begin of text/code."
   (interactive)
   (if (and (eq last-command 'bcm-my-smart-end)
            (= (line-end-position) (point)))
       (bcm-end-of-line-text)
-      (end-of-line)))
+    (end-of-line)))
 (defun bcm-end-of-line-text ()
   "Move to end of current line and skip comments and trailing space."
   (interactive)
@@ -380,7 +369,7 @@
       (while (and (/= bol (point))
                   (eq font-lock-comment-face
                       (get-text-property (point) 'face)))
-             (backward-char 1))
+        (backward-char 1))
       (unless (= (point) bol)
         (forward-char 1) (skip-chars-backward " \t\n")))))
 ;; Normal home/end prefixed with control.
@@ -415,16 +404,16 @@
                                    (eldoc-mode . t)))
 
 ;; Set shells.
-(when *freebsd-system*
+(when (eq system-type 'berkeley-unix)
   (setq shell-file-name "/usr/local/bin/zsh")
   (setq tex-shell-file-name "/usr/local/bin/zsh"))
-(when *linux-system*
+(when (eq system-type 'gnu/linux)
   (setq shell-file-name "/usr/bin/zsh")
   (setq tex-shell-file-name "/usr/bin/zsh"))
-(when *nt-system*
+(when (eq system-type 'windows-nt)
   (setq shell-file-name "/usr/bin/bash")
   (setq tex-shell-file-name "/usr/bin/bash"))
-(when *osx-system*
+(when (eq system-type 'darwin)
   (setq shell-file-name "/bin/zsh")
   (setq tex-shell-file-name "/bin/zsh"))
 
@@ -609,9 +598,9 @@
                 (string-match (buffer-name buf) "*grep*"))
             ;; There were errors.
             (message "Compilation errors, press C-x ` to visit.")
-            ;; No errors; make the compilation window go away in 2 seconds.
-            (run-at-time 2 nil 'delete-windows-on buf)
-            (message "Build Succeeded."))))
+          ;; No errors; make the compilation window go away in 2 seconds.
+          (run-at-time 2 nil 'delete-windows-on buf)
+          (message "Build Succeeded."))))
 ;; Use c-mode for flex files (cc-mode is probably better for this though).
 (setq auto-mode-alist
       (append '(("\\.l$" . c-mode))
@@ -712,7 +701,7 @@
 ;; Solves aspell startup problem on some Linuxes.
 (setq flyspell-issue-welcome-flag nil)
 ;; Some OSX-specific cocoAspell config.
-(when *osx-system*
+(when (eq system-type 'darwin)
   (setq ispell-program-name "aspell"
         ispell-dictionary "english"
         ispell-dictionary-alist
@@ -768,8 +757,8 @@
 ;; Add calendar control-navigation.
 (add-hook 'calendar-load-hook
           '(lambda ()
-            (define-key calendar-mode-map (kbd "C-x >") 'scroll-calendar-right)
-            (define-key calendar-mode-map (kbd "C-x <") 'scroll-calendar-left)))
+             (define-key calendar-mode-map (kbd "C-x >") 'scroll-calendar-right)
+             (define-key calendar-mode-map (kbd "C-x <") 'scroll-calendar-left)))
 ;; Change some self-explanatory calendar settings.
 (setq
  mark-holidays-in-calendar t
@@ -813,7 +802,7 @@
 ;; Custom generic mode for arff files (Used with Weka).
 (require 'generic)
 (define-generic-mode 'arff-file-mode
-    (list ?%)
+  (list ?%)
   (list "attribute" "relation" "end" "data")
   '(("\\('.*'\\)" 1 'font-lock-string-face)
     ("^\\@\\S-*\\s-\\(\\S-*\\)" 1 'font-lock-string-face)
@@ -833,10 +822,10 @@
   (list
    (function
     (lambda ()
-     (setq font-lock-defaults
-           (list 'generic-font-lock-defaults nil t   ; case insensitive
-                 (list (cons ?* "w") (cons ?- "w"))))
-     (turn-on-font-lock)))) "Mode for arff-files.")
+      (setq font-lock-defaults
+            (list 'generic-font-lock-defaults nil t   ; case insensitive
+                  (list (cons ?* "w") (cons ?- "w"))))
+      (turn-on-font-lock)))) "Mode for arff-files.")
 
 ;; Use file<pathname> instead of file<n> to uniquify buffer names.
 ;; Note: Enabled by default in >=24.4.
@@ -860,7 +849,7 @@
       comint-input-ring-size 5000)
 
 ;;; TRAMP
-(when *nt-system*
+(when (eq system-type 'windows-nt)
   (setq shell-file-name "bash")
   (setq explicit-shell-file-name shell-file-name))
 (setq tramp-default-method "scp")
@@ -1035,7 +1024,7 @@ hyperlinked *compilation* buffer."
 (add-hook 'cider-mode-hook 'ac-cider-setup)
 (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
 (eval-after-load "auto-complete"
-                 '(add-to-list 'ac-modes 'cider-mode))
+  '(add-to-list 'ac-modes 'cider-mode))
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
@@ -1049,8 +1038,8 @@ hyperlinked *compilation* buffer."
 (add-hook 'clojure-mode-hook 'bcm-clojure-hook)
 (add-hook 'cider-repl-mode-hook
           '(lambda ()
-            (define-key cider-repl-mode-map
-             (kbd "C-w") 'paredit-backward-kill-word)))
+             (define-key cider-repl-mode-map
+               (kbd "C-w") 'paredit-backward-kill-word)))
 ;; Fix missing *nrepl-messages* buffer.
 (setq nrepl-log-messages 1)
 
@@ -1132,9 +1121,9 @@ hyperlinked *compilation* buffer."
 (require 'gnuplot)
 (add-hook 'gnuplot-mode-hook
           '(lambda ()
-            (flyspell-prog-mode)
-            (add-hook 'before-save-hook
-             'whitespace-cleanup nil t)))
+             (flyspell-prog-mode)
+             (add-hook 'before-save-hook
+                       'whitespace-cleanup nil t)))
 ;; .gp is my personally-designated Gnuplot extension.
 (add-to-list 'auto-mode-alist '("\\.gp$" . gnuplot-mode))
 
@@ -1142,7 +1131,7 @@ hyperlinked *compilation* buffer."
 ;; https://github.com/jrblevin/markdown-mode
 ;; Note: Install textproc/markdown to integrate compilation commands.
 (autoload 'markdown-mode "markdown-mode"
-          "Major mode for editing Markdown files" t)
+  "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
@@ -1162,7 +1151,7 @@ hyperlinked *compilation* buffer."
 
 ;;; gtags
 ;; Requires an install of GNU Global.  Currently only using for c-mode.
-(when *freebsd-system*
+(when (eq system-type 'berkeley-unix)
   (setq load-path (cons "/usr/local/share/gtags" load-path))
   (autoload 'gtags-mode "gtags" "" t)
   (setq c-mode-hook '(lambda () (gtags-mode 1))))
@@ -1187,13 +1176,13 @@ hyperlinked *compilation* buffer."
 ;; http://www.emacswiki.org/emacs/download/multi-term.el
 (autoload 'multi-term "multi-term" nil t)
 (autoload 'multi-term-next "multi-term" nil t)
-(when *freebsd-system*
+(when (eq system-type 'berkeley-unix)
   (setq multi-term-program "/usr/local/bin/zsh"))
-(when *linux-system*
+(when (eq system-type 'gnu/linux)
   (setq multi-term-program "/usr/bin/zsh"))
-(when *nt-system*
+(when (eq system-type 'windows-nt)
   (setq multi-term-program "/usr/bin/bash"))
-(when *osx-system*
+(when (eq system-type 'darwin)
   (setq multi-term-program "/bin/zsh"))
 (global-set-key (kbd "C-c t") 'multi-term-next)
 (global-set-key (kbd "C-c T") 'multi-term)
@@ -1259,10 +1248,10 @@ hyperlinked *compilation* buffer."
 
 ;;; Printing
 ;; Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.
-(when *freebsd-system*
+(when (eq system-type 'berkeley-unix)
   (setq lpr-command "xpp"))
 ;; Requires install of Ghostscript and GSView native ports on Windows.
-(when *nt-system*
+(when (eq system-type 'windows-nt)
   (progn
     (setq-default ps-lpr-command
                   (expand-file-name

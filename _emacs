@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-09-07 12:19:29 (bm3719)>
+;;;; Time-stamp: <2019-10-08 05:48:59 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -11,8 +11,8 @@
 ;;;; CIDER, ac-cider, projectile, intero, json-mode, rainbow-delimiters, Proof
 ;;;; General, AUCTeX, web-mode, rainbow-mode, dockerfile-mode, flymake-cursor,
 ;;;; js2-mode, markdown-mode, CEDET, gtags, aggressive-indent, elscreen,
-;;;; multi-term, lusty-explorer, emms, with-editor, magit, git-gutter, wttrin,
-;;;; htmlize.el, powerline, diminish.el.
+;;;; multi-term, lusty-explorer, emms, magit, git-gutter, wttrin, htmlize.el,
+;;;; powerline, diminish.el.
 ;;;;
 ;;;; Manually managed addons: emacs-w3m (development branch), org-present,
 ;;;; python-mode, wombat-custom-theme.el.

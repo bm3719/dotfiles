@@ -37,6 +37,8 @@ URxvt*color12:          #87ceeb
 URxvt*color13:          #996600
 URxvt*color14:          #b0c4de
 URxvt*color15:          #ddccbb
+URxvt*iso14755:         false
+URxvt*iso14755_52:      false
 !! Enable if using embedded Perl interpreter.
 !URxvt*urlLauncher:      /usr/local/bin/conkeror
 !URxvt*matcher.button:   1

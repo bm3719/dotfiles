@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2019-10-08 05:48:59 (bm3719)>
+;;;; Time-stamp: <2020-05-23 18:58:07 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -11,15 +11,15 @@
 ;;;; CIDER, ac-cider, projectile, intero, json-mode, rainbow-delimiters, Proof
 ;;;; General, AUCTeX, web-mode, rainbow-mode, dockerfile-mode, flymake-cursor,
 ;;;; js2-mode, markdown-mode, CEDET, gtags, aggressive-indent, elscreen,
-;;;; multi-term, lusty-explorer, emms, magit, git-gutter, wttrin, htmlize.el,
-;;;; powerline, diminish.el.
+;;;; multi-term, lusty-explorer, emms, with-editor, magit, git-gutter, wttrin,
+;;;; pinentry, htmlize.el, powerline, diminish.el.
 ;;;;
 ;;;; Manually managed addons: emacs-w3m (development branch), org-present,
 ;;;; python-mode, wombat-custom-theme.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
-;;;; Ghostscript/GSView (Windows only).
+;;;; Ghostscript/GSView (Windows only), Consolas font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -33,7 +33,7 @@
 ;; Font face: Requires appropriate fonts to be installed.
 (if (eq system-type 'windows-nt)
     (set-default-font
-     "-outline-Consolas-normal-r-normal-normal-17-97-96-96-c-*-iso8859-1")
+     "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
   (when window-system
     (set-face-attribute 'default nil :font "dejavu sans mono-14")))
 
@@ -379,9 +379,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Miscellaneous Customization
 
-;; This sets garbage collection to hundred times of the default; supposedly
-;; significantly speeds up startup time.  Disable this if RAM is limited.
-(setq gc-cons-threshold 50000000)
+;; This sets garbage collection to maximum, speeding up startup time.  Disable
+;; this if RAM is limited, or set to a fixed amount.
+(setq gc-cons-threshold most-positive-fixnum)
 
 ;; Warn only when opening files bigger than 100MB (default is 10MB).
 (setq large-file-warning-threshold 100000000)
@@ -410,6 +410,9 @@
 (when (eq system-type 'gnu/linux)
   (setq shell-file-name "/usr/bin/zsh")
   (setq tex-shell-file-name "/usr/bin/zsh"))
+(when (eq system-type 'windows-nt)
+  (setq shell-file-name "/usr/bin/bash")
+  (setq tex-shell-file-name "/usr/bin/bash"))
 (when (eq system-type 'darwin)
   (setq shell-file-name "/bin/zsh")
   (setq tex-shell-file-name "/bin/zsh"))
@@ -725,12 +728,14 @@
                             "STARTED(s!)"
                             "|"
                             "DONE(d!/!)"
-                            "CANCELED(c!)")))
+                            "CANCELED(c!)"
+                            "BLOCKED(b!)")))
  org-todo-keyword-faces
  (quote (("TODO" :foreground "red" :weight bold)
-         ("STARTED" :foreground "blue" :weight bold)
+         ("STARTED" :foreground "light sky blue" :weight bold)
          ("DONE" :foreground "forest green" :weight bold)
-         ("CANCELED" :foreground "light sky blue" :weight bold))))
+         ("CANCELED" :foreground "dark blue" :weight bold)
+         ("BLOCKED" :foreground "purple" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
 ;;; org-capture.el: On-the-fly note taking.
@@ -846,6 +851,9 @@
       comint-input-ring-size 5000)
 
 ;;; TRAMP
+(when (eq system-type 'windows-nt)
+  (setq shell-file-name "bash")
+  (setq explicit-shell-file-name shell-file-name))
 (setq tramp-default-method "scp")
 
 ;;; icomplete.el
@@ -909,6 +917,7 @@
           (git-gutter . "melpa-stable")
           (wttrin . "melpa-stable")
           (htmlize . "melpa-stable")
+          (pinentry . "gnu")
           (powerline . "melpa-stable")
           (aggressive-indent . "melpa-stable")
           (elscreen . "melpa-stable")
@@ -939,6 +948,7 @@
                       git-gutter
                       wttrin
                       htmlize
+                      pinentry
                       powerline
                       aggressive-indent
                       elscreen
@@ -1174,6 +1184,8 @@ hyperlinked *compilation* buffer."
   (setq multi-term-program "/usr/local/bin/zsh"))
 (when (eq system-type 'gnu/linux)
   (setq multi-term-program "/usr/bin/zsh"))
+(when (eq system-type 'windows-nt)
+  (setq multi-term-program "/usr/bin/bash"))
 (when (eq system-type 'darwin)
   (setq multi-term-program "/bin/zsh"))
 (global-set-key (kbd "C-c t") 'multi-term-next)
@@ -1232,6 +1244,11 @@ hyperlinked *compilation* buffer."
 ;; https://github.com/hniksic/emacs-htmlize
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
+
+;;; pinentry: Needed for minibuffer prompt integration with GnuPG 2.1.5+ and
+;;; Pinentry 0.9.5+.
+(setq epa-pinentry-mode 'loopback)
+(pinentry-start)
 
 ;;; powerline.el: Mode line replacement.
 (when window-system
@@ -1368,7 +1385,7 @@ hyperlinked *compilation* buffer."
  '(haskell-process-type (quote cabal-repl))
  '(package-selected-packages
    (quote
-    (dockerfile-mode which-key proof-general projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
+    (pinentry dockerfile-mode which-key proof-general projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))

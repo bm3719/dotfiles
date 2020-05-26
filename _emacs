@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-23 18:58:07 (bm3719)>
+;;;; Time-stamp: <2020-05-25 22:33:31 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -95,7 +95,7 @@
 ;;; Basic Key Bindings
 
 ;; Define a function to auto-delete trailing whitespace upon save.
-(defun bcm-delete-ws-save ()
+(defun bcm/delete-ws-save ()
   (interactive)
   (progn (delete-trailing-whitespace)
          (save-buffer)))
@@ -103,7 +103,7 @@
 ;; Global key (re-)mappings.
 (global-set-key (kbd "C-w") 'backward-kill-word)   ; Match the shell's C-w.
 (global-set-key (kbd "C-x w") 'kill-region)
-(global-set-key (kbd "C-x s") 'bcm-delete-ws-save)
+(global-set-key (kbd "C-x s") 'bcm/delete-ws-save)
 (global-set-key (kbd "C-m") 'newline-and-indent)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "M-G") 'goto-char)
@@ -123,7 +123,7 @@
 ;; intending to do a find-file.
 (global-set-key (kbd "C-x f") 'find-file)
 (global-set-key (kbd "C-x M-f") 'set-fill-column)
-(global-set-key (kbd "C-x C-s") 'bcm-delete-ws-save)
+(global-set-key (kbd "C-x C-s") 'bcm/delete-ws-save)
 
 ;; For quick macro running.
 (global-set-key (kbd "<f10>") 'start-kbd-macro)
@@ -157,12 +157,12 @@
 (setq-default fill-column 79)
 
 ;; Takes a multi-line paragraph and makes it into a single line of text.
-(defun bcm-unfill-paragraph ()
+(defun bcm/unfill-paragraph ()
   "Un-fill paragraph at point."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
-(global-set-key (kbd "M-p") 'bcm-unfill-paragraph)
+(global-set-key (kbd "M-p") 'bcm/unfill-paragraph)
 
 ;; Heretical tab settings.  Emacs is smart enough to auto-disable this when
 ;; editing Make files.
@@ -202,18 +202,18 @@
 ;; Use cursor color to indicate some modes.  Modified version that ignores
 ;; overwrite.  Original snippet from:
 ;; http://www.emacswiki.org/emacs/EmacsNiftyTricks#toc4
-(setq bcm-set-cursor-color-color "")
-(setq bcm-set-cursor-color-buffer "")
-(defun bcm-set-cursor-color-according-to-mode ()
+(setq bcm/set-cursor-color-color "")
+(setq bcm/set-cursor-color-buffer "")
+(defun bcm/set-cursor-color-according-to-mode ()
   "Change cursor color according to some minor modes."
   ;; Set-cursor-color is somewhat costly, so we only call it when needed.
   (let ((color (if buffer-read-only "red" "DarkSlateGray")))
     (unless (and
-             (string= color bcm-set-cursor-color-color)
-             (string= (buffer-name) bcm-set-cursor-color-buffer))
-      (set-cursor-color (setq bcm-set-cursor-color-color color))
-      (setq bcm-set-cursor-color-buffer (buffer-name)))))
-(add-hook 'post-command-hook 'bcm-set-cursor-color-according-to-mode)
+             (string= color bcm/set-cursor-color-color)
+             (string= (buffer-name) bcm/set-cursor-color-buffer))
+      (set-cursor-color (setq bcm/set-cursor-color-color color))
+      (setq bcm/set-cursor-color-buffer (buffer-name)))))
+(add-hook 'post-command-hook 'bcm/set-cursor-color-according-to-mode)
 
 ;; Alias to prompt for a regex and a replacement string.
 (defalias 'qrr 'query-replace-regexp)
@@ -246,14 +246,14 @@
 (setq require-final-newline t)
 
 ;; Defines a function to kill text from point to beginning of line.
-(defun bcm-backward-kill-line (arg)
+(defun bcm/backward-kill-line (arg)
   "Kill chars backward until encountering the end of a line."
   (interactive "p")
   (kill-line 0))
-(global-set-key (kbd "M-C-k") 'bcm-backward-kill-line)
+(global-set-key (kbd "M-C-k") 'bcm/backward-kill-line)
 
 ;; Copy a line without killing it.
-(defun bcm-copy-line (&optional arg)
+(defun bcm/copy-line (&optional arg)
   "Do a kill-line but copy rather than kill."
   (interactive "p")
   (toggle-read-only 1)
@@ -261,12 +261,12 @@
   (toggle-read-only 0))
 ;; Replace error message on read-only kill with an echo area message.
 (setq-default kill-read-only-ok t)
-(global-set-key (kbd "C-x M-w") 'bcm-copy-line)
+(global-set-key (kbd "C-x M-w") 'bcm/copy-line)
 
 ;; For composing in Emacs then pasting into a word processor, this un-fills all
 ;; the paragraphs (i.e. turns each paragraph into one very long line) and
 ;; removes any blank lines that previously separated paragraphs.
-(defun bcm-wp-munge ()
+(defun bcm/wp-munge ()
   "Un-fill paragraphs and remove blank lines."
   (interactive)
   (let ((save-fill-column fill-column))
@@ -277,7 +277,7 @@
     (set-fill-column save-fill-column)))
 
 ;; Add a function to strip DOS endlines.
-(defun bcm-cut-ctrlm ()
+(defun bcm/cut-ctrlm ()
   "Cut all visible ^M."
   (interactive)
   (beginning-of-buffer)
@@ -285,12 +285,12 @@
     (replace-match "" nil t)))
 
 ;; Insert a date string in the format I most commonly use in text files.
-(defun bcm-date ()
+(defun bcm/date ()
   "Insert an ISO 8601 formatted date string."
   (interactive)
   (insert (format-time-string "%Y-%m-%d")))
 ;; Insert a UTC datetime string in ISO 8601 format.
-(defun bcm-datetime ()
+(defun bcm/datetime ()
   "Insert an ISO 8601 formatted datetime string, with time in UTC."
   (interactive)
   (insert (format-time-string "%Y-%m-%dT%H:%M:%SZ" nil 1)))
@@ -344,23 +344,23 @@
 ;; A second invocation moves the cursor to beginning of the *absolute* line.
 ;; Most of the time this won't matter even be noticeable, but when it does (in
 ;; comments, for example) it will quite convenient.  By sw77@cornell.edu.
-(global-set-key (kbd "<home>") 'bcm-my-smart-home)
-(global-set-key (kbd "<end>") 'bcm-my-smart-end)
-(defun bcm-my-smart-home ()
+(global-set-key (kbd "<home>") 'bcm/my-smart-home)
+(global-set-key (kbd "<end>") 'bcm/my-smart-end)
+(defun bcm/my-smart-home ()
   "Odd home to beginning of line, even home to beginning of text/code."
   (interactive)
-  (if (and (eq last-command 'bcm-my-smart-home)
+  (if (and (eq last-command 'bcm/my-smart-home)
            (/= (line-beginning-position) (point)))
       (beginning-of-line)
     (beginning-of-line-text)))
-(defun bcm-my-smart-end ()
+(defun bcm/my-smart-end ()
   "Odd end to end of line, even end to begin of text/code."
   (interactive)
-  (if (and (eq last-command 'bcm-my-smart-end)
+  (if (and (eq last-command 'bcm/my-smart-end)
            (= (line-end-position) (point)))
-      (bcm-end-of-line-text)
+      (bcm/end-of-line-text)
     (end-of-line)))
-(defun bcm-end-of-line-text ()
+(defun bcm/end-of-line-text ()
   "Move to end of current line and skip comments and trailing space."
   (interactive)
   (end-of-line)
@@ -449,25 +449,25 @@
 
 ;; Startup message with Emacs version.  Modified from original at:
 ;; http://www.emacswiki.org/emacs/DotEmacsChallenge
-(defun bcm-emacs-reloaded ()
+(defun bcm/emacs-reloaded ()
   "Display animated startup message."
   (animate-string
    (concat ";; Initialization successful.  Welcome to "
            (substring (emacs-version) 0 14) ".") 0 0)
   (newline-and-indent)  (newline-and-indent))
-(add-hook 'after-init-hook 'bcm-emacs-reloaded)
+(add-hook 'after-init-hook 'bcm/emacs-reloaded)
 
 ;; Call this function to increase/decrease font size.
-(defun bcm-zoom (n)
+(defun bcm/zoom (n)
   "With positive N, increase the font size, otherwise decrease it."
   (set-face-attribute 'default (selected-frame) :height
                       (+ (face-attribute 'default :height)
                          (* (if (> n 0) 1 -1) 10))))
 ;; Add some zoom keybindings.
-(global-set-key (kbd "C-+") '(lambda () (interactive) (bcm-zoom 1)))
-(global-set-key (kbd "C-<kp-add>") '(lambda () (interactive) (bcm-zoom 1)))
-(global-set-key (kbd "C--") '(lambda () (interactive) (bcm-zoom -1)))
-(global-set-key (kbd "C-<kb-subtract>") '(lambda () (interactive) (bcm-zoom -1)))
+(global-set-key (kbd "C-+") '(lambda () (interactive) (bcm/zoom 1)))
+(global-set-key (kbd "C-<kp-add>") '(lambda () (interactive) (bcm/zoom 1)))
+(global-set-key (kbd "C--") '(lambda () (interactive) (bcm/zoom -1)))
+(global-set-key (kbd "C-<kb-subtract>") '(lambda () (interactive) (bcm/zoom -1)))
 
 ;;; Time-stamp support
 ;; When there is a "Time-stamp: <>" in the first 10 lines of the file,
@@ -483,7 +483,7 @@
 ;; I always compile my .emacs, saving about two seconds startup time.  But that
 ;; only helps if the .emacs.elc is newer than the .emacs.  So, compile .emacs
 ;; if it's not.
-(defun bcm-autocompile ()
+(defun bcm/autocompile ()
   "Compile self in ~/.emacs.d/build"
   (interactive)
   (require 'bytecomp)
@@ -491,23 +491,23 @@
                (expand-file-name
                 (concat default-directory "~/.emacs.d/build")))
       (byte-compile-file (buffer-file-name))))
-(add-hook 'after-save-hook 'bcm-autocompile)
+(add-hook 'after-save-hook 'bcm/autocompile)
 
 ;; A function to close all buffers except scratch.
-(defun bcm-cleanup ()
+(defun bcm/cleanup ()
   "Kill all buffers except *scratch*."
   (interactive)
   (mapcar (lambda (x) (kill-buffer x)) (buffer-list)) (delete-other-windows))
 
 ;; Indents the entire buffer according to whatever indenting rules are present.
-(defun bcm-indent ()
+(defun bcm/indent ()
   "Indent whole buffer."
   (interactive)
   (delete-trailing-whitespace)
   (indent-region (point-min) (point-max) nil)
   (untabify (point-min) (point-max)))
 ;; This is so commonly used, binding to F4.
-(global-set-key (kbd "<f4>") 'bcm-indent)
+(global-set-key (kbd "<f4>") 'bcm/indent)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes
@@ -578,7 +578,7 @@
     ("<<" . ?≪) (">>" . ?≫) ("<<<" . ?⋘) (">>>" . ?⋙) ("<|" . ?⊲) ("|>" . ?⊳)
     ("><" . ?⋈) ("mempty" . ?∅) ("mappend" . ?⊕) ("<*>" . ?⊛) ("undefined" . ?⊥)
     (":=" . ?≔) ("=:" . ?≕) ("=def" . ?≝) ("=?" . ?≟) ("..." . ?…)))
-(defun bcm-haskell-prettify-enable ()
+(defun bcm/haskell-prettify-enable ()
   "Enable prettification for Haskell symbols."
   (prettify-symbols-mode -1)
   (setq-local prettify-symbols-alist (append prettify-symbols-alist
@@ -1034,12 +1034,12 @@ hyperlinked *compilation* buffer."
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
-(defun bcm-clojure-hook ()
+(defun bcm/clojure-hook ()
   (auto-complete-mode 1)
   (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
   ;; (define-key cider-mode-map (kbd "C-c C-o") 'cider-reset)
   (define-key clojure-mode-map (kbd "C-w") 'paredit-backward-kill-word))
-(add-hook 'clojure-mode-hook 'bcm-clojure-hook)
+(add-hook 'clojure-mode-hook 'bcm/clojure-hook)
 (add-hook 'cider-repl-mode-hook
           '(lambda ()
              (define-key cider-repl-mode-map
@@ -1051,8 +1051,8 @@ hyperlinked *compilation* buffer."
 ;; https://commercialhaskell.github.io/intero/
 (add-hook 'haskell-mode-hook 'intero-mode)
 ;; Enable prettify-symbols-mode symbols-alists in buffers.
-(add-hook 'haskell-mode-hook 'bcm-haskell-prettify-enable)
-(add-hook 'intero-repl-mode-hook 'bcm-haskell-prettify-enable)
+(add-hook 'haskell-mode-hook 'bcm/haskell-prettify-enable)
+(add-hook 'intero-repl-mode-hook 'bcm/haskell-prettify-enable)
 
 ;;; Proof General
 ;; TODO: Add some stuff here, maybe

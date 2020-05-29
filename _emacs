@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-29 18:23:43 (bm3719)>
+;;;; Time-stamp: <2020-05-29 18:38:10 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -10,11 +10,11 @@
 ;;;; ELPA addons: volatile-highlights, paredit, which-key, clojure-mode, cider,
 ;;;; rainbow-delimiters, ac-cider, intero, proof-general, auctex, web-mode,
 ;;;; rainbow-mode, dockerfile-mode, flymake-cursor, js2-mode, json-mode,
-;;;; gnuplot, markdown-mode, aggressive-indent, elscreen, w3m, multi-term,
-;;;; lusty-explorer, emms, magit, git-gutter, wttrin, htmlize, pinentry,
-;;;; powerline, diminish.
+;;;; python-mode, gnuplot, markdown-mode, aggressive-indent, elscreen, w3m,
+;;;; multi-term, lusty-explorer, emms, magit, git-gutter, org-present, wttrin,
+;;;; htmlize, pinentry, powerline, diminish.
 ;;;;
-;;;; Manually managed addons: org-present, python-mode, wombat-custom-theme.el.
+;;;; Manually managed addons: wombat-custom-theme.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
@@ -943,6 +943,7 @@
           (flymake-cursor . "melpa-stable")
           (js2-mode . "melpa-stable")
           (json-mode . "mepla-stable")
+          (python-mode . "melpa-stable")
           (gnuplot . "mepla-stable")
           (markdown-mode . "melpa-stable")
           (aggressive-indent . "melpa-stable")
@@ -953,6 +954,7 @@
           (emms . "melpa-stable")
           (magit . "melpa-stable")
           (git-gutter . "melpa-stable")
+          (org-present . "melpa")
           (wttrin . "melpa-stable")
           (htmlize . "melpa-stable")
           (pinentry . "gnu")
@@ -974,6 +976,7 @@
                       flymake-cursor
                       js2-mode
                       json-mode
+                      python-mode
                       gnuplot
                       markdown-mode
                       aggressive-indent
@@ -984,6 +987,7 @@
                       emms
                       magit
                       git-gutter
+                      org-present
                       wttrin
                       htmlize
                       pinentry
@@ -1154,6 +1158,41 @@ hyperlinked *compilation* buffer."
 ;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
 
+
+;;; python-mode: Replaces the built-in python.el, though I'm no longer using
+;;; its integrated iPython support.
+;; http://launchpad.net/python-mode/
+;; NOTE: This might've bit-rotted some.  Will revisit everything here next time
+;; I setup the dev stack via pip to write some Python.
+(autoload 'python-mode "python-mode" "Python Mode." t)
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+;; NOTE: python-describe-symbol requires the python-doc-html package and the
+;;       PYTHONDOCS environment variable to be set.  This isn't valid in
+;;       python-mode though, only in python.el.
+(add-hook 'python-mode-hook
+          (lambda ()
+            (set (make-variable-buffer-local 'beginning-of-defun-function)
+                 'py-beginning-of-def-or-class)
+            (setq outline-regexp "def\\|class ")
+            (flyspell-prog-mode)
+            (flymake-mode)
+            (local-set-key (kbd "C-c L") 'py-execute-buffer)))
+;; Replaced pylint with pyflakes, as it's super fast.  However, it doesn't
+;; catch a lot of style problems, so it's still a good idea to pylint it later.
+;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
+(defun flymake-pyflakes-init ()
+  "Initialize Flymake for Python, using pyflakes."
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "pyflakes" (list local-file))))
+(when (load "flymake" t)
+  (push '("\\.py\\'" flymake-pyflakes-init)
+        flymake-allowed-file-name-masks))
+
 ;;; gnuplot-mode
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el
 (require 'gnuplot)
@@ -1278,6 +1317,22 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "C-x C-g") 'git-gutter:toggle)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
+;;; org-present.el
+;; https://github.com/rlister/org-present
+;; Note: Use arrow keys to navigate, C-c C-q to quit.
+(autoload 'org-present "org-present" nil t)
+;; Reduce the huge upscaling of text.  This amount is more reasonable for my
+;; laptop, but reconsider it for larger displays.
+(setq org-present-text-scale 2)
+(add-hook 'org-present-mode-hook
+          (lambda ()
+            (org-present-big)
+            (org-display-inline-images)))
+(add-hook 'org-present-mode-quit-hook
+          (lambda ()
+            (org-present-small)
+            (org-remove-inline-images)))
+
 ;;; wttrin.el: Get a weather report.
 ;; https://github.com/bcbcarl/emacs-wttrin
 ;; Note: Requires xterm-color.
@@ -1312,57 +1367,6 @@ hyperlinked *compilation* buffer."
           (lambda () (setq mode-name "e-λ")))
 (add-hook 'clojure-mode-hook
           (lambda () (setq mode-name "cλj")))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; External Addons (manual)
-
-;;; org-present.el
-;; https://github.com/rlister/org-present
-;; Note: Use arrow keys to navigate, C-c C-q to quit.
-(autoload 'org-present "org-present" nil t)
-;; Reduce the huge upscaling of text.  This amount is more reasonable for my
-;; laptop, but reconsider it for larger displays.
-(setq org-present-text-scale 2)
-(add-hook 'org-present-mode-hook
-          (lambda ()
-            (org-present-big)
-            (org-display-inline-images)))
-(add-hook 'org-present-mode-quit-hook
-          (lambda ()
-            (org-present-small)
-            (org-remove-inline-images)))
-
-;;; python-mode: Replaces the built-in python.el, though I'm no longer using
-;;; its integrated iPython support.
-;; http://launchpad.net/python-mode/
-(autoload 'python-mode "python-mode" "Python Mode." t)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
-;; NOTE: python-describe-symbol requires the python-doc-html package and the
-;;       PYTHONDOCS environment variable to be set.  This isn't valid in
-;;       python-mode though, only in python.el.
-(add-hook 'python-mode-hook
-          (lambda ()
-            (set (make-variable-buffer-local 'beginning-of-defun-function)
-                 'py-beginning-of-def-or-class)
-            (setq outline-regexp "def\\|class ")
-            (flyspell-prog-mode)
-            (flymake-mode)
-            (local-set-key (kbd "C-c L") 'py-execute-buffer)))
-;; Replaced pylint with pyflakes, as it's super fast.  However, it doesn't
-;; catch a lot of style problems, so it's still a good idea to pylint it later.
-;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
-(defun flymake-pyflakes-init ()
-  "Initialize Flymake for Python, using pyflakes."
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                     'flymake-create-temp-inplace))
-         (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "pyflakes" (list local-file))))
-(when (load "flymake" t)
-  (push '("\\.py\\'" flymake-pyflakes-init)
-        flymake-allowed-file-name-masks))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Final init

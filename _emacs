@@ -1,21 +1,20 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-25 22:33:31 (bm3719)>
+;;;; Time-stamp: <2020-05-29 18:23:43 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
 ;;;;
-;;;; ELPA addons: volatile-highlights.el, paredit, which-key, clojure-mode,
-;;;; CIDER, ac-cider, projectile, intero, json-mode, rainbow-delimiters, Proof
-;;;; General, AUCTeX, web-mode, rainbow-mode, dockerfile-mode, flymake-cursor,
-;;;; js2-mode, markdown-mode, CEDET, gtags, aggressive-indent, elscreen,
-;;;; multi-term, lusty-explorer, emms, with-editor, magit, git-gutter, wttrin,
-;;;; pinentry, htmlize.el, powerline, diminish.el.
+;;;; ELPA addons: volatile-highlights, paredit, which-key, clojure-mode, cider,
+;;;; rainbow-delimiters, ac-cider, intero, proof-general, auctex, web-mode,
+;;;; rainbow-mode, dockerfile-mode, flymake-cursor, js2-mode, json-mode,
+;;;; gnuplot, markdown-mode, aggressive-indent, elscreen, w3m, multi-term,
+;;;; lusty-explorer, emms, magit, git-gutter, wttrin, htmlize, pinentry,
+;;;; powerline, diminish.
 ;;;;
-;;;; Manually managed addons: emacs-w3m (development branch), org-present,
-;;;; python-mode, wombat-custom-theme.el.
+;;;; Manually managed addons: org-present, python-mode, wombat-custom-theme.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
@@ -868,6 +867,43 @@
 (setq semanticdb-default-save-directory "~/.emacs.d/saves/semantic.cache")
 (require 'cedet)
 
+;;; Mutt client integration.
+;; This associates file whose name contains "/mutt" to be in mail-mode.
+(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
+(add-hook 'mail-mode-hook 'turn-on-auto-fill)
+;; Use C-c C-c to complete mutt message buffers without prompting for saving.
+(add-hook
+ 'mail-mode-hook
+ (lambda ()
+   (define-key mail-mode-map (kbd "C-c C-c")
+     (lambda ()
+       (interactive)
+       (save-buffer)
+       (server-edit)))))
+
+;;; gtags
+;; Requires an install of GNU Global.  Currently only using for c-mode.
+(when (eq system-type 'berkeley-unix)
+  (setq load-path (cons "/usr/local/share/gtags" load-path))
+  (autoload 'gtags-mode "gtags" "" t)
+  (setq c-mode-hook '(lambda () (gtags-mode 1))))
+
+;;; Printing
+;; Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.
+(when (eq system-type 'berkeley-unix)
+  (setq lpr-command "xpp"))
+;; Requires install of Ghostscript and GSView native ports on Windows.
+(when (eq system-type 'windows-nt)
+  (progn
+    (setq-default ps-lpr-command
+                  (expand-file-name
+                   "C:\\bin\\utils\\gs\\gsview\\gsview\\gsprint.exe"))
+    (setq-default ps-printer-name t)
+    (setq-default ps-printer-name-option nil)
+    (setq ps-lpr-switches '("-query"))   ; Show printer dialog.
+    (setq ps-right-header
+          '("/pagenumberstring load" ps-time-stamp-mon-dd-yyyy))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons (ELPA)
 
@@ -898,7 +934,6 @@
           (cider . "melpa-stable")
           (rainbow-delimiters . "melpa-stable")
           (ac-cider . "melpa-stable")
-          (projectile . "melpa-stable")
           (intero . "melpa-stable")
           (proof-general . "melpa") ;; Switch to melpa-stable later.
           (auctex . "gnu")
@@ -910,6 +945,9 @@
           (json-mode . "mepla-stable")
           (gnuplot . "mepla-stable")
           (markdown-mode . "melpa-stable")
+          (aggressive-indent . "melpa-stable")
+          (elscreen . "melpa-stable")
+          (w3m . "mepla")
           (multi-term . "melpa-stable")
           (lusty-explorer . "melpa-stable")
           (emms . "melpa-stable")
@@ -919,8 +957,6 @@
           (htmlize . "melpa-stable")
           (pinentry . "gnu")
           (powerline . "melpa-stable")
-          (aggressive-indent . "melpa-stable")
-          (elscreen . "melpa-stable")
           (diminish . "melpa-stable"))))
 (defvar my-packages '(volatile-highlights
                       paredit
@@ -929,7 +965,6 @@
                       cider
                       rainbow-delimiters
                       ac-cider
-                      projectile
                       intero
                       proof-general
                       auctex
@@ -941,6 +976,9 @@
                       json-mode
                       gnuplot
                       markdown-mode
+                      aggressive-indent
+                      elscreen
+                      w3m
                       multi-term
                       lusty-explorer
                       emms
@@ -950,8 +988,6 @@
                       htmlize
                       pinentry
                       powerline
-                      aggressive-indent
-                      elscreen
                       diminish))
 (dolist (p my-packages)
   (when (not (package-installed-p p))
@@ -996,9 +1032,7 @@ in M-x cider buffers connected to localhost."
   (cider-repl-return))
 ;; Have org-babel use CIDER.
 (setq org-babel-clojure-backend 'cider)
-
-;;; kibit
-;; https://github.com/jonase/kibit
+;; kibit: https://github.com/jonase/kibit
 (require 'compile)
 (add-to-list 'compilation-error-regexp-alist-alist
              '(kibit "At \\([^:]+\\):\\([[:digit:]]+\\):" 1 2 nil 0))
@@ -1139,27 +1173,6 @@ hyperlinked *compilation* buffer."
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-;;; Mutt client integration.
-;; This associates file whose name contains "/mutt" to be in mail-mode.
-(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
-(add-hook 'mail-mode-hook 'turn-on-auto-fill)
-;; Use C-c C-c to complete mutt message buffers without prompting for saving.
-(add-hook
- 'mail-mode-hook
- (lambda ()
-   (define-key mail-mode-map (kbd "C-c C-c")
-     (lambda ()
-       (interactive)
-       (save-buffer)
-       (server-edit)))))
-
-;;; gtags
-;; Requires an install of GNU Global.  Currently only using for c-mode.
-(when (eq system-type 'berkeley-unix)
-  (setq load-path (cons "/usr/local/share/gtags" load-path))
-  (autoload 'gtags-mode "gtags" "" t)
-  (setq c-mode-hook '(lambda () (gtags-mode 1))))
-
 ;;; aggressive-indent: On-the-fly indenting.
 ;; https://github.com/Malabarba/aggressive-indent-mode
 (require 'aggressive-indent)
@@ -1175,6 +1188,38 @@ hyperlinked *compilation* buffer."
 ;; F7 creates a new elscreen, F8 kills it.
 (global-set-key (kbd "<f7>") 'elscreen-create)
 (global-set-key (kbd "<f8>") 'elscreen-kill)
+
+;;; w3m (also called emacs-w3m)
+;; http://w3m.sourceforge.net/
+(autoload 'w3m "w3m" "Interface for w3m on Emacs." t)
+;; Use w3m for all URLs (deprecated code to use available GUI browser).
+(setq browse-url-browser-function 'w3m-browse-url)
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+;; Optional keyboard short-cut.
+(global-set-key (kbd "C-x M-m") 'browse-url-at-point)
+;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
+(setq w3m-use-tab t)
+(setq w3m-use-cookies t)
+;; Activate Conkeror-style link selection (toggle with f key).
+(add-hook 'w3m-mode-hook 'w3m-lnum-mode)
+;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
+(require 'w3m-search)
+;; Add some extra search engine URIs.
+(add-to-list 'w3m-search-engine-alist
+             '("hoogle" "http://haskell.org/hoogle/?q=%s"))
+(add-to-list 'w3m-search-engine-alist
+             '("ports" "http://freebsd.org/cgi/ports.cgi/?query=%s" nil))
+(add-to-list 'w3m-search-engine-alist
+             '("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil))
+(add-to-list 'w3m-search-engine-alist
+             '("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))
+(setq w3m-search-default-engine "duckduckgo")
+;; Default to the last manually specified search engine when calling the prefix
+;; version of the function.
+(defadvice w3m-search (after change-default activate)
+  (let ((engine (nth 1 minibuffer-history)))
+    (when (assoc engine w3m-search-engine-alist)
+      (setq w3m-search-default-engine engine))))
 
 ;;; multi-term
 ;; http://www.emacswiki.org/emacs/download/multi-term.el
@@ -1255,22 +1300,6 @@ hyperlinked *compilation* buffer."
   (require 'powerline)
   (powerline-default-theme))
 
-;;; Printing
-;; Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.
-(when (eq system-type 'berkeley-unix)
-  (setq lpr-command "xpp"))
-;; Requires install of Ghostscript and GSView native ports on Windows.
-(when (eq system-type 'windows-nt)
-  (progn
-    (setq-default ps-lpr-command
-                  (expand-file-name
-                   "C:\\bin\\utils\\gs\\gsview\\gsview\\gsprint.exe"))
-    (setq-default ps-printer-name t)
-    (setq-default ps-printer-name-option nil)
-    (setq ps-lpr-switches '("-query"))   ; Show printer dialog.
-    (setq ps-right-header
-          '("/pagenumberstring load" ps-time-stamp-mon-dd-yyyy))))
-
 ;;; diminish.el: mode-line shortening
 ;; https://www.eskimo.com/~seldon/diminish.el
 (when (require 'diminish nil 'noerror)
@@ -1286,41 +1315,6 @@ hyperlinked *compilation* buffer."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons (manual)
-
-;;; emacs-w3m
-;; http://emacs-w3m.namazu.org/
-;; FreeBSD: w3m; Linux: apt-get w3m w3m-el; Windows: CVS, Cygwin w3m
-;; NOTE: I also modify the local copies of w3m.el and w3m-search.el.  See
-;;       projects-old.org for details.
-(autoload 'w3m "w3m" "Interface for w3m on Emacs." t)
-;; Use w3m for all URLs (deprecated code to use available GUI browser).
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
-;; Optional keyboard short-cut.
-(global-set-key (kbd "C-x M-m") 'browse-url-at-point)
-;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
-(setq w3m-use-tab t)
-(setq w3m-use-cookies t)
-;; Activate Conkeror-style link selection (toggle with f key).
-(add-hook 'w3m-mode-hook 'w3m-lnum-mode)
-;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
-(require 'w3m-search)
-;; Add some extra search engine URIs.
-(add-to-list 'w3m-search-engine-alist
-             '("hoogle" "http://haskell.org/hoogle/?q=%s"))
-(add-to-list 'w3m-search-engine-alist
-             '("ports" "http://freebsd.org/cgi/ports.cgi/?query=%s" nil))
-(add-to-list 'w3m-search-engine-alist
-             '("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil))
-(add-to-list 'w3m-search-engine-alist
-             '("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))
-(setq w3m-search-default-engine "duckduckgo")
-;; Default to the last manually specified search engine when calling the prefix
-;; version of the function.
-(defadvice w3m-search (after change-default activate)
-  (let ((engine (nth 1 minibuffer-history)))
-    (when (assoc engine w3m-search-engine-alist)
-      (setq w3m-search-default-engine engine))))
 
 ;;; org-present.el
 ;; https://github.com/rlister/org-present
@@ -1385,7 +1379,7 @@ hyperlinked *compilation* buffer."
  '(haskell-process-type (quote cabal-repl))
  '(package-selected-packages
    (quote
-    (pinentry dockerfile-mode which-key proof-general projectile json-mode intero haskell-mode ac-cider cider clojure-mode)))
+    (pinentry dockerfile-mode which-key proof-general json-mode intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))

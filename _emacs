@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-29 18:38:10 (bm3719)>
+;;;; Time-stamp: <2020-05-29 20:04:33 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
 ;;;; and Windows, but all or parts of this file should work with older GNU
@@ -13,8 +13,6 @@
 ;;;; python-mode, gnuplot, markdown-mode, aggressive-indent, elscreen, w3m,
 ;;;; multi-term, lusty-explorer, emms, magit, git-gutter, org-present, wttrin,
 ;;;; htmlize, pinentry, powerline, diminish.
-;;;;
-;;;; Manually managed addons: wombat-custom-theme.el.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
@@ -511,11 +509,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes
 
-;;; Color themes
-;; Define where to find themes for M-x load-theme and load wombat-custom.
-(when (and (>= emacs-major-version 24) window-system)
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/themes")
-  (load-theme 'wombat-custom t nil))
+;;; color-theme
+;; Using wombat theme, but with a black background instead of default #242424.
+(load-theme 'wombat t nil)
+(set-face-attribute 'default nil :background "#000000")
 
 ;;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)

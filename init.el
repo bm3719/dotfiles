@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-29 22:15:31 (bm3719)>
+;;;; Time-stamp: <2020-05-29 22:55:29 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -29,7 +29,7 @@
 
 ;; Font face: Requires appropriate fonts to be installed.
 (if (eq system-type 'windows-nt)
-    (set-default-font
+    (set-frame-font
      "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
   (when window-system
     (set-face-attribute 'default nil :font "dejavu sans mono-14")))
@@ -79,7 +79,7 @@
 (set-default-coding-systems 'utf-8-unix)
 
 ;; Load Common Lisp features.
-(require 'cl)
+(require 'cl-lib)
 
 ;; Provides zap-up-to-char (M-z), different than the default zap-to-char which
 ;; includes deleting the argument character.
@@ -250,9 +250,9 @@
 (defun bcm/copy-line (&optional arg)
   "Do a kill-line but copy rather than kill."
   (interactive "p")
-  (toggle-read-only 1)
+  (read-only-mode 1)
   (kill-line arg)
-  (toggle-read-only 0))
+  (read-only-mode 0))
 ;; Replace error message on read-only kill with an echo area message.
 (setq-default kill-read-only-ok t)
 (global-set-key (kbd "C-x M-w") 'bcm/copy-line)
@@ -265,7 +265,9 @@
   (interactive)
   (let ((save-fill-column fill-column))
     (set-fill-column 1000000)
-    (mark-whole-buffer)
+    (push-mark)
+    (push-mark (point-max) nil t)
+    (goto-char (point-min))
     (fill-individual-paragraphs (point-min) (point-max))
     (delete-matching-lines "^$")
     (set-fill-column save-fill-column)))
@@ -274,7 +276,7 @@
 (defun bcm/cut-ctrlm ()
   "Cut all visible ^M."
   (interactive)
-  (beginning-of-buffer)
+  (goto-char (point-min))
   (while (search-forward "\r" nil t)
     (replace-match "" nil t)))
 
@@ -423,7 +425,7 @@
 (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
 
 ;; Gets rid of disabled commands prompting.
-(setq disabled-command-hook nil)
+(setq disabled-command-function nil)
 
 ;; Allow seamless editing of files in a tar/jar/zip file.
 (auto-compression-mode 1)
@@ -479,9 +481,11 @@
   "Compile init.el in ~/.emacs.d/"
   (interactive)
   (require 'bytecomp)
-  (if (string= (buffer-file-name)
-               (expand-file-name
-                (concat default-directory "init.el")))
+  (if (and (string= (buffer-file-name)
+                    (expand-file-name
+                     (concat default-directory "init.el")))
+           ;; Exclude my repo version of the same file.
+           (not (string-match-p "dotfiles" (buffer-file-name))))
       (byte-compile-file (buffer-file-name))))
 (add-hook 'after-save-hook 'bcm/autocompile-init)
 
@@ -489,7 +493,7 @@
 (defun bcm/cleanup ()
   "Kill all buffers except *scratch*."
   (interactive)
-  (mapcar (lambda (x) (kill-buffer x)) (buffer-list)) (delete-other-windows))
+  (mapc (lambda (x) (kill-buffer x)) (buffer-list)) (delete-other-windows))
 
 ;; Indents the entire buffer according to whatever indenting rules are present.
 (defun bcm/indent ()
@@ -583,7 +587,7 @@
 (setq compilation-scroll-output t)
 ;; If there were no errors, there's not much to look at in a compilation
 ;; buffer, so make it go away in 2 seconds.
-(setq compilation-finish-function
+(setq compilation-finish-functions
       (lambda (buf str)
         (if (or (string-match "exited abnormally" str)
                 (string-match (buffer-name buf) "*grep*"))
@@ -863,6 +867,8 @@
 ;; This associates file whose name contains "/mutt" to be in mail-mode.
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
 (add-hook 'mail-mode-hook 'turn-on-auto-fill)
+;; Define otherwise free variable.
+(eval-when-compile (defvar mail-mode-map))
 ;; Use C-c C-c to complete mutt message buffers without prompting for saving.
 (add-hook
  'mail-mode-hook
@@ -892,6 +898,9 @@
                    "C:\\bin\\utils\\gs\\gsview\\gsview\\gsprint.exe"))
     (setq-default ps-printer-name t)
     (setq-default ps-printer-name-option nil)
+    ;; Define otherwise free variables.
+    (eval-when-compile (defvar ps-lpr-switches))
+    (eval-when-compile (defvar ps-right-header))
     (setq ps-lpr-switches '("-query"))   ; Show printer dialog.
     (setq ps-right-header
           '("/pagenumberstring load" ps-time-stamp-mon-dd-yyyy))))
@@ -1039,7 +1048,7 @@ hyperlinked *compilation* buffer."
   (interactive)
   (compile "lein kibit")
   ;; This will clobber the custom function set above.
-  (setq compilation-finish-function '()))
+  (setq compilation-finish-functions '()))
 (defun kibit-current-file ()
   "Run kibit on the current file.  Display the results in a
 hyperlinked *compilation* buffer."
@@ -1164,8 +1173,8 @@ hyperlinked *compilation* buffer."
 ;;       python-mode though, only in python.el.
 (add-hook 'python-mode-hook
           (lambda ()
-            (set (make-variable-buffer-local 'beginning-of-defun-function)
-                 'py-beginning-of-def-or-class)
+            ;; This automatically becomes buffer-local when set.
+            (set 'beginning-of-defun-function 'py-beginning-of-def-or-class)
             (setq outline-regexp "def\\|class ")
             (flyspell-prog-mode)
             (flymake-mode)
@@ -1175,7 +1184,7 @@ hyperlinked *compilation* buffer."
 ;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
 (defun flymake-pyflakes-init ()
   "Initialize Flymake for Python, using pyflakes."
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+  (let* ((temp-file (flymake-proc-init-create-temp-buffer-copy
                      'flymake-create-temp-inplace))
          (local-file (file-relative-name
                       temp-file
@@ -1183,7 +1192,7 @@ hyperlinked *compilation* buffer."
     (list "pyflakes" (list local-file))))
 (when (load "flymake" t)
   (push '("\\.py\\'" flymake-pyflakes-init)
-        flymake-allowed-file-name-masks))
+        flymake-proc-allowed-file-name-masks))
 
 ;;; gnuplot-mode
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el
@@ -1278,7 +1287,7 @@ hyperlinked *compilation* buffer."
 ;; Currently using mplayer backend - seems superior to mpg321, which doesn't
 ;; support seeking.
 (require 'emms-setup)
-(emms-standard)
+(emms-all)
 (emms-default-players)
 (push 'emms-player-mplayer emms-player-list)
 ;; Show the current track each time EMMS starts to play a track with "NP: ".
@@ -1318,11 +1327,9 @@ hyperlinked *compilation* buffer."
 (setq org-present-text-scale 2)
 (add-hook 'org-present-mode-hook
           (lambda ()
-            (org-present-big)
             (org-display-inline-images)))
 (add-hook 'org-present-mode-quit-hook
           (lambda ()
-            (org-present-small)
             (org-remove-inline-images)))
 
 ;;; wttrin.el: Get a weather report.

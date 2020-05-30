@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-29 23:33:42 (bm3719)>
+;;;; Time-stamp: <2020-05-30 12:50:35 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -9,10 +9,10 @@
 ;;;;
 ;;;; ELPA addons: volatile-highlights, paredit, which-key, clojure-mode, cider,
 ;;;; rainbow-delimiters, ac-cider, intero, proof-general, auctex, web-mode,
-;;;; rainbow-mode, dockerfile-mode, flymake-cursor, js2-mode, json-mode,
-;;;; python-mode, gnuplot, markdown-mode, aggressive-indent, elscreen, w3m,
-;;;; multi-term, lusty-explorer, emms, magit, git-gutter, org-present, wttrin,
-;;;; htmlize, pinentry, powerline, diminish.
+;;;; restclient, rainbow-mode, dockerfile-mode, flymake-cursor, js2-mode,
+;;;; json-mode, python-mode, gnuplot, markdown-mode, aggressive-indent,
+;;;; elscreen, w3m, multi-term, lusty-explorer, emms, magit, git-gutter,
+;;;; org-present, wttrin, htmlize, pinentry, powerline, diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
@@ -733,7 +733,7 @@
          ("BLOCKED" :foreground "purple" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-;;; org-capture.el: On-the-fly note taking.
+;;; org-capture: On-the-fly note taking.
 (setq org-default-notes-file "~/notes.org")
 ;; Global keybinding for idea capture.
 (global-set-key (kbd "C-c r") 'org-capture)
@@ -851,7 +851,7 @@
   (setq explicit-shell-file-name shell-file-name))
 (setq tramp-default-method "scp")
 
-;;; icomplete.el
+;;; icomplete
 ;; Disable icomplete, since I prefer using lusty-explorer for this and don't
 ;; want both enabled.
 (icomplete-mode 0)
@@ -908,7 +908,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons (ELPA)
 
-;;; package.el
+;;; package
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/"))
@@ -932,6 +932,7 @@
           (proof-general . "melpa") ;; Switch to melpa-stable later.
           (auctex . "gnu")
           (web-mode . "melpa-stable")
+          (restclient . "melpa")
           (rainbow-mode . "gnu")
           (dockerfile-mode . "melpa-stable")
           (flymake-cursor . "melpa-stable")
@@ -965,6 +966,7 @@
                       proof-general
                       auctex
                       web-mode
+                      restclient
                       rainbow-mode
                       dockerfile-mode
                       flymake-cursor
@@ -991,7 +993,7 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
-;;; volatile-highlights.el
+;;; volatile-highlights
 ;; https://github.com/k-talo/volatile-highlights.el
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -1048,7 +1050,7 @@ hyperlinked *compilation* buffer."
   (interactive)
   (compile (concat "lein kibit " buffer-file-name)))
 
-;;; rainbow-delimiters.el
+;;; rainbow-delimiters
 ;; https://github.com/jlr/rainbow-delimiters
 (require 'rainbow-delimiters)
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
@@ -1126,6 +1128,13 @@ hyperlinked *compilation* buffer."
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
 (add-hook 'web-mode-hook 'flyspell-mode)
+
+;;; restclient
+;; https://github.com/pashky/restclient.el
+;; Inhibit restclient from sending cookies implicitly.
+(setq restclient-inhibit-cookies t)
+;; Designate .rest as the file extension for this mode.
+(add-to-list 'auto-mode-alist '("\\.rest$" . restclient-mode))
 
 ;;; rainbow-mode: Adds color hinting for colors in hex, RBG, and named.
 ;; https://github.com/emacsmirror/rainbow-mode
@@ -1311,7 +1320,7 @@ hyperlinked *compilation* buffer."
 (global-set-key (kbd "C-x C-g") 'git-gutter:toggle)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
-;;; org-present.el
+;;; org-present
 ;; https://github.com/rlister/org-present
 ;; Note: Use arrow keys to navigate, C-c C-q to quit.
 (autoload 'org-present "org-present" nil t)
@@ -1325,14 +1334,14 @@ hyperlinked *compilation* buffer."
           (lambda ()
             (org-remove-inline-images)))
 
-;;; wttrin.el: Get a weather report.
+;;; wttrin: Get a weather report.
 ;; https://github.com/bcbcarl/emacs-wttrin
 ;; Note: Requires xterm-color.
 (require 'wttrin)
 (setq wttrin-default-cities '("Slanesville"))
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
 
-;;; htmlize.el: Converts buffer to HTML.
+;;; htmlize: Converts buffer to HTML.
 ;; https://github.com/hniksic/emacs-htmlize
 ;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
 (require 'htmlize)
@@ -1342,12 +1351,12 @@ hyperlinked *compilation* buffer."
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
 
-;;; powerline.el: Mode line replacement.
+;;; powerline: Mode line replacement.
 (when window-system
   (require 'powerline)
   (powerline-default-theme))
 
-;;; diminish.el: mode-line shortening
+;;; diminish: mode-line shortening
 ;; https://www.eskimo.com/~seldon/diminish.el
 (when (require 'diminish nil 'noerror)
   (eval-after-load "git-gutter" '(diminish 'git-gutter-mode "Git↓"))

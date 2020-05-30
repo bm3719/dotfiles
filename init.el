@@ -1,11 +1,11 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-29 20:04:33 (bm3719)>
+;;;; Time-stamp: <2020-05-29 22:15:31 (bm3719)>
 ;;;;
-;;;; This init was created for GNU Emacs 25.1.1 for FreeBSD, GNU/Linux, OSX,
-;;;; and Windows, but all or parts of this file should work with older GNU
-;;;; Emacs versions, on other OSes, or even on XEmacs with minor adjustments.
+;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
+;;;; Windows, but all or parts of this file should work with older GNU Emacs
+;;;; versions, or on other OSes.
 ;;;;
 ;;;; ELPA addons: volatile-highlights, paredit, which-key, clojure-mode, cider,
 ;;;; rainbow-delimiters, ac-cider, intero, proof-general, auctex, web-mode,
@@ -51,9 +51,6 @@
 (global-font-lock-mode 1)          ; Turn on font lock mode everywhere.
 (blink-cursor-mode nil)            ; Disable cursor blinking.
 (setq visible-bell t)              ; Make bell visible, not aural.
-
-;; Add the directory containing .el files in into the default load path.
-(setq load-path (cons "~/.emacs.d/lisp" load-path))
 
 ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
 ;; what's going on.
@@ -477,18 +474,16 @@
 ;; Follow the compilation buffer scroll instead of remaining at the top line.
 (setq compilation-scroll-output t)
 
-;; I always compile my .emacs, saving about two seconds startup time.  But that
-;; only helps if the .emacs.elc is newer than the .emacs.  So, compile .emacs
-;; if it's not.
-(defun bcm/autocompile ()
-  "Compile self in ~/.emacs.d/build"
+;; If I've edited init.el, byte compile it.  Saves some startup time.
+(defun bcm/autocompile-init ()
+  "Compile init.el in ~/.emacs.d/"
   (interactive)
   (require 'bytecomp)
   (if (string= (buffer-file-name)
                (expand-file-name
-                (concat default-directory "~/.emacs.d/build")))
+                (concat default-directory "init.el")))
       (byte-compile-file (buffer-file-name))))
-(add-hook 'after-save-hook 'bcm/autocompile)
+(add-hook 'after-save-hook 'bcm/autocompile-init)
 
 ;; A function to close all buffers except scratch.
 (defun bcm/cleanup ()

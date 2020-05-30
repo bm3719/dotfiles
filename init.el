@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-29 22:55:29 (bm3719)>
+;;;; Time-stamp: <2020-05-29 23:02:53 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -907,13 +907,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons (ELPA)
-
-;; Add all ~/.emacs.d/lisp subfolders to load path.
-(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-    (let* ((my-lisp-dir "~/.emacs.d/lisp")
-           (default-directory my-lisp-dir))
-      (add-to-list 'load-path my-lisp-dir)
-      (normal-top-level-add-subdirs-to-load-path)))
 
 ;;; package.el
 (require 'package)

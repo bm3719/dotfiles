@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2019-11-17 10:48:32 (bm3719)>
+# Time-stamp: <2020-05-31 00:21:29 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -27,8 +27,8 @@ setopt hist_expire_dups_first
 setopt auto_pushd
 
 # Set a universal term type.
-#export TERM=xterm-256color
-export TERM=screen-256color
+export TERM=xterm-256color
+#export TERM=screen-256color
 
 # Detect OS type.  Currently only using for the difference in `ls' flags.
 platform='unknown'
@@ -60,7 +60,7 @@ compinit
 umask 027               # u=rw,g=r,o=
 
 # $PATH
-export PATH=$HOME/bin:/sbin:/usr/sbin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/libexec:$HOME/node_modules/.bin:$HOME/.racket/6.7/bin:$PATH:.
+export PATH=$HOME/bin:/sbin:/usr/sbin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$HOME/node_modules/.bin:$PATH:.
 
 # Autoload zsh modules when they are referenced.
 zmodload -a zsh/stat stat
@@ -127,9 +127,6 @@ then
 else
     export PYTHONDOCS=/usr/share/doc/python/html
 fi
-# Disable newer JVM options for Leiningen 2.2.x.  Remove this later after
-# upgrading to JVM 1.7.x.
-export LEIN_JVM_OPTS=
 
 # Colorized manpages.
 export LESS_TERMCAP_mb=$'\E[01;31m'

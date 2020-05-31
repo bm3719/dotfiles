@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2020-05-31 00:21:29 (bm3719)>
+# Time-stamp: <2020-05-31 09:33:28 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -42,6 +42,12 @@ elif [[ "$unamestr" == 'OpenBSD' ]]; then
 fi
 
 bindkey -e              # Emacs keybindings.
+# Fix C-arrow keys.
+bindkey "^[[1;5D" emacs-backward-word
+bindkey "^[[1;5C" emacs-forward-word
+# Fix home/end.
+bindkey "^[[7~" beginning-of-line
+bindkey "^[[8~" end-of-line
 
 # zstyle modifications.
 zstyle :compinstall filename '/home/bm3719/.zshrc'
@@ -60,7 +66,7 @@ compinit
 umask 027               # u=rw,g=r,o=
 
 # $PATH
-export PATH=$HOME/bin:/sbin:/usr/sbin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$HOME/node_modules/.bin:$PATH:.
+export PATH=$HOME/bin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:$HOME/node_modules/.bin:$PATH:.
 
 # Autoload zsh modules when they are referenced.
 zmodload -a zsh/stat stat

@@ -1,18 +1,18 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-30 12:50:35 (bm3719)>
+;;;; Time-stamp: <2020-05-31 00:37:09 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, or on other OSes.
 ;;;;
-;;;; ELPA addons: volatile-highlights, paredit, which-key, clojure-mode, cider,
-;;;; rainbow-delimiters, ac-cider, intero, proof-general, auctex, web-mode,
-;;;; restclient, rainbow-mode, dockerfile-mode, flymake-cursor, js2-mode,
-;;;; json-mode, python-mode, gnuplot, markdown-mode, aggressive-indent,
-;;;; elscreen, w3m, multi-term, lusty-explorer, emms, magit, git-gutter,
-;;;; org-present, wttrin, htmlize, pinentry, powerline, diminish.
+;;;; ELPA addons: volatile-highlights, smartparens, which-key, clojure-mode,
+;;;; cider, rainbow-delimiters, ac-cider, intero, proof-general, auctex,
+;;;; web-mode, restclient, rainbow-mode, dockerfile-mode, flymake-cursor,
+;;;; js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
+;;;; aggressive-indent, elscreen, w3m, multi-term, lusty-explorer, emms, magit,
+;;;; git-gutter, org-present, wttrin, htmlize, pinentry, powerline, diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
 ;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
@@ -691,6 +691,7 @@
   (add-hook hook (lambda () (flyspell-mode -1))))
 ;; aspell > ispell
 ;; Suggestion mode tuned to fastest possible.
+(when (eq system-type 'windows-nt))
 (setq ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
 ;; Solves aspell startup problem on some Linuxes.
@@ -922,7 +923,7 @@
 (when (boundp 'package-pinned-packages)
   (setq package-pinned-packages
         '((volatile-highlights . "melpa-stable")
-          (paredit . "melpa-stable")
+          (smartparens . "melpa-stable")
           (which-key . "melpa-stable")
           (clojure-mode . "melpa-stable")
           (cider . "melpa-stable")
@@ -956,7 +957,7 @@
           (powerline . "melpa-stable")
           (diminish . "melpa-stable"))))
 (defvar my-packages '(volatile-highlights
-                      paredit
+                      smartparens
                       which-key
                       clojure-mode
                       cider
@@ -998,14 +999,18 @@
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 
-;;; paredit
-;; http://mumble.net/~campbell/emacs/paredit.el
-(require 'paredit)
-(add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-(add-hook 'ielm-mode-hook #'enable-paredit-mode)
-(add-hook 'lisp-mode-hook #'enable-paredit-mode)
-(add-hook 'scheme-mode-hook #'enable-paredit-mode)
+;;; smartparens
+;; https://github.com/Fuco1/smartparens
+(require 'smartparens-config)
+(add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
+(add-hook 'ielm-mode-hook #'smartparens-strict-mode)
+(add-hook 'lisp-mode-hook #'smartparens-strict-mode)
+(add-hook 'scheme-mode-hook #'smartparens-strict-mode)
+;; Keybindings for the features being used so far.
+(define-key smartparens-mode-map (kbd "M-)") 'sp-forward-slurp-sexp)
+(define-key smartparens-mode-map (kbd "M-(") 'sp-backward-barf-sexp)
+(define-key smartparens-mode-map (kbd "M-s") 'sp-unwrap-sexp)
 
 ;;; which-key
 (setq which-key-popup-type 'side-window)
@@ -1014,13 +1019,13 @@
 (add-hook 'org-mode-hook 'which-key-mode)
 
  ;;; clojure-mode and CIDER (via mepla-stable).
-(add-hook 'clojure-mode-hook 'paredit-mode)
+(add-hook 'clojure-mode-hook 'smartparens-strict-mode)
 
 ;;; CIDER
 (require 'cider)
 (add-hook 'cider-mode-hook 'flyspell-prog-mode)
 (add-hook 'cider-mode-hook 'which-key-mode)
-(add-hook 'cider-repl-mode-hook 'paredit-mode)
+(add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
 (setq cider-repl-pop-to-buffer-on-connect t)
 (defun cider-reset ()
   "Sends (refresh) to the remote CIDER REPL buffer.  Only works
@@ -1072,12 +1077,12 @@ hyperlinked *compilation* buffer."
   (auto-complete-mode 1)
   (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
   ;; (define-key cider-mode-map (kbd "C-c C-o") 'cider-reset)
-  (define-key clojure-mode-map (kbd "C-w") 'paredit-backward-kill-word))
+  (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word))
 (add-hook 'clojure-mode-hook 'bcm/clojure-hook)
 (add-hook 'cider-repl-mode-hook
           '(lambda ()
              (define-key cider-repl-mode-map
-               (kbd "C-w") 'paredit-backward-kill-word)))
+               (kbd "C-w") 'sp-backward-kill-word)))
 ;; Fix missing *nrepl-messages* buffer.
 (setq nrepl-log-messages 1)
 
@@ -1348,8 +1353,9 @@ hyperlinked *compilation* buffer."
 
 ;;; pinentry: Needed for minibuffer prompt integration with GnuPG 2.1.5+ and
 ;;; Pinentry 0.9.5+.
-(setq epa-pinentry-mode 'loopback)
-(pinentry-start)
+(when (not (eq system-type 'windows-nt))
+  (setq epa-pinentry-mode 'loopback)
+  (pinentry-start))
 
 ;;; powerline: Mode line replacement.
 (when window-system
@@ -1360,7 +1366,7 @@ hyperlinked *compilation* buffer."
 ;; https://www.eskimo.com/~seldon/diminish.el
 (when (require 'diminish nil 'noerror)
   (eval-after-load "git-gutter" '(diminish 'git-gutter-mode "Git↓"))
-  (eval-after-load "Paredit" '(diminish 'paredit-mode "(ᴩ)")))
+  (eval-after-load "smartparens" '(diminish 'smartparens-mode "(ϛ)")))
 ;; Non-diminish major mode mode-line shortening.
 (add-hook 'haskell-mode-hook
           (lambda () (setq mode-name "λ≫")))

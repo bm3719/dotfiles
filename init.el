@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-05-31 00:37:09 (bm3719)>
+;;;; Time-stamp: <2020-05-31 23:28:31 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -30,7 +30,7 @@
 ;; Font face: Requires appropriate fonts to be installed.
 (if (eq system-type 'windows-nt)
     (set-frame-font
-     "-outline-Consolas-normal-r-normal-normal-14-97-96-96-c-*-iso8859-1")
+     "-outline-Consolas-normal-r-normal-normal-19-97-96-96-c-*-iso8859-1")
   (when window-system
     (set-face-attribute 'default nil :font "dejavu sans mono-14")))
 

@@ -1,22 +1,22 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-02 09:57:07 (bm3719)>
+;;;; Time-stamp: <2020-06-04 10:50:31 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, or on other OSes.
 ;;;;
 ;;;; ELPA addons: volatile-highlights, smartparens, which-key, clojure-mode,
-;;;; cider, rainbow-delimiters, ac-cider, intero, proof-general, auctex,
-;;;; web-mode, restclient, rainbow-mode, dockerfile-mode, flymake-cursor,
-;;;; js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
+;;;; cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo, intero,
+;;;; proof-general, auctex, web-mode, restclient, rainbow-mode,
+;;;; dockerfile-mode, js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
 ;;;; aggressive-indent, elscreen, w3m, multi-term, lusty-explorer, emms, magit,
 ;;;; git-gutter, org-present, wttrin, htmlize, pinentry, powerline, diminish.
 ;;;;
-;;;; External applications used: aspell, aspell-en, Leiningen, stack, GNU
-;;;; Global, python-doc-html, pyflakes, mutt, w3m, xpp (*nix only),
-;;;; Ghostscript/GSView (Windows only), Consolas font (Windows only).
+;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
+;;;; stack, GNU Global, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows
+;;;; only), Consolas font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -643,11 +643,6 @@
 ;; Add an auto-mode for the HiveQL extension I use.
 (add-to-list 'auto-mode-alist '("\\.hql$" . sql-mode))
 
-;;; flymake
-;; See flymake-cursor entry for minibuffer fix.
-(global-set-key (kbd "C-c [") 'flymake-goto-prev-error)
-(global-set-key (kbd "C-c ]") 'flymake-goto-next-error)
-
 ;;; prolog-mode
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
@@ -892,6 +887,7 @@
 (when (eq system-type 'berkeley-unix)
   (setq lpr-command "xpp"))
 ;; Requires install of Ghostscript and GSView native ports on Windows.
+;; TODO: Redo this.
 (when (eq system-type 'windows-nt)
   (progn
     (setq-default ps-lpr-command
@@ -937,7 +933,6 @@
           (restclient . "melpa")
           (rainbow-mode . "gnu")
           (dockerfile-mode . "melpa-stable")
-          (flymake-cursor . "melpa-stable")
           (js2-mode . "melpa-stable")
           (json-mode . "mepla-stable")
           (python-mode . "melpa-stable")
@@ -972,7 +967,6 @@
                       restclient
                       rainbow-mode
                       dockerfile-mode
-                      flymake-cursor
                       js2-mode
                       json-mode
                       python-mode
@@ -1142,9 +1136,6 @@ in M-x cider buffers connected to localhost."
 ;; https://github.com/spotify/dockerfile-mode
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 
-;;; flymake-cursor
-(require 'flymake-cursor)
-
 ;;; js2-mode
 ;; https://github.com/mooz/js2-mode
 ;; TODO: Replace with js-mode when Emacs 27 comes out.
@@ -1158,39 +1149,13 @@ in M-x cider buffers connected to localhost."
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
 
 
-;;; python-mode: Replaces the built-in python.el, though I'm no longer using
-;;; its integrated iPython support.
+;;; python-mode
 ;; http://launchpad.net/python-mode/
-;; NOTE: This might've bit-rotted some.  Will revisit everything here next time
-;; I setup the dev stack via pip to write some Python.
+;; Super-minimal Python infrastructure.  Restore docs navigation and integrate
+;; flycheck if needed later.
 (autoload 'python-mode "python-mode" "Python Mode." t)
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-;; NOTE: python-describe-symbol requires the python-doc-html package and the
-;;       PYTHONDOCS environment variable to be set.  This isn't valid in
-;;       python-mode though, only in python.el.
-(add-hook 'python-mode-hook
-          (lambda ()
-            ;; This automatically becomes buffer-local when set.
-            (set 'beginning-of-defun-function 'py-beginning-of-def-or-class)
-            (setq outline-regexp "def\\|class ")
-            (flyspell-prog-mode)
-            (flymake-mode)
-            (local-set-key (kbd "C-c L") 'py-execute-buffer)))
-;; Replaced pylint with pyflakes, as it's super fast.  However, it doesn't
-;; catch a lot of style problems, so it's still a good idea to pylint it later.
-;; http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc9
-(defun flymake-pyflakes-init ()
-  "Initialize Flymake for Python, using pyflakes."
-  (let* ((temp-file (flymake-proc-init-create-temp-buffer-copy
-                     'flymake-create-temp-inplace))
-         (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "pyflakes" (list local-file))))
-(when (load "flymake" t)
-  (push '("\\.py\\'" flymake-pyflakes-init)
-        flymake-proc-allowed-file-name-masks))
 
 ;;; gnuplot-mode
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el

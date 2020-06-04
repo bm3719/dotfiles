@@ -929,6 +929,7 @@
           (cider . "melpa-stable")
           (rainbow-delimiters . "melpa-stable")
           (ac-cider . "melpa-stable")
+          (flycheck-clj-kondo . "melpa-stable")
           (intero . "melpa-stable")
           (proof-general . "melpa") ;; Switch to melpa-stable later.
           (auctex . "gnu")
@@ -963,6 +964,7 @@
                       cider
                       rainbow-delimiters
                       ac-cider
+                      flycheck-clj-kondo
                       intero
                       proof-general
                       auctex
@@ -1037,23 +1039,6 @@ in M-x cider buffers connected to localhost."
   (cider-repl-return))
 ;; Have org-babel use CIDER.
 (setq org-babel-clojure-backend 'cider)
-;; kibit: https://github.com/jonase/kibit
-(require 'compile)
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(kibit "At \\([^:]+\\):\\([[:digit:]]+\\):" 1 2 nil 0))
-(add-to-list 'compilation-error-regexp-alist 'kibit)
-(defun kibit ()
-  "Run kibit on the current project.  Display the results in a
-hyperlinked *compilation* buffer."
-  (interactive)
-  (compile "lein kibit")
-  ;; This will clobber the custom function set above.
-  (setq compilation-finish-functions '()))
-(defun kibit-current-file ()
-  "Run kibit on the current file.  Display the results in a
-hyperlinked *compilation* buffer."
-  (interactive)
-  (compile (concat "lein kibit " buffer-file-name)))
 
 ;;; rainbow-delimiters
 ;; https://github.com/jlr/rainbow-delimiters
@@ -1085,6 +1070,12 @@ hyperlinked *compilation* buffer."
                (kbd "C-w") 'sp-backward-kill-word)))
 ;; Fix missing *nrepl-messages* buffer.
 (setq nrepl-log-messages 1)
+
+;; flycheck-clj-kondo: Requires clj-kondo installed to $PATH.
+;; https://github.com/borkdude/flycheck-clj-kondo
+(require 'flycheck-clj-kondo)
+;; Add to clojure-mode-hook.
+(add-hook 'clojure-mode-hook 'flycheck-mode)
 
 ;;; intero: A complete developer environment for Haskell.
 ;; https://commercialhaskell.github.io/intero/

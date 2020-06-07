@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-04 10:50:31 (bm3719)>
+;;;; Time-stamp: <2020-06-07 01:24:35 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -285,6 +285,7 @@
   "Insert an ISO 8601 formatted date string."
   (interactive)
   (insert (format-time-string "%Y-%m-%d")))
+(global-set-key (kbd "C-x C-d") 'bcm/date)
 ;; Insert a UTC datetime string in ISO 8601 format.
 (defun bcm/datetime ()
   "Insert an ISO 8601 formatted datetime string, with time in UTC."

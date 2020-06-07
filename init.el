@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-07 01:24:35 (bm3719)>
+;;;; Time-stamp: <2020-06-07 14:02:55 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -729,6 +729,17 @@
          ("CANCELED" :foreground "dark blue" :weight bold)
          ("BLOCKED" :foreground "purple" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+;;; org-babel
+;; Enable specific languages.
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((python . t)
+                               (emacs-lisp . t)
+                               (clojure . t))))
+
+;;; ob-clojure
+(require 'ob-clojure)
 
 ;;; org-capture: On-the-fly note taking.
 (setq org-default-notes-file "~/notes.org")

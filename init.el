@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-07 14:02:55 (bm3719)>
+;;;; Time-stamp: <2020-06-09 08:06:12 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -15,8 +15,8 @@
 ;;;; git-gutter, org-present, wttrin, htmlize, pinentry, powerline, diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
-;;;; stack, GNU Global, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows
-;;;; only), Consolas font (Windows only).
+;;;; stack, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
+;;;; Consolas font (Windows only).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -736,7 +736,8 @@
   (org-babel-do-load-languages
    'org-babel-load-languages '((python . t)
                                (emacs-lisp . t)
-                               (clojure . t))))
+                               (clojure . t)
+                               (ditaa . t))))
 
 ;;; ob-clojure
 (require 'ob-clojure)
@@ -886,13 +887,6 @@
        (interactive)
        (save-buffer)
        (server-edit)))))
-
-;;; gtags
-;; Requires an install of GNU Global.  Currently only using for c-mode.
-(when (eq system-type 'berkeley-unix)
-  (setq load-path (cons "/usr/local/share/gtags" load-path))
-  (autoload 'gtags-mode "gtags" "" t)
-  (setq c-mode-hook '(lambda () (gtags-mode 1))))
 
 ;;; Printing
 ;; Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-09 08:06:12 (bm3719)>
+;;;; Time-stamp: <2020-06-09 15:26:36 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -11,8 +11,8 @@
 ;;;; cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo, intero,
 ;;;; proof-general, auctex, web-mode, restclient, rainbow-mode,
 ;;;; dockerfile-mode, js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
-;;;; aggressive-indent, elscreen, w3m, multi-term, lusty-explorer, emms, magit,
-;;;; git-gutter, org-present, wttrin, htmlize, pinentry, powerline, diminish.
+;;;; aggressive-indent, elscreen, w3m, lusty-explorer, emms, magit, git-gutter,
+;;;; org-present, wttrin, htmlize, pinentry, powerline, diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
 ;;;; stack, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
@@ -309,7 +309,7 @@
 ;; Don't hscroll unless needed.
 (setq hscroll-margin 1)
 ;; Start scrolling when 2 lines from top/bottom.  Set to 0 on systems where I
-;; use ansi-term or multi-term a lot.
+;; use ansi-term a lot.
 (setq scroll-margin 0)
 ;; Keeps the cursor in the same relative row during pgups and downs.
 (setq scroll-preserve-screen-position t)
@@ -405,8 +405,8 @@
   (setq shell-file-name "/usr/local/bin/zsh")
   (setq tex-shell-file-name "/usr/local/bin/zsh"))
 (when (eq system-type 'gnu/linux)
-  (setq shell-file-name "/usr/bin/zsh")
-  (setq tex-shell-file-name "/usr/bin/zsh"))
+  (setq shell-file-name "/bin/zsh")
+  (setq tex-shell-file-name "/bin/zsh"))
 (when (eq system-type 'windows-nt)
   (setq shell-file-name "/usr/bin/bash")
   (setq tex-shell-file-name "/usr/bin/bash"))
@@ -947,7 +947,6 @@
           (aggressive-indent . "melpa-stable")
           (elscreen . "melpa-stable")
           (w3m . "mepla")
-          (multi-term . "melpa-stable")
           (lusty-explorer . "melpa-stable")
           (emms . "melpa-stable")
           (magit . "melpa-stable")
@@ -981,7 +980,6 @@
                       aggressive-indent
                       elscreen
                       w3m
-                      multi-term
                       lusty-explorer
                       emms
                       magit
@@ -1230,21 +1228,6 @@ in M-x cider buffers connected to localhost."
   (let ((engine (nth 1 minibuffer-history)))
     (when (assoc engine w3m-search-engine-alist)
       (setq w3m-search-default-engine engine))))
-
-;;; multi-term
-;; http://www.emacswiki.org/emacs/download/multi-term.el
-(autoload 'multi-term "multi-term" nil t)
-(autoload 'multi-term-next "multi-term" nil t)
-(when (eq system-type 'berkeley-unix)
-  (setq multi-term-program "/usr/local/bin/zsh"))
-(when (eq system-type 'gnu/linux)
-  (setq multi-term-program "/usr/bin/zsh"))
-(when (eq system-type 'windows-nt)
-  (setq multi-term-program "/usr/bin/bash"))
-(when (eq system-type 'darwin)
-  (setq multi-term-program "/bin/zsh"))
-(global-set-key (kbd "C-c t") 'multi-term-next)
-(global-set-key (kbd "C-c T") 'multi-term)
 
 ;;; lusty-explorer
 ;; https://github.com/sjbach/lusty-emacs

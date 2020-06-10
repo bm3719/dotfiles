@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-09 15:26:36 (bm3719)>
+;;;; Time-stamp: <2020-06-09 21:43:01 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -11,8 +11,9 @@
 ;;;; cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo, intero,
 ;;;; proof-general, auctex, web-mode, restclient, rainbow-mode,
 ;;;; dockerfile-mode, js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
-;;;; aggressive-indent, elscreen, w3m, lusty-explorer, emms, magit, git-gutter,
-;;;; org-present, wttrin, htmlize, pinentry, powerline, diminish.
+;;;; aggressive-indent, eshell-git-prompt, elscreen, w3m, lusty-explorer, emms,
+;;;; magit, git-gutter, org-present, wttrin, htmlize, pinentry, powerline,
+;;;; diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
 ;;;; stack, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
@@ -945,6 +946,7 @@
           (gnuplot . "mepla-stable")
           (markdown-mode . "melpa-stable")
           (aggressive-indent . "melpa-stable")
+          (eshell-git-prompt . "melpa-stable")
           (elscreen . "melpa-stable")
           (w3m . "mepla")
           (lusty-explorer . "melpa-stable")
@@ -978,6 +980,7 @@
                       gnuplot
                       markdown-mode
                       aggressive-indent
+                      eshell-git-prompt
                       elscreen
                       w3m
                       lusty-explorer
@@ -1188,6 +1191,10 @@ in M-x cider buffers connected to localhost."
 (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
 (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
 (add-to-list 'aggressive-indent-excluded-modes 'cider-repl-mode)
+
+;;; eshell-git-prompt
+;; https://github.com/xuchunyang/eshell-git-prompt
+(eshell-git-prompt-use-theme 'robbyrussell)
 
 ;;; elscreen
 ;; https://github.com/knu/elscreen

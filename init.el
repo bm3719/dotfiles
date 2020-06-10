@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-09 21:43:01 (bm3719)>
+;;;; Time-stamp: <2020-06-10 14:36:00 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -738,7 +738,8 @@
    'org-babel-load-languages '((python . t)
                                (emacs-lisp . t)
                                (clojure . t)
-                               (ditaa . t))))
+                               (ditaa . t)
+                               (restclient . t))))
 
 ;;; ob-clojure
 (require 'ob-clojure)
@@ -859,7 +860,7 @@
 (when (eq system-type 'windows-nt)
   (setq shell-file-name "bash")
   (setq explicit-shell-file-name shell-file-name))
-(setq tramp-default-method "scp")
+(setq tramp-default-method "ssh")
 
 ;;; icomplete
 ;; Disable icomplete, since I prefer using lusty-explorer for this and don't
@@ -953,6 +954,7 @@
           (emms . "melpa-stable")
           (magit . "melpa-stable")
           (git-gutter . "melpa-stable")
+          (ob-restclient . "melpa")
           (org-present . "melpa")
           (wttrin . "melpa-stable")
           (htmlize . "melpa-stable")
@@ -988,6 +990,7 @@
                       magit
                       git-gutter
                       org-present
+                      ob-restclient
                       wttrin
                       htmlize
                       pinentry

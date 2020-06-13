@@ -1,9 +1,9 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-10 14:36:00 (bm3719)>
+;;;; Time-stamp: <2020-06-13 09:33:11 (bm3719)>
 ;;;;
-;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, FreeBSD, OSX, and
+;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, or on other OSes.
 ;;;;
@@ -411,9 +411,6 @@
 (when (eq system-type 'windows-nt)
   (setq shell-file-name "/usr/bin/bash")
   (setq tex-shell-file-name "/usr/bin/bash"))
-(when (eq system-type 'darwin)
-  (setq shell-file-name "/bin/zsh")
-  (setq tex-shell-file-name "/bin/zsh"))
 
 ;; Answer 'y' or RET for yes and 'n' for no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -693,18 +690,6 @@
       ispell-extra-args '("--sug-mode=ultra"))
 ;; Solves aspell startup problem on some Linuxes.
 (setq flyspell-issue-welcome-flag nil)
-;; Some OSX-specific cocoAspell config.
-(when (eq system-type 'darwin)
-  (setq ispell-program-name "aspell"
-        ispell-dictionary "english"
-        ispell-dictionary-alist
-        (let ((default '("[A-Za-z]" "[^A-Za-z]" "[']" nil
-                         ("-B" "-d" "english" "--dict-dir"
-                          "/Library/Application Support/cocoAspell/aspell6-en-6.0-0")
-                         nil iso-8859-1)))
-          `((nil ,@default)
-            ("english" ,@default))))
-  (add-to-list 'exec-path "/usr/local/bin"))
 
 ;;; org-mode
 ;; Initiate org-mode when opening .org files.

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-14 01:07:25 (bm3719)>
+;;;; Time-stamp: <2020-06-14 23:28:15 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -742,7 +742,7 @@
   (with-temp-buffer
     (insert-file-contents blog-header-file)
     (buffer-string)))
-;; Define a project for main personal site.
+;; Define projects that feed content into main personal site.
 (setq org-publish-project-alist
       `(("blog"
          :base-directory "~/public_html"
@@ -754,7 +754,20 @@
          :with-creator nil
          :html-validation-link nil
          :html-postamble nil
-         :html-preamble bcm/load-blog-header)))
+         :html-preamble bcm/load-blog-header)
+        ("docs"
+         :base-directory "~/src/docs"
+         :recursive nil
+         :publishing-directory "~/public_html"
+         :publishing-function org-html-publish-to-html
+         :with-author nil
+         :with-broken-links t
+         :with-creator nil
+         :html-validation-link nil
+         :html-postamble nil
+         :html-preamble bcm/load-blog-header
+         :exclude ".*"
+         :include ["projects.org" "projects-old.org"])))
 
 ;;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.

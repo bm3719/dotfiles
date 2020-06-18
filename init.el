@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-14 23:28:15 (bm3719)>
+;;;; Time-stamp: <2020-06-17 21:26:07 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -12,8 +12,8 @@
 ;;;; proof-general, auctex, web-mode, restclient, rainbow-mode,
 ;;;; dockerfile-mode, js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
 ;;;; aggressive-indent, eshell-git-prompt, elscreen, w3m, lusty-explorer, emms,
-;;;; magit, git-gutter, org-present, wttrin, htmlize, pinentry, powerline,
-;;;; diminish.
+;;;; magit, git-gutter, org-bullets, org-present, wttrin, htmlize, pinentry,
+;;;; powerline, diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
 ;;;; stack, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
@@ -691,7 +691,7 @@
 ;; Solves aspell startup problem on some Linuxes.
 (setq flyspell-issue-welcome-flag nil)
 
-;;; org-mode
+;;; Org
 ;; Initiate org-mode when opening .org files.
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 ;; Stores links.  In an org-mode file, C-c C-l calls them and creates links.
@@ -715,6 +715,11 @@
          ("CANCELED" :foreground "dark blue" :weight bold)
          ("BLOCKED" :foreground "purple" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
+;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
+(custom-theme-set-faces 'user
+                        `(org-level-2 ((t (:foreground "light sky blue")))))
+(custom-theme-set-faces 'user
+                        `(org-level-3 ((t (:foreground "deep sky blue")))))
 
 ;;; org-babel
 ;; Enable specific languages.
@@ -974,6 +979,7 @@
           (emms . "melpa-stable")
           (magit . "melpa-stable")
           (git-gutter . "melpa-stable")
+          (org-bullets . "melpa-stable")
           (ob-restclient . "melpa")
           (org-present . "melpa")
           (wttrin . "melpa-stable")
@@ -1009,6 +1015,7 @@
                       emms
                       magit
                       git-gutter
+                      org-bullets
                       org-present
                       ob-restclient
                       wttrin
@@ -1301,6 +1308,13 @@ in M-x cider buffers connected to localhost."
 (global-set-key (kbd "C-x C-g") 'git-gutter:toggle)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
+;;; org-bullets
+;; https://github.com/sabof/org-bullets
+(require 'org-bullets)
+;; Sometimes I don't want this on, so defaulting to off.  Will turn on
+;; manually.  Uncomment to always enable.
+;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
 ;;; org-present
 ;; https://github.com/rlister/org-present
 ;; Note: Use arrow keys to navigate, C-c C-q to quit.
@@ -1379,7 +1393,8 @@ in M-x cider buffers connected to localhost."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(org-level-2 ((t (:foreground "light sky blue"))))
+ '(org-level-3 ((t (:foreground "deep sky blue")))))
 
 ;; Replace echo area startup message.
 (run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))

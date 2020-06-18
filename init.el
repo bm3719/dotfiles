@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-17 21:26:07 (bm3719)>
+;;;; Time-stamp: <2020-06-18 13:23:12 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -58,8 +58,8 @@
 (setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffer of a .emacs file).
-(when (not (eq nil (get-buffer "*Messages*")))
-  (kill-buffer "*Messages*"))
+;; (when (not (eq nil (get-buffer "*Messages*")))
+;;   (kill-buffer "*Messages*"))
 
 ;; Provide a useful error trace if loading this .emacs fails.
 (setq debug-on-error t)
@@ -704,16 +704,16 @@
  org-todo-keywords (quote ((sequence
                             "TODO(t)"
                             "STARTED(s!)"
+                            "BLOCKED(b!)"
                             "|"
                             "DONE(d!/!)"
-                            "CANCELED(c!)"
-                            "BLOCKED(b!)")))
+                            "CANCELED(c!)")))
  org-todo-keyword-faces
  (quote (("TODO" :foreground "red" :weight bold)
          ("STARTED" :foreground "light sky blue" :weight bold)
+         ("BLOCKED" :foreground "purple" :weight bold)
          ("DONE" :foreground "forest green" :weight bold)
-         ("CANCELED" :foreground "dark blue" :weight bold)
-         ("BLOCKED" :foreground "purple" :weight bold))))
+         ("CANCELED" :foreground "dark blue" :weight bold))))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 ;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
 (custom-theme-set-faces 'user
@@ -772,7 +772,7 @@
          :html-postamble nil
          :html-preamble bcm/load-blog-header
          :exclude ".*"
-         :include ["projects.org" "projects-old.org"])))
+         :include ["projects.org" "archive.org"])))
 
 ;;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.

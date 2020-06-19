@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-19 12:38:17 (bm3719)>
+;;;; Time-stamp: <2020-06-19 12:47:21 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -9,11 +9,10 @@
 ;;;;
 ;;;; ELPA addons: volatile-highlights, smartparens, which-key, clojure-mode,
 ;;;; cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo, intero,
-;;;; proof-general, auctex, web-mode, restclient, rainbow-mode,
-;;;; dockerfile-mode, js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
-;;;; aggressive-indent, eshell-git-prompt, elscreen, w3m, lusty-explorer, emms,
-;;;; magit, git-gutter, org-bullets, org-present, wttrin, htmlize, pinentry,
-;;;; powerline, diminish.
+;;;; proof-general, auctex, web-mode, restclient, rainbow-mode, js2-mode,
+;;;; json-mode, python-mode, gnuplot, markdown-mode, aggressive-indent,
+;;;; eshell-git-prompt, elscreen, w3m, lusty-explorer, emms, magit, git-gutter,
+;;;; org-bullets, org-present, wttrin, htmlize, pinentry, powerline, diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
 ;;;; stack, mutt, w3m, Fira Code font.
@@ -955,7 +954,6 @@
           (web-mode . "melpa-stable")
           (restclient . "melpa")
           (rainbow-mode . "gnu")
-          (dockerfile-mode . "melpa-stable")
           (js2-mode . "melpa-stable")
           (json-mode . "mepla-stable")
           (python-mode . "melpa-stable")
@@ -991,7 +989,6 @@
                       web-mode
                       restclient
                       rainbow-mode
-                      dockerfile-mode
                       js2-mode
                       json-mode
                       python-mode
@@ -1159,10 +1156,6 @@ in M-x cider buffers connected to localhost."
 (add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
 (add-hook 'html-mode-hook (lambda () (rainbow-mode 1)))
 
-;;; dockerfile-mode
-;; https://github.com/spotify/dockerfile-mode
-(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
-
 ;;; js2-mode
 ;; https://github.com/mooz/js2-mode
 ;; TODO: Replace with js-mode when Emacs 27 comes out.
@@ -1174,7 +1167,6 @@ in M-x cider buffers connected to localhost."
 ;; Includes json-reformat and json-snatcher.
 ;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
-
 
 ;;; python-mode
 ;; http://launchpad.net/python-mode/

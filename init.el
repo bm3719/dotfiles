@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-19 11:34:05 (bm3719)>
+;;;; Time-stamp: <2020-06-19 11:42:39 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -16,8 +16,7 @@
 ;;;; powerline, diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
-;;;; stack, mutt, w3m, xpp (*nix only), Ghostscript/GSView (Windows only),
-;;;; Consolas font (Windows only).
+;;;; stack, mutt, w3m, Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -925,26 +924,6 @@
        (interactive)
        (save-buffer)
        (server-edit)))))
-
-;;; Printing
-;; Remap lpr-command to xpp on FreeBSD.  Requires print/xpp port.
-(when (eq system-type 'berkeley-unix)
-  (setq lpr-command "xpp"))
-;; Requires install of Ghostscript and GSView native ports on Windows.
-;; TODO: Redo this.
-(when (eq system-type 'windows-nt)
-  (progn
-    (setq-default ps-lpr-command
-                  (expand-file-name
-                   "C:\\bin\\utils\\gs\\gsview\\gsview\\gsprint.exe"))
-    (setq-default ps-printer-name t)
-    (setq-default ps-printer-name-option nil)
-    ;; Define otherwise free variables.
-    (eval-when-compile (defvar ps-lpr-switches))
-    (eval-when-compile (defvar ps-right-header))
-    (setq ps-lpr-switches '("-query"))   ; Show printer dialog.
-    (setq ps-right-header
-          '("/pagenumberstring load" ps-time-stamp-mon-dd-yyyy))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons (ELPA)

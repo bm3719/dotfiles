@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-18 13:23:12 (bm3719)>
+;;;; Time-stamp: <2020-06-19 11:34:05 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -28,12 +28,23 @@
 (when window-system
   (tool-bar-mode -1))
 
-;; Font face: Requires appropriate fonts to be installed.
-(if (eq system-type 'windows-nt)
-    (set-frame-font
-     "-outline-Consolas-normal-r-normal-normal-19-97-96-96-c-*-iso8859-1")
-  (when window-system
-    (set-face-attribute 'default nil :font "dejavu sans mono-14")))
+;; Font face: Always default to Fira, if available.  Otherwise use Consolas on
+;; Windows and go through a priority list of preferred fonts for other OSes.
+(defun font-exists-p (font)
+  "Check if font exists."
+  (if (null (x-list-fonts font)) nil t))
+(when window-system
+  (cond
+   ((find-font (font-spec :name "Fira Code"))
+    (set-frame-font "Fira Code-15"))
+   ((eq system-type 'windows-nt)
+    (set-frame-font "Consolas-16"))
+   ((find-font (font-spec :name "DejaVu Sans Mono"))
+    (set-frame-font "DejaVu Sans Mono-14"))
+   ((find-font (font-spec :name "Lucida Console"))
+    (set-frame-font "Lucida Console-14"))
+   ((find-font (font-spec :name "courier"))
+    (set-frame-font "courier-16"))))
 
 (setq inhibit-startup-message t)   ; Disable splash screen.
 (when window-system
@@ -706,7 +717,7 @@
                             "STARTED(s!)"
                             "BLOCKED(b!)"
                             "|"
-                            "DONE(d!/!)"
+                            "DONE(d!)"
                             "CANCELED(c!)")))
  org-todo-keyword-faces
  (quote (("TODO" :foreground "red" :weight bold)
@@ -1393,8 +1404,10 @@ in M-x cider buffers connected to localhost."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-done ((t (:foreground "forest green" :weight bold))))
  '(org-level-2 ((t (:foreground "light sky blue"))))
- '(org-level-3 ((t (:foreground "deep sky blue")))))
+ '(org-level-3 ((t (:foreground "deep sky blue"))))
+ '(org-todo ((t (:foreground "red" :weight bold)))))
 
 ;; Replace echo area startup message.
 (run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))

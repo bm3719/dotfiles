@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-19 11:42:39 (bm3719)>
+;;;; Time-stamp: <2020-06-19 12:38:17 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1301,9 +1301,7 @@ in M-x cider buffers connected to localhost."
 ;;; org-bullets
 ;; https://github.com/sabof/org-bullets
 (require 'org-bullets)
-;; Sometimes I don't want this on, so defaulting to off.  Will turn on
-;; manually.  Uncomment to always enable.
-;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 ;;; org-present
 ;; https://github.com/rlister/org-present

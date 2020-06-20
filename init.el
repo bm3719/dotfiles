@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-19 23:21:38 (bm3719)>
+;;;; Time-stamp: <2020-06-20 12:37:56 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -31,13 +31,15 @@
 (when window-system
   (cond
    ((find-font (font-spec :name "Fira Code"))
-    (set-frame-font "Fira Code-15"))
+    (set-frame-font "Fira Code-17"))
    ((eq system-type 'windows-nt)
     (set-frame-font "Consolas-16"))
+   ((find-font (font-spec :name "Monoid"))
+    (set-frame-font "Monoid-16"))
    ((find-font (font-spec :name "DejaVu Sans Mono"))
-    (set-frame-font "DejaVu Sans Mono-14"))
+    (set-frame-font "DejaVu Sans Mono-15"))
    ((find-font (font-spec :name "Lucida Console"))
-    (set-frame-font "Lucida Console-14"))
+    (set-frame-font "Lucida Console-15"))
    ((find-font (font-spec :name "courier"))
     (set-frame-font "courier-16"))))
 
@@ -1257,6 +1259,7 @@ in M-x cider buffers connected to localhost."
 ;; https://github.com/syohex/emacs-git-gutter
 (require 'git-gutter)
 (global-git-gutter-mode 1)
+(setq git-gutter:update-interval 2)
 (global-set-key (kbd "C-x M-g") 'git-gutter:toggle)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
@@ -1298,9 +1301,11 @@ in M-x cider buffers connected to localhost."
   (pinentry-start))
 
 ;;; powerline: Mode line replacement.
-(when window-system
-  (require 'powerline)
-  (powerline-default-theme))
+;; (when window-system
+;;   (require 'powerline)
+;;   (powerline-default-theme))
+(require 'powerline)
+(powerline-default-theme)
 
 ;;; diminish: mode-line shortening
 ;; https://www.eskimo.com/~seldon/diminish.el
@@ -1323,14 +1328,13 @@ in M-x cider buffers connected to localhost."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(git-gutter:update-interval 2)
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
  '(haskell-process-type (quote cabal-repl))
  '(package-selected-packages
    (quote
-    (pinentry dockerfile-mode which-key proof-general json-mode intero haskell-mode ac-cider cider clojure-mode)))
+    (pinentry which-key proof-general json-mode intero haskell-mode ac-cider cider clojure-mode)))
  '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
  '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
  '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))

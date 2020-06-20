@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-20 12:37:56 (bm3719)>
+;;;; Time-stamp: <2020-06-20 16:12:38 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -87,12 +87,16 @@
 ;; Specify UTF-8 for a few addons that are too dumb to default to it.
 (set-default-coding-systems 'utf-8-unix)
 
+;; Sends settings written to custom-set-variables and custom-set-faces to a
+;; separate file (instead of appending them here), where they will be ignored.
+;; IMPORTANT: This will cause anything done in the customize-* functions to
+;; have no effect unless loaded.
+(setq custom-file (concat user-emacs-directory "/custom.el"))
+;; Enable this if cust-edit output should be loaded.
+;; (load-file custom-file)
+
 ;; Load Common Lisp features.
 (require 'cl-lib)
-
-;; Provides zap-up-to-char (M-z), different than the default zap-to-char which
-;; includes deleting the argument character.
-(load-library "misc")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Basic Key Bindings
@@ -102,6 +106,10 @@
   (interactive)
   (progn (delete-trailing-whitespace)
          (save-buffer)))
+
+;; Provides zap-up-to-char (M-z), different than the default zap-to-char which
+;; includes deleting the argument character.
+(load-library "misc")
 
 ;; Global key (re-)mappings.
 (global-set-key (kbd "C-w") 'backward-kill-word)   ; Match the shell's C-w.
@@ -306,8 +314,8 @@
 ;; Don't hscroll unless needed.
 (setq hscroll-margin 1)
 ;; Start scrolling when 2 lines from top/bottom.  Set to 0 on systems where I
-;; use ansi-term a lot.  Eshell is okay with this.
-(setq scroll-margin 2)
+;; use ansi-term a lot.  Eshell is okay with this.  Disabling by default.
+;; (setq scroll-margin 2)
 ;; Keeps the cursor in the same relative row during pgups and downs.
 (setq scroll-preserve-screen-position t)
 
@@ -1074,13 +1082,20 @@ in M-x cider buffers connected to localhost."
 ;; Enable prettify-symbols-mode symbols-alists in buffers.
 (add-hook 'haskell-mode-hook #'bcm/haskell-prettify-enable)
 (add-hook 'intero-repl-mode-hook #'bcm/haskell-prettify-enable)
+;; Variables from haskell-customize.el
+(setq
+ ;; Import the modules reported by GHC to have been loaded.
+ haskell-process-auto-import-loaded-modules t
+ ;; Enable debug logging to *haskell-process-log* buffer.
+ haskell-process-log t
+ ;; Suggest removing import lines as warned by GHC.
+ haskell-process-suggest-remove-import-lines t)
 
 ;;; Proof General
-;; TODO: Add some stuff here, maybe
-
+;; TODO: Add some stuff here, maybe.
 ;;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
-;; Note: On OSX, install the BasicTeX package, then add its install location to $PATH.
+;; Note: On OSX, install BasicTeX package, then add its location to $PATH.
 (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 (add-hook 'LaTeX-mode-hook 'which-key-mode)
@@ -1321,26 +1336,7 @@ in M-x cider buffers connected to localhost."
           (lambda () (setq mode-name "cλj")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Final init
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type (quote cabal-repl))
- '(package-selected-packages
-   (quote
-    (pinentry which-key proof-general json-mode intero haskell-mode ac-cider cider clojure-mode)))
- '(safe-local-variable-values (quote ((eldoc-mode . t) (outline-minor-mode . t))))
- '(semantic-complete-inline-analyzer-displayor-class (quote semantic-displayor-tooltip))
- '(semantic-complete-inline-analyzer-idle-displayor-class (quote semantic-displayor-tooltip))
- '(semantic-idle-scheduler-verbose-flag nil)
- '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing))
- '(which-function-mode nil))
+;;; End external package load
 
 ;; Replace echo area startup message.
 (run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))

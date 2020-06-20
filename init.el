@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-19 14:10:10 (bm3719)>
+;;;; Time-stamp: <2020-06-19 23:21:38 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -28,9 +28,6 @@
 
 ;; Font face: Always default to Fira, if available.  Otherwise use Consolas on
 ;; Windows and go through a priority list of preferred fonts for other OSes.
-(defun font-exists-p (font)
-  "Check if font exists."
-  (if (null (x-list-fonts font)) nil t))
 (when window-system
   (cond
    ((find-font (font-spec :name "Fira Code"))
@@ -66,11 +63,11 @@
 ;; what's going on.
 (setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
-;; eval-buffer of a .emacs file).
-;; (when (not (eq nil (get-buffer "*Messages*")))
-;;   (kill-buffer "*Messages*"))
+;; eval-buffer of an init file).
+(when (not (eq nil (get-buffer "*Messages*")))
+  (kill-buffer "*Messages*"))
 
-;; Provide a useful error trace if loading this .emacs fails.
+;; Provide a useful error trace if loading this init fails.
 (setq debug-on-error t)
 
 ;; Change backup behavior to save in a directory, not in a miscellany of files
@@ -217,7 +214,7 @@
              (string= (buffer-name) bcm/set-cursor-color-buffer))
       (set-cursor-color (setq bcm/set-cursor-color-color color))
       (setq bcm/set-cursor-color-buffer (buffer-name)))))
-(add-hook 'post-command-hook 'bcm/set-cursor-color-according-to-mode)
+(add-hook 'post-command-hook #'bcm/set-cursor-color-according-to-mode)
 
 ;; Alias to prompt for a regex and a replacement string.
 (defalias 'qrr 'query-replace-regexp)
@@ -239,10 +236,6 @@
 ;; I use sentences.  Like this.
 (setq sentence-end-double-space t)
 
-;; Highlight regions so one can see what one is doing.
-;; Defaults on in >23.
-(transient-mark-mode 1)
-
 ;; Allow for mark ring traversal without popping them off the stack.
 (setq set-mark-command-repeat-pop t)
 
@@ -256,16 +249,8 @@
   (kill-line 0))
 (global-set-key (kbd "M-C-k") 'bcm/backward-kill-line)
 
-;; Copy a line without killing it.
-(defun bcm/copy-line (&optional arg)
-  "Do a kill-line but copy rather than kill."
-  (interactive "p")
-  (read-only-mode 1)
-  (kill-line arg)
-  (read-only-mode 0))
 ;; Replace error message on read-only kill with an echo area message.
 (setq-default kill-read-only-ok t)
-(global-set-key (kbd "C-x M-w") 'bcm/copy-line)
 
 ;; For composing in Emacs then pasting into a word processor, this un-fills all
 ;; the paragraphs (i.e. turns each paragraph into one very long line) and
@@ -319,8 +304,8 @@
 ;; Don't hscroll unless needed.
 (setq hscroll-margin 1)
 ;; Start scrolling when 2 lines from top/bottom.  Set to 0 on systems where I
-;; use ansi-term a lot.
-(setq scroll-margin 0)
+;; use ansi-term a lot.  Eshell is okay with this.
+(setq scroll-margin 2)
 ;; Keeps the cursor in the same relative row during pgups and downs.
 (setq scroll-preserve-screen-position t)
 
@@ -344,7 +329,8 @@
     ad-do-it
     (move-to-column col)))
 
-;; Change C-x C-b behavior so it uses bs; shows only interesting buffers.
+;; Change C-x C-b behavior so it uses bs; shows only interesting buffers.  The
+;; `a' key will toggle visibility of all.
 (global-set-key (kbd "C-x C-b") 'bs-show)
 
 ;; The first invocation of Home/End moves to the beginning of the *text* line.
@@ -421,7 +407,7 @@
   (setq shell-file-name "/usr/bin/bash")
   (setq tex-shell-file-name "/usr/bin/bash"))
 
-;; Answer 'y' or RET for yes and 'n' for no at minibar prompts.
+;; Answer `y' or RET for yes and `n' for no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
 (define-key query-replace-map (kbd "RET") 'act)
 
@@ -430,7 +416,7 @@
   (setq use-dialog-box nil))
 
 ;; Don't echo passwords when communicating with interactive programs.
-(add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
+(add-hook 'comint-output-filter-functions #'comint-watch-for-password-prompt)
 
 ;; Gets rid of disabled commands prompting.
 (setq disabled-command-function nil)
@@ -438,14 +424,9 @@
 ;; Allow seamless editing of files in a tar/jar/zip file.
 (auto-compression-mode 1)
 
-;; We can also get completion in the mini-buffer as well.
-(icomplete-mode t)
-
 ;; Completion ignores case.
 (setq read-buffer-completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
-;; In Emacs <23, use the following.
-;; (setq completion-ignore-case t)
 
 ;; Completion ignores filenames ending in any string in this list.
 (setq completion-ignored-extensions
@@ -459,7 +440,7 @@
    (concat ";; Initialization successful.  Welcome to "
            (substring (emacs-version) 0 14) ".") 0 0)
   (newline-and-indent)  (newline-and-indent))
-(add-hook 'after-init-hook 'bcm/emacs-reloaded)
+(add-hook 'after-init-hook #'bcm/emacs-reloaded)
 
 ;; Call this function to increase/decrease font size.
 (defun bcm/zoom (n)
@@ -479,7 +460,7 @@
 (setq time-stamp-active t          ; Do enable time-stamps.
       time-stamp-line-limit 10     ; Check first 10 buffer lines for stamp.
       time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ; Date format.
-(add-hook 'write-file-hooks 'time-stamp) ; Update when saving.
+(add-hook 'write-file-hooks #'time-stamp) ; Update when saving.
 
 ;; Follow the compilation buffer scroll instead of remaining at the top line.
 (setq compilation-scroll-output t)
@@ -495,7 +476,7 @@
            ;; Exclude my repo version of the same file.
            (not (string-match-p "dotfiles" (buffer-file-name))))
       (byte-compile-file (buffer-file-name))))
-(add-hook 'after-save-hook 'bcm/autocompile-init)
+(add-hook 'after-save-hook #'bcm/autocompile-init)
 
 ;; A function to close all buffers except scratch.
 (defun bcm/cleanup ()
@@ -522,11 +503,11 @@
 (set-face-attribute 'default nil :background "#000000")
 
 ;;; emacs-lisp-mode
-(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook #'flyspell-prog-mode)
+(add-hook 'emacs-lisp-mode-hook #'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook #'turn-on-eldoc-mode)
 ;;; IELM
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook #'turn-on-eldoc-mode)
 
 ;;; prettify-symbols-mode
 ;; Build a symbols-alist for Haskell (which is all I'm using this for
@@ -613,7 +594,7 @@
 (setq c-default-style "bsd"
       c-basic-offset 4)
 ;; Spell-check comments.
-(add-hook 'c-mode-hook 'flyspell-prog-mode)
+(add-hook 'c-mode-hook #'flyspell-prog-mode)
 
 ;;; java-mode
 ;; This mode doesn't properly indent Java out of the box.  This combined with
@@ -684,7 +665,7 @@
 
 ;;; shell-mode
 ;; Use ANSI colors within shell-mode.
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on)
 
 ;;; flyspell
 ;; Turn on flyspell mode for text editing.
@@ -694,10 +675,9 @@
   (add-hook hook (lambda () (flyspell-mode -1))))
 ;; aspell > ispell
 ;; Suggestion mode tuned to fastest possible.
-(when (eq system-type 'windows-nt))
 (setq ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
-;; Solves aspell startup problem on some Linuxes.
+;; Solves aspell startup problem on some GNU/Linux distros.
 (setq flyspell-issue-welcome-flag nil)
 
 ;;; Org
@@ -723,30 +703,13 @@
          ("BLOCKED" :foreground "purple" :weight bold)
          ("DONE" :foreground "forest green" :weight bold)
          ("CANCELED" :foreground "dark blue" :weight bold))))
-(add-hook 'org-mode-hook 'turn-on-auto-fill)
+(add-hook 'org-mode-hook #'turn-on-auto-fill)
 ;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
-(custom-theme-set-faces 'user
-                        `(org-level-2 ((t (:foreground "light sky blue")))))
-(custom-theme-set-faces 'user
-                        `(org-level-3 ((t (:foreground "deep sky blue")))))
-
-;;; org-babel
-;; Enable specific languages.
-(with-eval-after-load 'org
-  (org-babel-do-load-languages
-   'org-babel-load-languages '((python . t)
-                               (emacs-lisp . t)
-                               (clojure . t)
-                               (ditaa . t)
-                               (restclient . t))))
-
-;;; ob-clojure
-(require 'ob-clojure)
-
-;;; org-capture: On-the-fly note taking.
-(setq org-default-notes-file "~/notes.org")
-;; Global keybinding for idea capture.
-(global-set-key (kbd "C-c r") 'org-capture)
+(custom-theme-set-faces 'user `(org-level-2 ((t (:foreground "light sky blue")))))
+(custom-theme-set-faces 'user `(org-level-3 ((t (:foreground "deep sky blue")))))
+;; Match the colors of statistics cookies.
+(custom-theme-set-faces 'user `(org-done ((t (:foreground "forest green")))))
+(custom-theme-set-faces 'user `(org-todo ((t (:foreground "red")))))
 
 ;;; org-publish
 ;; Location of personal site header.
@@ -783,6 +746,25 @@
          :exclude ".*"
          :include ["projects.org" "archive.org"])))
 
+;;; org-babel
+;; Enable specific languages.
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((python . t)
+                               (emacs-lisp . t)
+                               (clojure . t)
+                               (ditaa . t)
+                               (restclient . t))))
+
+;;; ob-clojure
+(require 'ob-clojure)
+
+;;; org-capture: On-the-fly note taking.
+(setq org-default-notes-file "~/notes.org")
+;; Global keybinding for idea capture.
+(global-set-key (kbd "C-c r") 'org-capture)
+
+
 ;;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.
 (setq user-mail-address "bm3719@gmail.com")  ; Default: user@host
@@ -798,16 +780,15 @@
 ;;; calendar
 ;; Add calendar control-navigation.
 (add-hook 'calendar-load-hook
-          '(lambda ()
-             (define-key calendar-mode-map (kbd "C-x >") 'scroll-calendar-right)
-             (define-key calendar-mode-map (kbd "C-x <") 'scroll-calendar-left)))
+          (lambda ()
+            (define-key calendar-mode-map (kbd "C-x >") 'scroll-calendar-right)
+            (define-key calendar-mode-map (kbd "C-x <") 'scroll-calendar-left)))
 ;; Change some self-explanatory calendar settings.
-(setq
- mark-holidays-in-calendar t
- all-christian-calendar-holidays t
- all-islamic-calendar-holidays nil
- all-hebrew-calendar-holidays nil
- display-time-24hr-format t)
+(setq mark-holidays-in-calendar t
+      all-christian-calendar-holidays t
+      all-islamic-calendar-holidays nil
+      all-hebrew-calendar-holidays nil
+      display-time-24hr-format t)
 
 ;;; diary
 (setq diary-file "~/.emacs.d/.diary")    ; Might as well keep this out of ~.
@@ -825,8 +806,9 @@
 (defalias 'man 'woman)
 
 ;;; Emacs bookmarks
-;; NOTE: C-x r m: create new bookmark, C-x r b: navigate to bookmark, C-x r l:
-;;       list bookmarks.
+;; C-x r m: create new bookmark
+;; C-x r b: navigate to bookmark
+;; C-x r l: list bookmarks.
 (setq
  bookmark-default-file "~/.emacs.d/bookmarks" ; Moved from ~.
  bookmark-save-flag 1)                        ; Autosave each change.
@@ -841,7 +823,7 @@
       auto-mode-alist (cons '("\\README$" . text-mode) auto-mode-alist)
       auto-mode-alist (cons '("\\TODO$" . text-mode) auto-mode-alist))
 
-;; Custom generic mode for arff files (Used with Weka).
+;; Custom generic mode for ARFF files (Used with Weka).
 (require 'generic)
 (define-generic-mode 'arff-file-mode
   (list ?%)
@@ -868,11 +850,6 @@
             (list 'generic-font-lock-defaults nil t   ; case insensitive
                   (list (cons ?* "w") (cons ?- "w"))))
       (turn-on-font-lock)))) "Mode for arff-files.")
-
-;; Use file<pathname> instead of file<n> to uniquify buffer names.
-;; Note: Enabled by default in >=24.4.
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
 ;;; server-mode
 ;; This starts up a server automatically, allowing emacsclient to connect to a
@@ -901,17 +878,10 @@
 ;; want both enabled.
 (icomplete-mode 0)
 
-;;; CEDET
-;; Included in Emacs >=23.2.
-(setq semantic-load-turn-useful-things-on t)
-;; Keep semantic.cache files from littering my FS.
-(setq semanticdb-default-save-directory "~/.emacs.d/saves/semantic.cache")
-(require 'cedet)
-
 ;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
-(add-hook 'mail-mode-hook 'turn-on-auto-fill)
+(add-hook 'mail-mode-hook #'turn-on-auto-fill)
 ;; Define otherwise free variable.
 (eval-when-compile (defvar mail-mode-map))
 ;; Use C-c C-c to complete mutt message buffers without prompting for saving.
@@ -1036,16 +1006,16 @@
 (setq which-key-popup-type 'side-window)
 (setq which-key-side-window-location 'bottom)
 (setq which-key-idle-delay 1.2) ;; Default 1.0.
-(add-hook 'org-mode-hook 'which-key-mode)
+(add-hook 'org-mode-hook #'which-key-mode)
 
- ;;; clojure-mode and CIDER (via mepla-stable).
-(add-hook 'clojure-mode-hook 'smartparens-strict-mode)
+ ;;; clojure-mode
+(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
 
 ;;; CIDER
 (require 'cider)
-(add-hook 'cider-mode-hook 'flyspell-prog-mode)
-(add-hook 'cider-mode-hook 'which-key-mode)
-(add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+(add-hook 'cider-mode-hook #'flyspell-prog-mode)
+(add-hook 'cider-mode-hook #'which-key-mode)
+(add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
 (setq cider-repl-pop-to-buffer-on-connect t)
 (defun cider-reset ()
   "Sends (refresh) to the remote CIDER REPL buffer.  Only works
@@ -1061,32 +1031,32 @@ in M-x cider buffers connected to localhost."
 ;;; rainbow-delimiters
 ;; https://github.com/jlr/rainbow-delimiters
 (require 'rainbow-delimiters)
-(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 
 ;;; ac-cider: In-buffer completion for Clojure projects.
 ;; https://github.com/clojure-emacs/ac-cider
 (require 'ac-cider)
-(add-hook 'cider-mode-hook 'ac-flyspell-workaround)
-(add-hook 'cider-mode-hook 'ac-cider-setup)
-(add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+(add-hook 'cider-mode-hook #'ac-flyspell-workaround)
+(add-hook 'cider-mode-hook #'ac-cider-setup)
+(add-hook 'cider-repl-mode-hook #'ac-cider-setup)
 (eval-after-load "auto-complete"
   '(add-to-list 'ac-modes 'cider-mode))
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
-(add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
+(add-hook 'auto-complete-mode-hook #'set-auto-complete-as-completion-at-point-function)
+(add-hook 'cider-mode-hook #'set-auto-complete-as-completion-at-point-function)
 
 (defun bcm/clojure-hook ()
   (auto-complete-mode 1)
   (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
   ;; (define-key cider-mode-map (kbd "C-c C-o") 'cider-reset)
   (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word))
-(add-hook 'clojure-mode-hook 'bcm/clojure-hook)
+(add-hook 'clojure-mode-hook #'bcm/clojure-hook)
 (add-hook 'cider-repl-mode-hook
-          '(lambda ()
-             (define-key cider-repl-mode-map
-               (kbd "C-w") 'sp-backward-kill-word)))
+          (lambda ()
+            (define-key cider-repl-mode-map
+              (kbd "C-w") 'sp-backward-kill-word)))
 ;; Fix missing *nrepl-messages* buffer.
 (setq nrepl-log-messages 1)
 
@@ -1094,21 +1064,20 @@ in M-x cider buffers connected to localhost."
 ;; https://github.com/borkdude/flycheck-clj-kondo
 (require 'flycheck-clj-kondo)
 ;; Add to clojure-mode-hook.
-(add-hook 'clojure-mode-hook 'flycheck-mode)
+(add-hook 'clojure-mode-hook #'flycheck-mode)
 
 ;;; intero: A complete developer environment for Haskell.
 ;; https://commercialhaskell.github.io/intero/
-(add-hook 'haskell-mode-hook 'intero-mode)
+(add-hook 'haskell-mode-hook #'intero-mode)
 ;; Enable prettify-symbols-mode symbols-alists in buffers.
-(add-hook 'haskell-mode-hook 'bcm/haskell-prettify-enable)
-(add-hook 'intero-repl-mode-hook 'bcm/haskell-prettify-enable)
+(add-hook 'haskell-mode-hook #'bcm/haskell-prettify-enable)
+(add-hook 'intero-repl-mode-hook #'bcm/haskell-prettify-enable)
 
 ;;; Proof General
 ;; TODO: Add some stuff here, maybe
 
 ;;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
-;; FreeBSD ports, Linux apt-get version, OSx brew version.
 ;; Note: On OSX, install the BasicTeX package, then add its install location to $PATH.
 (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
@@ -1142,7 +1111,7 @@ in M-x cider buffers connected to localhost."
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
-(add-hook 'web-mode-hook 'flyspell-mode)
+(add-hook 'web-mode-hook #'flyspell-mode)
 
 ;;; restclient
 ;; https://github.com/pashky/restclient.el
@@ -1181,10 +1150,10 @@ in M-x cider buffers connected to localhost."
 ;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el
 (require 'gnuplot)
 (add-hook 'gnuplot-mode-hook
-          '(lambda ()
-             (flyspell-prog-mode)
-             (add-hook 'before-save-hook
-                       'whitespace-cleanup nil t)))
+          (lambda ()
+            (flyspell-prog-mode)
+            (add-hook 'before-save-hook
+                      #'whitespace-cleanup nil t)))
 ;; .gp is my personally-designated Gnuplot extension.
 (add-to-list 'auto-mode-alist '("\\.gp$" . gnuplot-mode))
 
@@ -1229,7 +1198,7 @@ in M-x cider buffers connected to localhost."
 (setq w3m-use-tab t)
 (setq w3m-use-cookies t)
 ;; Activate Conkeror-style link selection (toggle with f key).
-(add-hook 'w3m-mode-hook 'w3m-lnum-mode)
+(add-hook 'w3m-mode-hook #'w3m-lnum-mode)
 ;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
 (require 'w3m-search)
 ;; Add some extra search engine URIs.
@@ -1264,7 +1233,7 @@ in M-x cider buffers connected to localhost."
 (emms-default-players)
 (push 'emms-player-mplayer emms-player-list)
 ;; Show the current track each time EMMS starts to play a track with "NP: ".
-(add-hook 'emms-player-started-hook 'emms-show)
+(add-hook 'emms-player-started-hook #'emms-show)
 (setq emms-show-format "NP: %s")
 ;; When asked for emms-play-directory, always start from this one.
 (setq emms-source-file-default-directory "~/snd/")
@@ -1281,14 +1250,14 @@ in M-x cider buffers connected to localhost."
 (require 'magit)
 ;; Idiomatic fill-column setting for commit messages.
 (add-hook 'git-commit-mode-hook
-          '(lambda () (set-fill-column 72)))
+          (lambda () (set-fill-column 72)))
 (global-set-key (kbd "<f3>") 'magit-status)
 
 ;;; git-gutter
 ;; https://github.com/syohex/emacs-git-gutter
 (require 'git-gutter)
-(global-git-gutter-mode +1)
-(global-set-key (kbd "C-x C-g") 'git-gutter:toggle)
+(global-git-gutter-mode 1)
+(global-set-key (kbd "C-x M-g") 'git-gutter:toggle)
 (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
 
 ;;; org-bullets
@@ -1368,16 +1337,6 @@ in M-x cider buffers connected to localhost."
  '(semantic-idle-scheduler-verbose-flag nil)
  '(semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-name-increasing))
  '(which-function-mode nil))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-done ((t (:foreground "forest green" :weight bold))))
- '(org-level-2 ((t (:foreground "light sky blue"))))
- '(org-level-3 ((t (:foreground "deep sky blue"))))
- '(org-todo ((t (:foreground "red" :weight bold)))))
 
 ;; Replace echo area startup message.
 (run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))

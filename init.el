@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-20 16:12:38 (bm3719)>
+;;;; Time-stamp: <2020-06-20 16:19:05 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -714,24 +714,26 @@
          ("DONE" :foreground "forest green" :weight bold)
          ("CANCELED" :foreground "dark blue" :weight bold))))
 (add-hook 'org-mode-hook #'turn-on-auto-fill)
-;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
+;; Change faces for level 2, and 3.  Defaults are yellow, and light sky blue.
 (custom-theme-set-faces 'user `(org-level-2 ((t (:foreground "light sky blue")))))
 (custom-theme-set-faces 'user `(org-level-3 ((t (:foreground "deep sky blue")))))
-;; Match the colors of statistics cookies.
+;; Match the faces of statistics cookies to status faces.
 (custom-theme-set-faces 'user `(org-done ((t (:foreground "forest green")))))
 (custom-theme-set-faces 'user `(org-todo ((t (:foreground "red")))))
 
 ;;; org-publish
 ;; Location of personal site header.
 (setq blog-header-file "~/public_html/inc/header.html")
-;; Load personal site header.
+
 (defun bcm/load-blog-header (arg)
+  "Load personal site header."
   (with-temp-buffer
     (insert-file-contents blog-header-file)
     (buffer-string)))
-;; Define projects that feed content into main personal site.
+
+;; Define publish projects.
 (setq org-publish-project-alist
-      `(("blog"
+      `(("blog" ; Personal site.
          :base-directory "~/public_html"
          :recursive t
          :publishing-directory "~/public_html"
@@ -742,7 +744,7 @@
          :html-validation-link nil
          :html-postamble nil
          :html-preamble bcm/load-blog-header)
-        ("docs"
+        ("docs" ; 2 additional personal site documents.
          :base-directory "~/src/docs"
          :recursive nil
          :publishing-directory "~/public_html"
@@ -1316,9 +1318,8 @@ in M-x cider buffers connected to localhost."
   (pinentry-start))
 
 ;;; powerline: Mode line replacement.
-;; (when window-system
-;;   (require 'powerline)
-;;   (powerline-default-theme))
+;; Wrap this in a when expression that checks window-system, if using a
+;; non-Unicode terminal.
 (require 'powerline)
 (powerline-default-theme)
 

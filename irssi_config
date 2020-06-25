@@ -65,15 +65,11 @@ channels = (
   { name = "#haskell"; chatnet = "freenode"; autojoin = "No"; },
   { name = "#haskell-blah"; chatnet = "freenode"; autojoin = "No"; },
   { name = "#agda"; chatnet = "freenode"; autojoin = "No"; },
-  { name = "#mercury"; chatnet = "freenode"; autojoin = "No"; },
   { name = "#emacs"; chatnet = "freenode"; autojoin = "No"; },
-  { name = "#prolog"; chatnet = "freenode"; autojoin = "No"; },
-  { name = "#economics"; chatnet = "undernet"; autojoin = "No"; },
-  { name = "#activetrader"; chatnet = "financialchat"; autojoin = "Yes"; },
-  { name = "#gnu"; chatnet = "freenode"; autojoin = "No"; },
   { name = "#clojure"; chatnet = "freenode"; autojoin = "Yes"; },
-  { name = "#aicig"; chatnet = "freenode"; autojoin = "Yes"; },
   { name = "#l1j"; chatnet = "freenode"; autojoin = "Yes"; }
+  { name = "##typetheory"; chatnet = "freenode"; autojoin = "No"; }
+  { name = "##categorytheory"; chatnet = "freenode"; autojoin = "No"; }
 );
 
 aliases = {
@@ -256,17 +252,13 @@ ignores = (
     channels = (
       "#haskell",
       "#haskell-blah",
-      "#scheme",
       "#emacs",
-      "#mercury",
       "#lojban",
-      "#activetrader",
       "#clojure",
       "#agda",
-      "#math",
-      "#cascalog",
       "#nethack",
-      "#freebsd"
+      "##categorytheory",
+      "##typetheory"
     );
   },
   {
@@ -276,18 +268,13 @@ ignores = (
     channels = (
       "#haskell",
       "#haskell-blah",
-      "#lisp",
-      "#scheme",
       "#emacs",
-      "#mercury",
       "#lojban",
-      "#activetrader",
       "#clojure",
       "#agda",
-      "#math",
-      "#cascalog",
       "#nethack",
-      "#freebsd"
+      "##categorytheory",
+      "##typetheory"
     );
   },
   { mask = "*!*@freenode/staff/*"; level = "NOTICES"; }

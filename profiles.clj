@@ -1,9 +1,7 @@
-{:user {:plugins [[lein-kibit "0.1.7"]
-                  [lein-ancient "0.6.15"]
+{:user {:plugins [[lein-ancient "0.6.15"]
                   [lein-try "0.4.3"]
                   [lein-bikeshed "0.5.2"]
-                  [jonase/eastwood "0.3.6"]
-                  [cider/cider-nrepl "0.21.1"]]
+                  [cider/cider-nrepl "0.25.1"]]
         :dependencies [;; [spyscope "0.1.6"]
                        [org.clojure/tools.nrepl "0.2.12"]]
         :injections [;; (require 'spyscope.core)

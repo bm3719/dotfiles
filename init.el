@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-20 16:19:05 (bm3719)>
+;;;; Time-stamp: <2020-06-25 15:27:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -26,16 +26,17 @@
 (when window-system
   (tool-bar-mode -1))
 
-;; Font face: Always default to Fira, if available.  Otherwise use Consolas on
-;; Windows and go through a priority list of preferred fonts for other OSes.
+;; Font face: Always default to Fira Code or Roboto Mono, if available.
+;; Otherwise use Consolas on Windows and go through a priority list of
+;; preferred fonts for other OSes.
 (when window-system
   (cond
    ((find-font (font-spec :name "Fira Code"))
     (set-frame-font "Fira Code-17"))
+   ((find-font (font-spec :name "Roboto Mono"))
+    (set-frame-font "Roboto Mono-16"))
    ((eq system-type 'windows-nt)
     (set-frame-font "Consolas-16"))
-   ((find-font (font-spec :name "Monoid"))
-    (set-frame-font "Monoid-16"))
    ((find-font (font-spec :name "DejaVu Sans Mono"))
     (set-frame-font "DejaVu Sans Mono-15"))
    ((find-font (font-spec :name "Lucida Console"))
@@ -97,6 +98,10 @@
 
 ;; Load Common Lisp features.
 (require 'cl-lib)
+
+;; Use fullscreen in GUI mode.
+(when window-system
+  (toggle-frame-maximized))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Basic Key Bindings
@@ -714,26 +719,24 @@
          ("DONE" :foreground "forest green" :weight bold)
          ("CANCELED" :foreground "dark blue" :weight bold))))
 (add-hook 'org-mode-hook #'turn-on-auto-fill)
-;; Change faces for level 2, and 3.  Defaults are yellow, and light sky blue.
+;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
 (custom-theme-set-faces 'user `(org-level-2 ((t (:foreground "light sky blue")))))
 (custom-theme-set-faces 'user `(org-level-3 ((t (:foreground "deep sky blue")))))
-;; Match the faces of statistics cookies to status faces.
+;; Match the colors of statistics cookies.
 (custom-theme-set-faces 'user `(org-done ((t (:foreground "forest green")))))
 (custom-theme-set-faces 'user `(org-todo ((t (:foreground "red")))))
 
 ;;; org-publish
 ;; Location of personal site header.
 (setq blog-header-file "~/public_html/inc/header.html")
-
+;; Load personal site header.
 (defun bcm/load-blog-header (arg)
-  "Load personal site header."
   (with-temp-buffer
     (insert-file-contents blog-header-file)
     (buffer-string)))
-
-;; Define publish projects.
+;; Define projects that feed content into main personal site.
 (setq org-publish-project-alist
-      `(("blog" ; Personal site.
+      `(("blog"
          :base-directory "~/public_html"
          :recursive t
          :publishing-directory "~/public_html"
@@ -744,7 +747,7 @@
          :html-validation-link nil
          :html-postamble nil
          :html-preamble bcm/load-blog-header)
-        ("docs" ; 2 additional personal site documents.
+        ("docs"
          :base-directory "~/src/docs"
          :recursive nil
          :publishing-directory "~/public_html"
@@ -775,7 +778,6 @@
 (setq org-default-notes-file "~/notes.org")
 ;; Global keybinding for idea capture.
 (global-set-key (kbd "C-c r") 'org-capture)
-
 
 ;;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.
@@ -1085,6 +1087,9 @@ in M-x cider buffers connected to localhost."
 (add-hook 'haskell-mode-hook #'bcm/haskell-prettify-enable)
 (add-hook 'intero-repl-mode-hook #'bcm/haskell-prettify-enable)
 ;; Variables from haskell-customize.el
+(defvar haskell-process-auto-import-loaded-modules nil)
+(defvar haskell-process-log nil)
+(defvar haskell-process-suggest-remove-import-lines nil)
 (setq
  ;; Import the modules reported by GHC to have been loaded.
  haskell-process-auto-import-loaded-modules t
@@ -1095,6 +1100,7 @@ in M-x cider buffers connected to localhost."
 
 ;;; Proof General
 ;; TODO: Add some stuff here, maybe.
+
 ;;; AUCTeX
 ;; http://www.gnu.org/software/auctex/
 ;; Note: On OSX, install BasicTeX package, then add its location to $PATH.
@@ -1318,8 +1324,9 @@ in M-x cider buffers connected to localhost."
   (pinentry-start))
 
 ;;; powerline: Mode line replacement.
-;; Wrap this in a when expression that checks window-system, if using a
-;; non-Unicode terminal.
+;; (when window-system
+;;   (require 'powerline)
+;;   (powerline-default-theme))
 (require 'powerline)
 (powerline-default-theme)
 

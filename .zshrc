@@ -114,6 +114,7 @@ export GIT_EDITOR='emacsclient'
 export GREP_COLOR='01;32'              # Set grep color to green (default red).
 # Set Lynx start page to bookmarks file.
 export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
+export BROWSER=/bin/brave
 # Regionalization used by w3m.
 export LC_ALL=en_US.UTF-8
 # General locale.

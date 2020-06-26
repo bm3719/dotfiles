@@ -2,7 +2,9 @@
 
 Configuration files for applications I use or used to use.
 
-This includes:
+Of possible interest:
 - [[./.emacs.d/init.el]]: Emacs init.
 - [[./.zshrc]]: ZSH config.
-- [[./archive/CELLBLOCK]]: My final FreeBSD kernel config (12.0-REL).
+- [[./.tmux.conf]]: tmux config.
+- [[./.conkerorrc]]: Config for the [[http://conkeror.org/][Conkeror]] web browser.
+- [[./archive/CELLBLOCK]]: My final FreeBSD kernel config (12.0-REL on a NUC8i3BEK).

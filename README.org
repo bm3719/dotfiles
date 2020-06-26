@@ -1,7 +1,8 @@
 * dotfiles
 
-Configuration files for applications I use or used to use.  This
-includes Emacs, Conkeror, tmux, zsh, and XMonad.  My FreeBSD
-kernel config is also here.
+Configuration files for applications I use or used to use.
 
-Feel free to borrow anything here without any licensing obligations.
+This includes:
+- [[./.emacs.d/init.el]]: Emacs init.
+- [[./.zshrc]]: ZSH config.
+- [[./archive/CELLBLOCK]]: My final FreeBSD kernel config (12.0-REL).

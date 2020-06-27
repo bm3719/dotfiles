@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-25 15:27:26 (bm3719)>
+;;;; Time-stamp: <2020-06-26 22:18:24 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -700,12 +700,11 @@
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 ;; Stores links.  In an org-mode file, C-c C-l calls them and creates links.
 (global-set-key (kbd "C-x M-l") 'org-store-link)
-;; org-agenda displays this week's scheduled items.
-(global-set-key (kbd "C-x M-a") 'org-agenda)
 ;; Change default TODO keywords and coloring.
 (setq
  org-src-fontify-natively t
  org-todo-keywords (quote ((sequence
+                            "INACTIVE(i)"
                             "TODO(t)"
                             "STARTED(s!)"
                             "BLOCKED(b!)"
@@ -713,7 +712,8 @@
                             "DONE(d!)"
                             "CANCELED(c!)")))
  org-todo-keyword-faces
- (quote (("TODO" :foreground "red" :weight bold)
+ (quote (("INACTIVE" :forground "dark slate gray" :weight bold)
+         ("TODO" :foreground "red" :weight bold)
          ("STARTED" :foreground "light sky blue" :weight bold)
          ("BLOCKED" :foreground "purple" :weight bold)
          ("DONE" :foreground "forest green" :weight bold)
@@ -725,6 +725,10 @@
 ;; Match the colors of statistics cookies.
 (custom-theme-set-faces 'user `(org-done ((t (:foreground "forest green")))))
 (custom-theme-set-faces 'user `(org-todo ((t (:foreground "red")))))
+
+;;; org-agenda
+;; Display this week's scheduled items.  Clobbers hotkey for read-only-mode.
+(global-set-key (kbd "C-x C-q") 'org-agenda)
 
 ;;; org-publish
 ;; Location of personal site header.

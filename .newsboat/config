@@ -1,0 +1,4 @@
+max-items        300
+browser          "w3m %u" # "brave --new-tab %u"
+auto-reload      no
+save-path        "~/tmp"

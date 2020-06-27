@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-26 22:18:24 (bm3719)>
+;;;; Time-stamp: <2020-06-27 14:54:14 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -12,7 +12,7 @@
 ;;;; proof-general, auctex, web-mode, restclient, rainbow-mode, js2-mode,
 ;;;; json-mode, python-mode, gnuplot, markdown-mode, aggressive-indent,
 ;;;; eshell-git-prompt, elscreen, w3m, lusty-explorer, emms, magit, git-gutter,
-;;;; org-bullets, org-present, wttrin, htmlize, pinentry, powerline, diminish.
+;;;; org-bullets, org-present, htmlize, pinentry, powerline, diminish.
 ;;;;
 ;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
 ;;;; stack, mutt, w3m, Fira Code font.
@@ -712,7 +712,7 @@
                             "DONE(d!)"
                             "CANCELED(c!)")))
  org-todo-keyword-faces
- (quote (("INACTIVE" :forground "dark slate gray" :weight bold)
+ (quote (("INACTIVE" :foreground "gray25" :weight bold)
          ("TODO" :foreground "red" :weight bold)
          ("STARTED" :foreground "light sky blue" :weight bold)
          ("BLOCKED" :foreground "purple" :weight bold)
@@ -727,8 +727,11 @@
 (custom-theme-set-faces 'user `(org-todo ((t (:foreground "red")))))
 
 ;;; org-agenda
-;; Display this week's scheduled items.  Clobbers hotkey for read-only-mode.
+;; Display main agenda dispatch.  Clobbers hotkey for read-only-mode.
 (global-set-key (kbd "C-x C-q") 'org-agenda)
+;; Set the files I want org-agenda to pull from
+(setq org-agenda-files '("~/src/docs/projects.org"
+                         "~/src/docs/tasks.org"))
 
 ;;; org-publish
 ;; Location of personal site header.
@@ -958,7 +961,6 @@
           (org-bullets . "melpa-stable")
           (ob-restclient . "melpa")
           (org-present . "melpa")
-          (wttrin . "melpa-stable")
           (htmlize . "melpa-stable")
           (pinentry . "gnu")
           (powerline . "melpa-stable")
@@ -993,7 +995,6 @@
                       org-bullets
                       org-present
                       ob-restclient
-                      wttrin
                       htmlize
                       pinentry
                       powerline
@@ -1308,13 +1309,6 @@ in M-x cider buffers connected to localhost."
 (add-hook 'org-present-mode-quit-hook
           (lambda ()
             (org-remove-inline-images)))
-
-;;; wttrin: Get a weather report.
-;; https://github.com/bcbcarl/emacs-wttrin
-;; Note: Requires xterm-color.
-(require 'wttrin)
-(setq wttrin-default-cities '("Slanesville"))
-(setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
 
 ;;; htmlize: Converts buffer to HTML.
 ;; https://github.com/hniksic/emacs-htmlize

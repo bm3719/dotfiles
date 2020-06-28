@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-27 14:54:14 (bm3719)>
+;;;; Time-stamp: <2020-06-27 23:30:25 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -731,7 +731,8 @@
 (global-set-key (kbd "C-x C-q") 'org-agenda)
 ;; Set the files I want org-agenda to pull from
 (setq org-agenda-files '("~/src/docs/projects.org"
-                         "~/src/docs/tasks.org"))
+                         "~/src/docs/tasks.org"
+                         "~/src/docs/capture.org"))
 
 ;;; org-publish
 ;; Location of personal site header.
@@ -782,7 +783,7 @@
 (require 'ob-clojure)
 
 ;;; org-capture: On-the-fly note taking.
-(setq org-default-notes-file "~/notes.org")
+(setq org-default-notes-file "~/src/docs/capture.org")
 ;; Global keybinding for idea capture.
 (global-set-key (kbd "C-c r") 'org-capture)
 

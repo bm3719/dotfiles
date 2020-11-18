@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-06-27 23:30:25 (bm3719)>
+;;;; Time-stamp: <2020-11-13 15:09:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -474,7 +474,8 @@
 ;; Emacs will write time-stamp information there when saving.
 (setq time-stamp-active t          ; Do enable time-stamps.
       time-stamp-line-limit 10     ; Check first 10 buffer lines for stamp.
-      time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ; Date format.
+      ;; Date format.  Note that this is a >=27.x format.
+      time-stamp-format "%Y-%02m-%02d %02H:%02M:%02S (%u)")
 (add-hook 'write-file-hooks #'time-stamp) ; Update when saving.
 
 ;; Follow the compilation buffer scroll instead of remaining at the top line.

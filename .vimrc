@@ -80,8 +80,8 @@ if has("win32")                     " Win32-specific settings.
   " Remove 't' flag from 'guioptions': no tearoff menu entries.
   let &guioptions = substitute(&guioptions, "t", "", "g") 
   set nobackup                      " Disable backup files.
-  set backupdir=C:\temp             " Where backups go.
-  set directory=C:\temp             " Where swap files go.
+  set backupdir=~/.vim              " Where backups go.
+  set directory=~/.vim              " Where swap files go.
 else                                " *nix-specific settings.
   set guifont=terminus:h14
   set backupdir=~/.vim              " Where backups go.
@@ -190,16 +190,3 @@ let b:match_words = '\s*#\s*region.*$:\s*#\s*endregion'
 let java_highlight_functions=1
  autocmd BufRead,BufNewFile *.java set makeprg=javac\ %
 "autocmd BufRead BufNewFile *.java set makeprg=ant\ -emacs
-
-" Haskell
-if has("win32")
-  au BufEnter *.hs compiler ghc
-  :let g:haddock_browser="C:\Program Files\Mozilla Firefox\firefox.exe" 
-  :let g:haddock_docdir="C:\bm3719\doc\haddock"
-  :let g:haddock_indexfiledir="C:\temp"
-else
-  :let g:ghc="/usr/local/bin/ghc"
-  :let g:haddock_browser="/usr/local/bin/firefox" 
-  :let g:haddock_docdir="/usr/local/share/doc/haddock-2.0.0.0/html"
-  :let g:haddock_indexfiledir="~/.vim"
-endif

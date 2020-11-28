@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-11-13 15:09:26 (bm3719)>
+;;;; Time-stamp: <2020-11-27 22:09:00 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -726,6 +726,10 @@
 ;; Match the colors of statistics cookies.
 (custom-theme-set-faces 'user `(org-done ((t (:foreground "forest green")))))
 (custom-theme-set-faces 'user `(org-todo ((t (:foreground "red")))))
+;; Activate org-temp for code block insertion using <s TAB.
+(require 'org-tempo)
+;; Also add a better binding for template insertion.
+(org-defkey org-mode-map (kbd "C-c M-t") 'org-insert-structure-template)
 
 ;;; org-agenda
 ;; Display main agenda dispatch.  Clobbers hotkey for read-only-mode.

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2020-11-27 22:09:00 (bm3719)>
+;;;; Time-stamp: <2021-01-13 08:59:16 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -705,20 +705,20 @@
 (setq
  org-src-fontify-natively t
  org-todo-keywords (quote ((sequence
-                            "INACTIVE(i)"
+                            "INAC(i)"
                             "TODO(t)"
-                            "STARTED(s!)"
-                            "BLOCKED(b!)"
+                            "STRT(s!)"
+                            "BLCK(b!)"
                             "|"
                             "DONE(d!)"
-                            "CANCELED(c!)")))
+                            "CNCL(c!)")))
  org-todo-keyword-faces
- (quote (("INACTIVE" :foreground "gray25" :weight bold)
+ (quote (("INAC" :foreground "gray25" :weight bold)
          ("TODO" :foreground "red" :weight bold)
-         ("STARTED" :foreground "light sky blue" :weight bold)
-         ("BLOCKED" :foreground "purple" :weight bold)
+         ("STRT" :foreground "light sky blue" :weight bold)
+         ("BLCK" :foreground "purple" :weight bold)
          ("DONE" :foreground "forest green" :weight bold)
-         ("CANCELED" :foreground "dark blue" :weight bold))))
+         ("CNCL" :foreground "dark blue" :weight bold))))
 (add-hook 'org-mode-hook #'turn-on-auto-fill)
 ;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
 (custom-theme-set-faces 'user `(org-level-2 ((t (:foreground "light sky blue")))))

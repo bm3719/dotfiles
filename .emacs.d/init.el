@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-01-16 21:06:57 (bm3719)>
+;;;; Time-stamp: <2021-03-28 10:36:39 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -816,6 +816,9 @@
       all-islamic-calendar-holidays nil
       all-hebrew-calendar-holidays nil
       display-time-24hr-format t)
+
+;;; dired
+(define-key dired-mode-map "h" 'dired-up-directory) ; More convenient than ^.
 
 ;;; diary
 (setq diary-file "~/.emacs.d/.diary")    ; Might as well keep this out of ~.

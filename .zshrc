@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2020-06-21 21:46:30 (bm3719)>
+# Time-stamp: <2021-03-28 12:09:30 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -160,7 +160,7 @@ alias -g NUL="> /dev/null 2>&1"
 alias f="finger"
 if [[ $platform == 'linux' ]]
 then
-    alias ls='ls --color=auto'
+    alias ls='ls --color=auto --time-style=+%Y-%m-%d'
 elif [[ $platform == 'freebsd' ]]
 then
     alias ls='ls -G'

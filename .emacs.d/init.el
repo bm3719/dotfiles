@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-03-28 11:02:21 (bm3719)>
+;;;; Time-stamp: <2021-03-28 12:00:09 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -818,6 +818,9 @@
       display-time-24hr-format t)
 
 ;;; dired
+;; List directories first and use ISO8601 dates.
+(setq dired-listing-switches
+      "-AhFlv --group-directories-first --time-style=+%Y-%m-%d")
 (add-hook 'dired-load-hook
           (lambda ()
             ;; More convenient than ^.

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-03-31 10:40:59 (bm3719)>
+;;;; Time-stamp: <2021-03-31 14:58:09 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -11,7 +11,7 @@
 ;;;; clojure-mode, cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo,
 ;;;; intero, proof-general, auctex, web-mode, restclient, rainbow-mode,
 ;;;; js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
-;;;; aggressive-indent, eshell-git-prompt, elscreen, w3m, counsel, emms, magit,
+;;;; aggressive-indent, eshell-git-prompt, w3m, counsel, emms, magit,
 ;;;; git-gutter, org-bullets, org-present, htmlize, pinentry, powerline,
 ;;;; diminish.
 ;;;;
@@ -908,6 +908,15 @@
   (setq explicit-shell-file-name shell-file-name))
 (setq tramp-default-method "ssh")
 
+;;; tab-bar-mode
+;; Allow C-z to be a prefix key.
+(define-key global-map (kbd "C-z") (make-sparse-keymap))
+;; Add keybindings to match elscreen defaults.
+(global-set-key (kbd "<f7>") 'tab-new)
+(global-set-key (kbd "<f8>") 'tab-close)
+(global-set-key (kbd "C-z n") 'tab-next)
+(global-set-key (kbd "C-z p") 'tab-bar-switch-to-prev-tab)
+
 ;;; icomplete
 ;; Disable icomplete, since I prefer using ivy for this and don't want both
 ;; enabled.
@@ -966,7 +975,6 @@
           (markdown-mode . "melpa-stable")
           (aggressive-indent . "melpa-stable")
           (eshell-git-prompt . "melpa-stable")
-          (elscreen . "melpa-stable")
           (w3m . "mepla")
           (counsel . "melpa-stable")
           (emms . "melpa-stable")
@@ -1000,7 +1008,6 @@
                       markdown-mode
                       aggressive-indent
                       eshell-git-prompt
-                      elscreen
                       w3m
                       counsel
                       emms
@@ -1223,14 +1230,6 @@ in M-x cider buffers connected to localhost."
 ;;; eshell-git-prompt
 ;; https://github.com/xuchunyang/eshell-git-prompt
 (eshell-git-prompt-use-theme 'robbyrussell)
-
-;;; elscreen
-;; https://github.com/knu/elscreen
-(require 'elscreen)
-(elscreen-start)
-;; F7 creates a new elscreen, F8 kills it.
-(global-set-key (kbd "<f7>") 'elscreen-create)
-(global-set-key (kbd "<f8>") 'elscreen-kill)
 
 ;;; w3m (also called emacs-w3m)
 ;; http://w3m.sourceforge.net/

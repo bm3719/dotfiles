@@ -1,21 +1,22 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-03-28 12:00:09 (bm3719)>
+;;;; Time-stamp: <2021-03-31 10:40:59 (bm3719)>
 ;;;;
-;;;; This init was created for GNU Emacs 26.3 for GNU/Linux, OpenBSD, and
+;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions, or on other OSes.
 ;;;;
-;;;; ELPA addons: volatile-highlights, smartparens, which-key, clojure-mode,
-;;;; cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo, intero,
-;;;; proof-general, auctex, web-mode, restclient, rainbow-mode, js2-mode,
-;;;; json-mode, python-mode, gnuplot, markdown-mode, aggressive-indent,
-;;;; eshell-git-prompt, elscreen, w3m, lusty-explorer, emms, magit, git-gutter,
-;;;; org-bullets, org-present, htmlize, pinentry, powerline, diminish.
+;;;; Top-level addons: volatile-highlights, smartparens, which-key,
+;;;; clojure-mode, cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo,
+;;;; intero, proof-general, auctex, web-mode, restclient, rainbow-mode,
+;;;; js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
+;;;; aggressive-indent, eshell-git-prompt, elscreen, w3m, counsel, emms, magit,
+;;;; git-gutter, org-bullets, org-present, htmlize, pinentry, powerline,
+;;;; diminish.
 ;;;;
-;;;; External applications used: aspell, aspell-en, Leiningen, clj-kondo,
-;;;; stack, mutt, w3m, Fira Code font.
+;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, stack,
+;;;; mutt, w3m, Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -134,7 +135,6 @@
 (global-set-key (kbd "M-z") 'zap-up-to-char)       ; Mimic Vim delete to char.
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-x M-a") 'align-regexp)
-(global-set-key (kbd "<f9>") 'insert-char)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
 ;; intending to do a find-file.
 (global-set-key (kbd "C-x f") 'find-file)
@@ -302,10 +302,9 @@
   (interactive)
   (insert (format-time-string "%Y-%m-%dT%H:%M:%SZ" nil 1)))
 
-;; I type a lot of λs.
+;; I type a lot of λs.  Clobbers reposition-window.
 (global-set-key (kbd "C-M-l") (lambda ()
-                                (interactive)
-                                (insert-char ?λ)))
+                                (interactive) (insert-char ?λ)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation
@@ -910,8 +909,8 @@
 (setq tramp-default-method "ssh")
 
 ;;; icomplete
-;; Disable icomplete, since I prefer using lusty-explorer for this and don't
-;; want both enabled.
+;; Disable icomplete, since I prefer using ivy for this and don't want both
+;; enabled.
 (icomplete-mode 0)
 
 ;;; Mutt client integration.
@@ -955,7 +954,7 @@
           (ac-cider . "melpa-stable")
           (flycheck-clj-kondo . "melpa-stable")
           (intero . "melpa-stable")
-          (proof-general . "melpa") ;; Switch to melpa-stable later.
+          (proof-general . "melpa") ; Switch to melpa-stable later.
           (auctex . "gnu")
           (web-mode . "melpa-stable")
           (restclient . "melpa")
@@ -969,7 +968,7 @@
           (eshell-git-prompt . "melpa-stable")
           (elscreen . "melpa-stable")
           (w3m . "mepla")
-          (lusty-explorer . "melpa-stable")
+          (counsel . "melpa-stable")
           (emms . "melpa-stable")
           (magit . "melpa-stable")
           (git-gutter . "melpa-stable")
@@ -1003,7 +1002,7 @@
                       eshell-git-prompt
                       elscreen
                       w3m
-                      lusty-explorer
+                      counsel
                       emms
                       magit
                       git-gutter
@@ -1265,11 +1264,29 @@ in M-x cider buffers connected to localhost."
     (when (assoc engine w3m-search-engine-alist)
       (setq w3m-search-default-engine engine))))
 
-;;; lusty-explorer
-;; https://github.com/sjbach/lusty-emacs
-(require 'lusty-explorer)
-(global-set-key (kbd "C-x C-f") 'lusty-file-explorer)
-(global-set-key (kbd "C-x b") 'lusty-buffer-explorer)
+;;; counsel/ivy
+;; https://github.com/abo-abo/swiper
+;; Enable ivy everywhere.
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "C-h f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "C-h v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> l") 'counsel-find-library)
+(global-set-key (kbd "C-h l") 'counsel-find-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "C-h i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "<f9>") 'counsel-unicode-char)
+(global-set-key (kbd "<f2> j") 'counsel-set-variable)
+(global-set-key (kbd "M-y") 'counsel-yank-pop)
+(global-set-key (kbd "C-c v") 'ivy-push-view)
+(global-set-key (kbd "C-c V") 'ivy-pop-view)
 
 ;;; EMMS
 ;; http://www.gnu.org/software/emms/

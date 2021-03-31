@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-03-31 17:19:37 (bm3719)>
+;;;; Time-stamp: <2021-03-31 17:46:16 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -99,6 +99,8 @@
 
 ;; Load Common Lisp features.
 (require 'cl-lib)
+;; Disable warning for requiring cl, which is deprecated in >=27.
+(setq byte-compile-warnings '(cl-functions))
 
 ;; Use fullscreen in GUI mode.
 (when window-system
@@ -1242,10 +1244,9 @@ in M-x cider buffers connected to localhost."
 
 ;;; w3m (also called emacs-w3m)
 ;; http://w3m.sourceforge.net/
-(autoload 'w3m "w3m" "Interface for w3m on Emacs." t)
+(require 'w3m-load nil t)
 ;; Use w3m for all URLs (deprecated code to use available GUI browser).
 (setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 ;; Optional keyboard short-cut.
 (global-set-key (kbd "C-x M-m") 'browse-url-at-point)
 ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
@@ -1259,7 +1260,7 @@ in M-x cider buffers connected to localhost."
 (add-to-list 'w3m-search-engine-alist
              '("hoogle" "http://haskell.org/hoogle/?q=%s"))
 (add-to-list 'w3m-search-engine-alist
-             '("ports" "http://freebsd.org/cgi/ports.cgi/?query=%s" nil))
+             '("wiby" "https://wiby.me/?q=%s" nil))
 (add-to-list 'w3m-search-engine-alist
              '("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil))
 (add-to-list 'w3m-search-engine-alist

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-03-31 14:58:09 (bm3719)>
+;;;; Time-stamp: <2021-03-31 17:19:37 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -911,11 +911,20 @@
 ;;; tab-bar-mode
 ;; Allow C-z to be a prefix key.
 (define-key global-map (kbd "C-z") (make-sparse-keymap))
+;; Default new tabs to *scratch* buffer.
+(setq tab-bar-new-tab-choice "*scratch*")
+;; Always add new tabs on the far right.
+(setq tab-bar-new-tab-to 'rightmost)
+;; Tweak tab faces to match powerline theme.
+(set-face-attribute 'tab-bar-tab-inactive nil :background "#1C1C1C" :foreground "#87875F")
+(set-face-attribute 'tab-bar nil :background "#3A3A3A" :foreground "#B2B2B2")
+(set-face-attribute 'tab-bar-tab nil :background "#626262" :foreground "#EEEEEE")
 ;; Add keybindings to match elscreen defaults.
 (global-set-key (kbd "<f7>") 'tab-new)
 (global-set-key (kbd "<f8>") 'tab-close)
 (global-set-key (kbd "C-z n") 'tab-next)
 (global-set-key (kbd "C-z p") 'tab-bar-switch-to-prev-tab)
+(global-set-key (kbd "C-z r") 'tab-rename)
 
 ;;; icomplete
 ;; Disable icomplete, since I prefer using ivy for this and don't want both

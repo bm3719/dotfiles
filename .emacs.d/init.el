@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-03-31 22:07:21 (bm3719)>
+;;;; Time-stamp: <2021-03-31 22:21:19 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -822,10 +822,12 @@
 ;; List directories first and use ISO8601 dates.
 (setq dired-listing-switches
       "-AhFlv --group-directories-first --time-style=+%Y-%m-%d")
+;; More convenient than ^.
 (add-hook 'dired-load-hook
-          (lambda ()
-            ;; More convenient than ^.
-            (define-key dired-mode-map "b" 'dired-up-directory)))
+          (lambda () (define-key dired-mode-map "b" 'dired-up-directory)))
+;; Always delete and copy recursively.
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
 
 ;;; diary
 (setq diary-file "~/.emacs.d/.diary")    ; Might as well keep this out of ~.
@@ -836,7 +838,6 @@
 
 ;;; rmail
 (setq mail-archive-file-name "~/Mail/sent")  ; Reuse the gnus mail dir.
-(defconst user-mail-address "bm3719@gmail.com")
 
 ;;; woman
 ;; Alias man to woman, since the latter offers completion.

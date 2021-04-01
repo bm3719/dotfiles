@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-03-31 17:46:16 (bm3719)>
+;;;; Time-stamp: <2021-03-31 21:45:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -11,8 +11,8 @@
 ;;;; clojure-mode, cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo,
 ;;;; intero, proof-general, auctex, web-mode, restclient, rainbow-mode,
 ;;;; js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
-;;;; aggressive-indent, eshell-git-prompt, w3m, counsel, emms, magit,
-;;;; git-gutter, org-bullets, org-present, htmlize, pinentry, powerline,
+;;;; aggressive-indent, eshell-git-prompt, w3m, counsel, ivy-prescient, emms,
+;;;; magit, git-gutter, org-bullets, org-present, htmlize, pinentry, powerline,
 ;;;; diminish.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, stack,
@@ -988,6 +988,7 @@
           (eshell-git-prompt . "melpa-stable")
           (w3m . "mepla")
           (counsel . "melpa-stable")
+          (ivy-prescient . "melpa-stable")
           (emms . "melpa-stable")
           (magit . "melpa-stable")
           (git-gutter . "melpa-stable")
@@ -1021,6 +1022,7 @@
                       eshell-git-prompt
                       w3m
                       counsel
+                      ivy-prescient
                       emms
                       magit
                       git-gutter
@@ -1296,6 +1298,13 @@ in M-x cider buffers connected to localhost."
 (global-set-key (kbd "M-y") 'counsel-yank-pop)
 (global-set-key (kbd "C-c v") 'ivy-push-view)
 (global-set-key (kbd "C-c V") 'ivy-pop-view)
+
+;;; ivy-prescient
+(ivy-prescient-mode 1)
+;; Disable sorting by length.
+(setq prescient-sort-length-enable nil)
+;; Remember candidate frequencies across sessions.
+(prescient-persist-mode 1)
 
 ;;; EMMS
 ;; http://www.gnu.org/software/emms/

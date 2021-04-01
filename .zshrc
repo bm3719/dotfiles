@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2021-03-28 12:09:30 (bm3719)>
+# Time-stamp: <2021-04-01 15:36:43 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -185,6 +185,7 @@ alias lup="sudo /usr/libexec/locate.updatedb"
 alias rz="lrz -e"
 alias sz="lsz -e"
 alias ec="emacsclient -n"    # Use this with server-start.
+alias ef="emacsclient -c"    # Creates a new frame with existing daemon.
 alias gc="gnuclient-emacs"   # Use this with gnuserv-emacs.
 alias em="emacs -nw"
 alias xpdf="xpdf -z page"

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-04-04 07:46:07 (bm3719)>
+;;;; Time-stamp: <2021-04-04 10:00:23 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -731,12 +731,15 @@
 
 (use-package haskell-mode
   :ensure t
+  ;; Doesn't work, for unknown reasons.
   :diminish "λ≫"
   :config
-  ;; ;; Enable prettify-symbols-mode symbols-alists in buffers.
-  ;; (add-hook 'haskell-mode-hook #'bcm/haskell-prettify-enable)
+  ;; Enable prettify-symbols-mode symbols-alists in buffers.
+  (add-hook 'haskell-mode-hook #'bcm/haskell-prettify-enable)
   (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
-  (add-hook 'haskell-mode-hook #'haskell-doc-mode))
+  (add-hook 'haskell-mode-hook #'haskell-doc-mode)
+  (add-hook 'haskell-mode-hook
+            (lambda () (setq mode-name "λ≫"))))
 
 (use-package proof-general
   :ensure t)

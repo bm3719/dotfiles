@@ -1,22 +1,22 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-03-31 22:21:19 (bm3719)>
+;;;; Time-stamp: <2021-04-04 00:13:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
-;;;; versions, or on other OSes.
+;;;; versions or on other OSes.
 ;;;;
-;;;; Top-level addons: volatile-highlights, smartparens, which-key,
-;;;; clojure-mode, cider, rainbow-delimiters, ac-cider, flycheck-clj-kondo,
-;;;; intero, proof-general, auctex, web-mode, restclient, rainbow-mode,
-;;;; js2-mode, json-mode, python-mode, gnuplot, markdown-mode,
-;;;; aggressive-indent, eshell-git-prompt, w3m, counsel, ivy-prescient, emms,
-;;;; magit, git-gutter, org-bullets, org-present, htmlize, pinentry, powerline,
-;;;; diminish.
+;;;; Top-level addons: use-package, diminish, counsel, ivy-prescient,
+;;;; smartparens, volatile-highlights, which-key, powerline, pinentry,
+;;;; org-bullets, org-present, ob-restclient, magit, git-gutter,
+;;;; eshell-git-prompt, aggressive-indent, clojure-mode, cider, ac-cider,
+;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
+;;;; auctex, web-mode, js2-mode, rainbow-mode, json-mode, python-mode,
+;;;; markdown-mode, gnuplot-mode, w3m, emms.
 ;;;;
-;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, stack,
-;;;; mutt, w3m, Fira Code font.
+;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
+;;;; Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -64,7 +64,7 @@
 (setq visible-bell t)              ; Make bell visible, not aural.
 
 ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
-;; what's going on.
+;; output from message function calls.
 (setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffer of an init file).
@@ -96,11 +96,6 @@
 (setq custom-file (concat user-emacs-directory "/custom.el"))
 ;; Enable this if cust-edit output should be loaded.
 ;; (load-file custom-file)
-
-;; Load Common Lisp features.
-(require 'cl-lib)
-;; Disable warning for requiring cl, which is deprecated in >=27.
-(setq byte-compile-warnings '(cl-functions))
 
 ;; Use fullscreen in GUI mode.
 (when window-system
@@ -512,6 +507,387 @@
 (global-set-key (kbd "<f4>") 'bcm/indent)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Package System Initialization
+
+;;; package
+(require 'package)
+
+;; Don't make installed packages available at startup.
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
+(package-initialize)
+
+;; If a fresh install, update the repos index.
+(unless package-archive-contents
+   (package-refresh-contents))
+;; Install 'use-package' if necessary
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+;; Provides :bind variants.
+(require 'bind-key)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; External Addons
+
+;; Required first to provide :diminish keyword.
+(use-package diminish
+  :ensure t
+  :init
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda () (setq mode-name "e-λ"))))
+
+(use-package counsel
+  :ensure t
+  :custom
+  (ivy-use-virtual-buffers t)
+  (ivy-count-format "(%d/%d) ")
+  :bind
+  ("C-x C-f" . counsel-find-file)
+  ("C-x b" . ivy-switch-buffer)
+  ("M-x" . counsel-M-x)
+  ("<f1> f" . counsel-describe-function)
+  ("C-h f" . counsel-describe-function)
+  ("<f1> v" . counsel-describe-variable)
+  ("C-h v" . counsel-describe-variable)
+  ("<f1> l" . counsel-find-library)
+  ("C-h l" . counsel-find-library)
+  ("<f2> i" . counsel-info-lookup-symbol)
+  ("C-h i" . counsel-info-lookup-symbol)
+  ("<f2> u" . counsel-unicode-char)
+  ("<f9>" . counsel-unicode-char)
+  ("<f2> j" . counsel-set-variable)
+  ("M-y" . counsel-yank-pop)
+  ("C-c v" . ivy-push-view)
+  ("C-c V" . ivy-pop-view))
+
+(use-package ivy-prescient
+  :ensure t
+  :custom
+  (prescient-sort-length-enable nil)
+  :config
+  (ivy-prescient-mode 1)
+  (prescient-persist-mode 1))
+
+(use-package smartparens
+  :ensure t
+  :diminish "(ϛ)"
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
+  (add-hook 'scheme-mode-hook #'smartparens-strict-mode)
+  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
+  (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
+  (add-hook 'ielm-mode-hook #'smartparens-strict-mode)
+  :config
+  (require 'smartparens-config)
+  :bind
+  ("M-)" . sp-forward-slurp-sexp)
+  ("M-(" . sp-backward-barf-sexp)
+  ("M-s" . sp-unwrap-sexp))
+
+(use-package volatile-highlights
+  :ensure t
+  :diminish "hl"
+  :init (volatile-highlights-mode t))
+
+(use-package which-key
+  :ensure t
+  :init
+  (add-hook 'org-mode-hook #'which-key-mode)
+  :custom
+  (which-key-popup-type 'side-window)
+  (which-key-side-window-location 'bottom)
+  (which-key-idle-delay 1.2))
+
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-default-theme))
+
+;; Manually installing pinentry from gnu, since ":pin gnu" seems to do nothing.
+(unless (package-installed-p 'pinentry)
+  (package-install 'pinentry))
+(use-package pinentry
+  :if (not (eq system-type 'windows-nt))
+  :custom
+  (epa-pinentry-mode 'loopback)
+  :config
+  (pinentry-start))
+
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;; Reminder: Use arrow keys to navigate, C-c C-q to quit.
+(use-package org-present
+  :ensure t
+  :init
+  ;; Reduce the huge upscaling of text.  This amount is more reasonable for my
+  ;; laptop, but reconsider it for larger displays.
+  (setq org-present-text-scale 2)
+  (add-hook 'org-present-mode-hook
+            (lambda ()
+              (org-display-inline-images)))
+  (add-hook 'org-present-mode-quit-hook
+            (lambda ()
+              (org-remove-inline-images))))
+
+(use-package ob-restclient
+  :ensure t
+  :mode "\\.rest$"
+  :custom
+  ;; Inhibit restclient from sending cookies implicitly.
+  (restclient-inhibit-cookies t))
+
+(use-package magit
+  :ensure t
+  :init
+  ;; Idiomatic fill-column setting for commit messages.
+  (add-hook 'git-commit-mode-hook
+            (lambda () (set-fill-column 72)))
+  (global-set-key (kbd "<f3>") 'magit-status))
+
+(use-package git-gutter
+  :ensure t
+  :diminish "Git↓"
+  :custom
+  (git-gutter:update-interval 2)
+  :config
+  (global-git-gutter-mode 1)
+  (global-set-key (kbd "C-x M-g") 'git-gutter:toggle)
+  (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk))
+
+(use-package eshell-git-prompt
+  :ensure t
+  :config
+  (eshell-git-prompt-use-theme 'robbyrussell))
+
+(use-package aggressive-indent
+  :ensure t
+  :init
+  (global-aggressive-indent-mode 1)
+  ;; Add any modes I want to exclude from this minor mode.
+  (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'cider-repl-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'java-mode))
+
+(use-package clojure-mode
+  :ensure t
+  :diminish "cλj"
+  :init
+  (add-hook 'clojure-mode-hook #'smartparens-strict-mode))
+
+(use-package cider
+  :ensure t
+  :custom
+  (cider-repl-pop-to-buffer-on-connect t)
+  :init
+  (add-hook 'cider-mode-hook #'flyspell-prog-mode)
+  (add-hook 'cider-mode-hook #'which-key-mode)
+  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
+  ;; Have org-babel use CIDER.
+  (setq org-babel-clojure-backend 'cider)
+  (defun bcm/clojure-hook ()
+    (auto-complete-mode 1)
+    (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
+    (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word))
+  (add-hook 'clojure-mode-hook #'bcm/clojure-hook)
+  (add-hook 'cider-repl-mode-hook
+            (lambda ()
+              (define-key cider-repl-mode-map
+                (kbd "C-w") 'sp-backward-kill-word)))
+  ;; Fix missing *nrepl-messages* buffer.
+  (setq nrepl-log-messages 1))
+
+(use-package ac-cider
+  :ensure t
+  :init
+  (add-hook 'cider-mode-hook #'ac-flyspell-workaround)
+  (add-hook 'cider-mode-hook #'ac-cider-setup)
+  (add-hook 'cider-repl-mode-hook #'ac-cider-setup)
+  (eval-after-load "auto-complete"
+    '(add-to-list 'ac-modes 'cider-mode))
+  (defun set-auto-complete-as-completion-at-point-function ()
+    (setq completion-at-point-functions '(auto-complete)))
+  (add-hook 'auto-complete-mode-hook #'set-auto-complete-as-completion-at-point-function)
+  (add-hook 'cider-mode-hook #'set-auto-complete-as-completion-at-point-function))
+
+(use-package flycheck-clj-kondo
+  :ensure t
+  :init
+  (add-hook 'clojure-mode-hook #'flycheck-mode))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :disabled
+  :init
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
+
+(use-package haskell-mode
+  :ensure t
+  :diminish "λ≫"
+  :config
+  ;; ;; Enable prettify-symbols-mode symbols-alists in buffers.
+  ;; (add-hook 'haskell-mode-hook #'bcm/haskell-prettify-enable)
+  (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
+  (add-hook 'haskell-mode-hook #'haskell-doc-mode))
+
+(use-package proof-general
+  :ensure t)
+
+;; Manually installing/configuring AUCTeX.
+(unless (package-installed-p 'auctex)
+  (package-install 'auctex))
+;; Note: On OSX, install BasicTeX package, then add its location to $PATH.
+(add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(add-hook 'LaTeX-mode-hook 'which-key-mode)
+;; Enable this when working with multi-file document structures.
+;; (setq-default TeX-master nil)
+;; Enable document parsing.
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+;; Full section options.  See Sectioning page in AUCTeX info.
+(setq LaTeX-section-hook
+      '(LaTeX-section-heading
+        LaTeX-section-title
+        LaTeX-section-toc
+        LaTeX-section-section
+        LaTeX-section-label))
+
+(use-package web-mode
+  :ensure t
+  :mode
+  ("\\.html?\\'" "\\.phtml\\'" "\\.tpl\\.php\\'"
+   "\\.[gj]sp\\'" "\\.as[cp]x\\'" "\\.erb\\'"
+   "\\.mustache\\'" "\\.djhtml\\'" "\\.php\\'")
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2)
+  :init
+  (add-hook 'web-mode-hook #'flyspell-mode))
+
+;; TODO: Maybe replace with js-mode built into Emacs 27.
+(use-package js2-mode
+  :ensure t
+  :mode
+  (("\\.js\\'" . js2-mode))
+  :custom
+  (js2-include-node-externs t)
+  (js2-global-externs '("customElements"))
+  (js2-highlight-level 3)
+  (js2r-prefer-let-over-var t)
+  (js2r-prefered-quote-type 2)
+  (js-indent-align-list-continuation t)
+  (global-auto-highlight-symbol-mode t)
+  (js-indent-level 2)
+  (js2-basic-offset 2)
+  :config
+  ;; Patch in basic private field support.
+  (advice-add #'js2-identifier-start-p
+              :after-until
+              (lambda (c) (eq c ?#))))
+
+(use-package rainbow-mode
+  :ensure t
+  :init
+  (add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
+  (add-hook 'html-mode-hook (lambda () (rainbow-mode 1))))
+
+;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
+(use-package json-mode
+  :ensure t
+  :mode "\\.json\\'")
+
+;; Super-minimal Python infrastructure.  Restore docs navigation and integrate
+;; flycheck if needed later.
+(use-package python-mode
+  :ensure t
+  :mode "\\.py\\'"
+  :init
+  (add-to-list 'interpreter-mode-alist '("python" . python-mode))
+  ;; Ensure Python 3 is used.
+  (setq python-shell-interpreter "python3"))
+
+;; Note: Install textproc/markdown to integrate compilation commands.
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.markdown\\'" "\\.md\\'"))
+
+(use-package gnuplot-mode
+  :ensure t
+  :mode "\\.gp$"
+  :config
+  (add-hook 'gnuplot-mode-hook
+            (lambda ()
+              (flyspell-prog-mode)
+              (add-hook 'before-save-hook
+                        #'whitespace-cleanup nil t))))
+
+(use-package w3m
+  :ensure t
+  :custom
+  ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
+  ;; (w3m-use-tab t)
+  (w3m-use-cookies t)
+  :init
+  (require 'w3m-load nil t)
+  ;; Use w3m for all URLs (deprecated code to use available GUI browser).
+  (setq browse-url-browser-function 'w3m-browse-url)
+  ;; Activate Conkeror-style link selection (toggle with f key).
+  (add-hook 'w3m-mode-hook #'w3m-lnum-mode)
+  ;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
+  (require 'w3m-search)
+  ;; Add some extra search engine URIs.
+  (add-to-list 'w3m-search-engine-alist
+               '("hoogle" "http://haskell.org/hoogle/?q=%s"))
+  (add-to-list 'w3m-search-engine-alist
+               '("wiby" "https://wiby.me/?q=%s" nil))
+  (add-to-list 'w3m-search-engine-alist
+               '("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil))
+  (add-to-list 'w3m-search-engine-alist
+               '("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))
+  (setq w3m-search-default-engine "duckduckgo")
+  ;; Default to the last manually specified search engine when calling the prefix
+  ;; version of the function.
+  (defadvice w3m-search (after change-default activate)
+    (let ((engine (nth 1 minibuffer-history)))
+      (when (assoc engine w3m-search-engine-alist)
+        (setq w3m-search-default-engine engine))))
+  :bind
+  ("C-x M-m" . browse-url-at-point))
+
+;; Currently using mplayer backend - seems superior to mpg321, which doesn't
+;; support seeking.
+(use-package emms
+  :ensure t
+  :custom
+  (emms-show-format "NP: %s")
+  ;; When asked for emms-play-directory, always start from this one.
+  (emms-source-file-default-directory "~/snd/")
+  :config
+  (require 'emms-setup)
+  (emms-all)
+  (emms-default-players)
+  (push 'emms-player-mplayer emms-player-list)
+  ;; Show the current track each time EMMS starts to play a track with "NP: ".
+  (add-hook 'emms-player-started-hook #'emms-show)
+  :bind
+  ("<kp-subtract>" . emms-previous)
+  ("<kp-add>" . emms-next)
+  ("<insert>" . emms-pause)
+  ("<kp-insert>" . emms-pause)
+  ("<kp-right>" . emms-seek-forward)
+  ("<kp-left>" . emms-seek-backward))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes
 
 ;;; color-theme
@@ -519,7 +895,12 @@
 (load-theme 'wombat t nil)
 (set-face-attribute 'default nil :background "#000000")
 
-;;; emacs-lisp-mode
+;;; icomplete
+;; Disable icomplete, since I prefer using ivy for this and don't want both
+;; enabled.
+(icomplete-mode 0)
+
+;;; elisp-mode
 (add-hook 'emacs-lisp-mode-hook #'flyspell-prog-mode)
 (add-hook 'emacs-lisp-mode-hook #'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook #'turn-on-eldoc-mode)
@@ -929,11 +1310,6 @@
 (global-set-key (kbd "C-z p") 'tab-bar-switch-to-prev-tab)
 (global-set-key (kbd "C-z r") 'tab-rename)
 
-;;; icomplete
-;; Disable icomplete, since I prefer using ivy for this and don't want both
-;; enabled.
-(icomplete-mode 0)
-
 ;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
@@ -951,452 +1327,7 @@
        (server-edit)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; External Addons (ELPA)
-
-;;; package
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://stable.melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("gnu" . "http://elpa.gnu.org/packages/"))
-;; (add-to-list 'package-archives
-;;              '("marmalade" . "https://marmalade-repo.org/packages/"))
-(package-initialize)
-(when (boundp 'package-pinned-packages)
-  (setq package-pinned-packages
-        '((volatile-highlights . "melpa-stable")
-          (smartparens . "melpa-stable")
-          (which-key . "melpa-stable")
-          (clojure-mode . "melpa-stable")
-          (cider . "melpa-stable")
-          (rainbow-delimiters . "melpa-stable")
-          (ac-cider . "melpa-stable")
-          (flycheck-clj-kondo . "melpa-stable")
-          (intero . "melpa-stable")
-          (proof-general . "melpa") ; Switch to melpa-stable later.
-          (auctex . "gnu")
-          (web-mode . "melpa-stable")
-          (restclient . "melpa")
-          (rainbow-mode . "gnu")
-          (js2-mode . "melpa-stable")
-          (json-mode . "mepla-stable")
-          (python-mode . "melpa-stable")
-          (gnuplot . "mepla-stable")
-          (markdown-mode . "melpa-stable")
-          (aggressive-indent . "melpa-stable")
-          (eshell-git-prompt . "melpa-stable")
-          (w3m . "mepla")
-          (counsel . "melpa-stable")
-          (ivy-prescient . "melpa-stable")
-          (emms . "melpa-stable")
-          (magit . "melpa-stable")
-          (git-gutter . "melpa-stable")
-          (org-bullets . "melpa-stable")
-          (ob-restclient . "melpa")
-          (org-present . "melpa")
-          (htmlize . "melpa-stable")
-          (pinentry . "gnu")
-          (powerline . "melpa-stable")
-          (diminish . "melpa-stable"))))
-(defvar my-packages '(volatile-highlights
-                      smartparens
-                      which-key
-                      clojure-mode
-                      cider
-                      rainbow-delimiters
-                      ac-cider
-                      flycheck-clj-kondo
-                      intero
-                      proof-general
-                      auctex
-                      web-mode
-                      restclient
-                      rainbow-mode
-                      js2-mode
-                      json-mode
-                      python-mode
-                      gnuplot
-                      markdown-mode
-                      aggressive-indent
-                      eshell-git-prompt
-                      w3m
-                      counsel
-                      ivy-prescient
-                      emms
-                      magit
-                      git-gutter
-                      org-bullets
-                      org-present
-                      ob-restclient
-                      htmlize
-                      pinentry
-                      powerline
-                      diminish))
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
-
-;;; volatile-highlights
-;; https://github.com/k-talo/volatile-highlights.el
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
-
-;;; smartparens
-;; https://github.com/Fuco1/smartparens
-(require 'smartparens-config)
-(add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
-(add-hook 'ielm-mode-hook #'smartparens-strict-mode)
-(add-hook 'lisp-mode-hook #'smartparens-strict-mode)
-(add-hook 'scheme-mode-hook #'smartparens-strict-mode)
-;; Keybindings for the features being used so far.
-(define-key smartparens-mode-map (kbd "M-)") 'sp-forward-slurp-sexp)
-(define-key smartparens-mode-map (kbd "M-(") 'sp-backward-barf-sexp)
-(define-key smartparens-mode-map (kbd "M-s") 'sp-unwrap-sexp)
-
-;;; which-key
-(setq which-key-popup-type 'side-window)
-(setq which-key-side-window-location 'bottom)
-(setq which-key-idle-delay 1.2) ;; Default 1.0.
-(add-hook 'org-mode-hook #'which-key-mode)
-
- ;;; clojure-mode
-(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
-
-;;; CIDER
-(require 'cider)
-(add-hook 'cider-mode-hook #'flyspell-prog-mode)
-(add-hook 'cider-mode-hook #'which-key-mode)
-(add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
-(setq cider-repl-pop-to-buffer-on-connect t)
-(defun cider-reset ()
-  "Sends (refresh) to the remote CIDER REPL buffer.  Only works
-in M-x cider buffers connected to localhost."
-  (interactive)
-  (set-buffer "*cider-repl 127.0.0.1*")
-  (goto-char (point-max))
-  (insert "(refresh)")
-  (cider-repl-return))
-;; Have org-babel use CIDER.
-(setq org-babel-clojure-backend 'cider)
-
-;;; rainbow-delimiters
-;; https://github.com/jlr/rainbow-delimiters
-(require 'rainbow-delimiters)
-(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-(add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
-
-;;; ac-cider: In-buffer completion for Clojure projects.
-;; https://github.com/clojure-emacs/ac-cider
-(require 'ac-cider)
-(add-hook 'cider-mode-hook #'ac-flyspell-workaround)
-(add-hook 'cider-mode-hook #'ac-cider-setup)
-(add-hook 'cider-repl-mode-hook #'ac-cider-setup)
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'cider-mode))
-(defun set-auto-complete-as-completion-at-point-function ()
-  (setq completion-at-point-functions '(auto-complete)))
-(add-hook 'auto-complete-mode-hook #'set-auto-complete-as-completion-at-point-function)
-(add-hook 'cider-mode-hook #'set-auto-complete-as-completion-at-point-function)
-
-(defun bcm/clojure-hook ()
-  (auto-complete-mode 1)
-  (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
-  ;; (define-key cider-mode-map (kbd "C-c C-o") 'cider-reset)
-  (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word))
-(add-hook 'clojure-mode-hook #'bcm/clojure-hook)
-(add-hook 'cider-repl-mode-hook
-          (lambda ()
-            (define-key cider-repl-mode-map
-              (kbd "C-w") 'sp-backward-kill-word)))
-;; Fix missing *nrepl-messages* buffer.
-(setq nrepl-log-messages 1)
-
-;; flycheck-clj-kondo: Requires clj-kondo installed to $PATH.
-;; https://github.com/borkdude/flycheck-clj-kondo
-(require 'flycheck-clj-kondo)
-;; Add to clojure-mode-hook.
-(add-hook 'clojure-mode-hook #'flycheck-mode)
-
-;;; intero: A complete developer environment for Haskell.
-;; https://commercialhaskell.github.io/intero/
-(add-hook 'haskell-mode-hook #'intero-mode)
-;; Enable prettify-symbols-mode symbols-alists in buffers.
-(add-hook 'haskell-mode-hook #'bcm/haskell-prettify-enable)
-(add-hook 'intero-repl-mode-hook #'bcm/haskell-prettify-enable)
-;; Variables from haskell-customize.el
-(defvar haskell-process-auto-import-loaded-modules nil)
-(defvar haskell-process-log nil)
-(defvar haskell-process-suggest-remove-import-lines nil)
-(setq
- ;; Import the modules reported by GHC to have been loaded.
- haskell-process-auto-import-loaded-modules t
- ;; Enable debug logging to *haskell-process-log* buffer.
- haskell-process-log t
- ;; Suggest removing import lines as warned by GHC.
- haskell-process-suggest-remove-import-lines t)
-
-;;; Proof General
-;; TODO: Add some stuff here, maybe.
-
-;;; AUCTeX
-;; http://www.gnu.org/software/auctex/
-;; Note: On OSX, install BasicTeX package, then add its location to $PATH.
-(add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(add-hook 'LaTeX-mode-hook 'which-key-mode)
-;; Enable this when working with multi-file document structures.
-;; (setq-default TeX-master nil)
-;; Enable document parsing.
-(setq TeX-auto-save t)
-(setq TeX-parse-self t)
-;; Full section options.  See Sectioning page in AUCTeX info.
-(setq LaTeX-section-hook
-      '(LaTeX-section-heading
-        LaTeX-section-title
-        LaTeX-section-toc
-        LaTeX-section-section
-        LaTeX-section-label))
-
-;;; web-mode: An autonomous major-mode for editing web templates (HTML
-;;; documents embedding parts (CSS/JavaScript) and blocks (client/server side).
-;; https://github.com/fxbois/web-mode
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[gj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
-(setq web-mode-markup-indent-offset 2)
-(setq web-mode-css-indent-offset 2)
-(setq web-mode-code-indent-offset 2)
-(add-hook 'web-mode-hook #'flyspell-mode)
-
-;;; restclient
-;; https://github.com/pashky/restclient.el
-;; Inhibit restclient from sending cookies implicitly.
-(setq restclient-inhibit-cookies t)
-;; Designate .rest as the file extension for this mode.
-(add-to-list 'auto-mode-alist '("\\.rest$" . restclient-mode))
-
-;;; rainbow-mode: Adds color hinting for colors in hex, RBG, and named.
-;; https://github.com/emacsmirror/rainbow-mode
-(require 'rainbow-mode)
-(add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
-(add-hook 'html-mode-hook (lambda () (rainbow-mode 1)))
-
-;;; js2-mode
-;; https://github.com/mooz/js2-mode
-;; TODO: Replace with js-mode when Emacs 27 comes out.
-(require 'js2-mode)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(setq js2-basic-offset 2)
-
-;;; json-mode
-;; Includes json-reformat and json-snatcher.
-;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
-(add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
-
-;;; python-mode
-;; http://launchpad.net/python-mode/
-;; Super-minimal Python infrastructure.  Restore docs navigation and integrate
-;; flycheck if needed later.
-(autoload 'python-mode "python-mode" "Python Mode." t)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
-;; Ensure Python 3 is used.
-(setq python-shell-interpreter "python3")
-
-;;; gnuplot-mode
-;; https://raw.github.com/mkmcc/gnuplot-mode/master/gnuplot-mode.el
-(require 'gnuplot)
-(add-hook 'gnuplot-mode-hook
-          (lambda ()
-            (flyspell-prog-mode)
-            (add-hook 'before-save-hook
-                      #'whitespace-cleanup nil t)))
-;; .gp is my personally-designated Gnuplot extension.
-(add-to-list 'auto-mode-alist '("\\.gp$" . gnuplot-mode))
-
-;;; markdown-mode
-;; https://github.com/jrblevin/markdown-mode
-;; Note: Install textproc/markdown to integrate compilation commands.
-(autoload 'markdown-mode "markdown-mode"
-  "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-;;; aggressive-indent: On-the-fly indenting.
-;; https://github.com/Malabarba/aggressive-indent-mode
-(require 'aggressive-indent)
-(global-aggressive-indent-mode 1)
-;; Add any modes I want to exclude from this minor mode.
-(add-to-list 'aggressive-indent-excluded-modes 'web-mode)
-(add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
-(add-to-list 'aggressive-indent-excluded-modes 'cider-repl-mode)
-
-;;; eshell-git-prompt
-;; https://github.com/xuchunyang/eshell-git-prompt
-(eshell-git-prompt-use-theme 'robbyrussell)
-
-;;; w3m (also called emacs-w3m)
-;; http://w3m.sourceforge.net/
-(require 'w3m-load nil t)
-;; Use w3m for all URLs (deprecated code to use available GUI browser).
-(setq browse-url-browser-function 'w3m-browse-url)
-;; Optional keyboard short-cut.
-(global-set-key (kbd "C-x M-m") 'browse-url-at-point)
-;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
-(setq w3m-use-tab t)
-(setq w3m-use-cookies t)
-;; Activate Conkeror-style link selection (toggle with f key).
-(add-hook 'w3m-mode-hook #'w3m-lnum-mode)
-;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
-(require 'w3m-search)
-;; Add some extra search engine URIs.
-(add-to-list 'w3m-search-engine-alist
-             '("hoogle" "http://haskell.org/hoogle/?q=%s"))
-(add-to-list 'w3m-search-engine-alist
-             '("wiby" "https://wiby.me/?q=%s" nil))
-(add-to-list 'w3m-search-engine-alist
-             '("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil))
-(add-to-list 'w3m-search-engine-alist
-             '("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))
-(setq w3m-search-default-engine "duckduckgo")
-;; Default to the last manually specified search engine when calling the prefix
-;; version of the function.
-(defadvice w3m-search (after change-default activate)
-  (let ((engine (nth 1 minibuffer-history)))
-    (when (assoc engine w3m-search-engine-alist)
-      (setq w3m-search-default-engine engine))))
-
-;;; counsel/ivy
-;; https://github.com/abo-abo/swiper
-;; Enable ivy everywhere.
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "C-h f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-(global-set-key (kbd "C-h v") 'counsel-describe-variable)
-(global-set-key (kbd "<f1> l") 'counsel-find-library)
-(global-set-key (kbd "C-h l") 'counsel-find-library)
-(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "C-h i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-(global-set-key (kbd "<f9>") 'counsel-unicode-char)
-(global-set-key (kbd "<f2> j") 'counsel-set-variable)
-(global-set-key (kbd "M-y") 'counsel-yank-pop)
-(global-set-key (kbd "C-c v") 'ivy-push-view)
-(global-set-key (kbd "C-c V") 'ivy-pop-view)
-
-;;; ivy-prescient
-(ivy-prescient-mode 1)
-;; Disable sorting by length.
-(setq prescient-sort-length-enable nil)
-;; Remember candidate frequencies across sessions.
-(prescient-persist-mode 1)
-
-;;; EMMS
-;; http://www.gnu.org/software/emms/
-;; Currently using mplayer backend - seems superior to mpg321, which doesn't
-;; support seeking.
-(require 'emms-setup)
-(emms-all)
-(emms-default-players)
-(push 'emms-player-mplayer emms-player-list)
-;; Show the current track each time EMMS starts to play a track with "NP: ".
-(add-hook 'emms-player-started-hook #'emms-show)
-(setq emms-show-format "NP: %s")
-;; When asked for emms-play-directory, always start from this one.
-(setq emms-source-file-default-directory "~/snd/")
-;; Some global playlist management keybindings.
-(global-set-key (kbd "<kp-subtract>") 'emms-previous)
-(global-set-key (kbd "<kp-add>") 'emms-next)
-(global-set-key (kbd "<insert>") 'emms-pause)
-(global-set-key (kbd "<kp-insert>") 'emms-pause)
-(global-set-key (kbd "<kp-right>") 'emms-seek-forward)
-(global-set-key (kbd "<kp-left>") 'emms-seek-backward)
-
-;;; Magit
-;; https://github.com/magit/magit
-(require 'magit)
-;; Idiomatic fill-column setting for commit messages.
-(add-hook 'git-commit-mode-hook
-          (lambda () (set-fill-column 72)))
-(global-set-key (kbd "<f3>") 'magit-status)
-
-;;; git-gutter
-;; https://github.com/syohex/emacs-git-gutter
-(require 'git-gutter)
-(global-git-gutter-mode 1)
-(setq git-gutter:update-interval 2)
-(global-set-key (kbd "C-x M-g") 'git-gutter:toggle)
-(global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
-
-;;; org-bullets
-;; https://github.com/sabof/org-bullets
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-;;; org-present
-;; https://github.com/rlister/org-present
-;; Note: Use arrow keys to navigate, C-c C-q to quit.
-(autoload 'org-present "org-present" nil t)
-;; Reduce the huge upscaling of text.  This amount is more reasonable for my
-;; laptop, but reconsider it for larger displays.
-(setq org-present-text-scale 2)
-(add-hook 'org-present-mode-hook
-          (lambda ()
-            (org-display-inline-images)))
-(add-hook 'org-present-mode-quit-hook
-          (lambda ()
-            (org-remove-inline-images)))
-
-;;; htmlize: Converts buffer to HTML.
-;; https://github.com/hniksic/emacs-htmlize
-;; TODO: Check if htmlfontify.el (being added in 23.2) is the same as this.
-(require 'htmlize)
-
-;;; pinentry: Needed for minibuffer prompt integration with GnuPG 2.1.5+ and
-;;; Pinentry 0.9.5+.
-(when (not (eq system-type 'windows-nt))
-  (setq epa-pinentry-mode 'loopback)
-  (pinentry-start))
-
-;;; powerline: Mode line replacement.
-;; (when window-system
-;;   (require 'powerline)
-;;   (powerline-default-theme))
-(require 'powerline)
-(powerline-default-theme)
-
-;;; diminish: mode-line shortening
-;; https://www.eskimo.com/~seldon/diminish.el
-(when (require 'diminish nil 'noerror)
-  (eval-after-load "git-gutter" '(diminish 'git-gutter-mode "Git↓"))
-  (eval-after-load "smartparens" '(diminish 'smartparens-mode "(ϛ)")))
-;; Non-diminish major mode mode-line shortening.
-(add-hook 'haskell-mode-hook
-          (lambda () (setq mode-name "λ≫")))
-(add-hook 'emacs-lisp-mode-hook
-          (lambda () (setq mode-name "e-λ")))
-(add-hook 'clojure-mode-hook
-          (lambda () (setq mode-name "cλj")))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; End external package load
+;;; End package load
 
 ;; Replace echo area startup message.
 (run-with-timer 1 nil (lambda () (message "I have SEEN the CONSING!!")))

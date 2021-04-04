@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-04-04 00:13:26 (bm3719)>
+;;;; Time-stamp: <2021-04-04 07:46:07 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -868,6 +868,7 @@
 ;; support seeking.
 (use-package emms
   :ensure t
+  :if (not (eq system-type 'windows-nt))
   :custom
   (emms-show-format "NP: %s")
   ;; When asked for emms-play-directory, always start from this one.

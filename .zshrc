@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2021-04-01 15:36:43 (bm3719)>
+# Time-stamp: <2021-04-06 08:55:09 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -195,6 +195,7 @@ then
 fi
 alias bc="bc -ql"
 alias ttt="telnet yay.tim.org 5440"
+alias tb="nc termbin.com 9999"
 # Aliases for X11 forwarding.
 alias rurxvt="urxvt -sl 10000 -ls -geometry 120x48"
 # Disk Hogs Summary - disk usage by directory beneath this, sorted by

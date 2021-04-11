@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-04-04 10:00:23 (bm3719)>
+;;;; Time-stamp: <2021-04-11 13:08:48 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -644,6 +644,7 @@
 
 (use-package magit
   :ensure t
+  :defer 3
   :init
   ;; Idiomatic fill-column setting for commit messages.
   (add-hook 'git-commit-mode-hook
@@ -653,6 +654,7 @@
 (use-package git-gutter
   :ensure t
   :diminish "Git↓"
+  :defer 2
   :custom
   (git-gutter:update-interval 2)
   :config
@@ -662,6 +664,7 @@
 
 (use-package eshell-git-prompt
   :ensure t
+  :defer 2
   :config
   (eshell-git-prompt-use-theme 'robbyrussell))
 
@@ -683,6 +686,7 @@
 
 (use-package cider
   :ensure t
+  :defer 2
   :custom
   (cider-repl-pop-to-buffer-on-connect t)
   :init
@@ -705,6 +709,7 @@
 
 (use-package ac-cider
   :ensure t
+  :defer 3
   :init
   (add-hook 'cider-mode-hook #'ac-flyspell-workaround)
   (add-hook 'cider-mode-hook #'ac-cider-setup)
@@ -718,6 +723,7 @@
 
 (use-package flycheck-clj-kondo
   :ensure t
+  :defer 3
   :init
   (add-hook 'clojure-mode-hook #'flycheck-mode))
 
@@ -731,6 +737,7 @@
 
 (use-package haskell-mode
   :ensure t
+  :defer 2
   ;; Doesn't work, for unknown reasons.
   :diminish "λ≫"
   :config
@@ -742,7 +749,8 @@
             (lambda () (setq mode-name "λ≫"))))
 
 (use-package proof-general
-  :ensure t)
+  :ensure t
+  :defer 2)
 
 ;; Manually installing/configuring AUCTeX.
 (unless (package-installed-p 'auctex)
@@ -766,6 +774,7 @@
 
 (use-package web-mode
   :ensure t
+  :defer 2
   :mode
   ("\\.html?\\'" "\\.phtml\\'" "\\.tpl\\.php\\'"
    "\\.[gj]sp\\'" "\\.as[cp]x\\'" "\\.erb\\'"
@@ -780,6 +789,7 @@
 ;; TODO: Maybe replace with js-mode built into Emacs 27.
 (use-package js2-mode
   :ensure t
+  :defer 2
   :mode
   (("\\.js\\'" . js2-mode))
   :custom
@@ -807,12 +817,14 @@
 ;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
 (use-package json-mode
   :ensure t
+  :defer 2
   :mode "\\.json\\'")
 
 ;; Super-minimal Python infrastructure.  Restore docs navigation and integrate
 ;; flycheck if needed later.
 (use-package python-mode
   :ensure t
+  :defer 2
   :mode "\\.py\\'"
   :init
   (add-to-list 'interpreter-mode-alist '("python" . python-mode))
@@ -822,10 +834,12 @@
 ;; Note: Install textproc/markdown to integrate compilation commands.
 (use-package markdown-mode
   :ensure t
+  :defer 2
   :mode ("\\.markdown\\'" "\\.md\\'"))
 
 (use-package gnuplot-mode
   :ensure t
+  :defer 2
   :mode "\\.gp$"
   :config
   (add-hook 'gnuplot-mode-hook
@@ -871,6 +885,7 @@
 ;; support seeking.
 (use-package emms
   :ensure t
+  :defer 3
   :if (not (eq system-type 'windows-nt))
   :custom
   (emms-show-format "NP: %s")

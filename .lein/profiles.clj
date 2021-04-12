@@ -2,8 +2,6 @@
                   [lein-try "0.4.3"]
                   [lein-bikeshed "0.5.2"]
                   [cider/cider-nrepl "0.25.9"]]
-        :dependencies [;; [spyscope "0.1.6"]
-                       [org.clojure/tools.nrepl "0.2.13"]]
-        :injections [;; (require 'spyscope.core)
-                     ]
+        :dependencies [[org.clojure/tools.nrepl "0.2.13"]]
+        :injections []
         :eastwood {:add-linters [:unused-locals :unused-namespaces]}}}

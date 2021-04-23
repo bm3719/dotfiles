@@ -1,8 +1,8 @@
 # i3 config file (v4)
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
-# Set mod key (Mod1=<Alt>, Mod4=<Super>)
-set $mod Mod3
+# Set mod key (Mod1=<Alt>, Mod4=<Super>, Mod3=<R-Alt>)
+set $mod Mod4
 
 # set default desktop layout (default is tiling)
 # workspace_layout tabbed <stacking|tabbed>

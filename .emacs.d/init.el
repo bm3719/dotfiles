@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-04-11 13:08:48 (bm3719)>
+;;;; Time-stamp: <2021-04-22 22:14:06 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1328,6 +1328,22 @@
 (global-set-key (kbd "C-z n") 'tab-next)
 (global-set-key (kbd "C-z p") 'tab-bar-switch-to-prev-tab)
 (global-set-key (kbd "C-z r") 'tab-rename)
+
+;;; ERC
+(require 'erc)
+;; Can move the remainder of this to ~/.emacs.d/.ercrc.el later if including a
+;; user/pass.
+(defun bcm/erc ()
+  (interactive)
+  (erc :server "irc.freenode.org" :port 6667))
+(setq erc-interpret-mirc-color t
+      erc-rename-buffers t
+      erc-kill-buffer-on-part t
+      erc-kill-server-buffer-on-quit t)
+(setq erc-autojoin-channels-alist
+      '(("freenode" "#emacs")))
+(setq erc-channel-hide-list
+      '(("#emacs" "JOIN" "PART" "QUIT" "NICK")))
 
 ;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.

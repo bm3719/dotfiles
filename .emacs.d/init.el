@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-04-22 22:14:06 (bm3719)>
+;;;; Time-stamp: <2021-05-20 23:06:48 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1319,9 +1319,12 @@
 ;; Always add new tabs on the far right.
 (setq tab-bar-new-tab-to 'rightmost)
 ;; Tweak tab faces to match powerline theme.
-(set-face-attribute 'tab-bar-tab-inactive nil :background "#1C1C1C" :foreground "#87875F")
-(set-face-attribute 'tab-bar nil :background "#3A3A3A" :foreground "#B2B2B2")
-(set-face-attribute 'tab-bar-tab nil :background "#626262" :foreground "#EEEEEE")
+(set-face-attribute 'tab-bar-tab-inactive nil :background "#1C1C1C"
+                    :foreground "#87875F" :family "Monospace" :weight 'bold)
+(set-face-attribute 'tab-bar nil :background "#3A3A3A" :foreground "#B2B2B2"
+                    :family "Monospace" :weight 'bold)
+(set-face-attribute 'tab-bar-tab nil :background "#626262" :foreground "#EEEEEE"
+                    :family "Monospace" :weight 'bold)
 ;; Add keybindings to match elscreen defaults.
 (global-set-key (kbd "<f7>") 'tab-new)
 (global-set-key (kbd "<f8>") 'tab-close)

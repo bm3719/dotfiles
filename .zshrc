@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2021-04-06 08:55:09 (bm3719)>
+# Time-stamp: <2021-07-04 19:25:00 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -70,6 +70,7 @@ umask 027               # u=rw,g=r,o=
 
 # $PATH
 export PATH=$HOME/bin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:$HOME/node_modules/.bin:$PATH:.
+export PATH=/var/lib/snapd/snap/bin:$PATH
 export PATH=$HOME/.ghcup/bin:$HOME/.cabal/bin:$PATH
 
 # Autoload zsh modules when they are referenced.

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-05-20 23:06:48 (bm3719)>
+;;;; Time-stamp: <2021-06-29 10:32:34 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -814,7 +814,7 @@
   (add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
   (add-hook 'html-mode-hook (lambda () (rainbow-mode 1))))
 
-;; Note: Use C-c C-f reformats, C-c C-p displays path to object at point.
+;; Note: C-c C-f reformats, C-c C-p displays path to object at point.
 (use-package json-mode
   :ensure t
   :defer 2

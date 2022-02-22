@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2021-06-29 10:32:34 (bm3719)>
+;;;; Time-stamp: <2022-02-22 10:11:21 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -423,8 +423,7 @@
 (define-key query-replace-map (kbd "RET") 'act)
 
 ;; Always use the echo area instead of dialog boxes in console mode.
-(when (not window-system)
-  (setq use-dialog-box nil))
+(setq use-dialog-box nil)
 
 ;; Don't echo passwords when communicating with interactive programs.
 (add-hook 'comint-output-filter-functions #'comint-watch-for-password-prompt)

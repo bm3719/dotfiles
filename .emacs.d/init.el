@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-02-22 10:11:21 (bm3719)>
+;;;; Time-stamp: <2022-05-02 00:44:59 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -305,9 +305,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation
-
-;; Shift-arrow keys to move between windows.
-(windmove-default-keybindings)
 
 ;;; Scrolling
 ;; Fix the whole huge-jumps-scrolling-between-windows nastiness.
@@ -745,7 +742,10 @@
   (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
   (add-hook 'haskell-mode-hook #'haskell-doc-mode)
   (add-hook 'haskell-mode-hook
-            (lambda () (setq mode-name "λ≫"))))
+            (lambda () (setq mode-name "λ≫")))
+  ;; Add ghcup directory location of GHC binaries to PATH and exec-path.
+  (setenv "PATH" (concat (getenv "PATH") ":~/.ghcup/bin"))
+  (setq exec-path (append exec-path '("~/.ghcup/bin"))))
 
 (use-package proof-general
   :ensure t

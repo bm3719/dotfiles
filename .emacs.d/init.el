@@ -306,9 +306,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation
 
-;; Shift-arrow keys to move between windows.
-(windmove-default-keybindings)
-
 ;;; Scrolling
 ;; Fix the whole huge-jumps-scrolling-between-windows nastiness.
 (setq scroll-conservatively 4)

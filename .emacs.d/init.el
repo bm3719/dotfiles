@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-05-02 00:44:59 (bm3719)>
+;;;; Time-stamp: <2022-06-12 14:05:39 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1172,7 +1172,20 @@
          :html-postamble nil
          :html-preamble bcm/load-blog-header
          :exclude ".*"
-         :include ["projects.org" "archive.org"])))
+         :include ["projects.org" "archive.org"])
+        ("main"
+         :base-directory "~/src/macroexpand-main"
+         :recursive nil
+         :publishing-directory "~/src/macroexpand-main"
+         :publishing-function org-html-publish-to-html
+         :with-author nil
+         :with-broken-links t
+         :with-creator nil
+         :html-validation-link nil
+         :html-postamble nil
+         :html-preamble nil
+         :exclude ".*"
+         :include ["index.org"])))
 
 ;;; org-babel
 ;; Enable specific languages.

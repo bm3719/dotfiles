@@ -13,14 +13,14 @@
  * Conkeror rc file.
  *
  * Notes: On Windows eval this first: M-: user_pref("conkeror.rcfile",
- * "c:\\bm3719\\conkerorrc"); When switching between *nix and Windows, change
- * the first two settings groups.
+ * "c:\\Users\\bm3719\\conkerorrc"); When switching between *nix and Windows,
+ * change the first two settings groups.
  */
 
 // Theme: Blackened theme.  Make sure the blackened dir exists at this target
 // first.
 theme_load_paths.push("/home/bm3719/.conkeror.mozdev.org");
-//theme_load_paths.push("C:\\bm3719\\bin\\conkeror\\style");
+//theme_load_paths.push("C:\\bin\\net\\conkeror\\style");
 theme_load("blackened");
 
 // Start page

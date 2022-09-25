@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-06-12 14:05:39 (bm3719)>
+;;;; Time-stamp: <2022-09-24 22:25:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -10,7 +10,7 @@
 ;;;; Top-level addons: use-package, diminish, counsel, ivy-prescient,
 ;;;; smartparens, volatile-highlights, which-key, powerline, pinentry,
 ;;;; org-bullets, org-present, ob-restclient, magit, git-gutter,
-;;;; eshell-git-prompt, aggressive-indent, clojure-mode, cider, ac-cider,
+;;;; eshell-prompt-extras, aggressive-indent, clojure-mode, cider, ac-cider,
 ;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
 ;;;; auctex, web-mode, js2-mode, rainbow-mode, json-mode, python-mode,
 ;;;; markdown-mode, gnuplot-mode, w3m, emms.
@@ -658,11 +658,18 @@
   (global-set-key (kbd "C-x M-g") 'git-gutter:toggle)
   (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk))
 
-(use-package eshell-git-prompt
+;; (use-package eshell-git-prompt
+;;   :ensure t
+;;   :defer 2
+;;   :config
+;;   (eshell-git-prompt-use-theme 'robbyrussell))
+(use-package eshell-prompt-extras
   :ensure t
   :defer 2
   :config
-  (eshell-git-prompt-use-theme 'robbyrussell))
+  (autoload 'epe-theme-lambda "eshell-prompt-extras")
+  (setq eshell-highlight-prompt nil
+        eshell-prompt-function 'epe-theme-lambda))
 
 (use-package aggressive-indent
   :ensure t

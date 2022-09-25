@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2021-07-04 19:25:00 (bm3719)>
+# Time-stamp: <2022-08-13 14:17:51 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -202,6 +202,9 @@ alias rurxvt="urxvt -sl 10000 -ls -geometry 120x48"
 # Disk Hogs Summary - disk usage by directory beneath this, sorted by
 # size. (Directories that contain less than 100k are silently removed.)
 alias dfs="du -kd 1000 \"\$@\" | awk '(\$1 >= 100)' | sort -rn"
+
+# kittens
+alias icat="kitty +kitten icat"
 
 # Functions
 # A find function, saving some typing for the most common find call.

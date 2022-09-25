@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-09-24 22:25:26 (bm3719)>
+;;;; Time-stamp: <2022-09-24 22:31:16 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -658,11 +658,6 @@
   (global-set-key (kbd "C-x M-g") 'git-gutter:toggle)
   (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk))
 
-;; (use-package eshell-git-prompt
-;;   :ensure t
-;;   :defer 2
-;;   :config
-;;   (eshell-git-prompt-use-theme 'robbyrussell))
 (use-package eshell-prompt-extras
   :ensure t
   :defer 2

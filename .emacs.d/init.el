@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-09-27 08:23:26 (bm3719)>
+;;;; Time-stamp: <2022-09-27 08:29:30 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -468,7 +468,7 @@
       time-stamp-line-limit 10     ; Check first 10 buffer lines for stamp.
       ;; Date format.  Note that this is a >=27.x format.
       time-stamp-format "%Y-%02m-%02d %02H:%02M:%02S (%u)")
-(add-hook 'write-file-hooks #'time-stamp) ; Update when saving.
+(add-hook 'write-file-functions #'time-stamp) ; Update when saving.
 
 ;; Follow the compilation buffer scroll instead of remaining at the top line.
 (setq compilation-scroll-output t)

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-09-24 22:31:16 (bm3719)>
+;;;; Time-stamp: <2022-09-27 08:23:26 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -532,7 +532,9 @@
   :ensure t
   :init
   (add-hook 'emacs-lisp-mode-hook
-            (lambda () (setq mode-name "e-λ"))))
+            (lambda () (setq mode-name "e-λ")))
+  (add-hook 'clojure-mode-hook
+            (lambda () (setq mode-name "cλj"))))
 
 (use-package counsel
   :ensure t

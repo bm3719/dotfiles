@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-09-27 08:29:30 (bm3719)>
+;;;; Time-stamp: <2022-09-29 13:19:56 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1354,15 +1354,15 @@
 ;; user/pass.
 (defun bcm/erc ()
   (interactive)
-  (erc :server "irc.freenode.org" :port 6667))
+  (erc :server "irc.libera.chat" :port 6667))
 (setq erc-interpret-mirc-color t
       erc-rename-buffers t
       erc-kill-buffer-on-part t
       erc-kill-server-buffer-on-quit t)
 (setq erc-autojoin-channels-alist
-      '(("freenode" "#emacs")))
+      '(("libera" "#clojure")))
 (setq erc-channel-hide-list
-      '(("#emacs" "JOIN" "PART" "QUIT" "NICK")))
+      '(("#clojure" "JOIN" "PART" "QUIT" "NICK")))
 
 ;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.

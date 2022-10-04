@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-09-29 13:19:56 (bm3719)>
+;;;; Time-stamp: <2022-10-04 08:14:27 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -13,7 +13,7 @@
 ;;;; eshell-prompt-extras, aggressive-indent, clojure-mode, cider, ac-cider,
 ;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
 ;;;; auctex, web-mode, js2-mode, rainbow-mode, json-mode, python-mode,
-;;;; markdown-mode, gnuplot-mode, w3m, emms.
+;;;; markdown-mode, gnuplot-mode, w3m, emms, docker-tramp.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -908,6 +908,10 @@
   ("<kp-insert>" . emms-pause)
   ("<kp-right>" . emms-seek-forward)
   ("<kp-left>" . emms-seek-backward))
+
+(use-package docker-tramp
+  :ensure t
+  :defer 3)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes

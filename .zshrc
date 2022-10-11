@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2022-08-13 14:17:51 (bm3719)>
+# Time-stamp: <2022-10-10 23:20:59 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -69,7 +69,8 @@ compinit
 umask 027               # u=rw,g=r,o=
 
 # $PATH
-export PATH=$HOME/bin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:$HOME/node_modules/.bin:$PATH:.
+export PATH=$HOME/bin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:$PATH:.
+export PATH=$HOME/.yarn/bin:$HOME/node_modules/.bin:$PATH:
 export PATH=/var/lib/snapd/snap/bin:$PATH
 export PATH=$HOME/.ghcup/bin:$HOME/.cabal/bin:$PATH
 

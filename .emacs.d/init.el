@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-10-04 08:14:27 (bm3719)>
+;;;; Time-stamp: <2022-10-19 13:30:52 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -12,8 +12,8 @@
 ;;;; org-bullets, org-present, ob-restclient, magit, git-gutter,
 ;;;; eshell-prompt-extras, aggressive-indent, clojure-mode, cider, ac-cider,
 ;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
-;;;; auctex, web-mode, js2-mode, rainbow-mode, json-mode, python-mode,
-;;;; markdown-mode, gnuplot-mode, w3m, emms, docker-tramp.
+;;;; auctex, web-mode, rainbow-mode, json-mode, python-mode, markdown-mode,
+;;;; gnuplot-mode, w3m, emms, docker-tramp.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -788,28 +788,6 @@
   (web-mode-code-indent-offset 2)
   :init
   (add-hook 'web-mode-hook #'flyspell-mode))
-
-;; TODO: Maybe replace with js-mode built into Emacs 27.
-(use-package js2-mode
-  :ensure t
-  :defer 2
-  :mode
-  (("\\.js\\'" . js2-mode))
-  :custom
-  (js2-include-node-externs t)
-  (js2-global-externs '("customElements"))
-  (js2-highlight-level 3)
-  (js2r-prefer-let-over-var t)
-  (js2r-prefered-quote-type 2)
-  (js-indent-align-list-continuation t)
-  (global-auto-highlight-symbol-mode t)
-  (js-indent-level 2)
-  (js2-basic-offset 2)
-  :config
-  ;; Patch in basic private field support.
-  (advice-add #'js2-identifier-start-p
-              :after-until
-              (lambda (c) (eq c ?#))))
 
 (use-package rainbow-mode
   :ensure t

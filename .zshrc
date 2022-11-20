@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2022-10-10 23:20:59 (bm3719)>
+# Time-stamp: <2022-11-19 21:50:51 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -127,6 +127,8 @@ export JAVA_HOME=/usr/lib/jvm/default
 #export JAVA_HOME=/usr/local/openjdk12
 #export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar
 export ANT_HOME=/usr/local/share/java/apache-ant
+# Suppress JVM warning on certain JDK 1.8 versions, at least when using Lein.
+export LEIN_JVM_OPTS="-XX:TieredStopAtLevel=1"
 # Python-related stuff.
 if [ -d /usr/local/share/doc/python2.7 ]
 then

@@ -1,19 +1,19 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-10-19 13:30:52 (bm3719)>
+;;;; Time-stamp: <2022-11-27 21:25:58 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions or on other OSes.
 ;;;;
-;;;; Top-level addons: use-package, diminish, counsel, ivy-prescient,
-;;;; smartparens, volatile-highlights, which-key, powerline, pinentry,
-;;;; org-bullets, org-present, ob-restclient, magit, git-gutter,
-;;;; eshell-prompt-extras, aggressive-indent, clojure-mode, cider, ac-cider,
-;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
-;;;; auctex, web-mode, rainbow-mode, json-mode, python-mode, markdown-mode,
-;;;; gnuplot-mode, w3m, emms, docker-tramp.
+;;;; Top-level addons: use-package, diminish, counsel, ivy-prescient, paredit,
+;;;; volatile-highlights, which-key, powerline, pinentry, org-bullets,
+;;;; org-present, ob-restclient, magit, git-gutter, eshell-prompt-extras,
+;;;; aggressive-indent, clojure-mode, cider, ac-cider, flycheck-clj-kondo,
+;;;; rainbow-delimiters, haskell-mode, proof-general, auctex, web-mode,
+;;;; rainbow-mode, json-mode, python-mode, markdown-mode, gnuplot-mode, w3m,
+;;;; emms, docker-tramp.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -568,22 +568,19 @@
   (ivy-prescient-mode 1)
   (prescient-persist-mode 1))
 
-(use-package smartparens
+(use-package paredit
   :ensure t
   :diminish "(ϛ)"
   :init
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
-  (add-hook 'scheme-mode-hook #'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'ielm-mode-hook #'smartparens-strict-mode)
-  :config
-  (require 'smartparens-config)
+  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook #'enable-paredit-mode)
   :bind
-  ("M-)" . sp-forward-slurp-sexp)
-  ("M-(" . sp-backward-barf-sexp)
-  ("M-s" . sp-unwrap-sexp))
+  ("C-)" . paredit-forward-slurp-sexp)
+  ("C-(" . paredit-forward-barf-sexp))
 
 (use-package volatile-highlights
   :ensure t
@@ -682,7 +679,7 @@
   :ensure t
   :diminish "cλj"
   :init
-  (add-hook 'clojure-mode-hook #'smartparens-strict-mode))
+  (add-hook 'clojure-mode-hook #'enable-paredit-mode))
 
 (use-package cider
   :ensure t
@@ -692,7 +689,7 @@
   :init
   (add-hook 'cider-mode-hook #'flyspell-prog-mode)
   (add-hook 'cider-mode-hook #'which-key-mode)
-  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
+  (add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
   ;; Have org-babel use CIDER.
   (setq org-babel-clojure-backend 'cider)
   (defun bcm/clojure-hook ()

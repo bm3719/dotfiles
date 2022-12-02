@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-11-27 21:25:58 (bm3719)>
+;;;; Time-stamp: <2022-12-02 17:57:49 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -570,7 +570,7 @@
 
 (use-package paredit
   :ensure t
-  :diminish "(ϛ)"
+  :diminish "(φ)"
   :init
   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -580,7 +580,8 @@
   (add-hook 'ielm-mode-hook #'enable-paredit-mode)
   :bind
   ("C-)" . paredit-forward-slurp-sexp)
-  ("C-(" . paredit-forward-barf-sexp))
+  ("C-(" . paredit-forward-barf-sexp)
+  ("M-r" . paredit-raise-sexp))
 
 (use-package volatile-highlights
   :ensure t

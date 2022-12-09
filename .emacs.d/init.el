@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-12-09 08:23:21 (bm3719)>
+;;;; Time-stamp: <2022-12-09 08:47:17 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -501,6 +501,17 @@
   (untabify (point-min) (point-max)))
 ;; This is so commonly used, binding to F4.
 (global-set-key (kbd "<f4>") 'bcm/indent)
+
+;; A function useful for screen-sharing.
+(defun bcm/screenshare ()
+  "Toggle line numbers and git gutter mode (which interferes with linum-mode)"
+  (interactive)
+  (if (bound-and-true-p global-linum-mode)
+      (global-linum-mode -1)
+    (global-linum-mode))
+  (if (bound-and-true-p global-git-gutter-mode)
+      (global-git-gutter-mode -1)
+    (global-git-gutter-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Package System Initialization

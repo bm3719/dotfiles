@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-12-09 08:47:17 (bm3719)>
+;;;; Time-stamp: <2022-12-09 10:38:43 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -589,7 +589,7 @@
 (use-package smartparens
   :ensure t
   :diminish "(ϛ)"
-  :config
+  :init
   (require 'smartparens-config)
   (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)

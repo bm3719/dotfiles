@@ -1,14 +1,14 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-12-02 17:57:49 (bm3719)>
+;;;; Time-stamp: <2022-12-08 19:48:27 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions or on other OSes.
 ;;;;
-;;;; Top-level addons: use-package, diminish, counsel, ivy-prescient, paredit,
-;;;; volatile-highlights, which-key, powerline, pinentry, org-bullets,
+;;;; Top-level addons: use-package, diminish, counsel, ivy-prescient, swiper,
+;;;; paredit, volatile-highlights, which-key, powerline, pinentry, org-bullets,
 ;;;; org-present, ob-restclient, magit, git-gutter, eshell-prompt-extras,
 ;;;; aggressive-indent, clojure-mode, cider, ac-cider, flycheck-clj-kondo,
 ;;;; rainbow-delimiters, haskell-mode, proof-general, auctex, web-mode,
@@ -558,7 +558,8 @@
   ("<f2> j" . counsel-set-variable)
   ("M-y" . counsel-yank-pop)
   ("C-c v" . ivy-push-view)
-  ("C-c V" . ivy-pop-view))
+  ("C-c V" . ivy-pop-view)
+  ("C-x l" . counsel-locate))
 
 (use-package ivy-prescient
   :ensure t
@@ -567,6 +568,12 @@
   :config
   (ivy-prescient-mode 1)
   (prescient-persist-mode 1))
+
+(use-package swiper
+  :ensure t
+  :bind
+  ("C-s" . swiper-isearch)
+  ("C-r" . swiper-isearch-backward))
 
 (use-package paredit
   :ensure t

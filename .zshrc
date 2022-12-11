@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2022-11-19 21:50:51 (bm3719)>
+# Time-stamp: <2022-12-11 01:01:06 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -51,6 +51,62 @@ bindkey "^[[1;5C" emacs-forward-word
 # Fix home/end.
 bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
+# [PageUp] - Up a line of history
+if [[ -n "${terminfo[kpp]}" ]]; then
+    bindkey -M emacs "${terminfo[kpp]}" up-line-or-history
+    bindkey -M viins "${terminfo[kpp]}" up-line-or-history
+    bindkey -M vicmd "${terminfo[kpp]}" up-line-or-history
+fi
+# [PageDown] - Down a line of history
+if [[ -n "${terminfo[knp]}" ]]; then
+    bindkey -M emacs "${terminfo[knp]}" down-line-or-history
+    bindkey -M viins "${terminfo[knp]}" down-line-or-history
+    bindkey -M vicmd "${terminfo[knp]}" down-line-or-history
+fi
+# Start typing + [Up-Arrow] - fuzzy find history forward
+if [[ -n "${terminfo[kcuu1]}" ]]; then
+    autoload -U up-line-or-beginning-search
+    zle -N up-line-or-beginning-search
+
+    bindkey -M emacs "${terminfo[kcuu1]}" up-line-or-beginning-search
+    bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
+    bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
+fi
+# Start typing + [Down-Arrow] - fuzzy find history backward
+if [[ -n "${terminfo[kcud1]}" ]]; then
+    autoload -U down-line-or-beginning-search
+    zle -N down-line-or-beginning-search
+
+    bindkey -M emacs "${terminfo[kcud1]}" down-line-or-beginning-search
+    bindkey -M viins "${terminfo[kcud1]}" down-line-or-beginning-search
+    bindkey -M vicmd "${terminfo[kcud1]}" down-line-or-beginning-search
+fi
+# [Home] - Go to beginning of line
+if [[ -n "${terminfo[khome]}" ]]; then
+    bindkey -M emacs "${terminfo[khome]}" beginning-of-line
+    bindkey -M viins "${terminfo[khome]}" beginning-of-line
+    bindkey -M vicmd "${terminfo[khome]}" beginning-of-line
+fi
+# [End] - Go to end of line
+if [[ -n "${terminfo[kend]}" ]]; then
+    bindkey -M emacs "${terminfo[kend]}"  end-of-line
+    bindkey -M viins "${terminfo[kend]}"  end-of-line
+    bindkey -M vicmd "${terminfo[kend]}"  end-of-line
+fi
+# [Delete] - delete forward
+if [[ -n "${terminfo[kdch1]}" ]]; then
+    bindkey -M emacs "${terminfo[kdch1]}" delete-char
+    bindkey -M viins "${terminfo[kdch1]}" delete-char
+    bindkey -M vicmd "${terminfo[kdch1]}" delete-char
+else
+    bindkey -M emacs "^[[3~" delete-char
+    bindkey -M viins "^[[3~" delete-char
+    bindkey -M vicmd "^[[3~" delete-char
+
+    bindkey -M emacs "^[3;5~" delete-char
+    bindkey -M viins "^[3;5~" delete-char
+    bindkey -M vicmd "^[3;5~" delete-char
+fi
 
 # zstyle modifications.
 zstyle :compinstall filename '/home/bm3719/.zshrc'
@@ -62,17 +118,57 @@ zstyle :compinstall filename '/home/bm3719/.zshrc'
 #hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\*}%%,*})
 #zstyle ':completion:*:hosts' hosts $hosts
 
+# Completion
 autoload -Uz compinit
 compinit
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
+zstyle ':completion:*' rehash true                              # automatically find new executables in path
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"         # Colored completion (different colors for dirs/files/etc)
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' menu select
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+zstyle ':completion:*:descriptions' format '%U%F{cyan}%d%f%u'
+# Speed up completions
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.cache/zcache
+# automatically load bash completion functions
+autoload -U +X bashcompinit && bashcompinit
 
 # A righteous umask.
 umask 027               # u=rw,g=r,o=
 
 # $PATH
-export PATH=$HOME/bin:/bin:/usr/bin:$HOME/.local/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:$PATH:.
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH=$HOME/.local/bin:$PATH
+fi
+export PATH=$HOME/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:$PATH:.
 export PATH=$HOME/.yarn/bin:$HOME/node_modules/.bin:$PATH:
-export PATH=/var/lib/snapd/snap/bin:$PATH
+if [ -d "/var/lib/snapd/snap/bin" ]; then
+    export PATH=/var/lib/snapd/snap/bin:$PATH
+fi
 export PATH=$HOME/.ghcup/bin:$HOME/.cabal/bin:$PATH
+
+## Plugins section: Enable fish style features
+# Use syntax highlighting
+if [ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+# Use autosuggestion
+if [ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-autosuggestions.zsh" ]; then
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+# Use history substring search
+if [ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-history-substring-search.zsh" ]; then
+    source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+fi
+# Use fzf
+if [ -f "/usr/share/fzf/key-bindings.zsh" ]; then
+    source /usr/share/fzf/key-bindings.zsh
+fi
+if [ -f "/usr/share/fzf/completion.zsh" ]; then
+    source /usr/share/fzf/completion.zsh
+fi
 
 # Autoload zsh modules when they are referenced.
 zmodload -a zsh/stat stat
@@ -172,6 +268,8 @@ fi
 alias ll="ls -al"
 alias diff="colordiff"
 alias grep="grep --colour=auto"
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 #alias s="screen -U"
 #alias sd="screen -d"
 #alias sr="screen -rx"
@@ -182,8 +280,9 @@ alias tn="tmux new -s main -d && \
 alias td="tmux detach -s main"
 alias ta="tmux a -t main"
 alias tl="tmux ls"
-alias untar="tar xzfv"
-alias unbz2="tar xvfj"
+alias untar="tar xzfv "
+alias tarnow="tar -acf "
+alias unbz2="tar xvfj "
 alias sui="sudo -i"
 alias lup="sudo /usr/libexec/locate.updatedb"
 alias rz="lrz -e"
@@ -197,17 +296,33 @@ if [ -x $(which less) ]
 then
     alias less="less -RXF"
 fi
+alias grubup="sudo update-grub"
+alias fixpacman="sudo rm /var/lib/pacman/db.lck"
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 alias bc="bc -ql"
 alias ttt="telnet yay.tim.org 5440"
 alias tb="nc termbin.com 9999"
 # Aliases for X11 forwarding.
 alias rurxvt="urxvt -sl 10000 -ls -geometry 120x48"
+alias hw='hwinfo --short'
 # Disk Hogs Summary - disk usage by directory beneath this, sorted by
 # size. (Directories that contain less than 100k are silently removed.)
 alias dfs="du -kd 1000 \"\$@\" | awk '(\$1 >= 100)' | sort -rn"
+# Sort installed packages according to size in MB (expac must be installed.)
+alias big="expac -H M '%m\t%n' | sort -h | nl"
+# List -git packages
+alias gitpkg='pacman -Q | grep -i "\-git"'
 
 # kittens
 alias icat="kitty +kitten icat"
+
+# Get fastest mirrors
+alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
+alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
+alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
+
 
 # Functions
 # A find function, saving some typing for the most common find call.
@@ -427,3 +542,8 @@ ZSH_THEME_SVN_PROMPT_PREFIX="%{$fg[yellow]%}("
 ZSH_THEME_SVN_PROMPT_SUFFIX="%{$fg[yellow]%})%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_DIRTY="%{$fg[red]%}⚡%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_CLEAN="%{$fg[green]%}○%{$reset_color%}"
+
+## Run neofetch
+if which neofetch >/dev/null; then
+    neofetch
+fi

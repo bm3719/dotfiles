@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2022-12-11 01:01:06 (bm3719)>
+# Time-stamp: <2022-12-11 11:06:00 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -543,7 +543,8 @@ ZSH_THEME_SVN_PROMPT_SUFFIX="%{$fg[yellow]%})%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_DIRTY="%{$fg[red]%}⚡%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_CLEAN="%{$fg[green]%}○%{$reset_color%}"
 
-## Run neofetch
-if which neofetch >/dev/null; then
-    neofetch
+# Run fastfetch if session is interactive
+if [[ $- == *i* && $(which fastfetch &>/dev/null) ]]; then
+    #if test -o interactive && which fastfetch &>/dev/null; then
+    fastfetch --load-config neofetch
 fi

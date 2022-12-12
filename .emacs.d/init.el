@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-12-09 10:38:43 (bm3719)>
+;;;; Time-stamp: <2022-12-12 13:56:42 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -598,8 +598,8 @@
   (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
   (add-hook 'ielm-mode-hook #'smartparens-strict-mode)
   :bind
-  ("C-)" . sp-forward-slurp-sexp)
-  ("C-(" . sp-backward-barf-sexp)
+  ("M-)" . sp-forward-slurp-sexp)
+  ("M-(" . sp-backward-barf-sexp)
   ("M-s" . sp-unwrap-sexp)
   ("M-r" . sp-raise-sexp))
 

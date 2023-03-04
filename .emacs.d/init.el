@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2022-12-12 13:56:42 (bm3719)>
+;;;; Time-stamp: <2023-03-03 23:49:41 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1134,6 +1134,9 @@
 (require 'org-tempo)
 ;; Also add a better binding for template insertion.
 (org-defkey org-mode-map (kbd "C-c M-t") 'org-insert-structure-template)
+;; Use org-return-and-maybe-indent instead of org-return to prevent
+;; auto-indenting lists and other select structured content.
+(define-key org-mode-map (kbd "RET") 'org-return-and-maybe-indent)
 
 ;;; org-agenda
 ;; Display main agenda dispatch.  Clobbers hotkey for read-only-mode.

@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-03-03 23:53:14 (bm3719)>
+;;;; Time-stamp: <2023-03-22 09:27:18 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -13,7 +13,7 @@
 ;;;; eshell-prompt-extras, aggressive-indent, clojure-mode, cider, ac-cider,
 ;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
 ;;;; auctex, web-mode, rainbow-mode, json-mode, python-mode, markdown-mode,
-;;;; gnuplot-mode, w3m, emms, docker-tramp.
+;;;; gnuplot-mode, w3m, emms, docker-tramp, gptel.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -302,6 +302,21 @@
 ;; I type a lot of λs.  Clobbers reposition-window.
 (global-set-key (kbd "C-M-l") (lambda ()
                                 (interactive) (insert-char ?λ)))
+
+;; Supporting functions to read API keys from external file.
+(defun bcm/strip-trailing-crlf (string)
+  "Removes trailing CR/LF characters from a string if they exist."
+  (when (string-match "[\r\n]+$" string)
+    (setq string (substring string 0 (match-beginning 0))))
+  string)
+(defun bcm/read-file-contents (filename)
+  "Read the contents of file FILENAME and return as a string.
+If the file doesn't exist, return an empty string."
+  (if (file-exists-p filename)
+      (with-temp-buffer
+        (insert-file-contents filename)
+        (buffer-substring-no-properties (point-min) (point-max)))
+    ""))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation
@@ -908,6 +923,13 @@
 (use-package docker-tramp
   :ensure t
   :defer 3)
+
+(use-package gptel
+  :ensure t
+  :defer 3
+  :init  
+  (setq gptel-api-key (bcm/strip-trailing-crlf
+                       (bcm/read-file-contents "~/.emacs.d/openai.key"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes

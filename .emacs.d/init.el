@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-03-22 09:27:18 (bm3719)>
+;;;; Time-stamp: <2023-03-22 09:28:40 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -303,21 +303,6 @@
 (global-set-key (kbd "C-M-l") (lambda ()
                                 (interactive) (insert-char ?λ)))
 
-;; Supporting functions to read API keys from external file.
-(defun bcm/strip-trailing-crlf (string)
-  "Removes trailing CR/LF characters from a string if they exist."
-  (when (string-match "[\r\n]+$" string)
-    (setq string (substring string 0 (match-beginning 0))))
-  string)
-(defun bcm/read-file-contents (filename)
-  "Read the contents of file FILENAME and return as a string.
-If the file doesn't exist, return an empty string."
-  (if (file-exists-p filename)
-      (with-temp-buffer
-        (insert-file-contents filename)
-        (buffer-substring-no-properties (point-min) (point-max)))
-    ""))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation
 
@@ -527,6 +512,21 @@ If the file doesn't exist, return an empty string."
   (if (bound-and-true-p global-git-gutter-mode)
       (global-git-gutter-mode -1)
     (global-git-gutter-mode)))
+
+;; Supporting functions to read API keys from external file.
+(defun bcm/strip-trailing-crlf (string)
+  "Removes trailing CR/LF characters from a string if they exist."
+  (when (string-match "[\r\n]+$" string)
+    (setq string (substring string 0 (match-beginning 0))))
+  string)
+(defun bcm/read-file-contents (filename)
+  "Read the contents of file FILENAME and return as a string.
+If the file doesn't exist, return an empty string."
+  (if (file-exists-p filename)
+      (with-temp-buffer
+        (insert-file-contents filename)
+        (buffer-substring-no-properties (point-min) (point-max)))
+    ""))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Package System Initialization
@@ -927,7 +927,7 @@ If the file doesn't exist, return an empty string."
 (use-package gptel
   :ensure t
   :defer 3
-  :init  
+  :init
   (setq gptel-api-key (bcm/strip-trailing-crlf
                        (bcm/read-file-contents "~/.emacs.d/openai.key"))))
 

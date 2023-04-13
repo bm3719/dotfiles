@@ -1,9 +1,9 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-03-22 09:28:40 (bm3719)>
+;;;; Time-stamp: <2023-04-13 12:17:09 (bm3719)>
 ;;;;
-;;;; This init was created for GNU Emacs 27.1 for GNU/Linux, OpenBSD, and
+;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions or on other OSes.
 ;;;;

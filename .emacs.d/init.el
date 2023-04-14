@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-04-13 12:17:09 (bm3719)>
+;;;; Time-stamp: <2023-04-13 21:38:48 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -68,7 +68,7 @@
 (setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffer of an init file).
-(when (not (eq nil (get-buffer "*Messages*")))
+(when (get-buffer "*Messages*")
   (kill-buffer "*Messages*"))
 
 ;; Provide a useful error trace if loading this init fails.
@@ -101,6 +101,9 @@
 (when window-system
   (toggle-frame-maximized))
 
+;; Add elisp equivalents of Clojure's threading macros, `->' and `->>'.
+(require 'dash)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Basic Key Bindings
 
@@ -115,41 +118,41 @@
 (load-library "misc")
 
 ;; Global key (re-)mappings.
-(global-set-key (kbd "C-w") 'backward-kill-word)   ; Match the shell's C-w.
-(global-set-key (kbd "C-x w") 'kill-region)
-(global-set-key (kbd "C-x s") 'bcm/delete-ws-save)
-(global-set-key (kbd "C-m") 'newline-and-indent)
-(global-set-key (kbd "M-g") 'goto-line)
-(global-set-key (kbd "M-G") 'goto-char)
+(global-set-key (kbd "C-w")     'backward-kill-word)   ; Match the shell's C-w.
+(global-set-key (kbd "C-x w")   'kill-region)
+(global-set-key (kbd "C-x s")   'bcm/delete-ws-save)
+(global-set-key (kbd "C-m")     'newline-and-indent)
+(global-set-key (kbd "M-g")     'goto-line)
+(global-set-key (kbd "M-G")     'goto-char)
 (global-set-key (kbd "C-x C-k") 'kill-this-buffer) ; Bypasses the C-x k prompt.
 (global-set-key (kbd "C-x C-v") 'revert-buffer)
 (global-set-key (kbd "C-x TAB") 'indent-region)
 (global-set-key (kbd "C-c M-e") 'fixup-whitespace)
-(global-set-key (kbd "C-c g") 'replace-string)
-(global-set-key (kbd "C-c ;") 'comment-region)
-(global-set-key (kbd "C-c '") 'uncomment-region)
-(global-set-key (kbd "M-/") 'hippie-expand)        ; Instead of dabbrev-expand.
-(global-set-key (kbd "M-z") 'zap-up-to-char)       ; Mimic Vim delete to char.
-(global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "C-c g")   'replace-string)
+(global-set-key (kbd "C-c ;")   'comment-region)
+(global-set-key (kbd "C-c '")   'uncomment-region)
+(global-set-key (kbd "M-/")     'hippie-expand)        ; Instead of dabbrev-expand.
+(global-set-key (kbd "M-z")     'zap-up-to-char)       ; Mimic Vim delete to char.
+(global-set-key (kbd "M-o")     'other-window)
 (global-set-key (kbd "C-x M-a") 'align-regexp)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
 ;; intending to do a find-file.
-(global-set-key (kbd "C-x f") 'find-file)
+(global-set-key (kbd "C-x f")   'find-file)
 (global-set-key (kbd "C-x M-f") 'set-fill-column)
 (global-set-key (kbd "C-x C-s") 'bcm/delete-ws-save)
 
 ;; For quick macro running.
-(global-set-key (kbd "<f10>") 'start-kbd-macro)
-(global-set-key (kbd "<f11>") 'end-kbd-macro)
-(global-set-key (kbd "<f12>") 'call-last-kbd-macro)
+(global-set-key (kbd "<f10>")   'start-kbd-macro)
+(global-set-key (kbd "<f11>")   'end-kbd-macro)
+(global-set-key (kbd "<f12>")   'call-last-kbd-macro)
 
 ;; Cycle through buffers.
 (global-set-key (kbd "<C-tab>") 'bury-buffer)
 
 ;; M-x compile and M-x grep mnemonics.
-(global-set-key (kbd "<f5>") 'compile)
-(global-set-key (kbd "C-c n") 'next-error)
-(global-set-key (kbd "C-c p") 'previous-error)
+(global-set-key (kbd "<f5>")    'compile)
+(global-set-key (kbd "C-c n")   'next-error)
+(global-set-key (kbd "C-c p")   'previous-error)
 
 ;; My KVM switch uses scroll lock, and Emacs complains about it.
 (global-set-key (kbd "<Scroll_Lock>") 'ignore)
@@ -343,7 +346,7 @@
 
 ;; The first invocation of Home/End moves to the beginning of the *text* line.
 ;; A second invocation moves the cursor to beginning of the *absolute* line.
-;; Most of the time this won't matter even be noticeable, but when it does (in
+;; Most of the time this won't even be noticeable, but when it does (in
 ;; comments, for example) it will quite convenient.  By sw77@cornell.edu.
 (global-set-key (kbd "<home>") 'bcm/my-smart-home)
 (global-set-key (kbd "<end>") 'bcm/my-smart-end)
@@ -456,10 +459,10 @@
                       (+ (face-attribute 'default :height)
                          (* (if (> n 0) 1 -1) 10))))
 ;; Add some zoom keybindings.
-(global-set-key (kbd "C-+") '(lambda () (interactive) (bcm/zoom 1)))
-(global-set-key (kbd "C-<kp-add>") '(lambda () (interactive) (bcm/zoom 1)))
-(global-set-key (kbd "C--") '(lambda () (interactive) (bcm/zoom -1)))
-(global-set-key (kbd "C-<kb-subtract>") '(lambda () (interactive) (bcm/zoom -1)))
+(global-set-key (kbd "C-+") #'(lambda () (interactive) (bcm/zoom 1)))
+(global-set-key (kbd "C-<kp-add>") #'(lambda () (interactive) (bcm/zoom 1)))
+(global-set-key (kbd "C--") #'(lambda () (interactive) (bcm/zoom -1)))
+(global-set-key (kbd "C-<kb-subtract>") #'(lambda () (interactive) (bcm/zoom -1)))
 
 ;;; Time-stamp support
 ;; When there is a "Time-stamp: <>" in the first 10 lines of the file,
@@ -478,12 +481,13 @@
   "Compile init.el in ~/.emacs.d/"
   (interactive)
   (require 'bytecomp)
-  (if (and (string= (buffer-file-name)
-                    (expand-file-name
-                     (concat default-directory "init.el")))
-           ;; Exclude my repo version of the same file.
-           (not (string-match-p "dotfiles" (buffer-file-name))))
-      (byte-compile-file (buffer-file-name))))
+  (when (string= (buffer-file-name)
+                 (expand-file-name
+                  (concat default-directory "init.el")))
+    ;; TODO: Get this outputting to `~/.emacs.d' when `init.el' is a symlink.
+    (let ((byte-compile-dest-file (expand-file-name "init.el" user-emacs-directory)))
+      (byte-compile-file (buffer-file-name))
+      (message "Compiled %s" (buffer-file-name)))))
 (add-hook 'after-save-hook #'bcm/autocompile-init)
 
 ;; A function to close all buffers except scratch.
@@ -896,7 +900,9 @@ If the file doesn't exist, return an empty string."
   ("C-x M-m" . browse-url-at-point))
 
 ;; Currently using mplayer backend - seems superior to mpg321, which doesn't
-;; support seeking.
+;; support seeking.  Also needs the `emms-show' symbol declared ahead of time
+;; if intending to defer load.
+(defvar emms-show nil)
 (use-package emms
   :ensure t
   :defer 3
@@ -1103,7 +1109,7 @@ If the file doesn't exist, return an empty string."
 ;;; conf-mode
 ;; Ignore single quote highlighting in .properties files.
 (add-hook 'conf-javaprop-mode-hook
-          '(lambda () (conf-quote-normal nil)))
+          (lambda () (conf-quote-normal nil)))
 
 ;;; shell-mode
 ;; Use ANSI colors within shell-mode.
@@ -1248,7 +1254,7 @@ If the file doesn't exist, return an empty string."
 
 ;;; calendar
 ;; Add calendar control-navigation.
-(add-hook 'calendar-load-hook
+(add-hook 'calendar-after-load-hook
           (lambda ()
             (define-key calendar-mode-map (kbd "C-x >") 'scroll-calendar-right)
             (define-key calendar-mode-map (kbd "C-x <") 'scroll-calendar-left)))
@@ -1264,8 +1270,9 @@ If the file doesn't exist, return an empty string."
 (setq dired-listing-switches
       "-AhFlv --group-directories-first --time-style=+%Y-%m-%d")
 ;; More convenient than ^.
-(add-hook 'dired-load-hook
-          (lambda () (define-key dired-mode-map "b" 'dired-up-directory)))
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (define-key dired-mode-map (kbd "b") 'dired-up-directory)))
 ;; Always delete and copy recursively.
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)

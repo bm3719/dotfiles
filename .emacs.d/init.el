@@ -1,14 +1,14 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-04-13 21:38:48 (bm3719)>
+;;;; Time-stamp: <2023-04-19 11:02:36 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions or on other OSes.
 ;;;;
 ;;;; Top-level addons: use-package, diminish, counsel, ivy-prescient, swiper,
-;;;; smartparens, volatile-highlights, which-key, powerline, pinentry,
+;;;; smartparens, volatile-highlights, which-key, dash, powerline, pinentry,
 ;;;; org-bullets, org-present, ob-restclient, magit, git-gutter,
 ;;;; eshell-prompt-extras, aggressive-indent, clojure-mode, cider, ac-cider,
 ;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
@@ -100,9 +100,6 @@
 ;; Use fullscreen in GUI mode.
 (when window-system
   (toggle-frame-maximized))
-
-;; Add elisp equivalents of Clojure's threading macros, `->' and `->>'.
-(require 'dash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Basic Key Bindings
@@ -635,6 +632,10 @@ If the file doesn't exist, return an empty string."
   (which-key-popup-type 'side-window)
   (which-key-side-window-location 'bottom)
   (which-key-idle-delay 1.2))
+
+;; Add elisp equivalents of Clojure's threading macros, `->' and `->>'.
+(use-package dash
+  :ensure t)
 
 (use-package powerline
   :ensure t

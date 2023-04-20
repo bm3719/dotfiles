@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-04-19 11:02:36 (bm3719)>
+;;;; Time-stamp: <2023-04-19 11:04:40 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -635,7 +635,9 @@ If the file doesn't exist, return an empty string."
 
 ;; Add elisp equivalents of Clojure's threading macros, `->' and `->>'.
 (use-package dash
-  :ensure t)
+  :ensure t
+  :init
+  (global-dash-fontify-mode))
 
 (use-package powerline
   :ensure t

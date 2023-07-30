@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-04-19 11:04:40 (bm3719)>
+;;;; Time-stamp: <2023-06-13 06:55:23 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -115,21 +115,21 @@
 (load-library "misc")
 
 ;; Global key (re-)mappings.
-(global-set-key (kbd "C-w")     'backward-kill-word)   ; Match the shell's C-w.
+(global-set-key (kbd "C-w")     'backward-kill-word) ; Match the shell's C-w.
 (global-set-key (kbd "C-x w")   'kill-region)
 (global-set-key (kbd "C-x s")   'bcm/delete-ws-save)
 (global-set-key (kbd "C-m")     'newline-and-indent)
 (global-set-key (kbd "M-g")     'goto-line)
 (global-set-key (kbd "M-G")     'goto-char)
-(global-set-key (kbd "C-x C-k") 'kill-this-buffer) ; Bypasses the C-x k prompt.
+(global-set-key (kbd "C-x C-k") 'kill-this-buffer)   ; Bypasses the C-x k prompt.
 (global-set-key (kbd "C-x C-v") 'revert-buffer)
 (global-set-key (kbd "C-x TAB") 'indent-region)
 (global-set-key (kbd "C-c M-e") 'fixup-whitespace)
 (global-set-key (kbd "C-c g")   'replace-string)
 (global-set-key (kbd "C-c ;")   'comment-region)
 (global-set-key (kbd "C-c '")   'uncomment-region)
-(global-set-key (kbd "M-/")     'hippie-expand)        ; Instead of dabbrev-expand.
-(global-set-key (kbd "M-z")     'zap-up-to-char)       ; Mimic Vim delete to char.
+(global-set-key (kbd "M-/")     'hippie-expand)      ; Instead of dabbrev-expand.
+(global-set-key (kbd "M-z")     'zap-up-to-char)     ; Mimic Vim delete to char.
 (global-set-key (kbd "M-o")     'other-window)
 (global-set-key (kbd "C-x M-a") 'align-regexp)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when
@@ -538,7 +538,7 @@ If the file doesn't exist, return an empty string."
 ;; Don't make installed packages available at startup.
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
 (package-initialize)
 
 ;; If a fresh install, update the repos index.
@@ -570,23 +570,23 @@ If the file doesn't exist, return an empty string."
   (ivy-count-format "(%d/%d) ")
   :bind
   ("C-x C-f" . counsel-find-file)
-  ("C-x b" . ivy-switch-buffer)
-  ("M-x" . counsel-M-x)
-  ("<f1> f" . counsel-describe-function)
-  ("C-h f" . counsel-describe-function)
-  ("<f1> v" . counsel-describe-variable)
-  ("C-h v" . counsel-describe-variable)
-  ("<f1> l" . counsel-find-library)
-  ("C-h l" . counsel-find-library)
-  ("<f2> i" . counsel-info-lookup-symbol)
-  ("C-h i" . counsel-info-lookup-symbol)
-  ("<f2> u" . counsel-unicode-char)
-  ("<f9>" . counsel-unicode-char)
-  ("<f2> j" . counsel-set-variable)
-  ("M-y" . counsel-yank-pop)
-  ("C-c v" . ivy-push-view)
-  ("C-c V" . ivy-pop-view)
-  ("C-x l" . counsel-locate))
+  ("C-x b"   . ivy-switch-buffer)
+  ("M-x"     . counsel-M-x)
+  ("<f1> f"  . counsel-describe-function)
+  ("C-h f"   . counsel-describe-function)
+  ("<f1> v"  . counsel-describe-variable)
+  ("C-h v"   . counsel-describe-variable)
+  ("<f1> l"  . counsel-find-library)
+  ("C-h l"   . counsel-find-library)
+  ("<f2> i"  . counsel-info-lookup-symbol)
+  ("C-h i"   . counsel-info-lookup-symbol)
+  ("<f2> u"  . counsel-unicode-char)
+  ("<f9>"    . counsel-unicode-char)
+  ("<f2> j"  . counsel-set-variable)
+  ("M-y"     . counsel-yank-pop)
+  ("C-c v"   . ivy-push-view)
+  ("C-c V"   . ivy-pop-view)
+  ("C-x l"   . counsel-locate))
 
 (use-package ivy-prescient
   :ensure t
@@ -1172,7 +1172,7 @@ If the file doesn't exist, return an empty string."
 ;;; org-agenda
 ;; Display main agenda dispatch.  Clobbers hotkey for read-only-mode.
 (global-set-key (kbd "C-x C-q") 'org-agenda)
-;; Set the files I want org-agenda to pull from
+;; Set the files I want org-agenda to pull from.
 (setq org-agenda-files '("~/src/docs/projects.org"
                          "~/src/docs/tasks.org"
                          "~/src/docs/capture.org"))

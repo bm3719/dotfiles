@@ -311,8 +311,8 @@ exec autotiling
 # Wlsunset
 exec ~/.config/sway/scripts/light.sh
 
-# nm-applet
-exec nm-applet --indicator
+# nm-applet (includes fix for Wayland error)
+exec GDK_BACKEND=x11 nm-applet --indicator
 
 # Welcome
 exec dex -a -s /etc/xdg/autostart/:~/.config/autostart/

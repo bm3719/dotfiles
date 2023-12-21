@@ -6,6 +6,9 @@
 ##
 ## Usage: Run with sudo.
 
+# Exit if any failures occur.
+set -e
+
 # Identify the USB flash drive by its UUID.
 UUID="2c269d4d-8312-4946-98df-b8122532c541"
 

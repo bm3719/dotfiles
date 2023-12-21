@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-06-13 06:55:23 (bm3719)>
+;;;; Time-stamp: <2023-10-19 21:33:59 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -13,7 +13,7 @@
 ;;;; eshell-prompt-extras, aggressive-indent, clojure-mode, cider, ac-cider,
 ;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
 ;;;; auctex, web-mode, rainbow-mode, json-mode, python-mode, markdown-mode,
-;;;; gnuplot-mode, w3m, emms, docker-tramp, gptel.
+;;;; gnuplot-mode, w3m, docker-tramp, gptel.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -902,36 +902,9 @@ If the file doesn't exist, return an empty string."
   :bind
   ("C-x M-m" . browse-url-at-point))
 
-;; Currently using mplayer backend - seems superior to mpg321, which doesn't
-;; support seeking.  Also needs the `emms-show' symbol declared ahead of time
-;; if intending to defer load.
-(defvar emms-show nil)
-(use-package emms
-  :ensure t
-  :defer 3
-  :if (not (eq system-type 'windows-nt))
-  :custom
-  (emms-show-format "NP: %s")
-  ;; When asked for emms-play-directory, always start from this one.
-  (emms-source-file-default-directory "~/snd/")
-  :config
-  (require 'emms-setup)
-  (emms-all)
-  (emms-default-players)
-  (push 'emms-player-mplayer emms-player-list)
-  ;; Show the current track each time EMMS starts to play a track with "NP: ".
-  (add-hook 'emms-player-started-hook #'emms-show)
-  :bind
-  ("<kp-subtract>" . emms-previous)
-  ("<kp-add>" . emms-next)
-  ("<insert>" . emms-pause)
-  ("<kp-insert>" . emms-pause)
-  ("<kp-right>" . emms-seek-forward)
-  ("<kp-left>" . emms-seek-backward))
-
-(use-package docker-tramp
-  :ensure t
-  :defer 3)
+;; (use-package docker-tramp
+;;   :ensure t
+;;   :defer 3)
 
 (use-package gptel
   :ensure t

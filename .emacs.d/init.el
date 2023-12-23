@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-10-19 21:33:59 (bm3719)>
+;;;; Time-stamp: <2023-12-22 23:12:03 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -586,7 +586,8 @@ If the file doesn't exist, return an empty string."
   ("M-y"     . counsel-yank-pop)
   ("C-c v"   . ivy-push-view)
   ("C-c V"   . ivy-pop-view)
-  ("C-x l"   . counsel-locate))
+  ("C-x l"   . counsel-locate)
+  ("C-x g"   . counsel-rg))
 
 (use-package ivy-prescient
   :ensure t

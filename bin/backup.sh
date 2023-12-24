@@ -6,9 +6,6 @@
 ##
 ## Usage: Run with sudo.
 
-# Exit if any failures occur.
-set -e
-
 # Identify the USB flash drive by its UUID.
 UUID="2c269d4d-8312-4946-98df-b8122532c541"
 
@@ -29,7 +26,7 @@ mount -U $UUID /mnt/usbstick
 
 # Only proceed if mount was successful, to avoid duping the full FS locally.
 # TODO: Consider changing this to check `[ $? -eq 0 ]`.
-if mount | grep -q "^/dev/sdb1 on /mnt/usbstick"; then
+if mount | grep -q "^/dev/sdc1 on /mnt/usbstick"; then
     echo "USB volume is not mounted!"
     exit 1
 fi

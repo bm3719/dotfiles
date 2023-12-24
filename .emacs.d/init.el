@@ -507,9 +507,9 @@
 (defun bcm/screenshare ()
   "Toggle line numbers and git gutter mode (which interferes with linum-mode)"
   (interactive)
-  (if (bound-and-true-p global-linum-mode)
-      (global-linum-mode -1)
-    (global-linum-mode))
+  (if (bound-and-true-p global-display-line-numbers-mode)
+      (global-display-line-numbers-mode -1)
+    (global-display-line-numbers-mode))
   (if (bound-and-true-p global-git-gutter-mode)
       (global-git-gutter-mode -1)
     (global-git-gutter-mode)))

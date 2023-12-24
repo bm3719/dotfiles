@@ -1,19 +1,19 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-12-23 12:20:32 (bm3719)>
+;;;; Time-stamp: <2023-12-24 17:28:13 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
 ;;;; versions or on other OSes.
 ;;;;
-;;;; Top-level addons: use-package, diminish, counsel, ivy-prescient, swiper,
-;;;; smartparens, volatile-highlights, which-key, dash, powerline, pinentry,
-;;;; org-bullets, org-present, ob-restclient, magit, git-gutter,
-;;;; eshell-prompt-extras, aggressive-indent, clojure-mode, cider, ac-cider,
-;;;; flycheck-clj-kondo, rainbow-delimiters, haskell-mode, proof-general,
-;;;; auctex, web-mode, rainbow-mode, json-mode, python-mode, markdown-mode,
-;;;; gnuplot-mode, w3m, docker-tramp, gptel.
+;;;; Top-level addons: use-package, diminish, gnu-elpa-keyring-update, counsel,
+;;;; ivy-prescient, swiper, smartparens, volatile-highlights, which-key, dash,
+;;;; powerline, pinentry, org-bullets, org-present, ob-restclient, magit,
+;;;; git-gutter, eshell-prompt-extras, aggressive-indent, clojure-mode, cider,
+;;;; ac-cider, flycheck-clj-kondo, rainbow-delimiters, haskell-mode,
+;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
+;;;; markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -562,6 +562,13 @@ If the file doesn't exist, return an empty string."
             (lambda () (setq mode-name "e-λ")))
   (add-hook 'clojure-mode-hook
             (lambda () (setq mode-name "cλj"))))
+
+;; Always temporarily disable signature checking when updating keyring.
+(let ((old package-check-signature))
+  (use-package gnu-elpa-keyring-update
+    :ensure t
+    :init   (setq package-check-signature nil)
+    :config (setq package-check-signature old)))
 
 (use-package counsel
   :ensure t

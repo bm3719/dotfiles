@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-12-24 17:28:13 (bm3719)>
+;;;; Time-stamp: <2023-12-24 21:26:42 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -13,7 +13,7 @@
 ;;;; git-gutter, eshell-prompt-extras, aggressive-indent, clojure-mode, cider,
 ;;;; ac-cider, flycheck-clj-kondo, rainbow-delimiters, haskell-mode,
 ;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
-;;;; markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel.
+;;;; markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel, seq.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -921,6 +921,9 @@ If the file doesn't exist, return an empty string."
   :init
   (setq gptel-api-key (bcm/strip-trailing-crlf
                        (bcm/read-file-contents "~/.emacs.d/openai.key"))))
+
+(use-package seq
+  :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes

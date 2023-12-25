@@ -201,6 +201,26 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --color=prompt:#2d0f90,spinner:#af5fff,pointer:#af5fff,header:#87afaf
   --color=border:#262626,label:#aeaeae,query:#d9d9d9'
 
+# AWS-related
+# FETCH ROLES / POPULATE SAML-LOGIN
+alias fetch-roles='saml-login aws-assume-role --show >> ~/.saml-login'
+
+# SAML LOGINS
+alias awsprodlogin='saml-login -c bpk-write@bpk-prod aws-assume-role'
+alias awsnonprodlogin='saml-login -c bpk-write@bpk-nonprod aws-assume-role'
+alias awsmgmtlogin='saml-login -c bpk-read-only@bpk-mgmt aws-assume-role'
+alias awsrootlogin='saml-login -c bpk-read-only@bpk-root aws-assume-role'
+alias awsmktplacelogin='saml-login -c bpk-read-only@bpk-mktplace aws-assume-role'
+
+# AWS ALIASES
+alias awsprod='aws --profile bpk-write@bpk-prod'
+alias awsnonprod='aws --profile bpk-write@bpk-nonprod'
+alias awsmgmt='aws --profile bpk-read-only@bpk-mgmt'
+alias awsroot='aws --profile bpk-read-only@bpk-root'
+alias awsmktplace='aws --profile bpk-read-only@bpk-mktplace'
+
+export AWS_PROFILE="bpk-read-only@bpk-root"
+
 # Autoload zsh modules when they are referenced.
 zmodload -a zsh/stat stat
 zmodload -a zsh/zpty zpty
@@ -260,7 +280,7 @@ export LANG=en_US.UTF-8
 export CHARSET=UTF-8
 export LC_CTYPE=en_US.UTF-8
 # Java ecology stuff
-export JAVA_HOME=/usr/lib/jvm/default
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 #export JAVA_HOME=/usr/local/openjdk12
 #export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar
 export ANT_HOME=/usr/local/share/java/apache-ant
@@ -628,6 +648,10 @@ ZSH_THEME_SVN_PROMPT_DIRTY="%{$fg[red]%}⚡%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_CLEAN="%{$fg[green]%}○%{$reset_color%}"
 
 ## Final config
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 # Run fastfetch if session is interactive.
 if [[ $- == *i* && $(which fastfetch &>/dev/null) ]]; then
     #if test -o interactive && which fastfetch &>/dev/null; then

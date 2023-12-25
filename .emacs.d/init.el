@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-12-24 21:26:42 (bm3719)>
+;;;; Time-stamp: <2023-12-24 21:32:24 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -33,7 +33,7 @@
 (when window-system
   (cond
    ((find-font (font-spec :name "Fira Code"))
-    (set-frame-font "Fira Code-17"))
+    (set-frame-font "Fira Code-13"))
    ((find-font (font-spec :name "Roboto Mono"))
     (set-frame-font "Roboto Mono-16"))
    ((eq system-type 'windows-nt)

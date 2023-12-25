@@ -370,7 +370,7 @@ then
     alias less="less -RXF"
 fi
 alias grubup="sudo update-grub"
-alias fixpacman="sudo rm /var/lib/pacman/db.lck"
+# alias fixpacman="sudo rm /var/lib/pacman/db.lck"
 alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 alias bc="bc -ql"
@@ -382,10 +382,10 @@ alias hw='hwinfo --short'
 # Disk Hogs Summary - disk usage by directory beneath this, sorted by
 # size. (Directories that contain less than 100k are silently removed.)
 alias dfs="du -kd 1000 \"\$@\" | awk '(\$1 >= 100)' | sort -rn"
-# Sort installed packages according to size in MB (expac must be installed.)
-alias big="expac -H M '%m\t%n' | sort -h | nl"
-# List -git packages.
-alias gitpkg='pacman -Q | grep -i "\-git"'
+# # Sort installed packages according to size in MB (expac must be installed.)
+# alias big="expac -H M '%m\t%n' | sort -h | nl"
+# # List -git packages.
+# alias gitpkg='pacman -Q | grep -i "\-git"'
 
 # kitty kittens
 alias icat="kitty +kitten icat"

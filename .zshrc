@@ -656,8 +656,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Run fastfetch if session is interactive.
-if [[ $- == *i* && $(which fastfetch &>/dev/null) ]]; then
-    #if test -o interactive && which fastfetch &>/dev/null; then
-    fastfetch --load-config neofetch
+# Run neofetch if session is interactive.
+if [[ $- == *i* && $(which neofetch &>/dev/null) ]]; then
+    #if test -o interactive && which neofetch &>/dev/null; then
+    neofetch
 fi

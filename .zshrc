@@ -346,9 +346,12 @@ alias egrep='egrep --color=auto'
 #alias s="screen -U"
 #alias sd="screen -d"
 #alias sr="screen -rx"
+# alias tn="tmux new -s main -d && \
+#           tmux new-window -t main && \
+#           tmux send-keys -t main "em" Enter && \
+#           tmux a -t main"
 alias tn="tmux new -s main -d && \
           tmux new-window -t main && \
-          tmux send-keys -t main "em" Enter && \
           tmux a -t main"
 alias td="tmux detach -s main"
 alias ta="tmux a -t main"

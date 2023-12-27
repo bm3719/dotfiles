@@ -83,6 +83,10 @@
             (setq gc-cons-threshold (* 1048576 32) ; 32MB.
                   gc-cons-percentage 0.1))) ; GC when heap 10% allocated.
 
+;; Include ~/bin in PATH.
+(setenv "PATH" (concat (getenv "PATH") ":~/bin"))
+(setq exec-path (append exec-path '("~/bin")))
+
 ;; Change backup behavior to save in a directory, not in a miscellany of files
 ;; all over the place, and disable autosaves completely.
 (setq make-backup-files t           ; Do make backups.

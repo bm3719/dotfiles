@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-12-24 21:32:24 (bm3719)>
+;;;; Time-stamp: <2023-12-26 14:01:50 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -73,6 +73,10 @@
 
 ;; Provide a useful error trace if loading this init fails.
 (setq debug-on-error t)
+
+;; Include ~/bin in PATH.
+(setenv "PATH" (concat (getenv "PATH") ":~/bin"))
+(setq exec-path (append exec-path '("~/bin")))
 
 ;; Change backup behavior to save in a directory, not in a miscellany of files
 ;; all over the place, and disable autosaves completely.

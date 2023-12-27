@@ -1,5 +1,6 @@
 {:user {:plugins [;; [cider/cider-nrepl "0.22.0-beta6"]
-                  [cider/cider-nrepl "0.28.6"] ; latest
+                  ;; [cider/cider-nrepl "0.28.6"] ; old laptop
+                  [cider/cider-nrepl "0.44.0"] ; latest
                   [lein-ancient "1.0.0-RC4-SNAPSHOT"]
                   ;; [lein-try "0.4.3"]
                   [lein-bikeshed "0.5.2"]

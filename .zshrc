@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2022-12-11 11:06:00 (bm3719)>
+# Time-stamp: <2024-01-18 22:51:35 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -236,6 +236,15 @@ then
 else
     export PYTHONDOCS=/usr/share/doc/python/html
 fi
+# XDG related
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_STATE_HOME=$HOME/.local/state
+export XDG_CACHE_HOME=$HOME/.cache
+# ASDF
+export ASDF_DATA_DIR="$XDG_DATA_HOME"/asdf
+# mplayer
+export MPLAYER_HOME="$XDG_CONFIG_HOME"/mplayer
 
 # Colorized manpages.
 export LESS_TERMCAP_mb=$'\E[01;31m'

@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2024-01-18 22:51:35 (bm3719)>
+# Time-stamp: <2024-01-19 21:17:37 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -245,6 +245,10 @@ export XDG_CACHE_HOME=$HOME/.cache
 export ASDF_DATA_DIR="$XDG_DATA_HOME"/asdf
 # mplayer
 export MPLAYER_HOME="$XDG_CONFIG_HOME"/mplayer
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Colorized manpages.
 export LESS_TERMCAP_mb=$'\E[01;31m'

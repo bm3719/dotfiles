@@ -8,9 +8,11 @@ fi
 # Commented out since bspwmrc will launch this.
 #sxkhd &
 
-# TODO: Start polybar.
+# Start oxbar
+/home/bm3719/src/c/oxbar/oxbar bcm-bottom&
 
-# TODO: Use feh to set background.
+# Use feh to set background.
+feh --bg-tile $HOME/tmp/pure_black.jpg
 
 # Load custom .Xmodmap.
 xmodmap ~/.Xmodmap

@@ -80,7 +80,7 @@ XTerm.foreground:        #A8A8A8
 XTerm.selectToClipboard: true
 XTerm.vt100.background:  black
 XTerm.vt100.foreground:  #A8A8A8
-XTerm.vt100.faceName:    DejaVu Sans Mono:size=15:antialias=false
+XTerm.vt100.faceName:    terminus:size=14:antialias=false
 !! Ensure UTF-8 locale is used.
 XTerm.vt100.locale:      true
 !! Fix Alt key.

@@ -1,13 +1,13 @@
 #
 # wm independent hotkeys
-#
+# Note: space = @space
 
 # terminal emulator
 super + Return
 	st -f 'Terminus:size=14'
 
 # program launcher
-super + @space
+super + d
 	dmenu_run
 
 # make sxhkd reload its configuration files:
@@ -19,7 +19,7 @@ super + Escape
 #
 
 # quit/restart bspwm
-super + alt + {q,r}
+super + shift + {q,r}
 	bspc {quit,wm -r}
 
 # close and kill
@@ -119,3 +119,7 @@ super + alt + shift + {h,j,k,l}
 # move a floating window
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+# Applications
+super + shift + e
+	emacs

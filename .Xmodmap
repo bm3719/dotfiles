@@ -2,5 +2,5 @@ clear Lock
 keycode 66 = Multi_key
 add Control = Control_L
 remove mod1 = Alt_R
-add mod3 = Alt_R
+add mod4 = Alt_R
 keysym Alt_L = Meta_L Alt_L

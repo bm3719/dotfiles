@@ -10,6 +10,10 @@ fi
 
 # TODO: Start polybar.
 
-# TODO: Use feh to set background
+# TODO: Use feh to set background.
 
+# Load custom .Xmodmap.
+xmodmap ~/.Xmodmap
+
+# Launch WM.
 bspwm

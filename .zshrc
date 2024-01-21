@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2024-01-19 21:17:37 (bm3719)>
+# Time-stamp: <2024-01-21 18:02:08 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -219,6 +219,7 @@ export LC_ALL=en_US.UTF-8
 # General locale.
 export LANG=en_US.UTF-8
 export CHARSET=UTF-8
+export LC_CTYPE=en_US.UTF-8
 # Java ecology stuff
 export JAVA_HOME=/usr/lib/jvm/default
 #export JAVA_HOME=/usr/local/openjdk12

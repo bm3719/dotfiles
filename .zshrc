@@ -260,7 +260,8 @@ export LANG=en_US.UTF-8
 export CHARSET=UTF-8
 export LC_CTYPE=en_US.UTF-8
 # Java ecology stuff
-export JAVA_HOME=/usr/lib/jvm/default
+export JAVA_HOME=/usr/local/jdk-1.8.0
+export PATH=$PATH:/usr/local/jdk-1.8.0/bin
 #export JAVA_HOME=/usr/local/openjdk12
 #export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar
 export ANT_HOME=/usr/local/share/java/apache-ant
@@ -320,9 +321,9 @@ then
 fi
 alias ll="ls -al"
 alias diff="colordiff"
-alias grep="grep --colour=auto"
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+#alias grep="grep --colour=auto"
+#alias fgrep='fgrep --color=auto'
+#alias egrep='egrep --color=auto'
 #alias s="screen -U"
 #alias sd="screen -d"
 #alias sr="screen -rx"
@@ -356,6 +357,7 @@ alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 alias bc="bc -ql"
 alias ttt="telnet yay.tim.org 5440"
 alias tb="nc termbin.com 9999"
+alias st="st -f 'Terminus:size=14'"
 # Aliases for X11 forwarding.
 alias rurxvt="urxvt -sl 10000 -ls -geometry 120x48"
 alias hw='hwinfo --short'

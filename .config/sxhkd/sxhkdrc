@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-	st -f 'Terminus:size=14'
+	st -f 'Terminus:size=13'
 
 # program launcher
 super + d
@@ -63,7 +63,7 @@ super + {p,b,comma,period}
 	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous window in the current desktop
-super + {_,shift + }c
+super + {_,shift + }o
 	bspc node -f {next,prev}.local.!hidden.window
 
 # focus the next/previous desktop in the current monitor
@@ -75,7 +75,7 @@ super + {grave,Tab}
 	bspc {node,desktop} -f last
 
 # focus the older or newer node in the focus history
-super + {o,i}
+super + {c,i}
 	bspc wm -h off; \
 	bspc node {older,newer} -f; \
 	bspc wm -h on
@@ -120,6 +120,11 @@ super + alt + shift + {h,j,k,l}
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
+#
 # Applications
+#
+
 super + shift + e
 	emacs
+super + shift + b
+	firefox-esr

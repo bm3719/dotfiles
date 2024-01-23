@@ -4,6 +4,8 @@ if [ -f "$resources" ]; then
     /usr/X11R6/bin/xrdb -load "$resources"
 fi
 
+xset dpms 600 1800 3200
+
 # Start Simple X Hotkey Daemon.
 # Commented out since bspwmrc will launch this.
 #sxkhd &

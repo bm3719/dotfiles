@@ -357,7 +357,7 @@ alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 alias bc="bc -ql"
 alias ttt="telnet yay.tim.org 5440"
 alias tb="nc termbin.com 9999"
-alias st="st -f 'Terminus:size=14'"
+alias st="st -f 'Terminus:size=13'"
 # Aliases for X11 forwarding.
 alias rurxvt="urxvt -sl 10000 -ls -geometry 120x48"
 alias hw='hwinfo --short'

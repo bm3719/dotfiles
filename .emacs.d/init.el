@@ -84,8 +84,9 @@
                   gc-cons-percentage 0.1))) ; GC when heap 10% allocated.
 
 ;; Include ~/bin in PATH.
-(setenv "PATH" (concat (getenv "PATH") ":~/bin"))
+(setenv "PATH" (concat (getenv "PATH") ":~/bin:~/.nvm/versions/node/v16.20.2/bin"))
 (setq exec-path (append exec-path '("~/bin")))
+(setq exec-path (append exec-path '("~/.nvm/versions/node/v16.20.2/bin")))
 
 ;; Change backup behavior to save in a directory, not in a miscellany of files
 ;; all over the place, and disable autosaves completely.
@@ -822,9 +823,9 @@ If the file doesn't exist, return an empty string."
   :hook
   ((cider-mode . flyspell-prog-mode)
    (cider-mode . which-key-mode)
-   (cider-mode . company-mode)
+   ;; (cider-mode . company-mode)
    (cider-repl-mode . smartparens-strict-mode)
-   (cider-repl-mode . company-mode)
+   ;; (cider-repl-mode . company-mode)
    ;; Auto-run cljfmt on buffer at save.  Need to do in a lambda to make it
    ;; buffer-local to cider-mode.
    (cider-mode . (lambda ()

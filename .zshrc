@@ -199,6 +199,9 @@ alias awsmktplace='aws --profile bpk-read-only@bpk-mktplace'
 
 export AWS_PROFILE="bpk-read-only@bpk-root"
 
+# AWS VPN Client
+export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
 # Autoload zsh modules when they are referenced.
 zmodload -a zsh/stat stat
 zmodload -a zsh/zpty zpty
@@ -221,7 +224,8 @@ fi
 export SBCL_HOME=/usr/local/lib/sbcl
 export FTPANONPASS=nobody@nodomain.nox
 # Explicitly set TZ, which saves many system calls.
-export TZ=:/etc/localtime
+#export TZ=:/etc/localtime
+export TZ="America/New_York"
 # `less' gets aliased later, so unaliasing here if it's aliased prevents errors
 # when sourcing this file.
 if [ -n "`alias -m \"*less*\"`" ]
@@ -242,7 +246,7 @@ export GREP_COLORS='mt=01;32'              # Set grep color to green (default re
 # export GREP_COLOR='01;32'                # Legacy version of the above.
 # Set Lynx start page to bookmarks file.
 export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
-export BROWSER=/bin/brave
+export BROWSER=/bin/chromium
 # Regionalization used by w3m.
 export LC_ALL=en_US.UTF-8
 # General locale.

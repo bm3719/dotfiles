@@ -222,6 +222,9 @@ alias awsmktplace='aws --profile bpk-read-only@bpk-mktplace'
 
 export AWS_PROFILE="bpk-read-only@bpk-root"
 
+# AWS VPN Client
+export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
 # Autoload zsh modules when they are referenced.
 zmodload -a zsh/stat stat
 zmodload -a zsh/zpty zpty
@@ -247,7 +250,8 @@ fi
 export SBCL_HOME=/usr/local/lib/sbcl
 export FTPANONPASS=nobody@nodomain.nox
 # Explicitly set TZ, which saves many system calls.
-export TZ=:/etc/localtime
+#export TZ=:/etc/localtime
+export TZ="America/New_York"
 # `less' gets aliased later, so unaliasing here if it's aliased prevents errors
 # when sourcing this file.
 if [ -n "`alias -m \"*less*\"`" ]

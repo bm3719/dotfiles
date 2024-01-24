@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-12-26 14:01:50 (bm3719)>
+;;;; Time-stamp: <2024-01-24 07:43:04 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -68,15 +68,16 @@
 (setq message-log-max nil)
 ;; Check if message buffer exists before killing (not doing so errors
 ;; eval-buffer of an init file).
-(when (get-buffer "*Messages*")
-  (kill-buffer "*Messages*"))
+;; (when (get-buffer "*Messages*")
+;;   (kill-buffer "*Messages*"))
 
 ;; Provide a useful error trace if loading this init fails.
 (setq debug-on-error t)
 
 ;; Include ~/bin in PATH.
-(setenv "PATH" (concat (getenv "PATH") ":~/bin"))
+(setenv "PATH" (concat (getenv "PATH") ":~/bin:~/.nvm/versions/node/v16.20.2/bin"))
 (setq exec-path (append exec-path '("~/bin")))
+(setq exec-path (append exec-path '("~/.nvm/versions/node/v16.20.2/bin")))
 
 ;; Change backup behavior to save in a directory, not in a miscellany of files
 ;; all over the place, and disable autosaves completely.

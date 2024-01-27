@@ -32,8 +32,8 @@
 ;; preferred fonts for other OSes.
 (when (display-graphic-p)
   (cond
-   ((find-font (font-spec :name "Fira Code"))
-    (set-frame-font "Fira Code-17"))
+   ((find-font (font-spec :name "terminus"))
+    (set-frame-font "Terminus-13"))
    ((find-font (font-spec :name "Roboto Mono"))
     (set-frame-font "Roboto Mono-16"))
    ((eq system-type 'windows-nt)

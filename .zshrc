@@ -345,7 +345,7 @@ alias ec="emacsclient -n"    # Use this with server-start.
 alias ef="emacsclient -c"    # Creates a new frame with existing daemon.
 alias gc="gnuclient-emacs"   # Use this with gnuserv-emacs.
 alias em="emacs -nw"
-alias xpdf="xpdf -z page"
+alias xpdf="xpdf3 -z page"
 if [ -x $(which less) ]
 then
     alias less="less -RXF"

@@ -184,13 +184,12 @@ fi
 if [ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-history-substring-search.zsh" ]; then
     source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 fi
-
-# fzf
-if [ -f "/usr/share/fzf/key-bindings.zsh" ]; then
-    source /usr/share/fzf/key-bindings.zsh
+# Use fzf
+if [ -f "/usr/share/doc/fzf/examples/key-bindings.zsh" ]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
 fi
-if [ -f "/usr/share/fzf/completion.zsh" ]; then
-    source /usr/share/fzf/completion.zsh
+if [ -f "/usr/share/doc/fzf/examples/completion.zsh" ]; then
+    source /usr/share/doc/fzf/examples/completion.zsh
 fi
 # Allow searching dot-files/dirs, ignoring any .git directories.
 export FZF_DEFAULT_COMMAND="find . -name '.git' -prune -o -type f -print"

@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2024-01-21 18:02:08 (bm3719)>
+# Time-stamp: <2024-01-30 09:44:30 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -162,13 +162,15 @@ fi
 if [ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-history-substring-search.zsh" ]; then
     source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 fi
-# Use fzf
+# fzf
 if [ -f "/usr/share/fzf/key-bindings.zsh" ]; then
     source /usr/share/fzf/key-bindings.zsh
 fi
 if [ -f "/usr/share/fzf/completion.zsh" ]; then
     source /usr/share/fzf/completion.zsh
 fi
+# Allow searching dot-files/dirs, ignoring any .git directories.
+export FZF_DEFAULT_COMMAND="find . -name '.git' -prune -o -type f -print"
 
 # Autoload zsh modules when they are referenced.
 zmodload -a zsh/stat stat

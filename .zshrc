@@ -1,6 +1,6 @@
 # -*- Mode: Shell-script -*-
 # Bruce C. Miller
-# Time-stamp: <2024-01-30 09:44:30 (bm3719)>
+# Time-stamp: <2024-01-30 21:09:01 (bm3719)>
 # FreeBSD and GNU/Linux version
 # NOTE: To use as root, which is probably not a good idea to begin with:
 #       - Remove . from PATH.
@@ -162,6 +162,7 @@ fi
 if [ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-history-substring-search.zsh" ]; then
     source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 fi
+
 # fzf
 if [ -f "/usr/share/fzf/key-bindings.zsh" ]; then
     source /usr/share/fzf/key-bindings.zsh
@@ -171,6 +172,12 @@ if [ -f "/usr/share/fzf/completion.zsh" ]; then
 fi
 # Allow searching dot-files/dirs, ignoring any .git directories.
 export FZF_DEFAULT_COMMAND="find . -name '.git' -prune -o -type f -print"
+# Theme
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+  --color=fg:#d0d0d0,fg+:#d0d0d0,bg:#121212,bg+:#262626
+  --color=hl:#5f87af,hl+:#5fd7ff,info:#afaf87,marker:#87ff00
+  --color=prompt:#2d0f90,spinner:#af5fff,pointer:#af5fff,header:#87afaf
+  --color=border:#262626,label:#aeaeae,query:#d9d9d9'
 
 # Autoload zsh modules when they are referenced.
 zmodload -a zsh/stat stat

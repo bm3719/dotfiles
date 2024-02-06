@@ -251,7 +251,9 @@ export XDG_CONFIG_HOME=$HOME/.config
 export XDG_STATE_HOME=$HOME/.local/state
 export XDG_CACHE_HOME=$HOME/.cache
 # ASDF
-export ASDF_DATA_DIR="$XDG_DATA_HOME"/asdf
+if [ -f "$HOME/.asdf/asdf.sh" ]; then
+    source $HOME/.asdf/asdf.sh
+fi
 # mplayer
 export MPLAYER_HOME="$XDG_CONFIG_HOME"/mplayer
 # NVM

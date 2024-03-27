@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2023-12-24 21:26:42 (bm3719)>
+;;;; Time-stamp: <2024-03-26 20:51:09 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1116,6 +1116,13 @@ If the file doesn't exist, return an empty string."
 ;; Solves aspell startup problem on some GNU/Linux distros.
 (setq flyspell-issue-welcome-flag nil)
 
+;;; org-agenda
+;; Note: Needs to eval before Org config, for `org-agenda-files'.
+;; Display main agenda dispatch.  Clobbers hotkey for read-only-mode.
+(global-set-key (kbd "C-x C-q") 'org-agenda)
+;; Set the files I want org-agenda to pull from.
+(setq org-agenda-files '("~/src/docs"))
+
 ;;; Org
 ;; Initiate org-mode when opening .org files.
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -1138,14 +1145,17 @@ If the file doesn't exist, return an empty string."
          ("STRT" :foreground "light sky blue" :weight bold)
          ("BLCK" :foreground "purple" :weight bold)
          ("DONE" :foreground "forest green" :weight bold)
-         ("CNCL" :foreground "dark blue" :weight bold))))
+         ("CNCL" :foreground "dark blue" :weight bold)))
+ ;; Configure org-refile to target other files.
+ org-refile-targets '((org-agenda-files . (:maxlevel . 1)))
+ org-refile-use-outline-path 'file)
 (add-hook 'org-mode-hook #'turn-on-auto-fill)
 ;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
-(custom-theme-set-faces 'user `(org-level-2 ((t (:foreground "light sky blue")))))
-(custom-theme-set-faces 'user `(org-level-3 ((t (:foreground "deep sky blue")))))
+(custom-theme-set-faces 'user '(org-level-2 ((t (:foreground "light sky blue")))))
+(custom-theme-set-faces 'user '(org-level-3 ((t (:foreground "deep sky blue")))))
 ;; Match the colors of statistics cookies.
-(custom-theme-set-faces 'user `(org-done ((t (:foreground "forest green")))))
-(custom-theme-set-faces 'user `(org-todo ((t (:foreground "red")))))
+(custom-theme-set-faces 'user '(org-done ((t (:foreground "forest green")))))
+(custom-theme-set-faces 'user '(org-todo ((t (:foreground "red")))))
 ;; Activate org-temp for code block insertion using <s TAB.
 (require 'org-tempo)
 ;; Also add a better binding for template insertion.
@@ -1153,14 +1163,6 @@ If the file doesn't exist, return an empty string."
 ;; Use org-return-and-maybe-indent instead of org-return to prevent
 ;; auto-indenting lists and other select structured content.
 (org-defkey org-mode-map (kbd "RET") 'org-return-and-maybe-indent)
-
-;;; org-agenda
-;; Display main agenda dispatch.  Clobbers hotkey for read-only-mode.
-(global-set-key (kbd "C-x C-q") 'org-agenda)
-;; Set the files I want org-agenda to pull from.
-(setq org-agenda-files '("~/src/docs/projects.org"
-                         "~/src/docs/tasks.org"
-                         "~/src/docs/capture.org"))
 
 ;;; org-publish
 ;; Location of personal site header.
@@ -1172,7 +1174,7 @@ If the file doesn't exist, return an empty string."
     (buffer-string)))
 ;; Define projects that feed content into main personal site.
 (setq org-publish-project-alist
-      `(("blog"
+      '(("blog"
          :base-directory "~/public_html"
          :recursive t
          :publishing-directory "~/public_html"

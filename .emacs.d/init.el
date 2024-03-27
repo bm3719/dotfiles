@@ -1,7 +1,7 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
-;;;; Time-stamp: <2024-03-26 20:51:09 (bm3719)>
+;;;; Time-stamp: <2024-03-26 22:29:41 (bm3719)>
 ;;;;
 ;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
 ;;;; Windows, but all or parts of this file should work with older GNU Emacs
@@ -1121,7 +1121,8 @@ If the file doesn't exist, return an empty string."
 ;; Display main agenda dispatch.  Clobbers hotkey for read-only-mode.
 (global-set-key (kbd "C-x C-q") 'org-agenda)
 ;; Set the files I want org-agenda to pull from.
-(setq org-agenda-files '("~/src/docs"))
+(setq org-agenda-files (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
+                               '("~/src/docs/active.org")))
 
 ;;; Org
 ;; Initiate org-mode when opening .org files.

@@ -1093,11 +1093,6 @@ If the file doesn't exist, return an empty string."
       (cons '("\\.\\(xml\\|xsl\\|rng\\|xhtml\\)\\'" . nxml-mode)
             auto-mode-alist))
 
-;;; conf-mode
-;; Ignore single quote highlighting in .properties files.
-(add-hook 'conf-javaprop-mode-hook
-          (lambda () (conf-quote-normal nil)))
-
 ;;; shell-mode
 ;; Use ANSI colors within shell-mode.
 (add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on)
@@ -1378,7 +1373,6 @@ If the file doesn't exist, return an empty string."
   (interactive)
   (erc :server "irc.libera.chat" :port 6667))
 (setq erc-interpret-mirc-color t
-      erc-rename-buffers t
       erc-kill-buffer-on-part t
       erc-kill-server-buffer-on-quit t)
 (setq erc-autojoin-channels-alist

@@ -1116,7 +1116,8 @@ If the file doesn't exist, return an empty string."
 (global-set-key (kbd "C-x C-q") 'org-agenda)
 ;; Set the files I want org-agenda to pull from.
 (setq org-agenda-files (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
-                               '("~/src/docs/active.org")))
+                               '("~/src/docs/agenda.org"
+                                 "~/src/docs/recur.org")))
 
 ;;; Org
 ;; Initiate org-mode when opening .org files.

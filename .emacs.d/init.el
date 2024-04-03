@@ -1112,8 +1112,9 @@ If the file doesn't exist, return an empty string."
 
 ;;; org-agenda
 ;; Note: Needs to eval before Org config, for `org-agenda-files'.
-;; Display main agenda dispatch.  Clobbers hotkey for read-only-mode.
-(global-set-key (kbd "C-x C-q") 'org-agenda)
+;; Display main agenda dispatch.
+(global-set-key (kbd "C-c C-a") 'org-agenda)
+(global-set-key (kbd "C-c a") 'org-agenda)
 ;; Set the files I want org-agenda to pull from.
 (setq org-agenda-files (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
                                '("~/src/docs/agenda.org"
@@ -1144,7 +1145,9 @@ If the file doesn't exist, return an empty string."
          ("CNCL" :foreground "dark blue" :weight bold)))
  ;; Configure org-refile to target other files.
  org-refile-targets '((org-agenda-files . (:maxlevel . 1)))
- org-refile-use-outline-path 'file)
+ org-refile-use-outline-path 'file
+ ;; Customize optional modules.
+ org-modules (append org-modules '(org-habit)))
 (add-hook 'org-mode-hook #'turn-on-auto-fill)
 ;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
 (custom-theme-set-faces 'user '(org-level-2 ((t (:foreground "light sky blue")))))
@@ -1159,6 +1162,9 @@ If the file doesn't exist, return an empty string."
 ;; Use org-return-and-maybe-indent instead of org-return to prevent
 ;; auto-indenting lists and other select structured content.
 (org-defkey org-mode-map (kbd "RET") 'org-return-and-maybe-indent)
+;; Activate org modules.
+(eval-after-load 'org
+  '(org-load-modules-maybe t))
 
 ;;; org-publish
 ;; Location of personal site header.
@@ -1250,6 +1256,8 @@ If the file doesn't exist, return an empty string."
       all-islamic-calendar-holidays nil
       all-hebrew-calendar-holidays nil
       display-time-24hr-format t)
+;; Start weeks on Monday instead of Sunday.
+(setq calendar-week-start-day 1)
 
 ;;; dired
 ;; List directories first and use ISO8601 dates.

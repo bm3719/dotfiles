@@ -1113,7 +1113,6 @@ If the file doesn't exist, return an empty string."
 ;;; org-agenda
 ;; Note: Needs to eval before Org config, for `org-agenda-files'.
 ;; Display main agenda dispatch.
-(global-set-key (kbd "C-c C-a") 'org-agenda)
 (global-set-key (kbd "C-c a") 'org-agenda)
 ;; Set the files I want org-agenda to pull from.
 (setq org-agenda-files (append (directory-files "~/src/docs" t "^archive-.*\\.org$")

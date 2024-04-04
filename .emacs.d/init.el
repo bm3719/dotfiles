@@ -1118,6 +1118,8 @@ If the file doesn't exist, return an empty string."
 (setq org-agenda-files (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
                                '("~/src/docs/agenda.org"
                                  "~/src/docs/recur.org")))
+;; Increase space for habit description (default 40).
+(setq org-habit-graph-column 50)
 
 ;;; Org
 ;; Initiate org-mode when opening .org files.

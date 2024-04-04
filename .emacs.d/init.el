@@ -1129,9 +1129,9 @@ If the file doesn't exist, return an empty string."
 (setq
  org-src-fontify-natively t
  org-todo-keywords (quote ((sequence
-                            "INAC(i)"
                             "TODO(t)"
                             "STRT(s!)"
+                            "INAC(i)"
                             "BLCK(b!)"
                             "|"
                             "DONE(d!)"

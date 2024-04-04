@@ -1222,6 +1222,7 @@ If the file doesn't exist, return an empty string."
    'org-babel-load-languages '((python . t)
                                (emacs-lisp . t)
                                (clojure . t)
+                               (shell . t)
                                (ditaa . t)
                                (restclient . t))))
 

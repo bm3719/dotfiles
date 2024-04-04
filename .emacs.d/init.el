@@ -12,7 +12,7 @@
 ;;;; git-gutter, eshell-prompt-extras, aggressive-indent, clojure-mode, cider,
 ;;;; ac-cider, flycheck-clj-kondo, rainbow-delimiters, haskell-mode,
 ;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
-;;;; markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel, seq.
+;;;; markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel, seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -923,6 +923,12 @@ If the file doesn't exist, return an empty string."
 
 (use-package seq
   :ensure t)
+
+;; Needed to support code block syntax highlighting in org-export to HTML.
+(use-package htmlize
+  :ensure t
+  :config
+  (setq htmlize-output-type 'inline-css))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes

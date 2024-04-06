@@ -1232,6 +1232,8 @@ If the file doesn't exist, return an empty string."
                                (shell . t)
                                (ditaa . t)
                                (restclient . t))))
+;; Turn off prompt for confirmation before evaluation.
+(setq org-confirm-babel-evaluate nil)
 
 ;;; ob-clojure
 (require 'ob-clojure)

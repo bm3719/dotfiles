@@ -1276,6 +1276,22 @@ If the file doesn't exist, return an empty string."
       ;; Do simpler listing if on BSD.
       (if (eq system-type 'berkeley-unix)
           "-lFh" "-AhFlv --group-directories-first --time-style=+%Y-%m-%d"))
+;; Make up-navigation "reuse" the old buffer (actually kill the old one).
+(eval-after-load 'dired
+  '(defun dired-up-directory (&optional other-window)
+     "Run Dired on parent directory of current directory."
+     (interactive "P")
+     (let* ((dir (dired-current-directory))
+            (orig (current-buffer))
+            (up (file-name-directory (directory-file-name dir))))
+       (or (dired-goto-file (directory-file-name dir))
+           ;; Only try dired-goto-subdir if buffer has more than one dir.
+           (and (cdr dired-subdir-alist)
+                (dired-goto-subdir up))
+           (progn
+             (kill-buffer orig)
+             (dired up)
+             (dired-goto-file dir))))))
 ;; More convenient than ^.
 (add-hook 'dired-mode-hook
           (lambda ()

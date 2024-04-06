@@ -594,7 +594,8 @@ If the file doesn't exist, return an empty string."
   ("C-c V"   . ivy-pop-view)
   ("C-x l"   . counsel-locate)
   ("C-x C-l" . counsel-fzf)
-  ("C-x g"   . counsel-rg))
+  ("C-x g"   . counsel-rg)
+  ("C-x M-s" . counsel-outline))
 
 (use-package ivy-prescient
   :ensure t

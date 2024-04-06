@@ -8,12 +8,11 @@
 ;;;;
 ;;;; Top-level addons: use-package, diminish, gnu-elpa-keyring-update, counsel,
 ;;;; ivy-prescient, swiper, smartparens, volatile-highlights, which-key, dash,
-;;;; powerline, pinentry, org-bullets, org-present, ob-restclient,
-;;;; org-timeline, magit, git-gutter, eshell-prompt-extras, aggressive-indent,
-;;;; clojure-mode, cider, ac-cider, flycheck-clj-kondo, rainbow-delimiters,
-;;;; haskell-mode, proof-general, auctex, web-mode, rainbow-mode, json-mode,
-;;;; python-mode, markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel, seq,
-;;;; htmlize.
+;;;; powerline, pinentry, org-bullets, org-present, ob-restclient, magit,
+;;;; git-gutter, eshell-prompt-extras, aggressive-indent, clojure-mode, cider,
+;;;; ac-cider, flycheck-clj-kondo, rainbow-delimiters, haskell-mode,
+;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
+;;;; markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel, seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
 ;;;; Fira Code font.
@@ -689,11 +688,6 @@ If the file doesn't exist, return an empty string."
   :custom
   ;; Inhibit restclient from sending cookies implicitly.
   (restclient-inhibit-cookies t))
-
-(use-package org-timeline
-  :ensure t
-  :init
-  (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append))
 
 (use-package magit
   :ensure t

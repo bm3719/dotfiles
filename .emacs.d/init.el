@@ -1273,7 +1273,9 @@ If the file doesn't exist, return an empty string."
 ;;; dired
 ;; List directories first and use ISO8601 dates.
 (setq dired-listing-switches
-      "-AhFlv --group-directories-first --time-style=+%Y-%m-%d")
+      ;; Do simpler listing if on BSD.
+      (if (eq system-type 'berkeley-unix)
+          "-lFh" "-AhFlv --group-directories-first --time-style=+%Y-%m-%d"))
 ;; More convenient than ^.
 (add-hook 'dired-mode-hook
           (lambda ()

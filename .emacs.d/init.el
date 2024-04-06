@@ -1238,8 +1238,10 @@ If the file doesn't exist, return an empty string."
   (setq org-agenda-files
         (seq-filter 'file-exists-p
                     (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
-                            '("~/src/docs/agenda.org"
-                              "~/src/docs/recur.org")))))
+                            '(;; "~/src/docs/agenda.org"
+                              ;; "~/src/docs/recur.org"
+                              )))))
+;; For work, also append my work file.  Intentionally separate expression.
 (setq org-agenda-files (append org-agenda-files
                                '("~/bpk.org")))
 (setq

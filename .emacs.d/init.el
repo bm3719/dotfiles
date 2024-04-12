@@ -2,9 +2,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller - bm3719@gmail.com
 ;;;;
-;;;; This init was created for GNU Emacs 28.2 for GNU/Linux, OpenBSD, and
-;;;; Windows, but all or parts of this file should work with older GNU Emacs
-;;;; versions or on other OSes.
+;;;; This init was created for GNU Emacs 29.3 and 28.2 for GNU/Linux, OpenBSD,
+;;;; and Windows, but all or parts of this file should work with older GNU
+;;;; Emacs versions or on other OSes.
 ;;;;
 ;;;; Top-level addons: use-package, diminish, gnu-elpa-keyring-update, counsel,
 ;;;; ivy-prescient, swiper, smartparens, volatile-highlights, which-key, dash,
@@ -888,9 +888,9 @@ If the file doesn't exist, return an empty string."
   (require 'w3m-load nil t)
   ;; Use w3m for all URLs (deprecated code to use available GUI browser).
   (setq browse-url-browser-function 'w3m-browse-url)
-  ;; Activate Conkeror-style link selection (toggle with f key).
+  ;; Activate Conkeror-style link selection (toggle with `f' key).
   (add-hook 'w3m-mode-hook 'w3m-lnum-mode)
-  ;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
+  ;; To use w3m-search, hit `S' in w3m. Prefix with C-u to specify engine.
   (require 'w3m-search)
   ;; Add some extra search engine URIs.
   (add-to-list 'w3m-search-engine-alist

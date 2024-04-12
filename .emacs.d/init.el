@@ -33,7 +33,7 @@
 (when (display-graphic-p)
   (cond
    ((find-font (font-spec :name "terminus"))
-    (set-frame-font "Terminus-13"))
+    (set-frame-font "Terminus-16"))
    ((find-font (font-spec :name "Roboto Mono"))
     (set-frame-font "Roboto Mono-16"))
    ((eq system-type 'windows-nt)

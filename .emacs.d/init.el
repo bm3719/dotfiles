@@ -225,7 +225,7 @@
              (string= (buffer-name) bcm/set-cursor-color-buffer))
       (set-cursor-color (setq bcm/set-cursor-color-color color))
       (setq bcm/set-cursor-color-buffer (buffer-name)))))
-(add-hook 'post-command-hook #'bcm/set-cursor-color-according-to-mode)
+(add-hook 'post-command-hook 'bcm/set-cursor-color-according-to-mode)
 
 ;; Alias to prompt for a regex and a replacement string.
 (defalias 'qrr 'query-replace-regexp)
@@ -422,7 +422,7 @@
 (setq use-dialog-box nil)
 
 ;; Don't echo passwords when communicating with interactive programs.
-(add-hook 'comint-output-filter-functions #'comint-watch-for-password-prompt)
+(add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
 
 ;; Gets rid of disabled commands prompting.
 (setq disabled-command-function nil)
@@ -446,7 +446,7 @@
    (concat ";; Initialization successful.  Welcome to "
            (substring (emacs-version) 0 14) ".") 0 0)
   (newline-and-indent)  (newline-and-indent))
-(add-hook 'after-init-hook #'bcm/emacs-reloaded)
+(add-hook 'after-init-hook 'bcm/emacs-reloaded)
 
 ;; Call this function to increase/decrease font size.
 (defun bcm/zoom (n)
@@ -455,10 +455,10 @@
                       (+ (face-attribute 'default :height)
                          (* (if (> n 0) 1 -1) 10))))
 ;; Add some zoom keybindings.
-(global-set-key (kbd "C-+") #'(lambda () (interactive) (bcm/zoom 1)))
-(global-set-key (kbd "C-<kp-add>") #'(lambda () (interactive) (bcm/zoom 1)))
-(global-set-key (kbd "C--") #'(lambda () (interactive) (bcm/zoom -1)))
-(global-set-key (kbd "C-<kb-subtract>") #'(lambda () (interactive) (bcm/zoom -1)))
+(global-set-key (kbd "C-+") (lambda () (interactive) (bcm/zoom 1)))
+(global-set-key (kbd "C-<kp-add>") (lambda () (interactive) (bcm/zoom 1)))
+(global-set-key (kbd "C--") (lambda () (interactive) (bcm/zoom -1)))
+(global-set-key (kbd "C-<kb-subtract>") (lambda () (interactive) (bcm/zoom -1)))
 
 ;;; Time-stamp support
 ;; When there is a "Time-stamp: <>" in the first 10 lines of the file,
@@ -467,7 +467,7 @@
       time-stamp-line-limit 10     ; Check first 10 buffer lines for stamp.
       ;; Date format.  Note that this is a >=27.x format.
       time-stamp-format "%Y-%02m-%02d %02H:%02M:%02S (%u)")
-(add-hook 'write-file-functions #'time-stamp) ; Update when saving.
+(add-hook 'write-file-functions 'time-stamp) ; Update when saving.
 
 ;; Follow the compilation buffer scroll instead of remaining at the top line.
 (setq compilation-scroll-output t)
@@ -484,7 +484,7 @@
     (let ((byte-compile-dest-file (expand-file-name "init.el" user-emacs-directory)))
       (byte-compile-file (buffer-file-name))
       (message "Compiled %s" (buffer-file-name)))))
-(add-hook 'after-save-hook #'bcm/autocompile-init)
+(add-hook 'after-save-hook 'bcm/autocompile-init)
 
 ;; A function to close all buffers except scratch.
 (defun bcm/cleanup ()
@@ -616,12 +616,12 @@ If the file doesn't exist, return an empty string."
   :diminish "(ϛ)"
   :init
   (require 'smartparens-config)
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
-  (add-hook 'scheme-mode-hook #'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'ielm-mode-hook #'smartparens-strict-mode)
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook 'smartparens-strict-mode)
+  (add-hook 'scheme-mode-hook 'smartparens-strict-mode)
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'ielm-mode-hook 'smartparens-strict-mode)
   :bind
   ("M-)" . sp-forward-slurp-sexp)
   ("M-(" . sp-backward-barf-sexp)
@@ -636,7 +636,7 @@ If the file doesn't exist, return an empty string."
 (use-package which-key
   :ensure t
   :init
-  (add-hook 'org-mode-hook #'which-key-mode)
+  (add-hook 'org-mode-hook 'which-key-mode)
   :custom
   (which-key-popup-type 'side-window)
   (which-key-side-window-location 'bottom)
@@ -731,7 +731,7 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :diminish "cλj"
   :init
-  (add-hook 'clojure-mode-hook #'smartparens-strict-mode))
+  (add-hook 'clojure-mode-hook 'smartparens-strict-mode))
 
 (use-package cider
   :ensure t
@@ -739,20 +739,20 @@ If the file doesn't exist, return an empty string."
   :custom
   (cider-repl-pop-to-buffer-on-connect t)
   :init
-  (add-hook 'cider-mode-hook #'flyspell-prog-mode)
-  (add-hook 'cider-mode-hook #'which-key-mode)
-  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
+  (add-hook 'cider-mode-hook 'flyspell-prog-mode)
+  (add-hook 'cider-mode-hook 'which-key-mode)
+  (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
   ;; Have org-babel use CIDER.
   (setq org-babel-clojure-backend 'cider)
   (defun bcm/clojure-hook ()
     (auto-complete-mode 1)
     (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
     (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word))
-  (add-hook 'clojure-mode-hook #'bcm/clojure-hook)
+  (add-hook 'clojure-mode-hook 'bcm/clojure-hook)
   (add-hook 'cider-repl-mode-hook
             (lambda ()
               (define-key cider-repl-mode-map
-                (kbd "C-w") 'sp-backward-kill-word)))
+                          (kbd "C-w") 'sp-backward-kill-word)))
   ;; Fix missing *nrepl-messages* buffer.
   (setq nrepl-log-messages 1))
 
@@ -760,29 +760,29 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer 3
   :init
-  (add-hook 'cider-mode-hook #'ac-flyspell-workaround)
-  (add-hook 'cider-mode-hook #'ac-cider-setup)
-  (add-hook 'cider-repl-mode-hook #'ac-cider-setup)
+  (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
+  (add-hook 'cider-mode-hook 'ac-cider-setup)
+  (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
   (eval-after-load "auto-complete"
     '(add-to-list 'ac-modes 'cider-mode))
   (defun set-auto-complete-as-completion-at-point-function ()
     (setq completion-at-point-functions '(auto-complete)))
-  (add-hook 'auto-complete-mode-hook #'set-auto-complete-as-completion-at-point-function)
-  (add-hook 'cider-mode-hook #'set-auto-complete-as-completion-at-point-function))
+  (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+  (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function))
 
 (use-package flycheck-clj-kondo
   :ensure t
   :defer 3
   :init
-  (add-hook 'clojure-mode-hook #'flycheck-mode))
+  (add-hook 'clojure-mode-hook 'flycheck-mode))
 
 (use-package rainbow-delimiters
   :ensure t
   :disabled
   :init
-  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode))
 
 (use-package haskell-mode
   :ensure t
@@ -791,9 +791,9 @@ If the file doesn't exist, return an empty string."
   :diminish "λ≫"
   :config
   ;; Enable prettify-symbols-mode symbols-alists in buffers.
-  (add-hook 'haskell-mode-hook #'bcm/haskell-prettify-enable)
-  (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
-  (add-hook 'haskell-mode-hook #'haskell-doc-mode)
+  (add-hook 'haskell-mode-hook 'bcm/haskell-prettify-enable)
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (add-hook 'haskell-mode-hook 'haskell-doc-mode)
   (add-hook 'haskell-mode-hook
             (lambda () (setq mode-name "λ≫")))
   ;; Add ghcup directory location of GHC binaries to PATH and exec-path.
@@ -836,7 +836,7 @@ If the file doesn't exist, return an empty string."
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2)
   :init
-  (add-hook 'web-mode-hook #'flyspell-mode))
+  (add-hook 'web-mode-hook 'flyspell-mode))
 
 (use-package rainbow-mode
   :ensure t
@@ -876,7 +876,7 @@ If the file doesn't exist, return an empty string."
             (lambda ()
               (flyspell-prog-mode)
               (add-hook 'before-save-hook
-                        #'whitespace-cleanup nil t))))
+                        'whitespace-cleanup nil t))))
 
 (use-package w3m
   :ensure t
@@ -889,7 +889,7 @@ If the file doesn't exist, return an empty string."
   ;; Use w3m for all URLs (deprecated code to use available GUI browser).
   (setq browse-url-browser-function 'w3m-browse-url)
   ;; Activate Conkeror-style link selection (toggle with f key).
-  (add-hook 'w3m-mode-hook #'w3m-lnum-mode)
+  (add-hook 'w3m-mode-hook 'w3m-lnum-mode)
   ;; To use w3m-search, hit S in w3m.  Do a C-u S to specify engine.
   (require 'w3m-search)
   ;; Add some extra search engine URIs.
@@ -945,11 +945,11 @@ If the file doesn't exist, return an empty string."
 (icomplete-mode 0)
 
 ;;; elisp-mode
-(add-hook 'emacs-lisp-mode-hook #'flyspell-prog-mode)
-(add-hook 'emacs-lisp-mode-hook #'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook #'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 ;;; IELM
-(add-hook 'ielm-mode-hook #'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
 ;;; prettify-symbols-mode
 ;; Build a symbols-alist for Haskell (which is all I'm using this for
@@ -1036,7 +1036,7 @@ If the file doesn't exist, return an empty string."
 (setq c-default-style "bsd"
       c-basic-offset 4)
 ;; Spell-check comments.
-(add-hook 'c-mode-hook #'flyspell-prog-mode)
+(add-hook 'c-mode-hook 'flyspell-prog-mode)
 
 ;;; java-mode
 ;; This mode doesn't properly indent Java out of the box.  This combined with
@@ -1102,7 +1102,7 @@ If the file doesn't exist, return an empty string."
 
 ;;; shell-mode
 ;; Use ANSI colors within shell-mode.
-(add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;;; flyspell
 ;; Turn on flyspell mode for text editing.
@@ -1158,7 +1158,7 @@ If the file doesn't exist, return an empty string."
  org-cycle-separator-lines 1
  ;; Customize optional modules.
  org-modules (append org-modules '(org-habit)))
-(add-hook 'org-mode-hook #'turn-on-auto-fill)
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
 ;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
 (custom-theme-set-faces 'user '(org-level-2 ((t (:foreground "light sky blue")))))
 (custom-theme-set-faces 'user '(org-level-3 ((t (:foreground "deep sky blue")))))
@@ -1428,7 +1428,7 @@ If the file doesn't exist, return an empty string."
 ;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.
 (add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
-(add-hook 'mail-mode-hook #'turn-on-auto-fill)
+(add-hook 'mail-mode-hook 'turn-on-auto-fill)
 ;; Define otherwise free variable.
 (eval-when-compile (defvar mail-mode-map))
 ;; Use C-c C-c to complete mutt message buffers without prompting for saving.

@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-	st -f 'Terminus:size=13'
+	st -f 'Terminus:size=16'
 
 # program launcher
 super + d

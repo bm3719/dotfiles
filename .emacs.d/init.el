@@ -1265,10 +1265,15 @@ If the file doesn't exist, return an empty string."
             (define-key calendar-mode-map (kbd "C-x <") 'scroll-calendar-left)))
 ;; Change some self-explanatory calendar settings.
 (setq mark-holidays-in-calendar t
-      all-christian-calendar-holidays t
-      all-islamic-calendar-holidays nil
-      all-hebrew-calendar-holidays nil
+      calendar-holidays (append holiday-general-holidays
+                                holiday-local-holidays
+                                holiday-solar-holidays)
       display-time-24hr-format t)
+;; Remove Flag Day, since I don't want it appearing on org-agenda.
+(setq calendar-holidays
+      (remove (reverse (assoc "Flag Day"
+                              (mapcar 'reverse calendar-holidays)))
+              calendar-holidays))
 ;; Start weeks on Monday instead of Sunday.
 (setq calendar-week-start-day 1)
 

@@ -611,13 +611,13 @@ POST_1_7_2_GIT=$(git_compare_version "1.7.2")
 unset -f git_compare_version
 
 # oh-my-zsh theme: A modified dpoggi.zsh-theme.
-if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="blue"; fi
+if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="green"; fi
 local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
-PROMPT='%{$fg[$NCOLOR]%}%n%{$reset_color%}@%{$fg[blue]%}%m\
-%{$reset_color%}:%{$fg[magenta]%}%~\
+PROMPT='%{$fg[$NCOLOR]%}%n%{$fg[yellow]%}@%{$fg[green]%}%m\
+%{$fg[yellow]%}:%F{40}%~\
 $(git_prompt_info)\
 $(svn_prompt_info)\
-%{$fg[blue]%}%(!.#.»)%{$reset_color%} '
+%{$fg[green]%}%(!.#.»)%{$reset_color%} '
 PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
 RPS1='${return_code}'
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}("

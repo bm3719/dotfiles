@@ -1195,19 +1195,6 @@ If the file doesn't exist, return an empty string."
          :html-validation-link nil
          :html-postamble nil
          :html-preamble bcm/load-blog-header)
-        ("docs"
-         :base-directory "~/src/docs"
-         :recursive nil
-         :publishing-directory "~/public_html"
-         :publishing-function org-html-publish-to-html
-         :with-author nil
-         :with-broken-links t
-         :with-creator nil
-         :html-validation-link nil
-         :html-postamble nil
-         :html-preamble bcm/load-blog-header
-         :exclude ".*"
-         :include ["projects.org" "archive.org"])
         ("main"
          :base-directory "~/src/macroexpand-main"
          :recursive nil

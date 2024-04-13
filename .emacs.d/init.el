@@ -1421,9 +1421,13 @@ If the file doesn't exist, return an empty string."
       erc-kill-buffer-on-part t
       erc-kill-server-buffer-on-quit t)
 (setq erc-autojoin-channels-alist
-      '(("libera" "#clojure")))
+      '(("libera" "#haskell")))
 (setq erc-channel-hide-list
-      '(("#clojure" "JOIN" "PART" "QUIT" "NICK")))
+      '(("#clojure" "JOIN" "PART" "QUIT" "NICK")
+        ("#haskell" "JOIN" "PART" "QUIT" "NICK")))
+(setq erc-nick "nft_slut")
+(setq erc-user-full-name "NFT Slut") ; set your full name
+(setq erc-email-userid "slut")  ; set your username
 
 ;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.

@@ -1244,6 +1244,12 @@ If the file doesn't exist, return an empty string."
 (setq org-default-notes-file "~/src/docs/capture.org")
 ;; Global keybinding for idea capture.
 (global-set-key (kbd "C-c r") 'org-capture)
+;; Custom templates.
+(setq org-capture-templates
+      '(("t" "Task" entry (file org-default-notes-file)
+         "* TODO\n%U\n")
+        ("h" "Habit" entry (file org-default-notes-file)
+         "* TODO %?\nSCHEDULED: <%<%Y-%m-%d %a .+1d>>\n:PROPERTIES:\n:CREATED: %U\n:STYLE: habit\n:END:\n%U\n")))
 
 ;;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.

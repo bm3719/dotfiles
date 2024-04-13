@@ -14,8 +14,8 @@
 ;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
 ;;;; markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel, seq, htmlize.
 ;;;;
-;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, mutt, w3m,
-;;;; Fira Code font.
+;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
+;;;; mutt, w3m, Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -742,8 +742,6 @@ If the file doesn't exist, return an empty string."
   (add-hook 'cider-mode-hook 'flyspell-prog-mode)
   (add-hook 'cider-mode-hook 'which-key-mode)
   (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-  ;; Have org-babel use CIDER.
-  (setq org-babel-clojure-backend 'cider)
   (defun bcm/clojure-hook ()
     (auto-complete-mode 1)
     (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
@@ -1239,6 +1237,8 @@ If the file doesn't exist, return an empty string."
 
 ;;; ob-clojure
 (require 'ob-clojure)
+;; Backend: Default to CIDER, can override with `:backend babashka'.
+(setq org-babel-clojure-backend 'cider)
 
 ;;; org-capture: On-the-fly note taking.
 (setq org-default-notes-file "~/src/docs/capture.org")

@@ -13,7 +13,8 @@
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
 ;;;; json-mode, pyvenv, anaconda-mode, company-anaconda, lsp-pyright,
-;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, htmlize.
+;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, htmlize,
+;;;; green-phosphor-theme.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
 ;;;; Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
@@ -611,6 +612,12 @@ If the file doesn't exist, return an empty string."
   ((emacs-lisp-mode . (lambda () (setq mode-name "e-λ")))
    (clojure-mode . (lambda () (setq mode-name "cλj")))))
 
+(use-package green-phosphor-theme
+  :ensure t
+  :config
+  (load-theme 'green-phosphor t)
+  (set-face-attribute 'default nil :background "#000000"))
+
 (use-package counsel
   :ensure t
   :custom
@@ -1026,10 +1033,10 @@ If the file doesn't exist, return an empty string."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes
 
-;;; color-theme
-;; Using wombat theme, but with a black background instead of default #242424.
-(load-theme 'wombat t nil)
-(set-face-attribute 'default nil :background "#000000")
+;; ;;; color-theme
+;; ;; Using wombat theme, but with a black background instead of default #242424.
+;; (load-theme 'wombat t nil)
+;; (set-face-attribute 'default nil :background "#000000")
 
 ;;; icomplete
 ;; Disable icomplete, since I prefer using ivy for this and don't want both

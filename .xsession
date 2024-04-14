@@ -11,7 +11,7 @@ xset dpms 600 1800 3200
 #sxkhd &
 
 # Start oxbar
-/home/bm3719/src/c/oxbar/oxbar bcm-bottom&
+/home/bm3719/src/c/oxbar/oxbar -t "%Y-%m-%d %H:%M:%S" bcm-bottom &
 
 # Use feh to set background.
 feh --bg-tile $HOME/tmp/pure_black.jpg

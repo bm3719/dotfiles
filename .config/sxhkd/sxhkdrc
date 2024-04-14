@@ -4,7 +4,8 @@
 
 # terminal emulator
 super + Return
-	st -f 'Terminus:size=16'
+	st -f 'blockzone:size=16'
+#	st -f 'Terminus:size=16'
 
 # program launcher
 super + d

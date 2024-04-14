@@ -33,6 +33,8 @@
 ;; preferred fonts for other OSes.
 (when (display-graphic-p)
   (cond
+   ((find-font (font-spec :name "Fixedsys Excelsior"))
+    (set-frame-font "Fixedsys Excelsior-17"))
    ((find-font (font-spec :name "blockzone"))
     (set-frame-font "blockzone-16"))
    ((find-font (font-spec :name "terminus"))

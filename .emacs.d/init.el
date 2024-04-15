@@ -28,9 +28,9 @@
 (when (display-graphic-p)
   (tool-bar-mode -1))
 
-;; Font face: Always default to Fira Code or Roboto Mono, if available.
-;; Otherwise use Consolas on Windows and go through a priority list of
-;; preferred fonts for other OSes.
+;; Font face: Always default to Fixedsys Excelsior then blockzone and Terminus,
+;; if available.  Otherwise use Consolas on Windows and go through a priority
+;; list of preferred fonts for other OSes.
 (when (display-graphic-p)
   (cond
    ((find-font (font-spec :name "Fixedsys Excelsior"))

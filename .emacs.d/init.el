@@ -12,7 +12,7 @@
 ;;;; git-gutter, eshell-prompt-extras, aggressive-indent, clojure-mode, cider,
 ;;;; ac-cider, flycheck-clj-kondo, rainbow-delimiters, haskell-mode,
 ;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
-;;;; markdown-mode, gnuplot-mode, w3m, docker-tramp, gptel, seq, htmlize.
+;;;; markdown-mode, gnuplot-mode, w3m, gptel, seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
 ;;;; mutt, w3m, Fira Code font.
@@ -908,10 +908,6 @@ If the file doesn't exist, return an empty string."
         (setq w3m-search-default-engine engine))))
   :bind
   ("C-x M-m" . browse-url-at-point))
-
-;; (use-package docker-tramp
-;;   :ensure t
-;;   :defer 3)
 
 (use-package gptel
   :ensure t

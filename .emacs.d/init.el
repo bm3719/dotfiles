@@ -1,6 +1,6 @@
 ;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; Bruce C. Miller - bm3719@gmail.com
+;;;; Bruce C. Miller <bm3719@gmail.com>
 ;;;;
 ;;;; This init was created for GNU Emacs 29.3 and 28.2 for GNU/Linux, OpenBSD,
 ;;;; and Windows, but all or parts of this file should work with older GNU

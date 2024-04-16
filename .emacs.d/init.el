@@ -553,7 +553,14 @@ If the file doesn't exist, return an empty string."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; External Addons
 
-;; Required first to provide :diminish keyword.
+;; Always temporarily disable signature checking when updating keyring.
+(let ((old package-check-signature))
+  (use-package gnu-elpa-keyring-update
+    :ensure t
+    :init   (setq package-check-signature nil)
+    :config (setq package-check-signature old)))
+
+;; Required early to provide :diminish keyword.
 (use-package diminish
   :ensure t
   :init
@@ -561,13 +568,6 @@ If the file doesn't exist, return an empty string."
             (lambda () (setq mode-name "e-λ")))
   (add-hook 'clojure-mode-hook
             (lambda () (setq mode-name "cλj"))))
-
-;; Always temporarily disable signature checking when updating keyring.
-(let ((old package-check-signature))
-  (use-package gnu-elpa-keyring-update
-    :ensure t
-    :init   (setq package-check-signature nil)
-    :config (setq package-check-signature old)))
 
 (use-package counsel
   :ensure t

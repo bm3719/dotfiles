@@ -9,10 +9,10 @@
 ;;;; Top-level addons: use-package, diminish, gnu-elpa-keyring-update, counsel,
 ;;;; ivy-prescient, swiper, smartparens, volatile-highlights, which-key, dash,
 ;;;; powerline, pinentry, org-bullets, org-present, ob-restclient, magit,
-;;;; git-gutter, eshell-prompt-extras, aggressive-indent, clojure-mode, cider,
-;;;; ac-cider, flycheck-clj-kondo, rainbow-delimiters, haskell-mode,
-;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
-;;;; markdown-mode, gnuplot-mode, w3m, gptel, seq, htmlize.
+;;;; git-gutter, eshell-prompt-extras, lsp-mode, aggressive-indent,
+;;;; clojure-mode, cider, ac-cider, flycheck-clj-kondo, rainbow-delimiters,
+;;;; haskell-mode, proof-general, auctex, web-mode, rainbow-mode, json-mode,
+;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
 ;;;; mutt, w3m, Fira Code font.
@@ -716,6 +716,21 @@ If the file doesn't exist, return an empty string."
   (autoload 'epe-theme-lambda "eshell-prompt-extras")
   (setq eshell-highlight-prompt nil
         eshell-prompt-function 'epe-theme-lambda))
+
+(use-package lsp-mode
+  :ensure t
+  :init
+  ;; Set prefix for lsp-command-keymap
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (setq lsp-completion-provider :none)
+  (setq lsp-headerline-breadcrumb-enable nil)
+  ;; (setq lsp-modeline-code-actions-enable nil)
+  :hook (;; Supported language major modes
+         (clojure-mode . lsp)
+         ;; which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
 
 (use-package aggressive-indent
   :ensure t

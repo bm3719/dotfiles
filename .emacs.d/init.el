@@ -769,7 +769,7 @@ If the file doesn't exist, return an empty string."
   ;; Set prefix for lsp-command-keymap.  Needs to be in :init and not :custom.
   :init (setq lsp-keymap-prefix "C-c l")
   :hook (;; Supported language major modes
-         (clojure-mode . lsp)
+         ;; (clojure-mode . lsp) ;; Not supported on OpenBSD
          ;; which-key integration
          (lsp-mode . lsp-enable-which-key-integration)))
 

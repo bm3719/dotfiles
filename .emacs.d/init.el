@@ -7,9 +7,9 @@
 ;;;; Emacs versions or on other OSes.
 ;;;;
 ;;;; Top-level addons: use-package, diminish, gnu-elpa-keyring-update, counsel,
-;;;; ivy-prescient, swiper, smartparens, volatile-highlights, which-key, dash,
-;;;; powerline, pinentry, org-bullets, org-present, ob-restclient, magit,
-;;;; git-gutter, eshell-prompt-extras, lsp-mode, aggressive-indent,
+;;;; ivy-prescient, swiper, volatile-highlights, which-key, dash, powerline,
+;;;; pinentry, org-bullets, org-present, ob-restclient, magit, git-gutter,
+;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, smartparens,
 ;;;; clojure-mode, cider, ac-cider, flycheck-clj-kondo, rainbow-delimiters,
 ;;;; haskell-mode, proof-general, auctex, web-mode, rainbow-mode, json-mode,
 ;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, seq, htmlize.
@@ -611,23 +611,6 @@ If the file doesn't exist, return an empty string."
   ("C-s" . swiper-isearch)
   ("C-r" . swiper-isearch-backward))
 
-(use-package smartparens
-  :ensure t
-  :diminish "(ϛ)"
-  :init
-  (require 'smartparens-config)
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook 'smartparens-strict-mode)
-  (add-hook 'scheme-mode-hook 'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'ielm-mode-hook 'smartparens-strict-mode)
-  :bind
-  ("M-)" . sp-forward-slurp-sexp)
-  ("M-(" . sp-backward-barf-sexp)
-  ("M-s" . sp-unwrap-sexp)
-  ("M-r" . sp-raise-sexp))
-
 (use-package volatile-highlights
   :ensure t
   :diminish "hl"
@@ -732,6 +715,10 @@ If the file doesn't exist, return an empty string."
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
+(use-package lsp-ivy
+  :ensure t
+  :commands lsp-ivy-workspace-symbol)
+
 (use-package aggressive-indent
   :ensure t
   :init
@@ -741,6 +728,23 @@ If the file doesn't exist, return an empty string."
   (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'cider-repl-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'java-mode))
+
+(use-package smartparens
+  :ensure t
+  :diminish "(ϛ)"
+  :init
+  (require 'smartparens-config)
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook 'smartparens-strict-mode)
+  (add-hook 'scheme-mode-hook 'smartparens-strict-mode)
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'ielm-mode-hook 'smartparens-strict-mode)
+  :bind
+  ("M-)" . sp-forward-slurp-sexp)
+  ("M-(" . sp-backward-barf-sexp)
+  ("M-s" . sp-unwrap-sexp)
+  ("M-r" . sp-raise-sexp))
 
 (use-package clojure-mode
   :ensure t

@@ -618,8 +618,7 @@ If the file doesn't exist, return an empty string."
 
 (use-package which-key
   :ensure t
-  :init
-  (add-hook 'org-mode-hook 'which-key-mode)
+  :config (which-key-mode)
   :custom
   (which-key-popup-type 'side-window)
   (which-key-side-window-location 'bottom)

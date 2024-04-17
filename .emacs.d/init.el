@@ -1121,6 +1121,11 @@ If the file doesn't exist, return an empty string."
                                  "~/src/docs/recur.org")))
 ;; Increase space for habit description (default 40).
 (setq org-habit-graph-column 50)
+;; Custom agenda views.
+(setq org-agenda-custom-commands
+      '(("A" "Agenda and STRT tasks"
+         ((agenda "")
+          (todo "STRT")))))
 
 ;;; Org
 ;; Initiate org-mode when opening .org files.

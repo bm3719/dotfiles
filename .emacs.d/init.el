@@ -1177,6 +1177,8 @@ If the file doesn't exist, return an empty string."
  org-refile-use-outline-path 'file
  ;; Show all empty lines between collapsed trees.
  org-cycle-separator-lines 1
+ ;; Preserve indentation when exiting the `org-edit-src-code' editor.
+ org-src-preserve-indentation t
  ;; Customize optional modules.
  org-modules (append org-modules '(org-habit)))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)

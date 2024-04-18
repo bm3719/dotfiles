@@ -716,6 +716,10 @@ If the file doesn't exist, return an empty string."
 
 (use-package lsp-ivy
   :ensure t
+  :after lsp-mode
+  :hook (lsp-mode . (lambda ()
+                      (define-key lsp-mode-map [remap xref-find-apropos]
+                                  #'lsp-ivy-workspace-symbol)))
   :commands lsp-ivy-workspace-symbol)
 
 (use-package aggressive-indent

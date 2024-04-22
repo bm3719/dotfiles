@@ -62,13 +62,13 @@
 (blink-cursor-mode nil)            ; Disable cursor blinking.
 (setq visible-bell t)              ; Make bell visible, not aural.
 
-;; Shut off message buffer.  To debug Emacs, comment these out so you can see
-;; output from message function calls.
-(setq message-log-max nil)
-;; Check if message buffer exists before killing (not doing so errors
-;; eval-buffer of an init file).
-(when (get-buffer "*Messages*")
-  (kill-buffer "*Messages*"))
+;; ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
+;; ;; output from message function calls.
+;; (setq message-log-max nil)
+;; ;; Check if message buffer exists before killing (not doing so errors
+;; ;; eval-buffer of an init file).
+;; (when (get-buffer "*Messages*")
+;;   (kill-buffer "*Messages*"))
 
 ;; Provide a useful error trace if loading this init fails.
 (setq debug-on-error t)

@@ -1234,13 +1234,12 @@ If the file doesn't exist, return an empty string."
 ;; Display main agenda dispatch.
 (global-set-key (kbd "C-c a") 'org-agenda)
 ;; Set the files I want org-agenda to pull from.
-(when (file-directory-p "~/src/docs")
-  (setq org-agenda-files
-        (seq-filter 'file-exists-p
-                    (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
-                            '(;; "~/src/docs/agenda.org"
-                              ;; "~/src/docs/recur.org"
-                              )))))
+;; (when (file-directory-p "~/src/docs")
+;;   (setq org-agenda-files
+;;         (seq-filter 'file-exists-p
+;;                     (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
+;;                             '("~/src/docs/agenda.org"
+;;                               "~/src/docs/recur.org")))))
 ;; For work, also append my work file.  Intentionally separate expression.
 (setq org-agenda-files (append org-agenda-files
                                '("~/bpk.org")))

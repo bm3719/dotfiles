@@ -1172,8 +1172,8 @@ If the file doesn't exist, return an empty string."
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 ;; Stores links.  In an org-mode file, C-c C-l calls them and creates links.
 (global-set-key (kbd "C-x M-l") 'org-store-link)
-;; Change default TODO keywords and coloring.
 (setq
+ ;; Change default TODO keywords and coloring.
  org-src-fontify-natively t
  org-todo-keywords (quote ((sequence
                             "TODO(t)"

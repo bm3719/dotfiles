@@ -458,7 +458,7 @@ count-windows is not 2."
 (defun bcm/emacs-reloaded ()
   "Display animated startup message."
   (animate-string
-   (concat ";; Initialization successful.  Welcome to "
+   (concat "# Initialization successful.  Welcome to "
            (substring (emacs-version) 0 14) ".") 0 0)
   (newline-and-indent)  (newline-and-indent))
 (add-hook 'after-init-hook 'bcm/emacs-reloaded)
@@ -1173,6 +1173,8 @@ If the file doesn't exist, return an empty string."
 ;; Stores links.  In an org-mode file, C-c C-l calls them and creates links.
 (global-set-key (kbd "C-x M-l") 'org-store-link)
 (setq
+ ;; Set *scratch* buffer to org-mode instead of lisp-interaction-mode.
+ initial-major-mode 'org-mode
  ;; Change default TODO keywords and coloring.
  org-src-fontify-natively t
  org-todo-keywords (quote ((sequence

@@ -954,6 +954,11 @@ If the file doesn't exist, return an empty string."
   :config
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  ;; Register local ollama backend.
+  (gptel-make-ollama "ollama"
+    :host "localhost:11434"
+    :stream t
+    :models '("llama3"))
   :init
   (setq
    gptel-api-key (bcm/strip-trailing-crlf

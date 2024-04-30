@@ -1234,8 +1234,14 @@ If the file doesn't exist, return an empty string."
 ;; Match the colors of statistics cookies.
 (custom-theme-set-faces 'user '(org-done ((t (:foreground "forest green")))))
 (custom-theme-set-faces 'user '(org-todo ((t (:foreground "red")))))
-;; Activate org-temp for code block insertion using <s TAB.
+;; Activate org-tempo for block completion using <s TAB (and others).
 (require 'org-tempo)
+;; Add some custom structure templates
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("clj" . "src clojure :backend babashka"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+(add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 ;; Also add a better binding for template insertion.
 (org-defkey org-mode-map (kbd "C-c M-t") 'org-insert-structure-template)
 ;; Use org-return-and-maybe-indent instead of org-return to prevent

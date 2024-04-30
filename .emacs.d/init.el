@@ -949,9 +949,16 @@ If the file doesn't exist, return an empty string."
 (use-package gptel
   :ensure t
   :defer 3
+  :hook
+  (gptel-mode . visual-line-mode)
+  :config
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   :init
-  (setq gptel-api-key (bcm/strip-trailing-crlf
-                       (bcm/read-file-contents "~/.emacs.d/openai.key"))))
+  (setq
+   gptel-api-key (bcm/strip-trailing-crlf
+                  (bcm/read-file-contents "~/.emacs.d/openai.key"))
+   gptel-default-mode 'org-mode))
 
 (use-package seq
   :ensure t)

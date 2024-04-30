@@ -982,6 +982,20 @@ If the file doesn't exist, return an empty string."
 ;; enabled.
 (icomplete-mode 0)
 
+;;; desktop
+;; Save buffers, file names, major-modes, etc. and restore on restart.  Will
+;; prompt on first save.  Probably want to put it in `~/.emacs.d/'.
+(desktop-save-mode 1)
+(setq desktop-buffers-not-to-save
+      (concat "\\("
+              "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
+              "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
+	      "\\)$"))
+(add-to-list 'desktop-modes-not-to-save 'dired-mode)
+(add-to-list 'desktop-modes-not-to-save 'Info-mode)
+(add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+(add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
+
 ;;; elisp-mode
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)

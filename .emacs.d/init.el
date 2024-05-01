@@ -958,7 +958,7 @@ If the file doesn't exist, return an empty string."
   (gptel-make-ollama "ollama"
     :host "localhost:11434"
     :stream t
-    :models '("llama3"))
+    :models '("llama3" "dolphin-llama3:8b"))
   :init
   (setq
    gptel-api-key (bcm/strip-trailing-crlf

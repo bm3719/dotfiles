@@ -15,7 +15,7 @@
 ;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
-;;;; mutt, w3m, Fira Code font.
+;;;; mutt, w3m, ollama, Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup

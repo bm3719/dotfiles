@@ -1008,9 +1008,9 @@ If the file doesn't exist, return an empty string."
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   ;; Register local ollama backend.
   (gptel-make-ollama "ollama"
-    :host "localhost:11434"
-    :stream t
-    :models '("llama3" "dolphin-llama3:8b")))
+                     :host "192.168.1.102:11434"
+                     :stream t
+                     :models '("llama3" "dolphin-llama3:8b")))
 
 (use-package ob-dall-e-shell
   :ensure t

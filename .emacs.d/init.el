@@ -12,7 +12,8 @@
 ;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, smartparens,
 ;;;; clojure-mode, cider, ac-cider, flycheck-clj-kondo, rainbow-delimiters,
 ;;;; haskell-mode, proof-general, auctex, web-mode, rainbow-mode, json-mode,
-;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, seq, htmlize.
+;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, dall-e-shell, seq,
+;;;; htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
 ;;;; mutt, w3m, ollama, Fira Code font.
@@ -964,6 +965,14 @@ If the file doesn't exist, return an empty string."
    gptel-api-key (bcm/strip-trailing-crlf
                   (bcm/read-file-contents "~/.emacs.d/openai.key"))
    gptel-default-mode 'org-mode))
+
+(use-package dall-e-shell
+  :ensure t
+  :custom
+  ((dall-e-shell-openai-key
+    (bcm/strip-trailing-crlf
+     (bcm/read-file-contents "~/.emacs.d/openai.key")))
+   (dall-e-shell-image-output-directory "~/img")))
 
 (use-package seq
   :ensure t)

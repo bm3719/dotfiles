@@ -782,20 +782,17 @@ If the file doesn't exist, return an empty string."
   :custom
   (cider-repl-pop-to-buffer-on-connect t)
   :config
-  (define-key cider-mode-map (kbd "C-c C-l")
-              (lambda ()
-                (interactive)
-                (cider-find-and-clear-repl-output t)))
   (define-key cider-repl-mode-map (kbd "C-c C-l") 'cider-repl-clear-buffer)
   ;; Make backwards-kill-word respect enclosing structure.
   (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word)
   (define-key cider-repl-mode-map (kbd "C-w") 'sp-backward-kill-word)
+  :hook
+  ((cider-mode-hook . flyspell-prog-mode)
+   (cider-mode-hook . which-key-mode)
+   (cider-mode-hook . company-mode)
+   (cider-repl-mode-hook . smartparens-strict-mode)
+   (cider-repl-mode-hook . company-mode))
   :init
-  (add-hook 'cider-mode-hook 'flyspell-prog-mode)
-  (add-hook 'cider-mode-hook 'which-key-mode)
-  (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-  (add-hook 'cider-repl-mode-hook 'company-mode)
-  (add-hook 'cider-mode-hook 'company-mode)
   ;; Fix missing *nrepl-messages* buffer.
   (setq nrepl-log-messages 1))
 

@@ -1,0 +1,3 @@
+/usr/bin/env bash
+
+java -jar /home/bm3719/src/clojure/cljfmt/lein-cljfmt/target/lein-cljfmt-0.12.0-standalone.jar "$@"

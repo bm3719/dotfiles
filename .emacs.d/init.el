@@ -9,8 +9,8 @@
 ;;;; Top-level addons: use-package, diminish, gnu-elpa-keyring-update, counsel,
 ;;;; ivy-prescient, swiper, volatile-highlights, which-key, dash, powerline,
 ;;;; pinentry, org-bullets, org-present, ob-restclient, magit, git-gutter,
-;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, smartparens,
-;;;; clojure-mode, cider, ac-cider, flycheck-clj-kondo, rainbow-delimiters,
+;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, company-mode,
+;;;; smartparens, clojure-mode, cider, flycheck-clj-kondo, rainbow-delimiters,
 ;;;; haskell-mode, proof-general, auctex, web-mode, rainbow-mode, json-mode,
 ;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, dall-e-shell, seq,
 ;;;; htmlize.
@@ -748,6 +748,11 @@ If the file doesn't exist, return an empty string."
   (add-to-list 'aggressive-indent-excluded-modes 'cider-repl-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'java-mode))
 
+(use-package company
+  :ensure t
+  :pin gnu
+  :diminish " ċ")
+
 (use-package smartparens
   :ensure t
   :diminish "(ϛ)"
@@ -776,35 +781,23 @@ If the file doesn't exist, return an empty string."
   :defer 2
   :custom
   (cider-repl-pop-to-buffer-on-connect t)
+  :config
+  (define-key cider-mode-map (kbd "C-c C-l")
+              (lambda ()
+                (interactive)
+                (cider-find-and-clear-repl-output t)))
+  (define-key cider-repl-mode-map (kbd "C-c C-l") 'cider-repl-clear-buffer)
+  ;; Make backwards-kill-word respect enclosing structure.
+  (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word)
+  (define-key cider-repl-mode-map (kbd "C-w") 'sp-backward-kill-word)
   :init
   (add-hook 'cider-mode-hook 'flyspell-prog-mode)
   (add-hook 'cider-mode-hook 'which-key-mode)
   (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-  (defun bcm/clojure-hook ()
-    (auto-complete-mode 1)
-    (define-key clojure-mode-map (kbd "<S-tab>") 'auto-complete)
-    (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word))
-  (add-hook 'clojure-mode-hook 'bcm/clojure-hook)
-  (add-hook 'cider-repl-mode-hook
-            (lambda ()
-              (define-key cider-repl-mode-map
-                          (kbd "C-w") 'sp-backward-kill-word)))
+  (add-hook 'cider-repl-mode-hook 'company-mode)
+  (add-hook 'cider-mode-hook 'company-mode)
   ;; Fix missing *nrepl-messages* buffer.
   (setq nrepl-log-messages 1))
-
-(use-package ac-cider
-  :ensure t
-  :defer 3
-  :init
-  (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
-  (add-hook 'cider-mode-hook 'ac-cider-setup)
-  (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
-  (eval-after-load "auto-complete"
-    '(add-to-list 'ac-modes 'cider-mode))
-  (defun set-auto-complete-as-completion-at-point-function ()
-    (setq completion-at-point-functions '(auto-complete)))
-  (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-  (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function))
 
 (use-package flycheck-clj-kondo
   :ensure t

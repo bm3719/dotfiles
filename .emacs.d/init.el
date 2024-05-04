@@ -12,8 +12,8 @@
 ;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, company-mode,
 ;;;; smartparens, clojure-mode, cider, flycheck-clj-kondo, rainbow-delimiters,
 ;;;; haskell-mode, proof-general, auctex, web-mode, rainbow-mode, json-mode,
-;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, dall-e-shell, seq,
-;;;; htmlize.
+;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell,
+;;;; seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
 ;;;; mutt, w3m, ollama, Fira Code font.
@@ -956,13 +956,17 @@ If the file doesn't exist, return an empty string."
                   (bcm/read-file-contents "~/.emacs.d/openai.key"))
    gptel-default-mode 'org-mode))
 
-(use-package dall-e-shell
+(use-package ob-dall-e-shell
   :ensure t
+  :config
+  ;; Activate `dall-e-shell' as src block type.
+  (ob-dall-e-shell-setup)
   :custom
   ((dall-e-shell-openai-key
     (bcm/strip-trailing-crlf
      (bcm/read-file-contents "~/.emacs.d/openai.key")))
-   (dall-e-shell-image-output-directory "~/img")))
+   (dall-e-shell-image-output-directory "~/img")
+   (dall-e-shell-model-version "dall-e-3")))
 
 (use-package seq
   :ensure t)
@@ -1241,6 +1245,7 @@ If the file doesn't exist, return an empty string."
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("d" . "src dall-e-shell :version dall-e-3"))
 ;; Also add a better binding for template insertion.
 (org-defkey org-mode-map (kbd "C-c M-t") 'org-insert-structure-template)
 ;; Use org-return-and-maybe-indent instead of org-return to prevent

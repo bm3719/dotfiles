@@ -1206,21 +1206,15 @@ If the file doesn't exist, return an empty string."
  initial-major-mode 'org-mode
  ;; Change default TODO keywords and coloring.
  org-src-fontify-natively t
- org-todo-keywords (quote ((sequence
-                            "TODO(t)"
-                            "STRT(s!)"
-                            "INAC(i)"
-                            "BLCK(b!)"
-                            "|"
-                            "DONE(d!)"
-                            "CNCL(c!)")))
- org-todo-keyword-faces
- (quote (("INAC" :foreground "gray25" :weight bold)
-         ("TODO" :foreground "red" :weight bold)
-         ("STRT" :foreground "light sky blue" :weight bold)
-         ("BLCK" :foreground "purple" :weight bold)
-         ("DONE" :foreground "forest green" :weight bold)
-         ("CNCL" :foreground "dark blue" :weight bold)))
+ org-todo-keywords '((sequence
+                      "TODO(t)" "STRT(s!)" "INAC(i)" "BLCK(b!)" "|"
+                      "DONE(d!)" "CNCL(c!)"))
+ org-todo-keyword-faces'(("INAC" :foreground "gray25" :weight bold)
+                         ("TODO" :foreground "red" :weight bold)
+                         ("STRT" :foreground "light sky blue" :weight bold)
+                         ("BLCK" :foreground "purple" :weight bold)
+                         ("DONE" :foreground "forest green" :weight bold)
+                         ("CNCL" :foreground "dark blue" :weight bold))
  ;; Configure org-refile to target other files.
  org-refile-targets '((org-agenda-files . (:maxlevel . 1)))
  org-refile-use-outline-path 'file

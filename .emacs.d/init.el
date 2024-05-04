@@ -919,14 +919,13 @@ If the file doesn't exist, return an empty string."
   ;; To use w3m-search, hit `S' in w3m. Prefix with C-u to specify engine.
   (require 'w3m-search)
   ;; Add some extra search engine URIs.
-  (add-to-list 'w3m-search-engine-alist
-               '("hoogle" "http://haskell.org/hoogle/?q=%s"))
-  (add-to-list 'w3m-search-engine-alist
-               '("wiby" "https://wiby.me/?q=%s" nil))
-  (add-to-list 'w3m-search-engine-alist
-               '("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil))
-  (add-to-list 'w3m-search-engine-alist
-               '("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))
+  (setq w3m-search-engine-alist
+        (append
+         w3m-search-engine-alist
+         '(("hoogle" "http://haskell.org/hoogle/?q=%s")
+           ("wiby" "https://wiby.me/?q=%s" nil)
+           ("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil)
+           ("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))))
   (setq w3m-search-default-engine "duckduckgo")
   ;; Default to the last manually specified search engine when calling the prefix
   ;; version of the function.
@@ -1234,12 +1233,14 @@ If the file doesn't exist, return an empty string."
 ;; Activate org-tempo for block completion using <s TAB (and others).
 (require 'org-tempo)
 ;; Add some custom structure templates
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("clj" . "src clojure :backend babashka"))
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
-(add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
-(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-(add-to-list 'org-structure-template-alist '("d" . "src dall-e-shell :version dall-e-3"))
+(setq org-structure-template-alist
+      (append org-structure-template-alist
+              '(("el"  . "src emacs-lisp")
+                ("clj" . "src clojure :backend babashka")
+                ("py"  . "src python")
+                ("hs"  . "src haskell")
+                ("sh"  . "src shell")
+                ("d"   . "src dall-e-shell :version dall-e-3"))))
 ;; Also add a better binding for template insertion.
 (org-defkey org-mode-map (kbd "C-c M-t") 'org-insert-structure-template)
 ;; Use org-return-and-maybe-indent instead of org-return to prevent
@@ -1320,7 +1321,8 @@ If the file doesn't exist, return an empty string."
       '(("t" "Task" entry (file org-default-notes-file)
          "* TODO\n%U\n")
         ("h" "Habit" entry (file org-default-notes-file)
-         "* TODO %?\nSCHEDULED: <%<%Y-%m-%d %a .+1d>>\n:PROPERTIES:\n:CREATED: %U\n:STYLE: habit\n:END:\n%U\n")))
+         (concat "* TODO %?\nSCHEDULED: <%<%Y-%m-%d %a .+1d>>\n"
+                 ":PROPERTIES:\n:CREATED: %U\n:STYLE: habit\n:END:\n%U\n"))))
 
 ;;; add-log
 ;; Auto-add new entry to CHANGELOG found up parent dir hierarchy with C-x 4 a.

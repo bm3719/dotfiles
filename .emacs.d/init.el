@@ -10,10 +10,9 @@
 ;;;; ivy-prescient, swiper, volatile-highlights, which-key, dash, powerline,
 ;;;; pinentry, org-bullets, org-present, ob-restclient, magit, git-gutter,
 ;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, company,
-;;;; smartparens, clojure-mode, cider, flycheck-clj-kondo, rainbow-delimiters,
-;;;; haskell-mode, proof-general, auctex, web-mode, rainbow-mode, json-mode,
-;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell,
-;;;; seq, htmlize.
+;;;; smartparens, clojure-mode, cider, flycheck-clj-kondo, haskell-mode,
+;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
+;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
 ;;;; mutt, w3m, ollama, Fira Code font.
@@ -794,13 +793,6 @@ If the file doesn't exist, return an empty string."
   :defer 7
   :init
   (add-hook 'clojure-mode-hook 'flycheck-mode))
-
-(use-package rainbow-delimiters
-  :disabled
-  :hook
-  ((clojure-mode-hook . rainbow-delimiters-mode)
-   (emacs-lisp-mode-hook . rainbow-delimiters-mode)
-   (cider-repl-mode-hook . rainbow-delimiters-mode)))
 
 (use-package haskell-mode
   :ensure t

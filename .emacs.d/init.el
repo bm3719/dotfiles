@@ -24,13 +24,13 @@
 ;; Getting rid of the toolbar first prevents it from showing in the few seconds
 ;; needed for the rest of this stuff to load, though disabling it in .Xdefaults
 ;; is even better.
-(when window-system
+(when (display-graphic-p)
   (tool-bar-mode -1))
 
 ;; Font face: Always default to Fira Code or Roboto Mono, if available.
 ;; Otherwise use Consolas on Windows and go through a priority list of
 ;; preferred fonts for other OSes.
-(when window-system
+(when (display-graphic-p)
   (cond
    ((find-font (font-spec :name "Fira Code"))
     (set-frame-font "Fira Code-17"))
@@ -46,7 +46,7 @@
     (set-frame-font "courier-16"))))
 
 (setq inhibit-startup-message t)   ; Disable splash screen.
-(when window-system
+(when (display-graphic-p)
   (set-scroll-bar-mode 'right)     ; If turned on, use right scrollbars.
   (scroll-bar-mode -1)             ; Hide the scroll bar.
   (tooltip-mode 0))                ; Disable tooltips.
@@ -98,7 +98,7 @@
 ;; (load-file custom-file)
 
 ;; Use fullscreen in GUI mode.
-(when window-system
+(when (display-graphic-p)
   (toggle-frame-maximized))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -159,7 +159,7 @@
 (global-set-key (kbd "<drag-mouse-9>") 'ignore)
 
 ;; Disable suspend-frame on Xorg sessions.
-(when window-system
+(when (display-graphic-p)
   (global-unset-key (kbd "C-z"))
   (global-unset-key (kbd "C-x C-z")))
 

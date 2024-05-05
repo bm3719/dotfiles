@@ -6,10 +6,10 @@
 ;;;; and Windows, but all or parts of this file should work with older GNU
 ;;;; Emacs versions or on other OSes.
 ;;;;
-;;;; Top-level addons: use-package, diminish, gnu-elpa-keyring-update, counsel,
+;;;; Top-level addons: use-package, gnu-elpa-keyring-update, diminish, counsel,
 ;;;; ivy-prescient, swiper, volatile-highlights, which-key, dash, powerline,
 ;;;; pinentry, org-bullets, org-present, ob-restclient, magit, git-gutter,
-;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, company-mode,
+;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, company,
 ;;;; smartparens, clojure-mode, cider, flycheck-clj-kondo, rainbow-delimiters,
 ;;;; haskell-mode, proof-general, auctex, web-mode, rainbow-mode, json-mode,
 ;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell,
@@ -580,10 +580,12 @@ If the file doesn't exist, return an empty string."
 (use-package diminish
   :ensure t
   :init
+  ;; Modify some modeline strings that don't respect diminish.
   (add-hook 'emacs-lisp-mode-hook
             (lambda () (setq mode-name "e-λ")))
   (add-hook 'clojure-mode-hook
-            (lambda () (setq mode-name "cλj"))))
+            (lambda () (setq mode-name "cλj")))
+  (setq eldoc-minor-mode-string " λdoc"))
 
 (use-package counsel
   :ensure t
@@ -643,45 +645,40 @@ If the file doesn't exist, return an empty string."
 ;; Add elisp equivalents of Clojure's threading macros, `->' and `->>'.
 (use-package dash
   :ensure t
+  :demand t
   :init
   (global-dash-fontify-mode))
 
 (use-package powerline
   :ensure t
-  :config
-  (powerline-default-theme))
+  :config (powerline-default-theme))
 
 ;; Manually installing pinentry from gnu, since ":pin gnu" seems to do nothing.
 (unless (package-installed-p 'pinentry)
   (package-install 'pinentry))
 (use-package pinentry
   :if (not (eq system-type 'windows-nt))
-  :custom
-  (epa-pinentry-mode 'loopback)
-  :config
-  (pinentry-start))
+  :custom (epa-pinentry-mode 'loopback)
+  :config (pinentry-start))
 
 (use-package org-bullets
   :ensure t
-  :config
+  :init
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 ;; Reminder: Use arrow keys to navigate, C-c C-q to quit.
 (use-package org-present
   :ensure t
   :init
+  (add-hook 'org-present-mode-hook (lambda () (org-display-inline-images)))
+  (add-hook 'org-present-mode-quit-hook (lambda () (org-remove-inline-images)))
   ;; Reduce the huge upscaling of text.  This amount is more reasonable for my
   ;; laptop, but reconsider it for larger displays.
-  (setq org-present-text-scale 2)
-  (add-hook 'org-present-mode-hook
-            (lambda ()
-              (org-display-inline-images)))
-  (add-hook 'org-present-mode-quit-hook
-            (lambda ()
-              (org-remove-inline-images))))
+  (setq org-present-text-scale 2))
 
 (use-package ob-restclient
   :ensure t
+  :defer t
   :mode "\\.rest$"
   :custom
   ;; Inhibit restclient from sending cookies implicitly.
@@ -692,14 +689,12 @@ If the file doesn't exist, return an empty string."
   :defer 3
   :init
   ;; Idiomatic fill-column setting for commit messages.
-  (add-hook 'git-commit-mode-hook
-            (lambda () (set-fill-column 72)))
+  (add-hook 'git-commit-mode-hook (lambda () (set-fill-column 72)))
   (global-set-key (kbd "<f3>") 'magit-status))
 
 (use-package git-gutter
   :ensure t
   :diminish "Git↓"
-  :defer 2
   :custom
   (git-gutter:update-interval 2)
   :config
@@ -709,7 +704,6 @@ If the file doesn't exist, return an empty string."
 
 (use-package eshell-prompt-extras
   :ensure t
-  :defer 2
   :config
   (autoload 'epe-theme-lambda "eshell-prompt-extras")
   (setq eshell-highlight-prompt nil
@@ -778,7 +772,7 @@ If the file doesn't exist, return an empty string."
 
 (use-package cider
   :ensure t
-  :defer 2
+  :defer 3
   :custom
   (cider-repl-pop-to-buffer-on-connect t)
   :config
@@ -786,49 +780,48 @@ If the file doesn't exist, return an empty string."
   ;; Make backwards-kill-word respect enclosing structure.
   (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word)
   (define-key cider-repl-mode-map (kbd "C-w") 'sp-backward-kill-word)
-  :hook
-  ((cider-mode-hook . flyspell-prog-mode)
-   (cider-mode-hook . which-key-mode)
-   (cider-mode-hook . company-mode)
-   (cider-repl-mode-hook . smartparens-strict-mode)
-   (cider-repl-mode-hook . company-mode))
   :init
+  (add-hook 'cider-mode-hook 'flyspell-prog-mode)
+  (add-hook 'cider-mode-hook 'which-key-mode)
+  (add-hook 'cider-mode-hook 'company-mode)
+  (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+  (add-hook 'cider-repl-mode-hook 'company-mode)
   ;; Fix missing *nrepl-messages* buffer.
   (setq nrepl-log-messages 1))
 
 (use-package flycheck-clj-kondo
   :ensure t
-  :defer 3
+  :defer 7
   :init
   (add-hook 'clojure-mode-hook 'flycheck-mode))
 
 (use-package rainbow-delimiters
-  :ensure t
   :disabled
-  :init
-  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode))
+  :hook
+  ((clojure-mode-hook . rainbow-delimiters-mode)
+   (emacs-lisp-mode-hook . rainbow-delimiters-mode)
+   (cider-repl-mode-hook . rainbow-delimiters-mode)))
 
 (use-package haskell-mode
   :ensure t
-  :defer 2
+  :defer 5
   ;; Doesn't work, for unknown reasons.
   :diminish "λ≫"
-  :config
-  ;; Enable prettify-symbols-mode symbols-alists in buffers.
-  (add-hook 'haskell-mode-hook 'bcm/haskell-prettify-enable)
+  :init
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook 'haskell-mode-hook 'haskell-doc-mode)
-  (add-hook 'haskell-mode-hook
-            (lambda () (setq mode-name "λ≫")))
+  (add-hook 'haskell-mode-hook (lambda () (setq mode-name "λ≫")))
+  :config
+  ;; Enable prettify-symbols-mode symbols-alists in buffers.  Only load after
+  ;; package load.
+  (add-hook 'haskell-mode-hook 'bcm/haskell-prettify-enable)
   ;; Add ghcup directory location of GHC binaries to PATH and exec-path.
   (setenv "PATH" (concat (getenv "PATH") ":~/.ghcup/bin"))
   (setq exec-path (append exec-path '("~/.ghcup/bin"))))
 
 (use-package proof-general
   :ensure t
-  :defer 2)
+  :defer t)
 
 ;; Manually installing/configuring AUCTeX.
 (unless (package-installed-p 'auctex)
@@ -852,35 +845,35 @@ If the file doesn't exist, return an empty string."
 
 (use-package web-mode
   :ensure t
-  :defer 2
+  :defer t
   :mode
   ("\\.html?\\'" "\\.phtml\\'" "\\.tpl\\.php\\'"
    "\\.[gj]sp\\'" "\\.as[cp]x\\'" "\\.erb\\'"
    "\\.mustache\\'" "\\.djhtml\\'" "\\.php\\'")
+  :init
+  (add-hook 'web-mode-hook 'flyspell-mode)
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
-  (web-mode-code-indent-offset 2)
-  :init
-  (add-hook 'web-mode-hook 'flyspell-mode))
+  (web-mode-code-indent-offset 2))
 
 (use-package rainbow-mode
   :ensure t
-  :init
-  (add-hook 'css-mode-hook (lambda () (rainbow-mode 1)))
-  (add-hook 'html-mode-hook (lambda () (rainbow-mode 1))))
+  :hook
+  ((css-mode-hook . (lambda () (rainbow-mode 1)))
+   (html-mode-hook . (lambda () (rainbow-mode 1)))))
 
 ;; Note: C-c C-f reformats, C-c C-p displays path to object at point.
 (use-package json-mode
   :ensure t
-  :defer 2
+  :defer t
   :mode "\\.json\\'")
 
 ;; Super-minimal Python infrastructure.  Restore docs navigation and integrate
 ;; flycheck if needed later.
 (use-package python-mode
   :ensure t
-  :defer 2
+  :defer t
   :mode "\\.py\\'"
   :init
   (add-to-list 'interpreter-mode-alist '("python" . python-mode))
@@ -890,32 +883,32 @@ If the file doesn't exist, return an empty string."
 ;; Note: Install textproc/markdown to integrate compilation commands.
 (use-package markdown-mode
   :ensure t
-  :defer 2
+  :defer t
   :mode ("\\.markdown\\'" "\\.md\\'"))
 
 (use-package gnuplot-mode
   :ensure t
-  :defer 2
+  :defer t
   :mode "\\.gp$"
-  :config
-  (add-hook 'gnuplot-mode-hook
-            (lambda ()
-              (flyspell-prog-mode)
-              (add-hook 'before-save-hook
-                        'whitespace-cleanup nil t))))
+  :init
+  (add-hook 'gnuplot-mode-hook (lambda ()
+                                 (flyspell-prog-mode)
+                                 (add-hook 'before-save-hook
+                                           'whitespace-cleanup nil t))))
 
 (use-package w3m
   :ensure t
+  :defer t
   :custom
   ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
   ;; (w3m-use-tab t)
   (w3m-use-cookies t)
   :init
   (require 'w3m-load nil t)
-  ;; Use w3m for all URLs (deprecated code to use available GUI browser).
-  (setq browse-url-browser-function 'w3m-browse-url)
   ;; Activate Conkeror-style link selection (toggle with `f' key).
   (add-hook 'w3m-mode-hook 'w3m-lnum-mode)
+  ;; Use w3m for all URLs (deprecated code to use available GUI browser).
+  (setq browse-url-browser-function 'w3m-browse-url)
   ;; To use w3m-search, hit `S' in w3m. Prefix with C-u to specify engine.
   (require 'w3m-search)
   ;; Add some extra search engine URIs.
@@ -938,7 +931,6 @@ If the file doesn't exist, return an empty string."
 
 (use-package gptel
   :ensure t
-  :defer 3
   :hook
   (gptel-mode . visual-line-mode)
   :config
@@ -973,8 +965,8 @@ If the file doesn't exist, return an empty string."
 ;; Needed to support code block syntax highlighting in org-export to HTML.
 (use-package htmlize
   :ensure t
-  :config
-  (setq htmlize-output-type 'inline-css))
+  :defer t
+  :config (setq htmlize-output-type 'inline-css))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes

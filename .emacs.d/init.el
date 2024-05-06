@@ -858,8 +858,9 @@ If the file doesn't exist, return an empty string."
 (use-package rainbow-mode
   :ensure t
   :hook
-  ((css-mode-hook . (lambda () (rainbow-mode 1)))
-   (html-mode-hook . (lambda () (rainbow-mode 1)))))
+  ((css-mode . (lambda () (rainbow-mode 1)))
+   (html-mode . (lambda () (rainbow-mode 1)))
+   (web-mode . (lambda () (rainbow-mode 1)))))
 
 ;; Note: C-c C-f reformats, C-c C-p displays path to object at point.
 (use-package json-mode

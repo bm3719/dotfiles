@@ -579,11 +579,11 @@ If the file doesn't exist, return an empty string."
 (use-package diminish
   :ensure t
   ;; Modify some modeline strings that don't respect diminish.
+  :custom
+  (eldoc-minor-mode-string " λdoc")
   :hook
   ((emacs-lisp-mode . (lambda () (setq mode-name "e-λ")))
-   (clojure-mode-hook . (lambda () (setq mode-name "cλj"))))
-  :init
-  (setq eldoc-minor-mode-string " λdoc"))
+   (clojure-mode-hook . (lambda () (setq mode-name "cλj")))))
 
 (use-package counsel
   :ensure t
@@ -667,15 +667,15 @@ If the file doesn't exist, return an empty string."
 ;; Reminder: Use arrow keys to navigate, C-c C-q to quit.
 (use-package org-present
   :ensure t
+  :custom
+  ;; Reduce the huge upscaling of text.  This amount is more reasonable for my
+  ;; laptop, but reconsider it for larger displays.
+  (org-present-text-scale 2)
   :hook
   ((org-present-mode
     . (lambda () (when (display-graphic-p) (org-display-inline-images))))
    (org-present-mode-quit
-    . (lambda () (when (display-graphic-p) (org-remove-inline-images)))))
-  :init
-  ;; Reduce the huge upscaling of text.  This amount is more reasonable for my
-  ;; laptop, but reconsider it for larger displays.
-  (setq org-present-text-scale 2))
+    . (lambda () (when (display-graphic-p) (org-remove-inline-images))))))
 
 (use-package ob-restclient
   :ensure t
@@ -706,20 +706,21 @@ If the file doesn't exist, return an empty string."
 
 (use-package eshell-prompt-extras
   :ensure t
+  :custom
+  (eshell-highlight-prompt nil)
+  (eshell-prompt-function 'epe-theme-lambda)
   :config
-  (autoload 'epe-theme-lambda "eshell-prompt-extras")
-  (setq eshell-highlight-prompt nil
-        eshell-prompt-function 'epe-theme-lambda))
+  (autoload 'epe-theme-lambda "eshell-prompt-extras"))
 
 (use-package lsp-mode
   :ensure t
+  :custom
+  (lsp-completion-provider :none)
+  (lsp-headerline-breadcrumb-enable nil)
+  ;; (lsp-modeline-code-actions-enable nil)
   :init
-  ;; Set prefix for lsp-command-keymap
+  ;; Set prefix for lsp-command-keymap.  Needs to be in :init and not :custom.
   (setq lsp-keymap-prefix "C-c l")
-  :config
-  (setq lsp-completion-provider :none)
-  (setq lsp-headerline-breadcrumb-enable nil)
-  ;; (setq lsp-modeline-code-actions-enable nil)
   :hook (;; Supported language major modes
          (clojure-mode . lsp)
          ;; which-key integration
@@ -874,8 +875,9 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t
   :mode "\\.py\\'"
+  :interpreter
+  ("python" . python-mode)
   :init
-  (add-to-list 'interpreter-mode-alist '("python" . python-mode))
   ;; Ensure Python 3 is used.
   (setq python-shell-interpreter "python3"))
 
@@ -902,13 +904,13 @@ If the file doesn't exist, return an empty string."
   ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
   ;; (w3m-use-tab t)
   (w3m-use-cookies t)
+  ;; Use w3m for all URLs (deprecated code to use available GUI browser).
+  (browse-url-browser-function 'w3m-browse-url)
   :hook
   ;; Activate Conkeror-style link selection (toggle with `f' key).
   (w3m-mode . w3m-lnum-mode)
   :init
   (require 'w3m-load nil t)
-  ;; Use w3m for all URLs (deprecated code to use available GUI browser).
-  (setq browse-url-browser-function 'w3m-browse-url)
   ;; To use w3m-search, hit `S' in w3m. Prefix with C-u to specify engine.
   (require 'w3m-search)
   ;; Add some extra search engine URIs.
@@ -933,6 +935,10 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :hook
   (gptel-mode . visual-line-mode)
+  :custom
+  (gptel-api-key (bcm/strip-trailing-crlf
+                  (bcm/read-file-contents "~/.emacs.d/openai.key")))
+  (gptel-default-mode 'org-mode)
   :config
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
@@ -940,24 +946,19 @@ If the file doesn't exist, return an empty string."
   (gptel-make-ollama "ollama"
     :host "localhost:11434"
     :stream t
-    :models '("llama3" "dolphin-llama3:8b"))
-  :init
-  (setq
-   gptel-api-key (bcm/strip-trailing-crlf
-                  (bcm/read-file-contents "~/.emacs.d/openai.key"))
-   gptel-default-mode 'org-mode))
+    :models '("llama3" "dolphin-llama3:8b")))
 
 (use-package ob-dall-e-shell
   :ensure t
-  :config
-  ;; Activate `dall-e-shell' as src block type.
-  (ob-dall-e-shell-setup)
   :custom
   ((dall-e-shell-openai-key
     (bcm/strip-trailing-crlf
      (bcm/read-file-contents "~/.emacs.d/openai.key")))
    (dall-e-shell-image-output-directory "~/img")
-   (dall-e-shell-model-version "dall-e-3")))
+   (dall-e-shell-model-version "dall-e-3"))
+  :config
+  ;; Activate `dall-e-shell' as src block type.
+  (ob-dall-e-shell-setup))
 
 (use-package seq
   :ensure t)
@@ -966,7 +967,7 @@ If the file doesn't exist, return an empty string."
 (use-package htmlize
   :ensure t
   :defer t
-  :config (setq htmlize-output-type 'inline-css))
+  :custom (htmlize-output-type 'inline-css))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes

@@ -578,12 +578,11 @@ If the file doesn't exist, return an empty string."
 ;; Required early to provide :diminish keyword.
 (use-package diminish
   :ensure t
-  :init
   ;; Modify some modeline strings that don't respect diminish.
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda () (setq mode-name "e-λ")))
-  (add-hook 'clojure-mode-hook
-            (lambda () (setq mode-name "cλj")))
+  :hook
+  ((emacs-lisp-mode . (lambda () (setq mode-name "e-λ")))
+   (clojure-mode-hook . (lambda () (setq mode-name "cλj"))))
+  :init
   (setq eldoc-minor-mode-string " λdoc"))
 
 (use-package counsel
@@ -662,15 +661,18 @@ If the file doesn't exist, return an empty string."
 
 (use-package org-bullets
   :ensure t
-  :init
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  :hook
+  (org-mode . (lambda () (org-bullets-mode 1))))
 
 ;; Reminder: Use arrow keys to navigate, C-c C-q to quit.
 (use-package org-present
   :ensure t
+  :hook
+  ((org-present-mode
+    . (lambda () (when (display-graphic-p) (org-display-inline-images))))
+   (org-present-mode-quit
+    . (lambda () (when (display-graphic-p) (org-remove-inline-images)))))
   :init
-  (add-hook 'org-present-mode-hook (lambda () (org-display-inline-images)))
-  (add-hook 'org-present-mode-quit-hook (lambda () (org-remove-inline-images)))
   ;; Reduce the huge upscaling of text.  This amount is more reasonable for my
   ;; laptop, but reconsider it for larger displays.
   (setq org-present-text-scale 2))
@@ -686,9 +688,10 @@ If the file doesn't exist, return an empty string."
 (use-package magit
   :ensure t
   :defer 3
-  :init
+  :hook
   ;; Idiomatic fill-column setting for commit messages.
-  (add-hook 'git-commit-mode-hook (lambda () (set-fill-column 72)))
+  (git-commit-mode . (lambda () (set-fill-column 72)))
+  :init
   (global-set-key (kbd "<f3>") 'magit-status))
 
 (use-package git-gutter
@@ -744,19 +747,21 @@ If the file doesn't exist, return an empty string."
 (use-package company
   :ensure t
   :pin gnu
-  :diminish " ċ")
+  :diminish " ċ"
+  :hook emacs-lisp-mode)
 
 (use-package smartparens
   :ensure t
   :diminish "(ϛ)"
+  :hook
+  ((emacs-lisp-mode . smartparens-strict-mode)
+   (eval-expression-minibuffer-setup . smartparens-strict-mode)
+   (scheme-mode . smartparens-strict-mode)
+   (emacs-lisp-mode . smartparens-strict-mode)
+   (lisp-mode . smartparens-strict-mode)
+   (ielm-mode . smartparens-strict-mode))
   :init
   (require 'smartparens-config)
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook 'smartparens-strict-mode)
-  (add-hook 'scheme-mode-hook 'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'ielm-mode-hook 'smartparens-strict-mode)
   :bind
   ("M-)" . sp-forward-slurp-sexp)
   ("M-(" . sp-backward-barf-sexp)
@@ -766,43 +771,44 @@ If the file doesn't exist, return an empty string."
 (use-package clojure-mode
   :ensure t
   :diminish "cλj"
-  :init
-  (add-hook 'clojure-mode-hook 'smartparens-strict-mode))
+  :bind ("C-w" . sp-backward-kill-word)
+  :hook
+  (clojure-mode . smartparens-strict-mode))
 
 (use-package cider
   :ensure t
   :defer 3
   :custom
   (cider-repl-pop-to-buffer-on-connect t)
-  :config
-  (define-key cider-repl-mode-map (kbd "C-c C-l") 'cider-repl-clear-buffer)
-  ;; Make backwards-kill-word respect enclosing structure.
-  (define-key clojure-mode-map (kbd "C-w") 'sp-backward-kill-word)
-  (define-key cider-repl-mode-map (kbd "C-w") 'sp-backward-kill-word)
+  :hook
+  ((cider-mode . flyspell-prog-mode)
+   (cider-mode . which-key-mode)
+   (cider-mode . company-mode)
+   (cider-repl-mode . smartparens-strict-mode)
+   (cider-repl-mode . company-mode))
+  :bind
+  (:map cider-repl-mode-map
+        ("C-c C-l" . cider-repl-clear-buffer)
+        ("C-w" . sp-backward-kill-word))
   :init
-  (add-hook 'cider-mode-hook 'flyspell-prog-mode)
-  (add-hook 'cider-mode-hook 'which-key-mode)
-  (add-hook 'cider-mode-hook 'company-mode)
-  (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-  (add-hook 'cider-repl-mode-hook 'company-mode)
   ;; Fix missing *nrepl-messages* buffer.
   (setq nrepl-log-messages 1))
 
 (use-package flycheck-clj-kondo
   :ensure t
   :defer 7
-  :init
-  (add-hook 'clojure-mode-hook 'flycheck-mode))
+  :hook
+  (clojure-mode . flycheck-mode))
 
 (use-package haskell-mode
   :ensure t
   :defer 5
   ;; Doesn't work, for unknown reasons.
   :diminish "λ≫"
-  :init
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-  (add-hook 'haskell-mode-hook 'haskell-doc-mode)
-  (add-hook 'haskell-mode-hook (lambda () (setq mode-name "λ≫")))
+  :hook
+  ((haskell-mode . interactive-haskell-mode)
+   (haskell-mode . haskell-doc-mode)
+   (haskell-mode . (lambda () (setq mode-name "λ≫"))))
   :config
   ;; Enable prettify-symbols-mode symbols-alists in buffers.  Only load after
   ;; package load.
@@ -842,8 +848,8 @@ If the file doesn't exist, return an empty string."
   ("\\.html?\\'" "\\.phtml\\'" "\\.tpl\\.php\\'"
    "\\.[gj]sp\\'" "\\.as[cp]x\\'" "\\.erb\\'"
    "\\.mustache\\'" "\\.djhtml\\'" "\\.php\\'")
-  :init
-  (add-hook 'web-mode-hook 'flyspell-mode)
+  :hook
+  (web-mode . flyspell-mode)
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
@@ -882,11 +888,11 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t
   :mode "\\.gp$"
-  :init
-  (add-hook 'gnuplot-mode-hook (lambda ()
-                                 (flyspell-prog-mode)
-                                 (add-hook 'before-save-hook
-                                           'whitespace-cleanup nil t))))
+  :hook
+  (gnuplot-mode . (lambda ()
+                    (flyspell-prog-mode)
+                    (add-hook 'before-save-hook
+                              'whitespace-cleanup nil t))))
 
 (use-package w3m
   :ensure t
@@ -895,10 +901,11 @@ If the file doesn't exist, return an empty string."
   ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
   ;; (w3m-use-tab t)
   (w3m-use-cookies t)
+  :hook
+  ;; Activate Conkeror-style link selection (toggle with `f' key).
+  (w3m-mode . w3m-lnum-mode)
   :init
   (require 'w3m-load nil t)
-  ;; Activate Conkeror-style link selection (toggle with `f' key).
-  (add-hook 'w3m-mode-hook 'w3m-lnum-mode)
   ;; Use w3m for all URLs (deprecated code to use available GUI browser).
   (setq browse-url-browser-function 'w3m-browse-url)
   ;; To use w3m-search, hit `S' in w3m. Prefix with C-u to specify engine.

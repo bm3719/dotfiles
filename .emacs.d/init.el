@@ -14,8 +14,8 @@
 ;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
 ;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, seq, htmlize.
 ;;;;
-;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
-;;;; fzf, rg, mutt, w3m, ollama, Fira Code font.
+;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
+;;;; Babashka, fzf, rg, mutt, w3m, ollama, Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -591,7 +591,7 @@ If the file doesn't exist, return an empty string."
   (eldoc-minor-mode-string " λdoc")
   :hook
   ((emacs-lisp-mode . (lambda () (setq mode-name "e-λ")))
-   (clojure-mode-hook . (lambda () (setq mode-name "cλj")))))
+   (clojure-mode . (lambda () (setq mode-name "cλj")))))
 
 (use-package counsel
   :ensure t
@@ -797,7 +797,11 @@ If the file doesn't exist, return an empty string."
    (cider-mode . which-key-mode)
    (cider-mode . company-mode)
    (cider-repl-mode . smartparens-strict-mode)
-   (cider-repl-mode . company-mode))
+   (cider-repl-mode . company-mode)
+   ;; Auto-run cljfmt on buffer at save.  Need to do in a lambda to make it
+   ;; buffer-local to cider-mode.
+   (cider-mode . (lambda ()
+                   (add-hook 'before-save-hook 'cider-format-buffer nil t))))
   :bind
   (:map cider-repl-mode-map
         ("C-c C-l" . cider-repl-clear-buffer)

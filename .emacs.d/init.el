@@ -558,9 +558,17 @@ If the file doesn't exist, return an empty string."
 ;; If a fresh install, update the repos index.
 (unless package-archive-contents
    (package-refresh-contents))
-;; Install 'use-package' if necessary
+;; Install 'use-package' if necessary.
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
+
+;; Additional debug settings for when use-package config fails.  Only activate
+;; when Emacs is flagged with `--debug-init'.
+(when init-file-debug
+  (setq use-package-verbose t
+        use-package-expand-minimally nil
+        ;; Pair with `use-package-report' to see results.
+        use-package-compute-statistics t))
 
 ;; Provides :bind variants.
 (require 'bind-key)

@@ -629,12 +629,13 @@ If the file doesn't exist, return an empty string."
 
 (use-package volatile-highlights
   :ensure t
-  :diminish "hl"
+  :diminish
   :init (volatile-highlights-mode t))
 
 (use-package which-key
   :ensure t
   :config (which-key-mode)
+  :diminish
   :custom
   (which-key-popup-type 'side-window)
   (which-key-side-window-location 'bottom)

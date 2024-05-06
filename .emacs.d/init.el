@@ -805,11 +805,11 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer 5
   ;; Doesn't work, for unknown reasons.
-  :diminish "λ≫"
+  :diminish (haskell-mode . "λ≫ ")
   :hook
   ((haskell-mode . interactive-haskell-mode)
    (haskell-mode . haskell-doc-mode)
-   (haskell-mode . (lambda () (setq mode-name "λ≫"))))
+   (haskell-mode . (lambda () (setq mode-name "λ≫ "))))
   :config
   ;; Enable prettify-symbols-mode symbols-alists in buffers.  Only load after
   ;; package load.

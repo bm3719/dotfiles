@@ -13,7 +13,7 @@
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
 ;;;; json-mode, pyvenv, anaconda-mode, company-anaconda, lsp-pyright,
-;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, htmlize.
+;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, htmlize, xclip.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
 ;;;; Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
@@ -1027,6 +1027,11 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t
   :custom (htmlize-output-type 'inline-css))
+
+(use-package xclip
+  :ensure t
+  :config
+  (xclip-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Built-in Modes

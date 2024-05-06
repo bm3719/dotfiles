@@ -837,25 +837,28 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t)
 
-;; Manually installing/configuring AUCTeX.
-(unless (package-installed-p 'auctex)
-  (package-install 'auctex))
-;; Note: On OSX, install BasicTeX package, then add its location to $PATH.
-(add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(add-hook 'LaTeX-mode-hook 'which-key-mode)
-;; Enable this when working with multi-file document structures.
-;; (setq-default TeX-master nil)
-;; Enable document parsing.
-(setq TeX-auto-save t)
-(setq TeX-parse-self t)
-;; Full section options.  See Sectioning page in AUCTeX info.
-(setq LaTeX-section-hook
-      '(LaTeX-section-heading
-        LaTeX-section-title
-        LaTeX-section-toc
-        LaTeX-section-section
-        LaTeX-section-label))
+(use-package auctex
+  :ensure t
+  :defer t
+  :hook
+  ;; Note: On OSX, install BasicTeX package, then add its location to $PATH.
+  ((LaTeX-mode . turn-on-auto-fill)
+   (LaTeX-mode . LaTeX-math-mode)
+   (LaTeX-mode . which-key-mode))
+  :custom
+  ;; Enable document parsing.
+  (TeX-auto-save t)
+  (TeX-parse-self t)
+  :init
+  ;; Enable this when working with multi-file document structures.
+  ;; (setq-default TeX-master nil)
+  ;; Full section options.  See Sectioning page in AUCTeX info.
+  (setq LaTeX-section-hook
+        '(LaTeX-section-heading
+          LaTeX-section-title
+          LaTeX-section-toc
+          LaTeX-section-section
+          LaTeX-section-label)))
 
 (use-package web-mode
   :ensure t

@@ -994,7 +994,7 @@ If the file doesn't exist, return an empty string."
 (icomplete-mode 0)
 
 ;;; desktop
-;; Save buffers, file names, major-modes, etc. and restore on restart.  Will
+;; Save buffers, file names, major-modes, etc, and restore on restart.  Will
 ;; prompt on first save.  Probably want to put it in `~/.emacs.d/'.
 (desktop-save-mode 1)
 (setq desktop-buffers-not-to-save

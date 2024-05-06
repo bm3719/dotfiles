@@ -765,15 +765,17 @@ If the file doesn't exist, return an empty string."
   :init
   (require 'smartparens-config)
   :bind
-  ("M-)" . sp-forward-slurp-sexp)
-  ("M-(" . sp-backward-barf-sexp)
-  ("M-s" . sp-unwrap-sexp)
-  ("M-r" . sp-raise-sexp))
+  (:map smartparens-mode-map
+        ("M-)" . sp-forward-slurp-sexp)
+        ("M-(" . sp-backward-barf-sexp)
+        ("M-s" . sp-unwrap-sexp)
+        ("M-r" . sp-raise-sexp)))
 
 (use-package clojure-mode
   :ensure t
   :diminish "cλj"
-  :bind ("C-w" . sp-backward-kill-word)
+  :bind (:map clojure-mode-map
+              ("C-w" . sp-backward-kill-word))
   :hook
   (clojure-mode . smartparens-strict-mode))
 

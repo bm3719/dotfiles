@@ -15,7 +15,7 @@
 ;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, Babashka,
-;;;; mutt, w3m, ollama, Fira Code font.
+;;;; fzf, rg, mutt, w3m, ollama, Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup

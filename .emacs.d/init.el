@@ -576,12 +576,29 @@ If the file doesn't exist, return an empty string."
 (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
 (package-initialize)
 
+;; Bootstrap straight.el.
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 ;; If a fresh install, update the repos index.
 (unless package-archive-contents
   (package-refresh-contents))
 ;; Install 'use-package' if necessary.  Needed in <29.x.
 (unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+  (straight-use-package 'use-package))
 
 ;; Additional debug settings for when use-package config fails.  Only activate
 ;; when Emacs is flagged with `--debug-init'.
@@ -810,6 +827,7 @@ If the file doesn't exist, return an empty string."
         ("M-r" . sp-raise-sexp)))
 
 (use-package clojure-mode
+  :straight t
   :ensure t
   :diminish "cλj"
   :hook (clojure-mode . smartparens-strict-mode)
@@ -817,15 +835,20 @@ If the file doesn't exist, return an empty string."
               ("C-w" . sp-backward-kill-word)))
 
 (use-package cider
+  :straight (cider
+             :type git
+             :host github
+             :repo "clojure-emacs/cider"
+             :branch "v1.12.0")
   :ensure t
   :defer 3
   :custom (cider-repl-pop-to-buffer-on-connect t)
   :hook
   ((cider-mode . flyspell-prog-mode)
    (cider-mode . which-key-mode)
-   ;; (cider-mode . company-mode)
+   (cider-mode . company-mode)
    (cider-repl-mode . smartparens-strict-mode)
-   ;; (cider-repl-mode . company-mode)
+   (cider-repl-mode . company-mode)
    ;; Auto-run cljfmt on buffer at save.  Need to do in a lambda to make it
    ;; buffer-local to cider-mode.
    (cider-mode . (lambda ()

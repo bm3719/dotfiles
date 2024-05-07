@@ -835,7 +835,9 @@ If the file doesn't exist, return an empty string."
 
 (use-package proof-general
   :ensure t
-  :defer t)
+  :defer t
+  :custom
+  (proof-splash-enable nil))
 
 (use-package auctex
   :ensure t

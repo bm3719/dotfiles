@@ -915,21 +915,21 @@ If the file doesn't exist, return an empty string."
                     (add-hook 'before-save-hook
                               'whitespace-cleanup nil t))))
 
+;; Tabs: create: C-c C-t, close: C-c C-w, nav: C-c C-[np], list: C-c C-s
 (use-package w3m
   :ensure t
   :defer t
   :custom
-  ;; Tabs: create: C-c C-t close: C-c C-w nav: C-c C-[np] list: C-c C-s
-  ;; (w3m-use-tab t)
   (w3m-use-cookies t)
+  (w3m-use-favicon nil)
   ;; Use w3m for all URLs (deprecated code to use available GUI browser).
   (browse-url-browser-function 'w3m-browse-url)
-  :hook
   ;; Activate Conkeror-style link selection (toggle with `f' key).
-  (w3m-mode . w3m-lnum-mode)
+  :hook (w3m-mode . w3m-lnum-mode)
   :init
   (require 'w3m-load nil t)
-  ;; To use w3m-search, hit `S' in w3m. Prefix with C-u to specify engine.
+  ;; To use w3m-search, hit `s' for same buffer or `S' for new buffer. Prefix
+  ;; with C-u to specify engine.
   (require 'w3m-search)
   ;; Add some extra search engine URIs.
   (setq w3m-search-engine-alist
@@ -938,7 +938,7 @@ If the file doesn't exist, return an empty string."
          '(("hoogle" "http://haskell.org/hoogle/?q=%s")
            ("wiby" "https://wiby.me/?q=%s" nil)
            ("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil)
-           ("duckduckgo" "http://www.duckduckgo.com/?q=%s" nil))))
+           ("clojuredocs" "https://clojuredocs.org/search?q=%s"))))
   (setq w3m-search-default-engine "duckduckgo")
   ;; Default to the last manually specified search engine when calling the prefix
   ;; version of the function.
@@ -946,8 +946,7 @@ If the file doesn't exist, return an empty string."
     (let ((engine (nth 1 minibuffer-history)))
       (when (assoc engine w3m-search-engine-alist)
         (setq w3m-search-default-engine engine))))
-  :bind
-  ("C-x M-m" . browse-url-at-point))
+  :bind ("C-x M-m" . browse-url-at-point))
 
 (use-package gptel
   :ensure t

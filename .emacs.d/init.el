@@ -758,7 +758,7 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :pin gnu
   :diminish " ċ"
-  :hook emacs-lisp-mode)
+  :hook (emacs-lisp-mode . company-mode))
 
 (use-package smartparens
   :ensure t
@@ -928,7 +928,7 @@ If the file doesn't exist, return an empty string."
   :hook (w3m-mode . w3m-lnum-mode)
   :init
   (require 'w3m-load nil t)
-  ;; To use w3m-search, hit `s' for same buffer or `S' for new buffer. Prefix
+  ;; To use w3m-search, hit `s' for same buffer or `S' for new buffer.  Prefix
   ;; with C-u to specify engine.
   (require 'w3m-search)
   ;; Add some extra search engine URIs.

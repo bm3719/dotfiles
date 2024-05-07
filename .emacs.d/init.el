@@ -642,25 +642,25 @@ If the file doesn't exist, return an empty string."
 
 (use-package which-key
   :ensure t
-  :config (which-key-mode)
   :diminish
   :custom
   (which-key-popup-type 'side-window)
   (which-key-side-window-location 'bottom)
-  (which-key-idle-delay 1.2))
+  (which-key-idle-delay 1.2)
+  :config (which-key-mode))
 
 ;; Add elisp equivalents of Clojure's threading macros, `->' and `->>'.
 (use-package dash
   :ensure t
   :demand t
-  :init
-  (global-dash-fontify-mode))
+  :init (global-dash-fontify-mode))
 
 (use-package powerline
   :ensure t
+  :demand t
   :config (powerline-default-theme))
 
-;; Manually installing pinentry from gnu, since ":pin gnu" seems to do nothing.
+;; Manually installing pinentry from gnu, since `:pin gnu' seems to do nothing.
 (unless (package-installed-p 'pinentry)
   (package-install 'pinentry))
 (use-package pinentry
@@ -670,8 +670,7 @@ If the file doesn't exist, return an empty string."
 
 (use-package org-bullets
   :ensure t
-  :hook
-  (org-mode . (lambda () (org-bullets-mode 1))))
+  :hook (org-mode . (lambda () (org-bullets-mode 1))))
 
 ;; Reminder: Use arrow keys to navigate, C-c C-q to quit.
 (use-package org-present
@@ -690,24 +689,20 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t
   :mode "\\.rest$"
-  :custom
   ;; Inhibit restclient from sending cookies implicitly.
-  (restclient-inhibit-cookies t))
+  :custom (restclient-inhibit-cookies t))
 
 (use-package magit
   :ensure t
   :defer 3
-  :hook
   ;; Idiomatic fill-column setting for commit messages.
-  (git-commit-mode . (lambda () (set-fill-column 72)))
-  :init
-  (global-set-key (kbd "<f3>") 'magit-status))
+  :hook (git-commit-mode . (lambda () (set-fill-column 72)))
+  :init (global-set-key (kbd "<f3>") 'magit-status))
 
 (use-package git-gutter
   :ensure t
   :diminish "Git↓"
-  :custom
-  (git-gutter:update-interval 2)
+  :custom (git-gutter:update-interval 2)
   :config
   (global-git-gutter-mode 1)
   (global-set-key (kbd "C-x M-g") 'git-gutter:toggle)
@@ -718,8 +713,7 @@ If the file doesn't exist, return an empty string."
   :custom
   (eshell-highlight-prompt nil)
   (eshell-prompt-function 'epe-theme-lambda)
-  :config
-  (autoload 'epe-theme-lambda "eshell-prompt-extras"))
+  :config (autoload 'epe-theme-lambda "eshell-prompt-extras"))
 
 (use-package lsp-mode
   :ensure t
@@ -727,22 +721,21 @@ If the file doesn't exist, return an empty string."
   (lsp-completion-provider :none)
   (lsp-headerline-breadcrumb-enable nil)
   ;; (lsp-modeline-code-actions-enable nil)
-  :init
+  :commands lsp
   ;; Set prefix for lsp-command-keymap.  Needs to be in :init and not :custom.
-  (setq lsp-keymap-prefix "C-c l")
+  :init (setq lsp-keymap-prefix "C-c l")
   :hook (;; Supported language major modes
          (clojure-mode . lsp)
          ;; which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+         (lsp-mode . lsp-enable-which-key-integration)))
 
 (use-package lsp-ivy
   :ensure t
   :after lsp-mode
+  :commands lsp-ivy-workspace-symbol
   :hook (lsp-mode . (lambda ()
                       (define-key lsp-mode-map [remap xref-find-apropos]
-                                  #'lsp-ivy-workspace-symbol)))
-  :commands lsp-ivy-workspace-symbol)
+                                  #'lsp-ivy-workspace-symbol))))
 
 (use-package aggressive-indent
   :ensure t
@@ -782,16 +775,14 @@ If the file doesn't exist, return an empty string."
 (use-package clojure-mode
   :ensure t
   :diminish "cλj"
+  :hook (clojure-mode . smartparens-strict-mode)
   :bind (:map clojure-mode-map
-              ("C-w" . sp-backward-kill-word))
-  :hook
-  (clojure-mode . smartparens-strict-mode))
+              ("C-w" . sp-backward-kill-word)))
 
 (use-package cider
   :ensure t
   :defer 3
-  :custom
-  (cider-repl-pop-to-buffer-on-connect t)
+  :custom (cider-repl-pop-to-buffer-on-connect t)
   :hook
   ((cider-mode . flyspell-prog-mode)
    (cider-mode . which-key-mode)
@@ -802,19 +793,15 @@ If the file doesn't exist, return an empty string."
    ;; buffer-local to cider-mode.
    (cider-mode . (lambda ()
                    (add-hook 'before-save-hook 'cider-format-buffer nil t))))
-  :bind
-  (:map cider-repl-mode-map
-        ("C-c C-l" . cider-repl-clear-buffer)
-        ("C-w" . sp-backward-kill-word))
-  :init
-  ;; Fix missing *nrepl-messages* buffer.
-  (setq nrepl-log-messages 1))
+  :init (setq nrepl-log-messages 1) ; Fix missing *nrepl-messages* buffer.
+  :bind (:map cider-repl-mode-map
+              ("C-c C-l" . cider-repl-clear-buffer)
+              ("C-w" . sp-backward-kill-word)))
 
 (use-package flycheck-clj-kondo
   :ensure t
   :defer 7
-  :hook
-  (clojure-mode . flycheck-mode))
+  :hook (clojure-mode . flycheck-mode))
 
 (use-package haskell-mode
   :ensure t
@@ -836,21 +823,20 @@ If the file doesn't exist, return an empty string."
 (use-package proof-general
   :ensure t
   :defer t
-  :custom
-  (proof-splash-enable nil))
+  :custom (proof-splash-enable nil))
 
 (use-package auctex
   :ensure t
   :defer t
+  :custom
+  ;; Enable document parsing.
+  (TeX-auto-save t)
+  (TeX-parse-self t)
   :hook
   ;; Note: On OSX, install BasicTeX package, then add its location to $PATH.
   ((LaTeX-mode . turn-on-auto-fill)
    (LaTeX-mode . LaTeX-math-mode)
    (LaTeX-mode . which-key-mode))
-  :custom
-  ;; Enable document parsing.
-  (TeX-auto-save t)
-  (TeX-parse-self t)
   :init
   ;; Enable this when working with multi-file document structures.
   ;; (setq-default TeX-master nil)
@@ -866,15 +852,13 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t
   :mode
-  ("\\.html?\\'" "\\.phtml\\'" "\\.tpl\\.php\\'"
-   "\\.[gj]sp\\'" "\\.as[cp]x\\'" "\\.erb\\'"
-   "\\.mustache\\'" "\\.djhtml\\'" "\\.php\\'")
-  :hook
-  (web-mode . flyspell-mode)
+  ("\\.html?\\'" "\\.phtml\\'" "\\.tpl\\.php\\'" "\\.[gj]sp\\'" "\\.as[cp]x\\'"
+   "\\.erb\\'" "\\.mustache\\'" "\\.djhtml\\'" "\\.php\\'")
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
-  (web-mode-code-indent-offset 2))
+  (web-mode-code-indent-offset 2)
+  :hook (web-mode . flyspell-mode))
 
 (use-package rainbow-mode
   :ensure t
@@ -895,11 +879,8 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t
   :mode "\\.py\\'"
-  :interpreter
-  ("python" . python-mode)
-  :init
-  ;; Ensure Python 3 is used.
-  (setq python-shell-interpreter "python3"))
+  :init (setq python-shell-interpreter "python3") ; Ensure Python 3 is used.
+  :interpreter ("python" . python-mode))
 
 ;; Note: Install textproc/markdown to integrate compilation commands.
 (use-package markdown-mode
@@ -911,11 +892,10 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t
   :mode "\\.gp$"
-  :hook
-  (gnuplot-mode . (lambda ()
-                    (flyspell-prog-mode)
-                    (add-hook 'before-save-hook
-                              'whitespace-cleanup nil t))))
+  :hook (gnuplot-mode . (lambda ()
+                          (flyspell-prog-mode)
+                          (add-hook 'before-save-hook
+                                    'whitespace-cleanup nil t))))
 
 ;; Tabs: create: C-c C-t, close: C-c C-w, nav: C-c C-[np], list: C-c C-s
 (use-package w3m
@@ -952,8 +932,7 @@ If the file doesn't exist, return an empty string."
 
 (use-package gptel
   :ensure t
-  :hook
-  (gptel-mode . visual-line-mode)
+  :hook (gptel-mode . visual-line-mode)
   :custom
   (gptel-api-key (bcm/strip-trailing-crlf
                   (bcm/read-file-contents "~/.emacs.d/openai.key")))
@@ -975,9 +954,7 @@ If the file doesn't exist, return an empty string."
      (bcm/read-file-contents "~/.emacs.d/openai.key")))
    (dall-e-shell-image-output-directory "~/img")
    (dall-e-shell-model-version "dall-e-3"))
-  :config
-  ;; Activate `dall-e-shell' as src block type.
-  (ob-dall-e-shell-setup))
+  :config (ob-dall-e-shell-setup)) ; Activate `dall-e-shell' as src block type.
 
 (use-package seq
   :ensure t)
@@ -1024,7 +1001,7 @@ If the file doesn't exist, return an empty string."
 
 ;;; prettify-symbols-mode
 ;; Build a symbols-alist for Haskell (which is all I'm using this for
-;; currently). I might split these off into a different file if I create more
+;; currently).  I might split these off into a different file if I create more
 ;; for other languages.
 (defvar haskell-prettify-symbols-alist
   '(;; Double-struck letters
@@ -1244,7 +1221,7 @@ If the file doesn't exist, return an empty string."
 (custom-theme-set-faces 'user '(org-todo ((t (:foreground "red")))))
 ;; Activate org-tempo for block completion using <s TAB (and others).
 (require 'org-tempo)
-;; Add some custom structure templates
+;; Add some custom structure templates.
 (setq org-structure-template-alist
       (append org-structure-template-alist
               '(("el"  . "src emacs-lisp")
@@ -1326,7 +1303,7 @@ If the file doesn't exist, return an empty string."
 
 ;;; org-capture: On-the-fly note taking.
 (setq org-default-notes-file "~/src/docs/capture.org")
-;; Global keybinding for idea capture.
+;; Global keybinding for org-capture.
 (global-set-key (kbd "C-c r") 'org-capture)
 ;; Custom templates.
 (setq org-capture-templates
@@ -1390,7 +1367,7 @@ If the file doesn't exist, return an empty string."
              (kill-buffer orig)
              (dired up)
              (dired-goto-file dir))))))
-;; More convenient than ^.
+;; More convenient than `^'.
 (add-hook 'dired-mode-hook
           (lambda ()
             (define-key dired-mode-map (kbd "b") 'dired-up-directory)))
@@ -1516,9 +1493,8 @@ If the file doesn't exist, return an empty string."
 (setq erc-channel-hide-list
       '(("#clojure" "JOIN" "PART" "QUIT" "NICK")
         ("#haskell" "JOIN" "PART" "QUIT" "NICK")))
-(setq erc-nick "nft_slut")
-(setq erc-user-full-name "NFT Slut") ; set your full name
-(setq erc-email-userid "slut")  ; set your username
+(mapc (lambda (var) (set var "nft_slut"))
+      '(erc-nick erc-user-full-name erc-email-userid))
 
 ;;; Mutt client integration.
 ;; This associates file whose name contains "/mutt" to be in mail-mode.

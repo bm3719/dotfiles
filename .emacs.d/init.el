@@ -1296,6 +1296,8 @@ If the file doesn't exist, return an empty string."
                                (restclient . t))))
 ;; Turn off prompt for confirmation before evaluation.
 (setq org-confirm-babel-evaluate nil)
+;; Path to ditaa JAR.
+(setq org-ditaa-jar-path "~/bin/ditaa0_6b.jar")
 
 ;;; ob-clojure
 (require 'ob-clojure)

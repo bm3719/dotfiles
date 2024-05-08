@@ -1257,6 +1257,16 @@ If the file doesn't exist, return an empty string."
 ;; Activate org modules.
 (eval-after-load 'org
   '(org-load-modules-maybe t))
+;; Function to copy a link from an Org link.  Useful if you want to use the
+;; link target somewhere else and not just open it.
+(defun bcm/org-copy-url ()
+  "Copy URL from an org-mode link under the point."
+  (interactive)
+  (if (org-in-regexp org-link-bracket-re 1)
+      (let* ((link (org-link-unescape (match-string-no-properties 1)))
+             (path (when (string-match "\\(.*\\)\\(::.*\\)" link)
+                     (substring link 0 (match-beginning 2)))))
+        (kill-new (or path link)))))
 ;; Quick fix for swiper + Org unfold bug.
 ;; https://github.com/abo-abo/swiper/issues/3015
 ;; TODO: Remove this later.

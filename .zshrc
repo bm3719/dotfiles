@@ -138,15 +138,25 @@ autoload -U +X bashcompinit && bashcompinit
 umask 027               # u=rw,g=r,o=
 
 # $PATH
-if [ -d "$HOME/.local/bin" ]; then
-    export PATH=$HOME/.local/bin:$PATH
-fi
-export PATH=$HOME/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:$PATH:.
-export PATH=$HOME/.yarn/bin:$HOME/node_modules/.bin:$PATH:
-if [ -d "/var/lib/snapd/snap/bin" ]; then
-    export PATH=/var/lib/snapd/snap/bin:$PATH
-fi
-export PATH=$HOME/.ghcup/bin:$HOME/.config/cabal/bin:$PATH
+# Adds a path to $PATH only if it exists and not already present.
+add_to_path() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        export PATH="$1:$PATH"
+    fi
+}
+add_to_path "/bin"
+add_to_path "/usr/bin"
+add_to_path "/usr/sbin"
+add_to_path "/usr/local/bin"
+add_to_path "/usr/local/sbin"
+add_to_path "/sbin"
+add_to_path "$HOME/.local/bin"
+add_to_path "$HOME/.yarn/bin"
+add_to_path "$HOME/node_modules/.bin"
+add_to_path "/var/lib/snapd/snap/bin"
+add_to_path "$HOME/.ghcup/bin"
+add_to_path "$HOME/.config/cabal/bin"
+add_to_path "$HOME/bin"
 
 ## Plugins section: Enable fish style features
 # Use syntax highlighting

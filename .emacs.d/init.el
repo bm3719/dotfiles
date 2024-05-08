@@ -8,12 +8,12 @@
 ;;;;
 ;;;; Top-level addons: use-package, gnu-elpa-keyring-update, diminish, counsel,
 ;;;; ivy-prescient, swiper, volatile-highlights, which-key, dash, powerline,
-;;;; pinentry, org-bullets, org-present, ob-restclient, magit, git-gutter,
-;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, company,
-;;;; smartparens, clojure-mode, cider, flycheck-clj-kondo, haskell-mode,
-;;;; lsp-haskell, proof-general, auctex, web-mode, rainbow-mode, json-mode,
-;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell,
-;;;; seq, htmlize.
+;;;; pinentry, undo-tree, org-bullets, org-present, ob-restclient, magit,
+;;;; git-gutter, eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent,
+;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
+;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
+;;;; json-mode, python-mode, markdown-mode, gnuplot-mode, w3m, gptel,
+;;;; ob-dall-e-shell, seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
 ;;;; Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
@@ -676,6 +676,11 @@ If the file doesn't exist, return an empty string."
   :if (not (eq system-type 'windows-nt))
   :custom (epa-pinentry-mode 'loopback)
   :config (pinentry-start))
+
+(use-package undo-tree
+  :ensure t
+  :diminish
+  :config (global-undo-tree-mode 1))
 
 (use-package org-bullets
   :ensure t

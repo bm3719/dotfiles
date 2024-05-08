@@ -769,7 +769,9 @@ If the file doesn't exist, return an empty string."
   :bind
   (:map smartparens-mode-map
         ("M-)" . sp-forward-slurp-sexp)
-        ("M-(" . sp-backward-barf-sexp)
+        ("M-(" . sp-backward-slurp-sexp)
+        ("M-]" . sp-forward-barf-sexp)
+        ("M-[" . sp-backward-barf-sexp)
         ("M-s" . sp-unwrap-sexp)
         ("M-r" . sp-raise-sexp)))
 

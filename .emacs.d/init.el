@@ -1402,15 +1402,31 @@ If the file doesn't exist, return an empty string."
  bookmark-default-file "~/.emacs.d/bookmarks" ; Moved from ~.
  bookmark-save-flag 1)                        ; Autosave each change.
 
+;;; so-long
+;; Disables selected minor modes only in minified and similar files with
+;; excessively long lines, which tend to result in poor performance.
+(global-so-long-mode 1)
+;; Max line length before so-long activates.
+(setq so-long-threshold 5000)
+;; Add additional minor modes to exclude.
+(nconc so-long-minor-modes
+       '(eldoc-mode
+         rainbow-mode
+         lsp-mode
+         company-mode
+         rainbow-mode
+         aggressive-indent-mode))
+
 ;; Extra miscellaneous mode associations.
-(setq auto-mode-alist (cons '("\\.plan$" . text-mode) auto-mode-alist)
-      auto-mode-alist (cons '("\\.project$" . text-mode) auto-mode-alist)
-      auto-mode-alist (cons '("\\.doc$" . text-mode) auto-mode-alist)
-      auto-mode-alist (cons '("\\.zsh$" . sh-mode) auto-mode-alist)
-      auto-mode-alist (cons '("\\CHANGELOG$" . text-mode) auto-mode-alist)
-      auto-mode-alist (cons '("\\INSTALL$" . text-mode) auto-mode-alist)
-      auto-mode-alist (cons '("\\README$" . text-mode) auto-mode-alist)
-      auto-mode-alist (cons '("\\TODO$" . text-mode) auto-mode-alist))
+(nconc auto-mode-alist
+       '(("\\.plan$" . text-mode)
+         ("\\.project$" . text-mode)
+         ("\\.doc$" . text-mode)
+         ("\\.zsh$" . sh-mode)
+         ("\\CHANGELOG$" . text-mode)
+         ("\\INSTALL$" . text-mode)
+         ("\\README$" . text-mode)
+         ("\\TODO$" . text-mode)))
 
 ;; Custom generic mode for ARFF files (Used with Weka).
 (require 'generic)

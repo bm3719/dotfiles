@@ -396,7 +396,13 @@ count-windows is not 2."
 
 ;; This sets garbage collection to maximum, speeding up startup time.  Disable
 ;; this if RAM is limited, or set to a fixed amount.
-(setq gc-cons-threshold most-positive-fixnum)
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+;; Reset garbage collection to sane defaults after init complete.
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 1048576 32) ; 32MB
+                  gc-cons-percentage 0.1)))
 
 ;; Warn only when opening files bigger than 100MB (default is 10MB).
 (setq large-file-warning-threshold 100000000)
@@ -1524,10 +1530,10 @@ If the file doesn't exist, return an empty string."
  'mail-mode-hook
  (lambda ()
    (define-key mail-mode-map (kbd "C-c C-c")
-     (lambda ()
-       (interactive)
-       (save-buffer)
-       (server-edit)))))
+               (lambda ()
+                 (interactive)
+                 (save-buffer)
+                 (server-edit)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; End package load

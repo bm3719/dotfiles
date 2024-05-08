@@ -821,7 +821,7 @@ If the file doesn't exist, return an empty string."
   (add-hook 'haskell-mode-hook 'bcm/haskell-prettify-enable)
   ;; Add ghcup directory location of GHC binaries to PATH and exec-path.
   (setenv "PATH" (concat (getenv "PATH") ":~/.ghcup/bin"))
-  (setq exec-path (append exec-path '("~/.ghcup/bin"))))
+  (add-to-list 'exec-path "~/.ghcup/bin"))
 
 (use-package proof-general
   :ensure t
@@ -917,13 +917,12 @@ If the file doesn't exist, return an empty string."
   ;; with C-u to specify engine.
   (require 'w3m-search)
   ;; Add some extra search engine URIs.
-  (setq w3m-search-engine-alist
-        (append
-         w3m-search-engine-alist
-         '(("hoogle" "http://haskell.org/hoogle/?q=%s")
-           ("wiby" "https://wiby.me/?q=%s" nil)
-           ("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil)
-           ("clojuredocs" "https://clojuredocs.org/search?q=%s"))))
+  (nconc
+   w3m-search-engine-alist
+   '(("hoogle" "http://haskell.org/hoogle/?q=%s")
+     ("wiby" "https://wiby.me/?q=%s" nil)
+     ("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil)
+     ("clojuredocs" "https://clojuredocs.org/search?q=%s")))
   (setq w3m-search-default-engine "duckduckgo")
   ;; Default to the last manually specified search engine when calling the prefix
   ;; version of the function.
@@ -1079,9 +1078,7 @@ If the file doesn't exist, return an empty string."
           (run-at-time 2 nil 'delete-windows-on buf)
           (message "Build Succeeded."))))
 ;; Use c-mode for flex files (cc-mode is probably better for this though).
-(setq auto-mode-alist
-      (append '(("\\.l$" . c-mode))
-              auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.l$" . c-mode))
 ;; Change default indent style from "gnu".  I actually use 1TBS, but BSD style
 ;; auto-indents properly.
 (setq c-default-style "bsd"
@@ -1225,14 +1222,13 @@ If the file doesn't exist, return an empty string."
 ;; Activate org-tempo for block completion using <s TAB (and others).
 (require 'org-tempo)
 ;; Add some custom structure templates.
-(setq org-structure-template-alist
-      (append org-structure-template-alist
-              '(("el"  . "src emacs-lisp")
-                ("clj" . "src clojure :backend babashka")
-                ("py"  . "src python")
-                ("hs"  . "src haskell")
-                ("sh"  . "src shell")
-                ("d"   . "src dall-e-shell :version dall-e-3"))))
+(nconc org-structure-template-alist
+       '(("el"  . "src emacs-lisp")
+         ("clj" . "src clojure :backend babashka")
+         ("py"  . "src python")
+         ("hs"  . "src haskell")
+         ("sh"  . "src shell")
+         ("d"   . "src dall-e-shell :version dall-e-3")))
 ;; Also add a better binding for template insertion.
 (org-defkey org-mode-map (kbd "C-c M-t") 'org-insert-structure-template)
 ;; Use org-return-and-maybe-indent instead of org-return to prevent

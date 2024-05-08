@@ -146,7 +146,7 @@ export PATH=$HOME/.yarn/bin:$HOME/node_modules/.bin:$PATH:
 if [ -d "/var/lib/snapd/snap/bin" ]; then
     export PATH=/var/lib/snapd/snap/bin:$PATH
 fi
-export PATH=$HOME/.ghcup/bin:$HOME/.cabal/bin:$PATH
+export PATH=$HOME/.ghcup/bin:$HOME/.config/cabal/bin:$PATH
 
 ## Plugins section: Enable fish style features
 # Use syntax highlighting

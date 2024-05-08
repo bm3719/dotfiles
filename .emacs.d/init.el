@@ -11,11 +11,12 @@
 ;;;; pinentry, org-bullets, org-present, ob-restclient, magit, git-gutter,
 ;;;; eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent, company,
 ;;;; smartparens, clojure-mode, cider, flycheck-clj-kondo, haskell-mode,
-;;;; proof-general, auctex, web-mode, rainbow-mode, json-mode, python-mode,
-;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, seq, htmlize.
+;;;; lsp-haskell, proof-general, auctex, web-mode, rainbow-mode, json-mode,
+;;;; python-mode, markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell,
+;;;; seq, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
-;;;; Babashka, fzf, rg, mutt, w3m, ollama, Fira Code font.
+;;;; Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -829,6 +830,13 @@ If the file doesn't exist, return an empty string."
   ;; Add ghcup directory location of GHC binaries to PATH and exec-path.
   (setenv "PATH" (concat (getenv "PATH") ":~/.ghcup/bin"))
   (add-to-list 'exec-path "~/.ghcup/bin"))
+
+(use-package lsp-haskell
+  :ensure t
+  :defer t
+  :hook
+  ((haskell-mode . lsp)
+   (haskell-literate-mode . lsp)))
 
 (use-package proof-general
   :ensure t

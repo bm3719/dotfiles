@@ -1310,6 +1310,7 @@ If the file doesn't exist, return an empty string."
                                (emacs-lisp . t)
                                (clojure . t)
                                (shell . t)
+                               (haskell . t)
                                (ditaa . t)
                                (restclient . t))))
 ;; Turn off prompt for confirmation before evaluation.

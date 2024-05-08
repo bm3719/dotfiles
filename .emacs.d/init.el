@@ -74,6 +74,16 @@
 ;; Provide a useful error trace if loading this init fails.
 (setq debug-on-error t)
 
+;; Set garbage collection to maximum, speeding up startup time.  Disable this
+;; if RAM is limited, or set to a fixed amount.
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+;; Reset garbage collection to sane defaults after init complete.
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 1048576 32) ; 32MB
+                  gc-cons-percentage 0.1)))
+
 ;; Change backup behavior to save in a directory, not in a miscellany of files
 ;; all over the place, and disable autosaves completely.
 (setq make-backup-files t           ; Do make backups.
@@ -395,16 +405,6 @@ count-windows is not 2."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Miscellaneous Customization
-
-;; This sets garbage collection to maximum, speeding up startup time.  Disable
-;; this if RAM is limited, or set to a fixed amount.
-(setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6)
-;; Reset garbage collection to sane defaults after init complete.
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold (* 1048576 32) ; 32MB
-                  gc-cons-percentage 0.1)))
 
 ;; Warn only when opening files bigger than 100MB (default is 10MB).
 (setq large-file-warning-threshold 100000000)

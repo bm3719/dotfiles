@@ -156,6 +156,7 @@ add_to_path "$HOME/node_modules/.bin"
 add_to_path "/var/lib/snapd/snap/bin"
 add_to_path "$HOME/.ghcup/bin"
 add_to_path "$HOME/.config/cabal/bin"
+add_to_path "$HOME/.cargo/bin"
 add_to_path "$HOME/bin"
 
 ## Plugins section: Enable fish style features

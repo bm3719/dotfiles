@@ -1,4 +1,4 @@
-;;;; -*- mode: Emacs-Lisp; eldoc-mode:t -*-
+;;;; -*- mode: Emacs-Lisp; eldoc-mode:t; lexical-binding: t -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Bruce C. Miller <bm3719@gmail.com>
 ;;;;
@@ -157,6 +157,10 @@
 (global-set-key (kbd "<double-mouse-9>") 'ignore)
 (global-set-key (kbd "<drag-mouse-9>") 'ignore)
 
+;; Disable over-write mode.
+(global-unset-key (kbd "<insert>"))
+(global-unset-key (kbd "<insertchar>"))
+
 ;; Disable suspend-frame on Xorg sessions.
 (when (display-graphic-p)
   (global-unset-key (kbd "C-z"))
@@ -192,9 +196,6 @@
 
 ;; Allow a command to erase an entire buffer.
 (put 'erase-buffer 'disabled nil)
-
-;; Disable over-write mode.
-(defun overwrite-mode (arg) (interactive "p"))
 
 ;; Modify hippie-expand functions.
 (setq hippie-expand-try-functions-list
@@ -254,9 +255,9 @@
 (setq require-final-newline t)
 
 ;; Defines a function to kill text from point to beginning of line.
-(defun bcm/backward-kill-line (arg)
+(defun bcm/backward-kill-line ()
   "Kill chars backward until encountering the end of a line."
-  (interactive "p")
+  (interactive)
   (kill-line 0))
 (global-set-key (kbd "M-C-k") 'bcm/backward-kill-line)
 
@@ -1257,7 +1258,7 @@ If the file doesn't exist, return an empty string."
 ;; Location of personal site header.
 (setq blog-header-file "~/public_html/inc/header.html")
 ;; Load personal site header.
-(defun bcm/load-blog-header (arg)
+(defun bcm/load-blog-header ()
   (with-temp-buffer
     (insert-file-contents blog-header-file)
     (buffer-string)))
@@ -1360,9 +1361,9 @@ If the file doesn't exist, return an empty string."
           "-lFh" "-AhFlv --group-directories-first --time-style=+%Y-%m-%d"))
 ;; Make up-navigation "reuse" the old buffer (actually kill the old one).
 (eval-after-load 'dired
-  '(defun dired-up-directory (&optional other-window)
+  '(defun dired-up-directory ()
      "Run Dired on parent directory of current directory."
-     (interactive "P")
+     (interactive)
      (let* ((dir (dired-current-directory))
             (orig (current-buffer))
             (up (file-name-directory (directory-file-name dir))))

@@ -261,7 +261,7 @@ export CHARSET=UTF-8
 export LC_CTYPE=en_US.UTF-8
 # Java ecology stuff
 export JAVA_HOME=/usr/local/jdk-1.8.0
-export PATH=$PATH:/usr/local/jdk-1.8.0/bin
+add_to_path "/usr/local/jdk-1.8.0/bin"
 #export JAVA_HOME=/usr/local/openjdk12
 #export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar
 export ANT_HOME=/usr/local/share/java/apache-ant

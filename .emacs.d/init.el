@@ -680,6 +680,8 @@ If the file doesn't exist, return an empty string."
 (use-package undo-tree
   :ensure t
   :diminish
+  ;; Don't persist undo information.
+  :custom (undo-tree-auto-save-history nil)
   :config (global-undo-tree-mode 1))
 
 (use-package org-bullets

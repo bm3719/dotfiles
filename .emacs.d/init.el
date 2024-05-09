@@ -588,7 +588,7 @@ If the file doesn't exist, return an empty string."
 (let ((old package-check-signature))
   (use-package gnu-elpa-keyring-update
     :ensure t
-    :init   (setq package-check-signature nil)
+    :preface (setq package-check-signature nil)
     :config (setq package-check-signature old)))
 
 ;; Required early to provide :diminish keyword.

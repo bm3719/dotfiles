@@ -13,7 +13,7 @@
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
 ;;;; json-mode, python-mode, markdown-mode, gnuplot-mode, w3m, gptel,
-;;;; ob-dall-e-shell, seq, htmlize.
+;;;; ob-dall-e-shell, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
 ;;;; Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
@@ -979,9 +979,6 @@ If the file doesn't exist, return an empty string."
    (dall-e-shell-image-output-directory "~/img")
    (dall-e-shell-model-version "dall-e-3"))
   :config (ob-dall-e-shell-setup)) ; Activate `dall-e-shell' as src block type.
-
-(use-package seq
-  :ensure t)
 
 ;; Needed to support code block syntax highlighting in org-export to HTML.
 (use-package htmlize

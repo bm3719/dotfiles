@@ -850,7 +850,8 @@ If the file doesn't exist, return an empty string."
    (cider-repl-mode . smartparens-strict-mode)
    (cider-repl-mode . company-mode)
    ;; Auto-run cljfmt on buffer at save.  Need to do in a lambda to make it
-   ;; buffer-local to cider-mode.
+   ;; buffer-local to cider-mode.  Run this buffer-local if it's making
+   ;; unwanted changes: (remove-hook 'before-save-hook 'cider-format-buffer)
    (cider-mode . (lambda ()
                    (add-hook 'before-save-hook 'cider-format-buffer nil t))))
   :init (setq nrepl-log-messages 1) ; Fix missing *nrepl-messages* buffer.

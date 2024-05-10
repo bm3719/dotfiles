@@ -12,8 +12,8 @@
 ;;;; git-gutter, eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent,
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
-;;;; json-mode, python-mode, lsp-pyright, markdown-mode, gnuplot-mode, w3m,
-;;;; gptel, ob-dall-e-shell, htmlize.
+;;;; json-mode, anaconda-mode, company-anaconda, lsp-pyright, pyvenv,
+;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
 ;;;; Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
@@ -898,14 +898,20 @@ If the file doesn't exist, return an empty string."
   :defer t
   :mode "\\.json\\'")
 
-;; Super-minimal Python infrastructure.  Restore docs navigation and integrate
-;; flycheck if needed later.
-(use-package python-mode
+(use-package anaconda-mode
   :ensure t
   :defer t
-  :mode "\\.py\\'"
-  :init (setq python-shell-interpreter "python3") ; Ensure Python 3 is used.
-  :interpreter ("python" . python-mode))
+  :diminish " α"
+  :after python
+  :hook ((python-mode . anaconda-mode)
+         (python-mode . (lambda () (setq mode-name "Py")))
+         (python-mode . company-mode))
+  :config (require 'pyvenv))
+
+(use-package company-anaconda
+  :ensure t
+  :defer t
+  :after (company python-mode))
 
 (use-package lsp-pyright
   :ensure t
@@ -913,6 +919,11 @@ If the file doesn't exist, return an empty string."
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                          (lsp))))
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode 1))
 
 ;; Note: Install textproc/markdown to integrate compilation commands.
 (use-package markdown-mode

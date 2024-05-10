@@ -12,8 +12,8 @@
 ;;;; git-gutter, eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent,
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
-;;;; json-mode, python-mode, markdown-mode, gnuplot-mode, w3m, gptel,
-;;;; ob-dall-e-shell, htmlize.
+;;;; json-mode, python-mode, lsp-pyright, markdown-mode, gnuplot-mode, w3m,
+;;;; gptel, ob-dall-e-shell, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
 ;;;; Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
@@ -906,6 +906,13 @@ If the file doesn't exist, return an empty string."
   :mode "\\.py\\'"
   :init (setq python-shell-interpreter "python3") ; Ensure Python 3 is used.
   :interpreter ("python" . python-mode))
+
+(use-package lsp-pyright
+  :ensure t
+  :defer t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp))))
 
 ;; Note: Install textproc/markdown to integrate compilation commands.
 (use-package markdown-mode

@@ -1196,11 +1196,12 @@ If the file doesn't exist, return an empty string."
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
 ;; aspell > ispell
-;; Suggestion mode tuned to fastest possible.
-(setq ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra"))
-;; Solves aspell startup problem on some GNU/Linux distros.
-(setq flyspell-issue-welcome-flag nil)
+(setq
+ ;; Suggestion mode tuned to fastest possible.
+ ispell-program-name "aspell"
+ ispell-extra-args '("--sug-mode=ultra")
+ ;; Solves aspell startup problem on some GNU/Linux distros.
+ flyspell-issue-welcome-flag nil)
 
 ;;; org-agenda
 ;; Note: Needs to eval before Org config, for `org-agenda-files'.
@@ -1213,13 +1214,20 @@ If the file doesn't exist, return an empty string."
                     (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
                             '("~/src/docs/agenda.org"
                               "~/src/docs/recur.org")))))
-;; Increase space for habit description (default 40).
-(setq org-habit-graph-column 50)
-;; Custom agenda views.
-(setq org-agenda-custom-commands
-      '(("A" "Agenda and STRT tasks"
-         ((agenda "")
-          (todo "STRT")))))
+(setq
+ ;; Increase space for habit description (default 40).
+ org-habit-graph-column 50
+ ;; Custom agenda views.
+ org-agenda-custom-commands'(("A" "Agenda and STRT tasks"
+                              ((agenda "")
+                               (todo "STRT"))))
+ ;; Custom time grid styling.
+ org-agenda-current-time-string
+ "◀── now ────────────────────────────────────────────"
+ org-agenda-time-grid
+ '((daily today require-timed)
+   (800 1000 1200 1400 1600 1800 2000)
+   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
 
 ;;; Org
 ;; Initiate org-mode when opening .org files.

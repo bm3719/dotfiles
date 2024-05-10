@@ -1248,7 +1248,9 @@ If the file doesn't exist, return an empty string."
  ;; Preserve indentation when exiting the `org-edit-src-code' editor.
  org-src-preserve-indentation t
  ;; Customize optional modules.
- org-modules (append org-modules '(org-habit)))
+ org-modules (append org-modules '(org-habit))
+ ;; Increase scale of inline rendered LaTeX.
+ org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 ;; Change colors for level 2, and 3.  Defaults are yellow, and light sky blue.
 (custom-theme-set-faces 'user '(org-level-2 ((t (:foreground "light sky blue")))))

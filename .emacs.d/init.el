@@ -12,7 +12,7 @@
 ;;;; git-gutter, eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent,
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
-;;;; json-mode, anaconda-mode, company-anaconda, lsp-pyright, pyvenv,
+;;;; json-mode, pyvenv, anaconda-mode, company-anaconda, lsp-pyright,
 ;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
@@ -898,11 +898,16 @@ If the file doesn't exist, return an empty string."
   :defer t
   :mode "\\.json\\'")
 
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode 1))
+
 (use-package anaconda-mode
   :ensure t
   :defer t
   :diminish " α"
-  :after python
+  :after (python pyvenv)
   :hook ((python-mode . anaconda-mode)
          (python-mode . (lambda () (setq mode-name "Py")))
          (python-mode . company-mode))
@@ -919,11 +924,6 @@ If the file doesn't exist, return an empty string."
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                          (lsp))))
-
-(use-package pyvenv
-  :ensure t
-  :config
-  (pyvenv-mode 1))
 
 ;; Note: Install textproc/markdown to integrate compilation commands.
 (use-package markdown-mode

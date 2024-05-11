@@ -458,8 +458,10 @@ count-windows is not 2."
 (setq read-file-name-completion-ignore-case t)
 
 ;; Completion ignores filenames ending in any string in this list.
-(setq completion-ignored-extensions
-      '(".o" ".elc" ".class" "java~" ".ps" ".abs" ".mx" ".~jv" ".bak" ))
+(let ((exts '(".obj" "java~" ".ps" ".abs" ".mx" ".~jv" ".bak")))
+  (dolist (ext exts)
+    (unless (member ext completion-ignored-extensions)
+      (push ext completion-ignored-extensions))))
 
 ;; Add file register to quickly get to this init file.
 (set-register ?i '(file . "~/.emacs.d/init.el"))

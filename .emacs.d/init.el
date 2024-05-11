@@ -461,6 +461,9 @@ count-windows is not 2."
 (setq completion-ignored-extensions
       '(".o" ".elc" ".class" "java~" ".ps" ".abs" ".mx" ".~jv" ".bak" ))
 
+;; Add file register to quickly get to this init file.
+(set-register ?i '(file . "~/.emacs.d/init.el"))
+
 ;; Startup message with Emacs version.  Modified from original at:
 ;; http://www.emacswiki.org/emacs/DotEmacsChallenge
 (defun bcm/emacs-reloaded ()

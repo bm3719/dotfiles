@@ -1237,6 +1237,8 @@ If the file doesn't exist, return an empty string."
                     (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
                             '("~/src/docs/agenda.org"
                               "~/src/docs/recur.org")))))
+(setq org-agenda-files (append org-agenda-files
+                               '("~/bpk.org")))
 (setq
  ;; Increase space for habit description (default 40).
  org-habit-graph-column 50

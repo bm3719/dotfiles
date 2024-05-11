@@ -63,11 +63,10 @@
 (blink-cursor-mode nil)            ; Disable cursor blinking.
 (setq visible-bell t)              ; Make bell visible, not aural.
 
-;; ;; Shut off message buffer.  To debug Emacs, comment these out so you can see
-;; ;; output from message function calls.
+;; ;; Shut off message buffer.  Uncomment on "stable" systems, like laptops.
 ;; (setq message-log-max nil)
 ;; ;; Check if message buffer exists before killing (not doing so errors
-;; ;; eval-buffer of an init file).
+;; ;; eval-buffer of init file).
 ;; (when (get-buffer "*Messages*")
 ;;   (kill-buffer "*Messages*"))
 
@@ -81,8 +80,8 @@
 ;; Reset garbage collection to sane defaults after init complete.
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 1048576 32) ; 32MB
-                  gc-cons-percentage 0.1)))
+            (setq gc-cons-threshold (* 1048576 32) ; 32MB.
+                  gc-cons-percentage 0.1))) ; GC when heap 10% allocated.
 
 ;; Change backup behavior to save in a directory, not in a miscellany of files
 ;; all over the place, and disable autosaves completely.
@@ -183,14 +182,6 @@
 ;; Set fill width to 79 (default was 70).
 (setq-default fill-column 79)
 
-;; Takes a multi-line paragraph and makes it into a single line of text.
-(defun bcm/unfill-paragraph ()
-  "Un-fill paragraph at point."
-  (interactive)
-  (let ((fill-column (point-max)))
-    (fill-paragraph nil)))
-(global-set-key (kbd "M-p") 'bcm/unfill-paragraph)
-
 ;; Heretical tab settings.  Emacs is smart enough to auto-disable this when
 ;; editing Make files.
 (setq-default indent-tabs-mode nil)
@@ -267,13 +258,21 @@
 
 ;; Defines a function to kill text from point to beginning of line.
 (defun bcm/backward-kill-line ()
-  "Kill chars backward until encountering the end of a line."
+  "Kill chars backward until encountering the beginning of a line."
   (interactive)
   (kill-line 0))
 (global-set-key (kbd "M-C-k") 'bcm/backward-kill-line)
 
 ;; Replace error message on read-only kill with an echo area message.
 (setq-default kill-read-only-ok t)
+
+;; Takes a multi-line paragraph and makes it into a single line of text.
+(defun bcm/unfill-paragraph ()
+  "Un-fill paragraph at point."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+(global-set-key (kbd "M-p") 'bcm/unfill-paragraph)
 
 ;; For composing in Emacs then pasting into a word processor, this un-fills all
 ;; the paragraphs (i.e. turns each paragraph into one very long line) and
@@ -328,11 +327,6 @@
 ;; Keeps the cursor in the same relative row during pgups and downs.
 (setq scroll-preserve-screen-position t)
 
-;;; Mouse wheel scrolling
-;; Scroll in 1-line increments for the buffer under pointer.
-(setq mouse-wheel-follow-mouse t)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-
 ;; Make cursor stay in the same column when scrolling using pgup/dn.
 ;; Previously pgup/dn clobbers column position, moving it to the beginning of
 ;; the line.
@@ -347,6 +341,11 @@
   (let ((col (current-column)))
     ad-do-it
     (move-to-column col)))
+
+;;; Mouse wheel scrolling
+;; Scroll in 1-line increments for the buffer under pointer.
+(setq mouse-wheel-follow-mouse t)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
 ;; Change C-x C-b behavior so it uses bs; shows only interesting buffers.  The
 ;; `a' key will toggle visibility of all.
@@ -422,7 +421,7 @@ count-windows is not 2."
 ;; the buffer so they can't get out of sync.
 (global-auto-revert-mode t)
 
-;; Variables to mark as safe.
+;; File variables to mark as safe.
 (setq safe-local-variable-values '((outline-minor-mode . t)
                                    (eldoc-mode . t)))
 
@@ -439,6 +438,8 @@ count-windows is not 2."
 
 ;; Answer `y' or RET for yes and `n' for no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
+;; In y-or-n-p, query-replace, or query-replace-regexp operation, use return to
+;; perform action.
 (define-key query-replace-map (kbd "RET") 'act)
 
 ;; Always use the echo area instead of dialog boxes in console mode.
@@ -466,6 +467,18 @@ count-windows is not 2."
 ;; Add file register to quickly get to this init file.
 (set-register ?i '(file . "~/.emacs.d/init.el"))
 
+;; Follow the compilation buffer scroll instead of remaining at the top line.
+(setq compilation-scroll-output t)
+
+;;; Time-stamp support
+;; When there is a "Time-stamp: <>" in the first 10 lines of the file,
+;; Emacs will write time-stamp information there when saving.
+(setq time-stamp-active t          ; Do enable time-stamps.
+      time-stamp-line-limit 10     ; Check first 10 buffer lines for stamp.
+      ;; Date format.  Note that this is a >=27.x format.
+      time-stamp-format "%Y-%02m-%02d %02H:%02M:%02S (%u)")
+(add-hook 'write-file-functions 'time-stamp) ; Update when saving.
+
 ;; Startup message with Emacs version.  Modified from original at:
 ;; http://www.emacswiki.org/emacs/DotEmacsChallenge
 (defun bcm/emacs-reloaded ()
@@ -486,19 +499,7 @@ count-windows is not 2."
 (global-set-key (kbd "C-+") (lambda () (interactive) (bcm/zoom 1)))
 (global-set-key (kbd "C-<kp-add>") (lambda () (interactive) (bcm/zoom 1)))
 (global-set-key (kbd "C--") (lambda () (interactive) (bcm/zoom -1)))
-(global-set-key (kbd "C-<kb-subtract>") (lambda () (interactive) (bcm/zoom -1)))
-
-;;; Time-stamp support
-;; When there is a "Time-stamp: <>" in the first 10 lines of the file,
-;; Emacs will write time-stamp information there when saving.
-(setq time-stamp-active t          ; Do enable time-stamps.
-      time-stamp-line-limit 10     ; Check first 10 buffer lines for stamp.
-      ;; Date format.  Note that this is a >=27.x format.
-      time-stamp-format "%Y-%02m-%02d %02H:%02M:%02S (%u)")
-(add-hook 'write-file-functions 'time-stamp) ; Update when saving.
-
-;; Follow the compilation buffer scroll instead of remaining at the top line.
-(setq compilation-scroll-output t)
+(global-set-key (kbd "C-<kp-subtract>") (lambda () (interactive) (bcm/zoom -1)))
 
 ;; If I've edited init.el, byte compile it.  Saves some startup time.
 (defun bcm/autocompile-init ()
@@ -512,7 +513,10 @@ count-windows is not 2."
     (let ((byte-compile-dest-file (expand-file-name "init.el" user-emacs-directory)))
       (byte-compile-file (buffer-file-name))
       (message "Compiled %s" (buffer-file-name)))))
-(add-hook 'after-save-hook 'bcm/autocompile-init)
+(add-hook 'after-save-hook (lambda ()
+                             (if (equal (expand-file-name "~/.emacs.d/init.el")
+                                        (buffer-file-name))
+                                 (byte-compile-file (buffer-file-name)))))
 
 ;; A function to close all buffers except scratch.
 (defun bcm/cleanup ()
@@ -530,7 +534,7 @@ count-windows is not 2."
 ;; This is so commonly used, binding to F4.
 (global-set-key (kbd "<f4>") 'bcm/indent)
 
-;; A function useful for screen-sharing.
+;; A function useful for screen-sharing.  Rerun when done to undo.
 (defun bcm/screenshare ()
   "Toggle line numbers and git gutter mode (which interferes with linum-mode)"
   (interactive)
@@ -562,7 +566,7 @@ If the file doesn't exist, return an empty string."
 ;;; package
 (require 'package)
 
-;; Don't make installed packages available at startup.
+;; Read init before initializing packages.
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
@@ -570,8 +574,8 @@ If the file doesn't exist, return an empty string."
 
 ;; If a fresh install, update the repos index.
 (unless package-archive-contents
-   (package-refresh-contents))
-;; Install 'use-package' if necessary.
+  (package-refresh-contents))
+;; Install 'use-package' if necessary.  Needed in <29.x.
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
@@ -599,9 +603,8 @@ If the file doesn't exist, return an empty string."
 ;; Required early to provide :diminish keyword.
 (use-package diminish
   :ensure t
-  ;; Modify some modeline strings that don't respect diminish.
-  :custom
-  (eldoc-minor-mode-string " λdoc")
+  ;; Modify any built-in mode modeline strings that don't respect diminish.
+  :custom (eldoc-minor-mode-string " λdoc")
   :hook
   ((emacs-lisp-mode . (lambda () (setq mode-name "e-λ")))
    (clojure-mode . (lambda () (setq mode-name "cλj")))))
@@ -637,8 +640,7 @@ If the file doesn't exist, return an empty string."
 
 (use-package ivy-prescient
   :ensure t
-  :custom
-  (prescient-sort-length-enable nil)
+  :custom (prescient-sort-length-enable nil)
   :config
   (ivy-prescient-mode 1)
   (prescient-persist-mode 1))
@@ -685,8 +687,7 @@ If the file doesn't exist, return an empty string."
 (use-package undo-tree
   :ensure t
   :diminish
-  ;; Don't persist undo information.
-  :custom (undo-tree-auto-save-history nil)
+  :custom (undo-tree-auto-save-history nil) ; Don't persist undo information.
   :config (global-undo-tree-mode 1))
 
 (use-package org-bullets
@@ -710,8 +711,7 @@ If the file doesn't exist, return an empty string."
   :ensure t
   :defer t
   :mode "\\.rest$"
-  ;; Inhibit restclient from sending cookies implicitly.
-  :custom (restclient-inhibit-cookies t))
+  :custom (restclient-inhibit-cookies t)) ; Don't implicitly send cookies.
 
 (use-package magit
   :ensure t
@@ -741,6 +741,7 @@ If the file doesn't exist, return an empty string."
   :custom
   (lsp-completion-provider :none)
   (lsp-headerline-breadcrumb-enable nil)
+  ;; Disable these if they get annoying.
   ;; (lsp-modeline-code-actions-enable nil)
   :commands lsp
   ;; Set prefix for lsp-command-keymap.  Needs to be in :init and not :custom.
@@ -784,8 +785,7 @@ If the file doesn't exist, return an empty string."
    (emacs-lisp-mode . smartparens-strict-mode)
    (lisp-mode . smartparens-strict-mode)
    (ielm-mode . smartparens-strict-mode))
-  :init
-  (require 'smartparens-config)
+  :init (require 'smartparens-config)
   :bind
   (:map smartparens-mode-map
         ("M-)" . sp-forward-slurp-sexp)
@@ -952,8 +952,13 @@ If the file doesn't exist, return an empty string."
   :custom
   (w3m-use-cookies t)
   (w3m-use-favicon nil)
-  ;; Use w3m for all URLs (deprecated code to use available GUI browser).
+  ;; Use w3m for all URLs (default is browse-url-default-browser).
   (browse-url-browser-function 'w3m-browse-url)
+  ;; Use new w3m tab when doing a browse-url operation.  Disable for GUI
+  ;; browsers, since it should open a new tab automatically.
+  (browse-url-new-window-flag t)
+  ;; Lite version of DDG is built-in.
+  (w3m-search-default-engine "duckduckgo")
   ;; Activate Conkeror-style link selection (toggle with `f' key).
   :hook (w3m-mode . w3m-lnum-mode)
   :init
@@ -968,7 +973,6 @@ If the file doesn't exist, return an empty string."
      ("wiby" "https://wiby.me/?q=%s" nil)
      ("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil)
      ("clojuredocs" "https://clojuredocs.org/search?q=%s")))
-  (setq w3m-search-default-engine "duckduckgo")
   ;; Default to the last manually specified search engine when calling the prefix
   ;; version of the function.
   (defadvice w3m-search (after change-default activate)
@@ -1035,6 +1039,8 @@ If the file doesn't exist, return an empty string."
 (add-to-list 'desktop-modes-not-to-save 'Info-mode)
 (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
 (add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
+(add-to-list 'desktop-modes-not-to-save 'erc-mode)
+(add-to-list 'desktop-modes-not-to-save 'image-mode)
 
 ;;; elisp-mode
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
@@ -1359,10 +1365,7 @@ If the file doesn't exist, return an empty string."
 (setq org-confirm-babel-evaluate nil)
 ;; Path to ditaa JAR.
 (setq org-ditaa-jar-path "~/bin/ditaa0_6b.jar")
-
-;;; ob-clojure
-(require 'ob-clojure)
-;; Backend: Default to CIDER, can override with `:backend babashka'.
+;; Default ob-clojure backend to CIDER.  Override with `:backend babashka'.
 (setq org-babel-clojure-backend 'cider)
 
 ;;; org-capture: On-the-fly note taking.
@@ -1390,11 +1393,6 @@ If the file doesn't exist, return an empty string."
 (savehist-mode t)                          ; Turn savehist-mode on.
 
 ;;; calendar
-;; Add calendar control-navigation.
-(add-hook 'calendar-after-load-hook
-          (lambda ()
-            (define-key calendar-mode-map (kbd "C-x >") 'scroll-calendar-right)
-            (define-key calendar-mode-map (kbd "C-x <") 'scroll-calendar-left)))
 ;; Change some self-explanatory calendar settings.
 (setq mark-holidays-in-calendar t
       calendar-holidays (append holiday-general-holidays

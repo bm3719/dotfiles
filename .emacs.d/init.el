@@ -1023,7 +1023,7 @@ If the file doesn't exist, return an empty string."
   (function-put 'gptel-make-ollama 'lisp-indent-function 1)
   (register-definition-prefixes "gptel-ollama" '("gptel--ollama-"))
   (gptel-make-ollama "ollama"
-    :host "localhost:11434"
+    :host "192.168.1.102:11434"
     :stream t
     :models '("llama3" "dolphin-llama3:8b")))
 

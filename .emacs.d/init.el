@@ -516,10 +516,10 @@ count-windows is not 2."
     (let ((init-path (expand-file-name "init.el" user-emacs-directory)))
       (byte-compile-file init-path)
       (message "Compiled %s" init-path))))
-(add-hook 'after-save-hook (lambda ()
-                             (if (string-match-p "/init.el\\'"
-                                                 (buffer-file-name))
-                                 (bcm/autocompile-init))))
+;; (add-hook 'after-save-hook (lambda ()
+;;                              (if (string-match-p "/init.el\\'"
+;;                                                  (buffer-file-name))
+;;                                  (bcm/autocompile-init))))
 
 ;; A function to close all buffers except scratch.
 (defun bcm/cleanup ()

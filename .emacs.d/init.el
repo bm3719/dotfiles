@@ -514,8 +514,8 @@ count-windows is not 2."
       (byte-compile-file (buffer-file-name))
       (message "Compiled %s" (buffer-file-name)))))
 (add-hook 'after-save-hook (lambda ()
-                             (if (equal (expand-file-name "~/.emacs.d/init.el")
-                                        (buffer-file-name))
+                             (if (string-match-p "/init.el\\'"
+                                                 (buffer-file-name))
                                  (byte-compile-file (buffer-file-name)))))
 
 ;; A function to close all buffers except scratch.

@@ -509,14 +509,13 @@ count-windows is not 2."
   (when (string= (buffer-file-name)
                  (expand-file-name
                   (concat default-directory "init.el")))
-    ;; TODO: Get this outputting to `~/.emacs.d' when `init.el' is a symlink.
-    (let ((byte-compile-dest-file (expand-file-name "init.el" user-emacs-directory)))
-      (byte-compile-file (buffer-file-name))
-      (message "Compiled %s" (buffer-file-name)))))
+    (let ((init-path (expand-file-name "init.el" user-emacs-directory)))
+      (byte-compile-file init-path)
+      (message "Compiled %s" init-path))))
 (add-hook 'after-save-hook (lambda ()
                              (if (string-match-p "/init.el\\'"
                                                  (buffer-file-name))
-                                 (byte-compile-file (buffer-file-name)))))
+                                 (bcm/autocompile-init))))
 
 ;; A function to close all buffers except scratch.
 (defun bcm/cleanup ()

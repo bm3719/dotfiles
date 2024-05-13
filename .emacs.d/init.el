@@ -582,6 +582,9 @@ If the file doesn't exist, return an empty string."
 
 ;; Additional debug settings for when use-package config fails.  Only activate
 ;; when Emacs is flagged with `--debug-init'.
+(defvar use-package-verbose)
+(defvar use-package-expand-minimally)
+(defvar use-package-compute-statistics)
 (when init-file-debug
   (setq use-package-verbose t
         use-package-expand-minimally nil

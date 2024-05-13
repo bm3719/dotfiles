@@ -115,6 +115,7 @@
 
 ;; Define a function to auto-delete trailing whitespace upon save.
 (defun bcm/delete-ws-save ()
+  "Delete trailing whitespace and save."
   (interactive)
   (progn (delete-trailing-whitespace)
          (save-buffer)))
@@ -503,7 +504,7 @@ count-windows is not 2."
 
 ;; If I've edited init.el, byte compile it.  Saves some startup time.
 (defun bcm/autocompile-init ()
-  "Compile init.el in ~/.emacs.d/"
+  "Compile init.el in ~/.emacs.d/."
   (interactive)
   (require 'bytecomp)
   (when (string= (buffer-file-name)
@@ -535,7 +536,8 @@ count-windows is not 2."
 
 ;; A function useful for screen-sharing.  Rerun when done to undo.
 (defun bcm/screenshare ()
-  "Toggle line numbers and git gutter mode (which interferes with linum-mode)"
+  "Toggle line numbers and git gutter mode (which interferes with
+linum-mode)."
   (interactive)
   (if (bound-and-true-p global-display-line-numbers-mode)
       (global-display-line-numbers-mode -1)
@@ -1319,6 +1321,7 @@ If the file doesn't exist, return an empty string."
 (setq blog-header-file "~/public_html/inc/header.html")
 ;; Load personal site header.
 (defun bcm/load-blog-header ()
+  "Insert blog header into buffer."
   (with-temp-buffer
     (insert-file-contents blog-header-file)
     (buffer-string)))
@@ -1560,6 +1563,7 @@ If the file doesn't exist, return an empty string."
 ;; Can move the remainder of this to ~/.emacs.d/.ercrc.el later if including a
 ;; user/pass.
 (defun bcm/erc ()
+  "Start ERC and connect to Libera with pre-set credentials."
   (interactive)
   (erc :server "irc.libera.chat" :port 6667))
 (setq erc-interpret-mirc-color t

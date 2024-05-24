@@ -909,8 +909,7 @@ If the file doesn't exist, return an empty string."
 
 (use-package pyvenv
   :ensure t
-  :config
-  (pyvenv-mode 1))
+  :config (pyvenv-mode 1))
 
 (use-package anaconda-mode
   :ensure t

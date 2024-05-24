@@ -1,12 +1,12 @@
-# -*- Mode: Shell-script -*-
-# Bruce C. Miller
-# FreeBSD and GNU/Linux version
-# NOTE: To use as root, which is probably not a good idea to begin with:
-#       - Remove . from PATH.
-#       - Change compinstall filename path.
-#       - Change WWW_HOME and ANT_HOME.
-# TIPS: The <() construct lets you avoid having to use temporary files as
-#       arguments to commands, e.g. `diff -y <(wc -l 1/*) <(wc -l 2/*)'
+## -*- Mode: Shell-script -*-
+## Bruce C. Miller
+## FreeBSD and GNU/Linux version
+## NOTE: To use as root, which is probably not a good idea to begin with:
+##       - Remove . from PATH.
+##       - Change compinstall filename path.
+##       - Change WWW_HOME and ANT_HOME.
+## TIPS: The <() construct lets you avoid having to use temporary files as
+##       arguments to commands, e.g. `diff -y <(wc -l 1/*) <(wc -l 2/*)'
 
 # Huge history file; great for C-r searching long ago used commands.
 HISTFILE=~/.histfile
@@ -42,6 +42,18 @@ elif [[ "$unamestr" == 'FreeBSD' ]]; then
 elif [[ "$unamestr" == 'OpenBSD' ]]; then
     platform='openbsd'
 fi
+
+# A righteous umask.
+umask 027               # u=rw,g=r,o=
+
+# Disable flow control handling (can mess up screen sessions if C-s or C-a s is
+# hit).
+stty -ixon -ixoff
+# Stop background job output to stdout until foregrounded.  A message will be
+# printed before the next prompt display.  Usually don't want this.
+#stty tostop
+
+## Keybindings
 
 bindkey -e              # Emacs keybindings.
 # Fix C-arrow keys.
@@ -107,16 +119,18 @@ else
     bindkey -M vicmd "^[3;5~" delete-char
 fi
 
-# zstyle modifications.
-# Hostname completions based on the contents of ~/.ssh/known_hosts file.
-# Requires ~/.ssh/config change of: HashKnownHosts no
+## zstyle modifications.
+
+# Hostname completions based on the contents of `~/.ssh/known_hosts' file.
+# Requires `~/.ssh/config' change of: HashKnownHosts no
 # Disabling this by default on multi-user machines, since anyone that gains
 # read access can help themselves to a non-hashed list, and known_hosts is by
 # default chmod 0644.
 #hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\*}%%,*})
 #zstyle ':completion:*:hosts' hosts $hosts
 
-# Completion
+## Completion
+
 autoload -Uz compinit
 compinit
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
@@ -126,17 +140,15 @@ zstyle ':completion:*' completer _expand _complete _ignored _approximate
 zstyle ':completion:*' menu select
 zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
 zstyle ':completion:*:descriptions' format '%U%F{cyan}%d%f%u'
-# Speed up completions
+# Speed up completions.
 zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.cache/zcache
-# automatically load bash completion functions
+# Automatically load bash completion functions.
 autoload -U +X bashcompinit && bashcompinit
 
-# A righteous umask.
-umask 027               # u=rw,g=r,o=
+## $PATH
 
-# $PATH
 # Adds a path to $PATH only if it exists and not already present.
 add_to_path() {
     if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
@@ -159,6 +171,7 @@ add_to_path "$HOME/.cargo/bin"
 add_to_path "$HOME/bin"
 
 ## Plugins section: Enable fish style features
+
 # Use syntax highlighting
 if [ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -194,7 +207,8 @@ zmodload -a zsh/zpty zpty
 zmodload -a zsh/zprof zprof
 zmodload -ap zsh/mapfile mapfile
 
-# Prompt
+## Prompt
+
 autoload colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
     colors
@@ -206,6 +220,8 @@ fi
 # done
 # PR_NO_COLOR="%{$terminfo[sgr0]%}"
 # PS1=`echo "[$PR_BLUE%n@%m:%c$PR_NO_COLOR]%# " | tr -d "$<2>"`
+
+## Environmental variables
 
 export SBCL_HOME=/usr/local/lib/sbcl
 export FTPANONPASS=nobody@nodomain.nox
@@ -231,7 +247,7 @@ export GREP_COLORS='mt=01;32'              # Set grep color to green (default re
 # export GREP_COLOR='01;32'                # Legacy version of the above.
 # Set Lynx start page to bookmarks file.
 export WWW_HOME="file:///home/bm3719/lynx_bookmarks.html"
-export BROWSER=/bin/brave
+export BROWSER=/sbin/brave
 # Regionalization used by w3m.
 export LC_ALL=en_US.UTF-8
 # General locale.
@@ -243,7 +259,7 @@ export JAVA_HOME=/usr/lib/jvm/default
 #export JAVA_HOME=/usr/local/openjdk12
 #export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar
 export ANT_HOME=/usr/local/share/java/apache-ant
-# Suppress JVM warning on certain JDK 1.8 versions, at least when using Lein.
+# Suppress JVM warning on certain JDK 1.8 versions, at least when using lein.
 export LEIN_JVM_OPTS="-XX:TieredStopAtLevel=1"
 # Python-related stuff.
 if [ -d /usr/local/share/doc/python2.7 ]
@@ -280,14 +296,8 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# Disable flow control handling (can mess up screen sessions if C-s or C-a s is
-# hit).
-stty -ixon -ixoff
-# Stop background job output to stdout until foregrounded.  A message will be
-# printed before the next prompt display.  Usually don't want this.
-#stty tostop
+## Aliases
 
-# Aliases
 alias -g ...="../.."
 alias -g ....="../../.."
 alias -g .....="../../../.."
@@ -346,33 +356,30 @@ alias hw='hwinfo --short'
 alias dfs="du -kd 1000 \"\$@\" | awk '(\$1 >= 100)' | sort -rn"
 # Sort installed packages according to size in MB (expac must be installed.)
 alias big="expac -H M '%m\t%n' | sort -h | nl"
-# List -git packages
+# List -git packages.
 alias gitpkg='pacman -Q | grep -i "\-git"'
 
-# kittens
+# kitty kittens
 alias icat="kitty +kitten icat"
 
-# Get fastest mirrors
+# Get fastest mirrors.
 alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
 alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
 alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
 alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
 
-# Functions
+## Functions
+
 # A find function, saving some typing for the most common find call.
 ff() {
     find . -name \*$1\* -print;
 }
-# Colorize `svn diff' output.  Requires colordiff to be installed.
-svndiff() {
-    svn diff "${@}" | colordiff
-}
 
-# oh-my-zsh: I've removed from this project just what I think is useful.
-# There's a lot of stuff in oh-my-zsh that I don't agree with, and it's
-# inconvenient to maintain a separate fork of a repo for my shell.  This keeps
-# it all on one file.
+## oh-my-zsh: Borrowed from this project just what I think is useful.  There's
+## a lot of stuff in oh-my-zsh that I don't agree with, and it's inconvenient
+## to maintain a separate fork of a repo for my shell.  This keeps it all on
+## one file.
 
 # oh-my-zsh plugins: Just using git and svn.  Consider lein and github later.
 # git.plugin.zsh
@@ -538,8 +545,8 @@ git_prompt_status() {
     echo $STATUS
 }
 # Compare the provided version of git to the version installed and on path.
-# Prints 1 if input version <= installed version
-# Prints -1 otherwise
+# Prints 1 if input version <= installed version.
+# Prints -1 otherwise.
 function git_compare_version() {
     local INPUT_GIT_VERSION=$1;
     local INSTALLED_GIT_VERSION
@@ -578,7 +585,8 @@ ZSH_THEME_SVN_PROMPT_SUFFIX="%{$fg[yellow]%})%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_DIRTY="%{$fg[red]%}⚡%{$reset_color%}"
 ZSH_THEME_SVN_PROMPT_CLEAN="%{$fg[green]%}○%{$reset_color%}"
 
-# Run fastfetch if session is interactive
+## Final config
+# Run fastfetch if session is interactive.
 if [[ $- == *i* && $(which fastfetch &>/dev/null) ]]; then
     #if test -o interactive && which fastfetch &>/dev/null; then
     fastfetch --load-config neofetch

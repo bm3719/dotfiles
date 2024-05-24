@@ -368,12 +368,45 @@ alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/p
 alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
 alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
-
 ## Functions
 
 # A find function, saving some typing for the most common find call.
 ff() {
     find . -name \*$1\* -print;
+}
+
+# Make a directory and `cd` into it.
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Move up some number of directories.
+up() {
+    cd $(printf "%0.s../" {1..$1})
+}
+
+# Uncompress various file formats without having to remember the syntax for
+# each.
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2) tar xvjf "$1" ;;
+            *.tar.gz) tar xvzf "$1" ;;
+            *.tar.xz) tar xvJf "$1" ;;
+            *.bz2) bunzip2 "$1" ;;
+            *.rar) unrar x "$1" ;;
+            *.gz) gunzip "$1" ;;
+            *.tar) tar xvf "$1" ;;
+            *.tbz2) tar xvjf "$1" ;;
+            *.tgz) tar xvzf "$1" ;;
+            *.zip) unzip "$1" ;;
+            *.Z) uncompress "$1" ;;
+            *.7z) 7z x "$1" ;;
+            *) echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
 }
 
 ## oh-my-zsh: Borrowed from this project just what I think is useful.  There's

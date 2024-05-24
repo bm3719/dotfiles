@@ -23,7 +23,7 @@ setopt nomatch
 setopt nocheckjobs      # Don't complain about background jobs on exit.
 setopt nohup            # Don't kill background jobs on exit.
 setopt hist_expire_dups_first
-# printexitvalue        # Print exit value from jobs. Useful for shell scripts.
+# setopt printexitvalue   # Print exit value from jobs.
 # pushd: Creates directory stacks that you can popd back to with cd -n, where n
 # is an integer.
 setopt auto_pushd
@@ -108,7 +108,6 @@ else
 fi
 
 # zstyle modifications.
-zstyle :compinstall filename '/home/bm3719/.zshrc'
 # Hostname completions based on the contents of ~/.ssh/known_hosts file.
 # Requires ~/.ssh/config change of: HashKnownHosts no
 # Disabling this by default on multi-user machines, since anyone that gains

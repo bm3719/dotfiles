@@ -962,6 +962,8 @@ If the file doesn't exist, return an empty string."
   (browse-url-new-window-flag t)
   ;; Lite version of DDG is built-in.
   (w3m-search-default-engine "duckduckgo")
+  ;; Don't prompt when going from HTTPS -> HTTP.
+  (w3m-confirm-leaving-secure-page nil)
   ;; Activate Conkeror-style link selection (toggle with `f' key).
   :hook (w3m-mode . w3m-lnum-mode)
   :init

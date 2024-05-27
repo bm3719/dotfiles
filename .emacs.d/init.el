@@ -688,11 +688,11 @@ If the file doesn't exist, return an empty string."
   :custom (epa-pinentry-mode 'loopback)
   :config (pinentry-start))
 
-(use-package undo-tree
-  :ensure t
-  :diminish
-  :custom (undo-tree-auto-save-history nil) ; Don't persist undo information.
-  :config (global-undo-tree-mode 1))
+;; (use-package undo-tree
+;;   :ensure t
+;;   :diminish
+;;   :custom (undo-tree-auto-save-history nil) ; Don't persist undo information.
+;;   :config (global-undo-tree-mode 1))
 
 (use-package org-bullets
   :ensure t

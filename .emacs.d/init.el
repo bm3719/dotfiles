@@ -771,6 +771,7 @@ If the file doesn't exist, return an empty string."
   (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'cider-repl-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'clojure-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'java-mode))
 
 (use-package company

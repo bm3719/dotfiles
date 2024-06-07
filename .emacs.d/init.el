@@ -745,6 +745,8 @@ If the file doesn't exist, return an empty string."
   :custom
   (lsp-completion-provider :none)
   (lsp-headerline-breadcrumb-enable nil)
+  ;; Disable lsp-mode indent, which conflicts with aggressive-indent-mode.
+  (lsp-enable-indentation nil)
   ;; Disable these if they get annoying.
   ;; (lsp-modeline-code-actions-enable nil)
   :commands lsp
@@ -771,7 +773,6 @@ If the file doesn't exist, return an empty string."
   (add-to-list 'aggressive-indent-excluded-modes 'web-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'cider-repl-mode)
-  (add-to-list 'aggressive-indent-excluded-modes 'clojure-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'java-mode))
 
 (use-package company

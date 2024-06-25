@@ -8,7 +8,7 @@
 ;;;;
 ;;;; Top-level addons: use-package, gnu-elpa-keyring-update, diminish, counsel,
 ;;;; ivy-prescient, swiper, volatile-highlights, which-key, dash, powerline,
-;;;; pinentry, undo-tree, org-bullets, org-present, ob-restclient, magit,
+;;;; pinentry, vundo, org-bullets, org-present, ob-restclient, magit,
 ;;;; git-gutter, eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent,
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
@@ -688,11 +688,10 @@ If the file doesn't exist, return an empty string."
   :custom (epa-pinentry-mode 'loopback)
   :config (pinentry-start))
 
-;; (use-package undo-tree
-;;   :ensure t
-;;   :diminish
-;;   :custom (undo-tree-auto-save-history nil) ; Don't persist undo information.
-;;   :config (global-undo-tree-mode 1))
+(use-package vundo
+  :ensure t
+  :custom (vundo-glyph-alist vundo-unicode-symbols)
+  :bind ("C-x u" . vundo))
 
 (use-package org-bullets
   :ensure t

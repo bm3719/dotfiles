@@ -744,6 +744,12 @@ If the file doesn't exist, return an empty string."
   :custom
   (lsp-completion-provider :none)
   (lsp-headerline-breadcrumb-enable nil)
+  (lsp-enable-snippet nil)
+  (lsp-enable-folding nil)
+  (lsp-enable-links nil)
+  (lsp-enable-dap-auto-configure nil)
+  ;; Kill workspace when last workspace buffer is closed.
+  (lsp-keep-workspace-alive nil)
   ;; Disable lsp-mode indent, which conflicts with aggressive-indent-mode.
   (lsp-enable-indentation nil)
   ;; Disable these if they get annoying.

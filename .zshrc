@@ -265,7 +265,10 @@ export JAVA_HOME=/usr/lib/jvm/default
 #export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar
 export ANT_HOME=/usr/local/share/java/apache-ant
 # Suppress JVM warning on certain JDK 1.8 versions, at least when using lein.
-export LEIN_JVM_OPTS="-XX:TieredStopAtLevel=1"
+if [[ $(java -version 2>&1 | grep 'version' | cut -d'"' -f2 | cut -d'.' -f1-2) == "1.8" ]]
+then
+    export LEIN_JVM_OPTS="-XX:TieredStopAtLevel=1"
+fi
 # Python-related stuff.
 if [ -d /usr/local/share/doc/python2.7 ]
 then

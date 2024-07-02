@@ -427,15 +427,13 @@ count-windows is not 2."
                                    (eldoc-mode . t)))
 
 ;; Set shells.
-(when (eq system-type 'berkeley-unix)
-  (setq shell-file-name "/usr/local/bin/zsh")
-  (setq tex-shell-file-name "/usr/local/bin/zsh"))
-(when (eq system-type 'gnu/linux)
-  (setq shell-file-name "/bin/zsh")
-  (setq tex-shell-file-name "/bin/zsh"))
-(when (eq system-type 'windows-nt)
-  (setq shell-file-name "/usr/bin/bash")
-  (setq tex-shell-file-name "/usr/bin/bash"))
+(pcase system-type
+  ('berkeley-unix (setq shell-file-name "/usr/local/bin/zsh"
+                        tex-shell-file-name "/usr/local/bin/zsh"))
+  ('gnu/linux     (setq shell-file-name "/bin/zsh"
+                        tex-shell-file-name "/bin/zsh"))
+  ('windows-nt    (setq shell-file-name "/usr/bin/bash"
+                        tex-shell-file-name "/usr/bin/bash")))
 
 ;; Answer `y' or RET for yes and `n' for no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)

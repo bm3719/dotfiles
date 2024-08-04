@@ -25,8 +25,10 @@ fi
 mount -U $UUID /mnt/usbstick
 
 # Only proceed if mount was successful, to avoid duping the full FS locally.
-# TODO: Consider changing this to check `[ $? -eq 0 ]`.
-if mount | grep -q "^/dev/sdc1 on /mnt/usbstick"; then
+mount | grep -q "^/dev/sdb1 on /mnt/usbstick"
+if [ $? -eq 0 ]; then
+    echo "USB volume is mounted"
+else
     echo "USB volume is not mounted!"
     exit 1
 fi

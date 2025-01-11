@@ -1,0 +1,26 @@
+# enable the recolor toggle, which allows you to change color profiles
+set recolor true
+
+# adjust colors for dark mode
+set default-bg "#1e1e1e"
+set default-fg "#a9b7c6"
+set render-loading-bg "#1e1e1e"
+set render-loading-fg "#a9b7c6"
+
+# adjust the completion to match
+set completion-bg "#2b2b2b"
+set completion-fg "#a9b7c6"
+
+# adjust the index to match
+set index-bg "#1e1e1e"
+set index-fg "#a9b7c6"
+set index-active-bg "#313335"
+set index-active-fg "#a9b7c6"
+
+# adjust statusbar to match
+set statusbar-bg "#2b2b2b"
+set statusbar-fg "#a9b7c6"
+
+# invert colors to darken the PDF as well
+set recolor-lightcolor "#1a1d16"
+set recolor-darkcolor "#d9ded3"

@@ -278,7 +278,7 @@ export LANG=en_US.UTF-8
 export CHARSET=UTF-8
 export LC_CTYPE=en_US.UTF-8
 # Java ecology stuff
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/bellsoft-java21-amd64
 #export JAVA_HOME=/usr/local/openjdk12
 #export CLASSPATH=$CLASSPATH:.:/usr/local/share/java/classes/jline.jar
 export ANT_HOME=/usr/local/share/java/apache-ant

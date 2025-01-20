@@ -8,7 +8,7 @@
 ;;;;
 ;;;; Top-level addons: use-package, gnu-elpa-keyring-update, diminish, counsel,
 ;;;; ivy-prescient, swiper, volatile-highlights, which-key, dash, powerline,
-;;;; pinentry, vundo, org-bullets, org-present, ob-restclient, magit,
+;;;; pinentry, vundo, org-bullets, org-present, ob-restclient, magit, forge,
 ;;;; git-gutter, eshell-prompt-extras, lsp-mode, lsp-ivy, aggressive-indent,
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
@@ -720,6 +720,10 @@ If the file doesn't exist, return an empty string."
   ;; Idiomatic fill-column setting for commit messages.
   :hook (git-commit-mode . (lambda () (set-fill-column 72)))
   :init (global-set-key (kbd "<f3>") 'magit-status))
+
+(use-package forge
+  :ensure t
+  :after magit)
 
 (use-package git-gutter
   :ensure t

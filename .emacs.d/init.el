@@ -117,8 +117,8 @@
 (defun bcm/delete-ws-save ()
   "Delete trailing whitespace and save."
   (interactive)
-  (progn (delete-trailing-whitespace)
-         (save-buffer)))
+  (delete-trailing-whitespace)
+  (save-buffer))
 
 ;; Provides zap-up-to-char (M-z), different than the default zap-to-char which
 ;; includes deleting the argument character.

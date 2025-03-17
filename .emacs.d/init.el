@@ -125,21 +125,21 @@
 (load-library "misc")
 
 ;; Global key (re-)mappings.
-(global-set-key (kbd "C-w")     'backward-kill-word) ; Match the shell's C-w.
+(global-set-key (kbd "C-w")     'backward-kill-word)  ; Match the shell's C-w.
 (global-set-key (kbd "C-x w")   'kill-region)
 (global-set-key (kbd "C-x s")   'bcm/delete-ws-save)
 (global-set-key (kbd "C-m")     'newline-and-indent)
 (global-set-key (kbd "M-g")     'goto-line)
 (global-set-key (kbd "M-G")     'goto-char)
-(global-set-key (kbd "C-x C-k") 'kill-this-buffer)   ; Bypasses the C-x k prompt.
+(global-set-key (kbd "C-x C-k") 'kill-current-buffer) ; Bypasses the C-x k prompt.
 (global-set-key (kbd "C-x C-v") 'revert-buffer)
 (global-set-key (kbd "C-x TAB") 'indent-region)
 (global-set-key (kbd "C-c M-e") 'fixup-whitespace)
 (global-set-key (kbd "C-c g")   'replace-string)
 (global-set-key (kbd "C-c ;")   'comment-region)
 (global-set-key (kbd "C-c '")   'uncomment-region)
-(global-set-key (kbd "M-/")     'hippie-expand)      ; Instead of dabbrev-expand.
-(global-set-key (kbd "M-z")     'zap-up-to-char)     ; Mimic Vim delete to char.
+(global-set-key (kbd "M-/")     'hippie-expand)       ; Instead of dabbrev-expand.
+(global-set-key (kbd "M-z")     'zap-up-to-char)      ; Mimic Vim delete to char.
 (global-set-key (kbd "M-o")     'other-window)
 (global-set-key (kbd "C-x M-a") 'align-regexp)
 ;; Move set-fill-column from C-x f to C-x M-f, as it's easy to hit this when

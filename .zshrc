@@ -247,7 +247,7 @@ export GREP_COLORS='mt=01;32'              # Set grep color to green (default re
 # export GREP_COLOR='01;32'                # Legacy version of the above.
 # Set Lynx start page to bookmarks file.
 export WWW_HOME="file://$HOME/lynx_bookmarks.html"
-if [ -x $(which brave) ]
+if [ -x "$(which brave)" ]
 then
     export BROWSER='brave'
 else

@@ -1329,7 +1329,7 @@ If the file doesn't exist, return an empty string."
 ;; Location of personal site header.
 (setq blog-header-file "~/public_html/inc/header.html")
 ;; Load personal site header.
-(defun bcm/load-blog-header ()
+(defun bcm/load-blog-header (&rest _)
   "Insert blog header into buffer."
   (with-temp-buffer
     (insert-file-contents blog-header-file)

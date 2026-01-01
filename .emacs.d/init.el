@@ -1234,7 +1234,8 @@ If the file doesn't exist, return an empty string."
         (seq-filter 'file-exists-p
                     (append (directory-files "~/src/docs" t "^archive-.*\\.org$")
                             '("~/src/docs/agenda.org"
-                              "~/src/docs/recur.org")))))
+                              "~/src/docs/recur.org"
+                              "~/src/docs/work-icam.org")))))
 (setq
  ;; Increase space for habit description (default 40).
  org-habit-graph-column 50

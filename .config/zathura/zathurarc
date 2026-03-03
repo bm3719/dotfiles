@@ -24,3 +24,6 @@ set statusbar-fg "#a9b7c6"
 # invert colors to darken the PDF as well
 set recolor-lightcolor "#1a1d16"
 set recolor-darkcolor "#d9ded3"
+
+# Set DB
++set database-name sqlite

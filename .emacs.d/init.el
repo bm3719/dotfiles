@@ -576,29 +576,12 @@ If the file doesn't exist, return an empty string."
 (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
 (package-initialize)
 
-;; Bootstrap straight.el.
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
 ;; If a fresh install, update the repos index.
 (unless package-archive-contents
   (package-refresh-contents))
 ;; Install 'use-package' if necessary.  Needed in <29.x.
 (unless (package-installed-p 'use-package)
-  (straight-use-package 'use-package))
+  (package-install 'use-package))
 
 ;; Additional debug settings for when use-package config fails.  Only activate
 ;; when Emacs is flagged with `--debug-init'.
@@ -827,7 +810,6 @@ If the file doesn't exist, return an empty string."
         ("M-r" . sp-raise-sexp)))
 
 (use-package clojure-mode
-  :straight t
   :ensure t
   :diminish "cλj"
   :hook (clojure-mode . smartparens-strict-mode)
@@ -835,11 +817,6 @@ If the file doesn't exist, return an empty string."
               ("C-w" . sp-backward-kill-word)))
 
 (use-package cider
-  :straight (cider
-             :type git
-             :host github
-             :repo "clojure-emacs/cider"
-             :branch "v1.12.0")
   :ensure t
   :defer 3
   :custom (cider-repl-pop-to-buffer-on-connect t)
@@ -1071,21 +1048,21 @@ If the file doesn't exist, return an empty string."
 ;; enabled.
 (icomplete-mode 0)
 
-;; ;;; desktop
-;; ;; Save buffers, file names, major-modes, etc, and restore on restart.  Will
-;; ;; prompt on first save.  Probably want to put it in `~/.emacs.d/'.
-;; (desktop-save-mode 1)
-;; (setq desktop-buffers-not-to-save
-;;       (concat "\\("
-;;               "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
-;;               "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
-;; 	      "\\)$"))
-;; (add-to-list 'desktop-modes-not-to-save 'dired-mode)
-;; (add-to-list 'desktop-modes-not-to-save 'Info-mode)
-;; (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
-;; (add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
-;; (add-to-list 'desktop-modes-not-to-save 'erc-mode)
-;; (add-to-list 'desktop-modes-not-to-save 'image-mode)
+;;; desktop
+;; Save buffers, file names, major-modes, etc, and restore on restart.  Will
+;; prompt on first save.  Probably want to put it in `~/.emacs.d/'.
+(desktop-save-mode 1)
+(setq desktop-buffers-not-to-save
+      (concat "\\("
+              "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
+              "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
+	      "\\)$"))
+(add-to-list 'desktop-modes-not-to-save 'dired-mode)
+(add-to-list 'desktop-modes-not-to-save 'Info-mode)
+(add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+(add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
+(add-to-list 'desktop-modes-not-to-save 'erc-mode)
+(add-to-list 'desktop-modes-not-to-save 'image-mode)
 
 ;;; elisp-mode
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)

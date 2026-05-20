@@ -136,7 +136,7 @@
 (global-set-key (kbd "C-m")     'newline-and-indent)
 (global-set-key (kbd "M-g")     'goto-line)
 (global-set-key (kbd "M-G")     'goto-char)
-(global-set-key (kbd "C-x C-k") 'kill-this-buffer)   ; Bypasses the C-x k prompt.
+(global-set-key (kbd "C-x C-k") 'kill-current-buffer)   ; Bypasses the C-x k prompt.
 (global-set-key (kbd "C-x C-v") 'revert-buffer)
 (global-set-key (kbd "C-x TAB") 'indent-region)
 (global-set-key (kbd "C-c M-e") 'fixup-whitespace)

@@ -313,6 +313,9 @@
 ;; I type a lot of λs.  Clobbers reposition-window.
 (global-set-key (kbd "C-M-l") (lambda ()
                                 (interactive) (insert-char ?λ)))
+;; Sharp s.  C-x 8 RET df also works.
+(global-set-key (kbd "C-x 8 s") (lambda ()
+                                  (interactive) (insert-char ?ß)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Buffer Navigation

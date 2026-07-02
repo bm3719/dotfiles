@@ -1338,15 +1338,6 @@ If the file doesn't exist, return an empty string."
              (path (when (string-match "\\(.*\\)\\(::.*\\)" link)
                      (substring link 0 (match-beginning 2)))))
         (kill-new (or path link)))))
-;; Quick fix for swiper + Org unfold bug.
-;; https://github.com/abo-abo/swiper/issues/3015
-;; TODO: Remove this later.
-(defun bcm/org-fix-unfold ()
-  "Reset isearch overlays for active buffer."
-  (interactive)
-  (org-fold-core--clear-isearch-overlays))
-;; Clobbers `org-forward-heading-same-level'.
-(org-defkey org-mode-map (kbd "C-c C-f") 'bcm/org-fix-unfold)
 
 ;;; org-publish
 ;; Location of personal site header.

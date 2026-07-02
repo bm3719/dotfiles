@@ -15,8 +15,8 @@
 ;;;; json-mode, pyvenv, anaconda-mode, company-anaconda, lsp-pyright,
 ;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, htmlize.
 ;;;;
-;;;; System packages used: aspell, aspell-en, Leiningen, clj-kondo, cljfmt,
-;;;; Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
+;;;; System packages used: aspell, aspell-en, aspell-de, Leiningen, clj-kondo,
+;;;; cljfmt, Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initial Startup
@@ -1226,6 +1226,19 @@ If the file doesn't exist, return an empty string."
  ispell-extra-args '("--sug-mode=ultra")
  ;; Solves aspell startup problem on some GNU/Linux distros.
  flyspell-issue-welcome-flag nil)
+;; Switch between aspell-en and aspell-de
+(defun bcm/switch-to-english-dictionary ()
+  "Switch to English dictionary."
+  (interactive)
+  (ispell-change-dictionary "en")
+  (message "Switched to English dictionary"))
+(defun bcm/switch-to-german-dictionary ()
+  "Switch to German dictionary."
+  (interactive)
+  (ispell-change-dictionary "de")
+  (message "Switched to German dictionary"))
+(global-set-key (kbd "C-c d e") 'bcm/switch-to-english-dictionary)
+(global-set-key (kbd "C-c d g") 'bcm/switch-to-german-dictionary)
 
 ;;; org-agenda
 ;; Note: Needs to eval before Org config, for `org-agenda-files'.

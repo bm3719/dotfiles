@@ -1001,10 +1001,16 @@ If the file doesn't exist, return an empty string."
   (gptel-api-key (bcm/strip-trailing-crlf
                   (bcm/read-file-contents "~/.emacs.d/openai.key")))
   (gptel-default-mode 'org-mode)
+  (gptel-model 'gpt-5.4-mini)
   :config
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   ;; Register local ollama backend.
+  ;; TODO: Sloppy hack to get working without warning.  Remove later.
+  (declare-function gptel-make-ollama "gptel")
+  (autoload 'gptel-make-ollama "gptel-ollama" "")
+  (function-put 'gptel-make-ollama 'lisp-indent-function 1)
+  (register-definition-prefixes "gptel-ollama" '("gptel--ollama-"))
   (gptel-make-ollama "ollama"
     :host "localhost:11434"
     :stream t

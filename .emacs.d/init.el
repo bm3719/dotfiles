@@ -235,9 +235,10 @@
 (defalias 'qrr 'query-replace-regexp)
 
 ;; Don't bother entering search and replace args if the buffer is read-only.
-(defadvice query-replace-read-args (before barf-if-buffer-read-only activate)
+(defun bcm/barf-if-buffer-read-only (&rest _args)
   "Signal a `buffer-read-only' error if the current buffer is read-only."
   (barf-if-buffer-read-only))
+(advice-add 'query-replace-read-args :before #'bcm/barf-if-buffer-read-only)
 
 ;; Change pasting behavior.  Normally, it pastes where the mouse is at, which
 ;; is not necessarily where the cursor is.  This changes things so whether they
@@ -333,18 +334,14 @@
 
 ;; Make cursor stay in the same column when scrolling using pgup/dn.
 ;; Previously pgup/dn clobbers column position, moving it to the beginning of
-;; the line.
+;; the line.  Rewrite of old defadvice version from:
 ;; http://www.dotemacs.de/dotfiles/ElijahDaniel.emacs.html
-(defadvice scroll-up (around ewd-scroll-up first act)
-  "Keep cursor in the same column."
+(defun bcm/keep-column-around (orig-fun &rest args)
   (let ((col (current-column)))
-    ad-do-it
+    (apply orig-fun args)
     (move-to-column col)))
-(defadvice scroll-down (around ewd-scroll-down first act)
-  "Keep cursor in the same column."
-  (let ((col (current-column)))
-    ad-do-it
-    (move-to-column col)))
+(advice-add 'scroll-up :around #'bcm/keep-column-around)
+(advice-add 'scroll-down :around #'bcm/keep-column-around)
 
 ;;; Mouse wheel scrolling
 ;; Scroll in 1-line increments for the buffer under pointer.
@@ -986,12 +983,15 @@ If the file doesn't exist, return an empty string."
      ("wiby" "https://wiby.me/?q=%s" nil)
      ("wikipedia" "http://en.m.wikipedia.org/wiki/Special:Search?search=%s" nil)
      ("clojuredocs" "https://clojuredocs.org/search?q=%s")))
-  ;; Default to the last manually specified search engine when calling the prefix
-  ;; version of the function.
-  (defadvice w3m-search (after change-default activate)
+  ;; Default to the last manually specified search engine when calling the
+  ;; prefix version of the function.  Should be able to do this without
+  ;; declare-function.
+  (declare-function bcm/w3m-search-change-default "w3m")
+  (defun bcm/w3m-search-change-default (&rest _args)
     (let ((engine (nth 1 minibuffer-history)))
       (when (assoc engine w3m-search-engine-alist)
         (setq w3m-search-default-engine engine))))
+  (advice-add 'w3m-search :after #'bcm/w3m-search-change-default)
   :bind ("C-x M-m" . browse-url-at-point))
 
 (use-package gptel

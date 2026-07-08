@@ -1594,9 +1594,18 @@ If the file doesn't exist, return an empty string."
       erc-kill-server-buffer-on-quit t)
 (setq erc-autojoin-channels-alist
       '(("libera" "#haskell")))
-(setq erc-channel-hide-list
-      '(("#clojure" "JOIN" "PART" "QUIT" "NICK")
-        ("#haskell" "JOIN" "PART" "QUIT" "NICK")))
+;; Hiding messages in channels.  According to docs, this should work, but
+;; doesn't.  Putting all those message types in erc-hide-list doesn't either.
+(setq erc-hide-list '("AWAY"))
+(defvar bcm/erc-hide-channels
+  '("#haskell" "#clojure" "#emacs" "#rocq" "##typetheory" "##categorytheory"
+    "##philosophy" "##psychology" "##deutsch"))
+(with-eval-after-load 'erc
+  (setq erc-channel-hide-list
+        (mapcar (lambda (channel)
+                  (cons channel '("JOIN" "PART" "QUIT" "NICK")))
+                bcm/erc-hide-channels)))
+(setq erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "AWAY" "333" "353"))
 (mapc (lambda (var) (set var "nft_slut"))
       '(erc-nick erc-user-full-name erc-email-userid))
 

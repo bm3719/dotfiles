@@ -87,3 +87,4 @@ XTerm.vt100.locale:      true
 XTerm.metaSendsEscape:   true
 XTerm.vt100.metaSendsEscape: true
 XTerm.eightBitInput:     false
+XTerm*scrollBar:         false

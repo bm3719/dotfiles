@@ -894,6 +894,12 @@ If the file doesn't exist, return an empty string."
           LaTeX-section-section
           LaTeX-section-label)))
 
+;; Work-specific project.  Remove later.
+(use-package go-mode
+  :ensure t
+  :defer t
+  :mode "\\.go\\'")
+
 (use-package web-mode
   :ensure t
   :defer t

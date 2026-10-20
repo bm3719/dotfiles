@@ -475,7 +475,7 @@ count-windows is not 2."
 (setq time-stamp-active t          ; Do enable time-stamps.
       time-stamp-line-limit 10     ; Check first 10 buffer lines for stamp.
       ;; Date format.  Note that this is a >=27.x format.
-      time-stamp-format "%Y-%02m-%02d %02H:%02M:%02S (%u)")
+      time-stamp-format "%Y-%02m-%02d %02H:%02M:%02S (%l)")
 (add-hook 'write-file-functions 'time-stamp) ; Update when saving.
 
 ;; Startup message with Emacs version.  Modified from original at:

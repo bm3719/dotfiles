@@ -502,19 +502,14 @@ count-windows is not 2."
 
 ;; If I've edited init.el, byte compile it.  Saves some startup time.
 (defun bcm/autocompile-init ()
-  "Compile init.el in ~/.emacs.d/."
-  (interactive)
-  (require 'bytecomp)
-  (when (string= (buffer-file-name)
-                 (expand-file-name
-                  (concat default-directory "init.el")))
-    (let ((init-path (expand-file-name "init.el" user-emacs-directory)))
-      (byte-compile-file init-path)
-      (message "Compiled %s" init-path))))
-(add-hook 'after-save-hook (lambda ()
-                             (if (string-match-p "/init.el\\'"
-                                                 (buffer-file-name))
-                                 (bcm/autocompile-init))))
+  "Compile init.el in ~/.emacs.d/ when saving it."
+  (let ((init-path (expand-file-name "init.el" user-emacs-directory)))
+    (when (and buffer-file-name
+               (file-equal-p buffer-file-name init-path))
+      (require 'bytecomp)
+      (when (byte-compile-file init-path)
+        (message "Compiled %s" init-path)))))
+(add-hook 'after-save-hook #'bcm/autocompile-init)
 
 ;; A function to close all buffers except scratch.
 (defun bcm/cleanup ()

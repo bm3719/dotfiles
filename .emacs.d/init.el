@@ -1014,7 +1014,7 @@ If the file doesn't exist, return an empty string."
   (gptel-make-ollama "ollama"
     :host "localhost:11434"
     :stream t
-    :models '("llama3" "dolphin-llama3:8b")))
+    :models '("llama3.1:8b" "dolphin3:8b" "gpt-oss:20b")))
 
 (use-package ob-dall-e-shell
   :ensure t

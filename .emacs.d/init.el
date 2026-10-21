@@ -1013,9 +1013,9 @@ If the file doesn't exist, return an empty string."
   (function-put 'gptel-make-ollama 'lisp-indent-function 1)
   (register-definition-prefixes "gptel-ollama" '("gptel--ollama-"))
   (gptel-make-ollama "ollama"
-    :host "localhost:11434"
-    :stream t
-    :models '("llama3.1:8b" "dolphin3:8b" "gpt-oss:20b")))
+                     :host "192.168.1.101:11434"
+                     :stream t
+                     :models '("llama3.1:8b" "dolphin3:8b" "gpt-oss:20b")))
 
 (use-package ob-dall-e-shell
   :ensure t

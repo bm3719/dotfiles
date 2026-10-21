@@ -377,9 +377,9 @@
   (interactive)
   (end-of-line)
   (let ((bol (line-beginning-position)))
-    (unless (eq font-lock-comment-face (get-text-property bol 'face))
+    (unless (eq 'font-lock-comment-face (get-text-property bol 'face))
       (while (and (/= bol (point))
-                  (eq font-lock-comment-face
+                  (eq 'font-lock-comment-face
                       (get-text-property (point) 'face)))
         (backward-char 1))
       (unless (= (point) bol)
@@ -704,9 +704,9 @@ If the file doesn't exist, return an empty string."
   (org-present-text-scale 2)
   :hook
   ((org-present-mode
-    . (lambda () (when (display-graphic-p) (org-display-inline-images))))
+    . (lambda () (when (display-graphic-p) (org-link-preview-region))))
    (org-present-mode-quit
-    . (lambda () (when (display-graphic-p) (org-remove-inline-images))))))
+    . (lambda () (when (display-graphic-p) (org-link-preview-clear))))))
 
 (use-package ob-restclient
   :ensure t

@@ -849,8 +849,9 @@ If the file doesn't exist, return an empty string."
   ;; package load.
   (add-hook 'haskell-mode-hook 'bcm/haskell-prettify-enable)
   ;; Add ghcup directory location of GHC binaries to PATH and exec-path.
-  (setenv "PATH" (concat (getenv "PATH") ":~/.ghcup/bin"))
-  (add-to-list 'exec-path "~/.ghcup/bin"))
+  (let ((ghcup-bin (expand-file-name "~/.ghcup/bin")))
+    (setenv "PATH" (concat (getenv "PATH") path-separator ghcup-bin))
+    (add-to-list 'exec-path ghcup-bin)))
 
 (use-package lsp-haskell
   :ensure t

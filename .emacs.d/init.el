@@ -13,7 +13,8 @@
 ;;;; company, smartparens, clojure-mode, cider, flycheck-clj-kondo,
 ;;;; haskell-mode, lsp-haskell, proof-general, auctex, web-mode, rainbow-mode,
 ;;;; json-mode, pyvenv, anaconda-mode, company-anaconda, lsp-pyright,
-;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, htmlize.
+;;;; markdown-mode, gnuplot-mode, w3m, gptel, ob-dall-e-shell, emacs-codex-ide,
+;;;; htmlize.
 ;;;;
 ;;;; System packages used: aspell, aspell-en, aspell-de, Leiningen, clj-kondo,
 ;;;; cljfmt, Babashka, GHC, HLS, fzf, rg, mutt, w3m, ollama, Fira Code font.
@@ -1021,6 +1022,12 @@ If the file doesn't exist, return an empty string."
    (dall-e-shell-image-output-directory "~/img")
    (dall-e-shell-model-version "dall-e-3"))
   :config (ob-dall-e-shell-setup)) ; Activate `dall-e-shell' as src block type.
+
+;; Manual site-lisp install.  use-package :vc works on 30.1, but not on (at
+;; least my) 31.1 install.  Replace this later.
+(use-package codex-ide
+  :load-path "~/.emacs.d/site-lisp/emacs-codex-ide"
+  :bind ("C-c M-c" . codex-ide-menu))
 
 ;; Needed to support code block syntax highlighting in org-export to HTML.
 (use-package htmlize

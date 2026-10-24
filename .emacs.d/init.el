@@ -1011,7 +1011,9 @@ If the file doesn't exist, return an empty string."
   (gptel-make-ollama "ollama"
     :host "localhost:11434"
     :stream t
-    :models '("llama3.1:8b" "dolphin3:8b" "gpt-oss:20b")))
+    :models '("llama3.1:8b" "dolphin3:8b" "gpt-oss:20b")
+    ;; Maybe fix some of the cutoff issues on longer responses.
+    :request-params'(:options (:num_predict 4096 :num_ctx 8192))))
 
 (use-package ob-dall-e-shell
   :ensure t
